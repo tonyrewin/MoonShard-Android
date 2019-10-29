@@ -1,9 +1,10 @@
-package io.moonshard.moonshard
+package io.moonshard.moonshard.mvp.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import io.moonshard.moonshard.R
 
 class RegisterActivity : AppCompatActivity() {
 

@@ -2,10 +2,17 @@
 
 buildscript {
     ext.kotlin_version = '1.3.41'
+    ext {
+        buildToolsVersion = "28.0.3"
+        minSdkVersion = 16
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+        supportLibVersion = "28.0.0"
+    }
     repositories {
         google()
         jcenter()
-        
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
@@ -15,13 +22,46 @@ buildscript {
     }
 }
 
+subprojects {
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 28     //do this in android/app/build.gradle too
+                buildToolsVersion '28.0.3'  //do this in android/app/build.gradle too
+            }
+        }
+    }
+}
+
 allprojects {
     repositories {
         google()
         jcenter()
-        
+
+        maven {
+            url 'https://jitpack.io'
+            content {
+                // Use this repo only for matrix SDK library
+                includeGroupByRegex "com\\.github\\.matrix-org"
+                // Also add subgroups, due to SDK split into modules
+                includeGroupByRegex "com\\.github\\.matrix-org\\.matrix-android-sdk"
+                // And Olm library
+                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
+                // And PhotoView
+                includeGroupByRegex "com\\.github\\.chrisbanes"
+            }
+        }
+
+        maven {
+            url "https://github.com/MoonSHRD/maven-repo/raw/master/releases"
+        }
+        maven {
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/releases"
+        }
     }
 }
+
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

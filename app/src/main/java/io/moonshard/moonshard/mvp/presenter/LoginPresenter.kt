@@ -22,7 +22,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
 
     fun login(homeserverUri: String, identityUri: String, email: String, password: String) {
         viewState?.showLoader()
-
+/*
         api.test().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe( { result->
@@ -32,6 +32,6 @@ class LoginPresenter : MvpPresenter<LoginView>() {
                 var kek = ""
                 viewState?.hideLoader()
             })
-
+*/
     }
 }

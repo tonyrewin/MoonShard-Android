@@ -14,12 +14,16 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+
 import org.matrix.androidsdk.MXSession;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
+import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.services.P2ChatService;
 
 public class MainApplication extends Application {
@@ -37,6 +41,7 @@ public class MainApplication extends Application {
 
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplicationContext()))
+                .webModule(new WebModule(getApplicationContext()))
                 .build();
 
         SoLoader.init(this, /* native exopackage */ false);

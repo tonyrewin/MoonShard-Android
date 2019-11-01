@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context=".mvp.view.RegisterActivity" android:orientation="vertical"
+              tools:context=".mvp.activities.RegisterActivity" android:orientation="vertical"
               android:background="#EEF6FF">
 
     <LinearLayout
@@ -43,7 +43,7 @@
             android:layout_height="40dp"
             android:inputType="textEmailAddress"
             android:ems="10"
-            android:id="@+id/edit_email"
+            android:id="@+id/editEmail"
             android:hint="Enter your email"
             android:gravity="center"
             android:background="@drawable/edittext_background"
@@ -56,7 +56,7 @@
             android:layout_height="40dp"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/edit_password"
+            android:id="@+id/editPassword"
             android:hint="Enter password"
             android:gravity="center"
             android:textSize="7pt"

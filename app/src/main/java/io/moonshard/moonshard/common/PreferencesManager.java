@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.common.matrix;
+package io.moonshard.moonshard.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;

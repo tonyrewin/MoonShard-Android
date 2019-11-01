@@ -24,7 +24,7 @@ class LocalChat {
             val messagesChunk = ArrayList<MessageModel>()
             var messageCount = 0
 
-            for ((key, value) in messages) {
+            for ((_, value) in messages) {
                 if(messageCount==16){
                     break
                 }else{

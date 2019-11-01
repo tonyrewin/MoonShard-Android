@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Binder
@@ -19,16 +18,14 @@ import com.google.gson.reflect.TypeToken
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.bd.LocalChatsRepository
-import io.moonshard.moonshard.bd.MatchContactsRepository
+import io.moonshard.moonshard.db.LocalChatsRepository
+import io.moonshard.moonshard.db.MatchContactsRepository
 import io.moonshard.moonshard.common.TopicStorage
-import io.moonshard.moonshard.common.matrix.Matrix
-import io.moonshard.moonshard.common.matrix.MatrixSdkHelper
 import io.moonshard.moonshard.mvp.models.LocalChat
 import io.moonshard.moonshard.mvp.models.MatchModel
 import io.moonshard.moonshard.mvp.models.MessageModel
 import io.moonshard.moonshard.mvp.models.UserModel
-import io.moonshard.moonshard.mvp.view.RegisterActivity
+import io.moonshard.moonshard.mvp.activities.RegisterActivity
 import p2mobile.P2mobile
 import p2mobile.P2mobile.start
 import java.util.*
@@ -55,8 +52,6 @@ class P2ChatService : Service() {
     lateinit var gson: Gson
     @Inject
     lateinit var topicStorage: TopicStorage
-    @Inject
-    lateinit var matrixInstance: Matrix
     private val binder = P2ChatServiceBinder()
     private var scheduledExecutorService: ScheduledExecutorService? = null
 
@@ -148,9 +143,9 @@ class P2ChatService : Service() {
             val messageObject = gson.fromJson(message, MessageModel::class.java)
             messageObject.timestamp = System.currentTimeMillis()
             messageObject.id = UUID.randomUUID().toString()
-            val future = MatrixSdkHelper.getMinimalUserData(messageObject.from)
-            val user = future.get() // FIXME may be blocking
-            messageObject.user = UserModel(messageObject.from, user.name, user.avatarUrl)
+           // val future = MatrixSdkHelper.getMinimalUserData(messageObject.from)
+          //  val user = future.get() // FIXME may be blocking
+           // messageObject.user = UserModel(messageObject.from, user.name, user.avatarUrl)
             LocalChatsRepository.getLocalChat(messageObject.topic)!!.putMessage(messageObject)
             val writableMap = Arguments.createMap()
             writableMap.putString("message", gson.toJson(messageObject))
@@ -163,7 +158,7 @@ class P2ChatService : Service() {
             val match = gson.fromJson(newMatch, MatchModel::class.java)
             if (match.isValid) {
                 LocalChatsRepository.getLocalChat(match.topic)!!.putMember(match.matrixID)
-
+/*
                 val directChats = matrixInstance.defaultSession.dataHandler.store?.rooms?.filter {
                     it.isDirect
                 }
@@ -192,6 +187,8 @@ class P2ChatService : Service() {
                         match.userModel = MatchContactsRepository.getUser(chat.userId)
                     }
                 }
+
+ */
                 Logger.i("getMatch - ${gson.toJson(match)}")
             } else {
                 LocalChatsRepository.getLocalChat(match.topic)!!.removeMember(match.matrixID)

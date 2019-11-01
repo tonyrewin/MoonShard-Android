@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.bd
+package io.moonshard.moonshard.db
 
 import io.moonshard.moonshard.mvp.models.LocalChat
 

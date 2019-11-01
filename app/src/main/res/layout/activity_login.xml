@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:background="#EEF6FF"
         android:orientation="vertical"
-        tools:context=".mvp.view.LoginActivity">
+        tools:context=".mvp.activities.LoginActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -46,7 +46,7 @@
             android:textSize="8pt" />
 
     <EditText
-            android:id="@+id/edit_email"
+            android:id="@+id/editEmail"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -61,7 +61,7 @@
             android:textSize="7pt" />
 
     <EditText
-            android:id="@+id/edit_password"
+            android:id="@+id/editPassword"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
             android:layout_height="40dp"

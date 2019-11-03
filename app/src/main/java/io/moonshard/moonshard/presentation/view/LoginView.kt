@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.mvp.view
+package io.moonshard.moonshard.presentation.view
 
 import com.arellomobile.mvp.MvpView
 

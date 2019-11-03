@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.mvp.models
+package io.moonshard.moonshard.models
 
 import java.util.*
 import kotlin.collections.ArrayList

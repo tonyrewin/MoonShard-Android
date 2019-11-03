@@ -1,6 +1,7 @@
 package io.moonshard.moonshard
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -29,6 +30,6 @@ interface API {
     fun removeRoom(@Query("id") roomID: String):Observable<String>
 
     @GET("/api/v1/employees")
-    fun test():Observable<ResponseBody>
+    fun test(): Single<ResponseBody>
 
 }

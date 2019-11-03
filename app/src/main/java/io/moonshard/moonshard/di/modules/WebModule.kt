@@ -1,10 +1,12 @@
 package io.moonshard.moonshard.di.modules
 
 import android.content.Context
+import com.orhanobut.logger.Logger
 import dagger.Module
 import dagger.Provides
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.common.ApiConstants
+import io.moonshard.moonshard.repository.NetworkRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,5 +39,11 @@ class WebModule(var context: Context) {
     @Singleton
     fun providesMovieApi(retrofit: Retrofit): API {
         return retrofit.create(API::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRetrofitReNetworkRepositorypository(): NetworkRepository {
+        return NetworkRepository()
     }
 }

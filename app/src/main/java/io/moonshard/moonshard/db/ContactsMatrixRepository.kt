@@ -1,6 +1,6 @@
 package io.moonshard.moonshard.db
 
-import io.moonshard.moonshard.mvp.models.UserModel
+import io.moonshard.moonshard.models.UserModel
 
 object ContactsMatrixRepository {
     private var contacts = ArrayList<UserModel>()

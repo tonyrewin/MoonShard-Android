@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.mvp.models
+package io.moonshard.moonshard.models
 
 data class UserModel (
     val userId: String,

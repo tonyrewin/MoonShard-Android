@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.mvp.activities
+package io.moonshard.moonshard.ui.activities
 
 import android.content.Intent
 import android.os.Bundle

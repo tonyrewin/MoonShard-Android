@@ -1,6 +1,6 @@
 package io.moonshard.moonshard.db
 
-import io.moonshard.moonshard.mvp.models.LocalChat
+import io.moonshard.moonshard.models.LocalChat
 
 object LocalChatsRepository {
     private val localChats = HashMap<String, LocalChat>()

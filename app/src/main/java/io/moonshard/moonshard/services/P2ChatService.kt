@@ -19,13 +19,11 @@ import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.LocalChatsRepository
-import io.moonshard.moonshard.db.MatchContactsRepository
 import io.moonshard.moonshard.common.TopicStorage
-import io.moonshard.moonshard.mvp.models.LocalChat
-import io.moonshard.moonshard.mvp.models.MatchModel
-import io.moonshard.moonshard.mvp.models.MessageModel
-import io.moonshard.moonshard.mvp.models.UserModel
-import io.moonshard.moonshard.mvp.activities.RegisterActivity
+import io.moonshard.moonshard.models.LocalChat
+import io.moonshard.moonshard.models.MatchModel
+import io.moonshard.moonshard.models.MessageModel
+import io.moonshard.moonshard.ui.activities.RegisterActivity
 import p2mobile.P2mobile
 import p2mobile.P2mobile.start
 import java.util.*

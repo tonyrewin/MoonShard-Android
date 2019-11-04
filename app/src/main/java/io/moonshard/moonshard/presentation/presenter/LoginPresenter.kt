@@ -39,21 +39,6 @@ class LoginPresenter : MvpPresenter<LoginView>() {
                 var kek = ""
                 viewState?.hideLoader()
             })
-
-
         //viewState?.showLoader()
-
-/*
-        api.test().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { result->
-                var kek = ""
-                viewState?.hideLoader()
-            },{
-                var kek = ""
-                viewState?.hideLoader()
-            })
-*/
-
     }
 }

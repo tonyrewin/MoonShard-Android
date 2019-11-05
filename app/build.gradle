@@ -71,6 +71,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'com.arello-mobile:moxy-compiler:1.5.5'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -121,6 +122,15 @@ dependencies {
     //Smack
     implementation "org.igniterealtime.smack:smack-android:4.3.0"
     implementation "org.igniterealtime.smack:smack-tcp:4.3.0"
+
+    //google play services
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-base:16.1.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    //circle image view
+    implementation 'de.hdodenhof:circleimageview:1.1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'

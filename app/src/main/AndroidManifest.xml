@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="io.moonshard.moonshard">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permisssion.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
             android:name=".MainApplication"
@@ -12,15 +17,19 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name="io.moonshard.moonshard.ui.activities.ContactsActivity"></activity>
-        <activity android:name="io.moonshard.moonshard.ui.activities.LoginActivity"></activity>
-        <activity android:name="io.moonshard.moonshard.ui.activities.RegisterActivity">
+        <activity android:name=".ui.activities.MainActivity"></activity>
+        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyC9fbodxQoDVheIZKRiU5GYfsWb31EiXvI"/>
     </application>
 
 </manifest>

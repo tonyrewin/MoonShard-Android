@@ -32,13 +32,14 @@ class LoginActivity : MvpActivity(), LoginView {
         }
 
         dontHaveText.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
 
     override fun showContactsScreen() {
-        val intentContactsActivity= Intent(this,ContactsActivity::class.java)
+        val intentContactsActivity= Intent(this,
+            MainActivity::class.java)
         startActivity(intentContactsActivity)
     }
 

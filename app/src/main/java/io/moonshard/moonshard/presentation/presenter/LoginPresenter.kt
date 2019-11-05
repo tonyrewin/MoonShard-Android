@@ -34,10 +34,12 @@ class LoginPresenter : MvpPresenter<LoginView>() {
             .doOnError {
                 var kek = ""
                 viewState?.hideLoader()
+                viewState?.showContactsScreen()
             }
             .subscribe { t1, t2 ->
                 var kek = ""
                 viewState?.hideLoader()
+                viewState?.showContactsScreen()
             })
         //viewState?.showLoader()
     }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="83dp"
+        android:orientation="vertical"
+        android:paddingStart="16dp">
+
+    <RelativeLayout
+            android:id="@+id/kek"
+            android:layout_width="54.5dp"
+            android:layout_height="54.5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:src="@color/colorAccent"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="#FF6161"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+</RelativeLayout>
+
+
+
+    <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/kek"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kanevsky"
+                android:textColor="#333333"
+                android:textSize="17sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Message text"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+    <ImageView
+            android:scaleType="center"
+            android:layout_alignTop="@+id/timeOrDayTv"
+            android:layout_alignBottom="@+id/timeOrDayTv"
+            android:layout_toStartOf="@+id/timeOrDayTv"
+            android:id="@+id/checkMessageIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_message" />
+
+
+    <TextView
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="20dp"
+            android:text="14:14"
+            android:id="@+id/timeOrDayTv"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#9B9BB6"
+            android:textSize="14sp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginEnd="17dp"
+            android:layout_marginTop="11dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_below="@+id/timeOrDayTv"
+            android:layout_alignParentEnd="true"
+            android:src="@color/catalyst_redbox_background" />
+
+
+</RelativeLayout>

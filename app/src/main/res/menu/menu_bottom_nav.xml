@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/homeFragment"
+            android:checked="true"
+            android:icon="@drawable/ic_settings_nav_selector"
+            android:title="Мои чаты"/>
+    <item
+            android:id="@+id/momentsFragment"
+            android:icon="@drawable/ic_map_nav_selector"
+            android:title="Найти чаты"/>
+    <item
+            android:id="@+id/notificationsFragment"
+            android:icon="@drawable/ic_chat_map_selector"
+            android:title="Настройки"/>
+
+</menu>

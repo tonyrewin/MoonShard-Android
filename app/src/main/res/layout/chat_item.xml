@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="83dp"
         android:orientation="vertical"
@@ -16,28 +15,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:src="@color/colorAccent"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp" />
+                android:src="@color/colorAccent" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="#FF6161"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:src="#FF6161" />
 
-</RelativeLayout>
-
-
+    </RelativeLayout>
 
     <LinearLayout
-            android:layout_marginTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
+            android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/kek"
             android:orientation="vertical">
 
@@ -57,37 +50,34 @@
 
     </LinearLayout>
 
-
     <ImageView
-            android:scaleType="center"
-            android:layout_alignTop="@+id/timeOrDayTv"
-            android:layout_alignBottom="@+id/timeOrDayTv"
-            android:layout_toStartOf="@+id/timeOrDayTv"
             android:id="@+id/checkMessageIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/timeOrDayTv"
+            android:layout_alignBottom="@+id/timeOrDayTv"
+            android:layout_toStartOf="@+id/timeOrDayTv"
+            android:scaleType="center"
             android:src="@drawable/ic_check_message" />
 
-
     <TextView
-            android:layout_marginEnd="18dp"
-            android:layout_marginTop="20dp"
-            android:text="14:14"
             android:id="@+id/timeOrDayTv"
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="18dp"
+            android:text="14:14"
             android:textColor="#9B9BB6"
             android:textSize="14sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginEnd="17dp"
-            android:layout_marginTop="11dp"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_below="@+id/timeOrDayTv"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="17dp"
             android:src="@color/catalyst_redbox_background" />
-
 
 </RelativeLayout>

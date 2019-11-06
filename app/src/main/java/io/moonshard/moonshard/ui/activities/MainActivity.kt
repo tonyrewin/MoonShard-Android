@@ -6,6 +6,7 @@ import android.os.Bundle
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.MapFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,5 +17,11 @@ class MainActivity : AppCompatActivity() {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.container, newFragment).commit()
+
+
+        bottomBar.enableAnimation(false)
+        bottomBar.enableShiftingMode(false)
+        bottomBar.enableItemShiftingMode(false)
+
     }
 }

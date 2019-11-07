@@ -20,40 +20,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMap = map
         map!!.isMyLocationEnabled = true
 
-
-
-        map.uiSettings.isMyLocationButtonEnabled = true
-        map.uiSettings.isCompassEnabled = true
+        map.uiSettings.isMyLocationButtonEnabled = false
+        map.uiSettings.isCompassEnabled = false
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
+        mapView?.onCreate(savedInstanceState)
+        mapView?.getMapAsync(this)
     }
 
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        mapView?.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mapView.onDestroy()
+        mapView?.onDestroy()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        mapView?.onPause()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        mapView?.onLowMemory()
     }
 }

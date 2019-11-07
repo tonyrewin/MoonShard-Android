@@ -12,7 +12,7 @@
             app:itemIconTint="#0075FF"
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:background="@android:color/white"
             app:menu="@menu/menu_bottom_nav" />

@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.container, newFragment).commit()
 
-
         initEvent()
     }
 

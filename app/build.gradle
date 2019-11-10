@@ -120,14 +120,21 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
 
     //Smack
-    implementation "org.igniterealtime.smack:smack-android:4.3.0"
-    implementation "org.igniterealtime.smack:smack-tcp:4.3.0"
+    implementation 'com.github.instacart.truetime-android:library:3.4'
+    implementation 'org.igniterealtime.smack:smack-core:4.3.3'
+    implementation 'org.igniterealtime.smack:smack-tcp:4.3.3'
+    implementation 'org.igniterealtime.smack:smack-android:4.3.3'
+    implementation 'org.igniterealtime.smack:smack-extensions:4.3.3'
+    implementation 'org.igniterealtime.smack:smack-experimental:4.3.3'
 
     //google play services
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-base:16.1.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation "de.adorsys.android:securestoragelibrary:1.0.3"
+
 
     //circle image view
     implementation 'de.hdodenhof:circleimageview:1.1.0'
@@ -137,6 +144,7 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 
     testImplementation 'junit:junit:4.12'

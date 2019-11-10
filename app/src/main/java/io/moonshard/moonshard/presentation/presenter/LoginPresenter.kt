@@ -10,6 +10,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.moonshard.moonshard.services.XMPPConnectionService
+import android.content.Intent
+
+
 
 
 @InjectViewState
@@ -25,6 +29,11 @@ class LoginPresenter : MvpPresenter<LoginView>() {
     init {
         MainApplication.getComponent().inject(this)
         testUseCase = TestUseCase()
+    }
+
+    fun login(){
+        //this.startService(Intent(this, XMPPConnectionService::class.java))
+
     }
 
     fun login(homeserverUri: String, identityUri: String, email: String, password: String) {

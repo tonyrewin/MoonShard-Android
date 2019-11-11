@@ -43,6 +43,7 @@
             android:layout_gravity="center"
             android:textSize="8pt"/>
     <EditText
+            android:text=""
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -77,6 +78,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="Confirm"
+            android:id="@+id/registerBtn"
             android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"

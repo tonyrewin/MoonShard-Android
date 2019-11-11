@@ -11,7 +11,9 @@ import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.MvpActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
@@ -34,21 +36,44 @@ class LoginActivity : MvpActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
+        startService()
+
 
         loginBtn.setOnClickListener {
+            saveLoginCredentials()
             /*
             presenter.login(
                 "https://matrix.moonshard.tech", "https://vector.im",
                 editEmail.text.toString(), editPassword.text.toString()
             )
              */
-            doLogin()
+            doLogin2()
         }
 
         dontHaveText.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
+    }
+
+    fun startService(){
+        startService(Intent(applicationContext, XMPPConnectionService::class.java))
+        val connection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName, service: IBinder) {
+                val binder = service as XMPPConnectionService.XMPPServiceBinder
+                AppHelper.setXmppConnection(binder.connection)
+            }
+
+            override fun onServiceDisconnected(name: ComponentName) {
+                AppHelper.setXmppConnection(null)
+            }
+        }
+        AppHelper.setServiceConnection(connection)
+        applicationContext.bindService(
+            Intent(applicationContext, XMPPConnectionService::class.java),
+            connection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     private fun doLogin() {
@@ -71,8 +96,8 @@ class LoginActivity : MvpActivity(), LoginView {
         )
         timer.schedule(object : TimerTask() {
             override fun run() {
-                if (MainApplication.getXmppConnection() != null) {
-                    if (MainApplication.getXmppConnection().isConnectionAlive) {
+                if (AppHelper.getXmppConnection() != null) {
+                    if (AppHelper.getXmppConnection().isConnectionAlive) {
                         showContactsScreen()
                         runOnUiThread {
                             hideLoader()
@@ -94,7 +119,23 @@ class LoginActivity : MvpActivity(), LoginView {
                     //EventBus.getDefault().post(AuthenticationStatusEvent(AuthenticationStatusEvent.NETWORK_ERROR))
                 }
             }
-        }, 5000)
+        }, 10000)
+    }
+
+    fun doLogin2(){
+       val success =  AppHelper.getXmppConnection().login(editEmail.text.toString(),
+           editPassword.text.toString())
+        if(success){
+            showContactsScreen()
+        }else{
+            showError("Error")
+        }
+    }
+
+    private fun saveLoginCredentials() {
+        SecurePreferences.setValue("jid", editEmail.text.toString())
+        SecurePreferences.setValue("pass", editPassword.text.toString())
+        SecurePreferences.setValue("logged_in", true)
     }
 
     override fun showContactsScreen() {

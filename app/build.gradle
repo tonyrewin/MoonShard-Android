@@ -49,6 +49,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
         }
+        
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -135,6 +136,8 @@ dependencies {
 
     implementation "de.adorsys.android:securestoragelibrary:1.0.3"
 
+    //easy permission
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
     //circle image view
     implementation 'de.hdodenhof:circleimageview:1.1.0'
@@ -145,7 +148,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'

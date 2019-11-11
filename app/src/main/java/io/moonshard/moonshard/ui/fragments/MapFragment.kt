@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import io.moonshard.moonshard.R
 import kotlinx.android.synthetic.main.fragment_map.*
+import pub.devrel.easypermissions.EasyPermissions
+import pub.devrel.easypermissions.EasyPermissions.hasPermissions
+import android.Manifest.permission
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.CAMERA
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -27,7 +32,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

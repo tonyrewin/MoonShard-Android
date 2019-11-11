@@ -36,14 +36,16 @@ public class XMPPConnectionService extends Service {
     }
 
     public void onServiceStart() {
+
         if(!isThreadAlive)
         {
             isThreadAlive = true;
             if(thread == null || !thread.isAlive()) {
                 thread = new Thread(() -> {
+                    createConnection();
                     Looper.prepare();
                     threadHandler = new Handler();
-                    createConnection();
+                    //createConnection();
                     Looper.loop();
                 });
                 thread.start();

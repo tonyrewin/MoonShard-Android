@@ -1,7 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.LoginView
@@ -12,8 +11,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.moonshard.moonshard.services.XMPPConnectionService
 import android.content.Intent
-
-
+import io.moonshard.moonshard.helpers.AppHelper
+import moxy.InjectViewState
+import moxy.MvpPresenter
 
 
 @InjectViewState
@@ -51,5 +51,15 @@ class LoginPresenter : MvpPresenter<LoginView>() {
                 viewState?.showContactsScreen()
             })
         //viewState?.showLoader()
+    }
+
+    fun login(email: String, password: String){
+        val success =  AppHelper.getXmppConnection().login(email,
+            password)
+        if(success){
+            viewState?.showContactsScreen()
+        }else{
+            viewState?.showError("An error has occurred")
+        }
     }
 }

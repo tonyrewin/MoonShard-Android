@@ -1,11 +1,12 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnection
+import moxy.InjectViewState
+import moxy.MvpPresenter
 import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smack.XMPPException
 

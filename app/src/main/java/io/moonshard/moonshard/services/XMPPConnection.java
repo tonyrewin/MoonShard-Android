@@ -19,6 +19,7 @@ import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smack.util.TLSUtils;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.ping.PingManager;
@@ -170,6 +171,7 @@ public class XMPPConnection implements ConnectionListener {
     @Override
     public void connected(org.jivesoftware.smack.XMPPConnection connection) {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.CONNECTED;
+
     }
 
     @Override
@@ -236,8 +238,6 @@ public class XMPPConnection implements ConnectionListener {
             throws XMPPException, SmackException, IOException, InterruptedException {
 
         String username = email.split("@")[0];
-        String jabberHost = email.split("@")[1];
-
 
         long l = System.currentTimeMillis();
         XMPPTCPConnection connect = getConnection();
@@ -249,6 +249,8 @@ public class XMPPConnection implements ConnectionListener {
         try{
             Logger.d("userLog: "+ email + " and pass: " + pass );
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+            SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+            SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
             connect.login(username, pass);
 
         }catch (Exception e){
@@ -259,6 +261,15 @@ public class XMPPConnection implements ConnectionListener {
         PingManager pingManager = PingManager.getInstanceFor(connect);
         pingManager.setPingInterval(5000);
         Logger.d("LOGIN JUST");
+        return true;
+    }
+
+    public boolean logOut(){
+        try {
+            connection.disconnect();
+        }catch (Exception e){
+         return false;
+        }
         return true;
     }
 

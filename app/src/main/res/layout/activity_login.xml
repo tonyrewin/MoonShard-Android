@@ -50,7 +50,7 @@
             android:textSize="8pt" />
 
     <EditText
-            android:text="test@moonshard.tech"
+            android:text="just@moonshard.tech"
             android:id="@+id/editEmail"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:textSize="7pt" />
 
     <EditText
-            android:text="test"
+            android:text="just"
             android:id="@+id/editPassword"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"

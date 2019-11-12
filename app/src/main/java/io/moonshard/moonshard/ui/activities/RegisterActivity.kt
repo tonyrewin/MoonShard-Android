@@ -8,21 +8,17 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.arellomobile.mvp.MvpActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.helpers.AppHelper
-import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
-import io.moonshard.moonshard.services.XMPPConnection
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_register.*
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
 import java.util.*
 
-class RegisterActivity : MvpActivity(), RegisterView {
+class RegisterActivity : MvpAppCompatActivity(), RegisterView {
 
     @InjectPresenter
     lateinit var presenter: RegisterPresenter
@@ -42,14 +38,14 @@ class RegisterActivity : MvpActivity(), RegisterView {
         }
 
         registerBtn.setOnClickListener {
-           // val connect = XMPPConnection(applicationContext)
-           // MainApplication.setXmppConnection(connect)
-            presenter.register(editEmail.text.toString(),editPassword.text.toString())
+            // val connect = XMPPConnection(applicationContext)
+            // MainApplication.setXmppConnection(connect)
+            presenter.register(editEmail.text.toString(), editPassword.text.toString())
             //startService()
         }
     }
 
-    fun startService(){
+    fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {

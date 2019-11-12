@@ -1,6 +1,6 @@
 package io.moonshard.moonshard.presentation.view
 
-import com.arellomobile.mvp.MvpView
+import moxy.MvpView
 
 interface RegisterView : MvpView {
     fun showLoader()

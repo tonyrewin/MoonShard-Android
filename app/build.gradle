@@ -24,6 +24,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'true',
+                ]
+            }
+        }
     }
     splits {
         abi {
@@ -73,8 +80,6 @@ android {
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt 'com.arello-mobile:moxy-compiler:1.5.5'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.0'
@@ -109,10 +114,13 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
 
     //moxy
-    implementation 'com.arello-mobile:moxy:1.5.5'
-    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.5'
-    implementation 'com.arello-mobile:moxy-android:1.5.5'
-    implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
+    implementation "com.github.moxy-community:moxy:2.0.2"
+    kapt "com.github.moxy-community:moxy-compiler:2.0.2"
+    implementation "com.github.moxy-community:moxy-androidx:2.0.2"
+    annotationProcessor "com.github.moxy-community:moxy-compiler:2.0.2"
+
+
+
 
     //kapt
     kapt 'com.google.dagger:dagger-compiler:2.15'

@@ -9,19 +9,18 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.widget.Toast
-import com.arellomobile.mvp.MvpActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
 import de.adorsys.android.securestoragelibrary.SecurePreferences
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_login.*
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
 import java.util.*
 
 
-class LoginActivity : MvpActivity(), LoginView {
+class LoginActivity : MvpAppCompatActivity(), LoginView {
 
     private val timer = Timer(true)
 
@@ -40,14 +39,17 @@ class LoginActivity : MvpActivity(), LoginView {
 
 
         loginBtn.setOnClickListener {
-            saveLoginCredentials()
+
             /*
             presenter.login(
                 "https://matrix.moonshard.tech", "https://vector.im",
                 editEmail.text.toString(), editPassword.text.toString()
             )
              */
-            doLogin2()
+            // doLogin2()
+
+            saveLoginCredentials(editEmail.text.toString(), editPassword.text.toString())
+            presenter.login(editEmail.text.toString(), editPassword.text.toString())
         }
 
         dontHaveText.setOnClickListener {
@@ -56,7 +58,7 @@ class LoginActivity : MvpActivity(), LoginView {
         }
     }
 
-    fun startService(){
+    private fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -76,65 +78,21 @@ class LoginActivity : MvpActivity(), LoginView {
         )
     }
 
-    private fun doLogin() {
-        showLoader()
-        startService(Intent(this, XMPPConnectionService::class.java))
-        MainApplication.setServiceConnection(object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                val binder = service as XMPPConnectionService.XMPPServiceBinder
-                MainApplication.setXmppConnection(binder.connection)
-            }
-
-            override fun onServiceDisconnected(name: ComponentName) {
-                MainApplication.setXmppConnection(null)
-            }
-        })
-        bindService(
-            Intent(this, XMPPConnectionService::class.java),
-            MainApplication.getServiceConnection(),
-            Context.BIND_AUTO_CREATE
+    fun doLogin2() {
+        val success = AppHelper.getXmppConnection().login(
+            editEmail.text.toString(),
+            editPassword.text.toString()
         )
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                if (AppHelper.getXmppConnection() != null) {
-                    if (AppHelper.getXmppConnection().isConnectionAlive) {
-                        showContactsScreen()
-                        runOnUiThread {
-                            hideLoader()
-                        }
-                        //EventBus.getDefault().post(AuthenticationStatusEvent(AuthenticationStatusEvent.CONNECT_AND_LOGIN_SUCCESSFUL))
-                    } else {
-                        runOnUiThread {
-                            hideLoader()
-                            showError("We have a incorrect login or password")
-                        }
-                        //  EventBus.getDefault().post(AuthenticationStatusEvent(AuthenticationStatusEvent.INCORRECT_LOGIN_OR_PASSWORD))
-                    }
-                } else {
-                    runOnUiThread {
-                        hideLoader()
-                        showError("We have a error with internet")
-                    }
-
-                    //EventBus.getDefault().post(AuthenticationStatusEvent(AuthenticationStatusEvent.NETWORK_ERROR))
-                }
-            }
-        }, 10000)
-    }
-
-    fun doLogin2(){
-       val success =  AppHelper.getXmppConnection().login(editEmail.text.toString(),
-           editPassword.text.toString())
-        if(success){
+        if (success) {
             showContactsScreen()
-        }else{
+        } else {
             showError("Error")
         }
     }
 
-    private fun saveLoginCredentials() {
-        SecurePreferences.setValue("jid", editEmail.text.toString())
-        SecurePreferences.setValue("pass", editPassword.text.toString())
+    private fun saveLoginCredentials(email: String, password: String) {
+        SecurePreferences.setValue("jid", email)
+        SecurePreferences.setValue("pass", password)
         SecurePreferences.setValue("logged_in", true)
     }
 

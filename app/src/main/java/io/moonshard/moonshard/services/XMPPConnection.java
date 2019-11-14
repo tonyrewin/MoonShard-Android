@@ -171,7 +171,6 @@ public class XMPPConnection implements ConnectionListener {
     @Override
     public void connected(org.jivesoftware.smack.XMPPConnection connection) {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.CONNECTED;
-
     }
 
     @Override
@@ -239,7 +238,6 @@ public class XMPPConnection implements ConnectionListener {
 
         String username = email.split("@")[0];
 
-        long l = System.currentTimeMillis();
         XMPPTCPConnection connect = getConnection();
         if (connect.isAuthenticated()) {
             Logger.d("User already logged in");
@@ -252,9 +250,8 @@ public class XMPPConnection implements ConnectionListener {
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
             connect.login(username, pass);
-
         }catch (Exception e){
-            Logger.d("LOGIN ERROR");
+            Logger.d("LOGIN ERROR" + connect.isAuthenticated());
             e.printStackTrace();
             return false;
         }

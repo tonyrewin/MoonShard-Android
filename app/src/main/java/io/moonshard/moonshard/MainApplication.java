@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import androidx.room.Room;
+
 import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -32,6 +34,7 @@ import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
 import io.moonshard.moonshard.di.modules.WebModule;
+import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 
@@ -47,7 +50,7 @@ public class MainApplication extends Application {
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
 
     private static String jid;
-    // private static RoomHelper chatDB;
+     private static RoomHelper chatDB;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;
     private static LoginCredentials currentLoginCredentials;
@@ -99,7 +102,7 @@ public class MainApplication extends Application {
         instance = this;
 
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
-        //initChatDB();
+        initChatDB();
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
@@ -193,7 +196,7 @@ public class MainApplication extends Application {
 
     public static void setJid(String jid1) { jid = jid1; }
 
-    // public static RoomHelper getChatDB() { return chatDB; }
+     public static RoomHelper getChatDB() { return chatDB; }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -244,7 +247,7 @@ public class MainApplication extends Application {
         }).start();
     }
 
-    /*
+
     private void initChatDB() {
         chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
                 .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
@@ -252,7 +255,7 @@ public class MainApplication extends Application {
                 .build();
     }
 
-     */
+
 
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;

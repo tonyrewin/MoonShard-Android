@@ -8,13 +8,15 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import io.moonshard.moonshard.models.GenericDialog
+import java.util.*
 
 
 interface RvListener {
-    fun clickChat(driver: String)
+    fun clickChat(idChat: String)
 }
 
-class MyChatsAdapter(val listener: RvListener, private val chats: List<String>) :
+class MyChatsAdapter(val listener: RvListener, private var chats: List<GenericDialog>) :
     RecyclerView.Adapter<MyChatsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -30,16 +32,28 @@ class MyChatsAdapter(val listener: RvListener, private val chats: List<String>) 
         Picasso.get()
             .load("https://dok7xy59qfw9h.cloudfront.net/479/254/442/-329996983-20arpee-1ersd6l4segk3e5/original/file.jpg")
             .into(holder.avatar)
-        //   holder.avatar?.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
 
         if (position == 14) {
 
         }
 
+        holder.itemView.setOnClickListener {
+            listener.clickChat(chats[position].id)
+        }
     }
 
-    override fun getItemCount(): Int = 15
+    fun setItems(items: List<GenericDialog>) {
+        this.chats = items
+        notifyDataSetChanged()
+    }
+
+    fun sort(comparator: Comparator<GenericDialog>) {
+        Collections.sort<GenericDialog>(chats, comparator)
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int = chats.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var avatar: ImageView? =

@@ -35,6 +35,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
+
         startService()
 
 

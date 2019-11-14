@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import androidx.multidex.MultiDexApplication;
+import androidx.room.Room;
 
 import com.instacart.library.truetime.TrueTime;
 
@@ -31,7 +32,7 @@ public class AppHelper extends MultiDexApplication {
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
 
     private static String jid;
-   // private static RoomHelper chatDB;
+    private static RoomHelper chatDB;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;
     private static LoginCredentials currentLoginCredentials;
@@ -47,7 +48,7 @@ public class AppHelper extends MultiDexApplication {
         instance = this;
 
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
-        //initChatDB();
+        initChatDB();
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
@@ -61,7 +62,7 @@ public class AppHelper extends MultiDexApplication {
 
     public static void setJid(String jid1) { jid = jid1; }
 
-   // public static RoomHelper getChatDB() { return chatDB; }
+    public static RoomHelper getChatDB() { return chatDB; }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -112,7 +113,7 @@ public class AppHelper extends MultiDexApplication {
         }).start();
     }
 
-    /*
+
     private void initChatDB() {
         chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
                 .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
@@ -120,7 +121,7 @@ public class AppHelper extends MultiDexApplication {
                 .build();
     }
 
-     */
+
 
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;

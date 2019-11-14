@@ -3,12 +3,18 @@ package io.moonshard.moonshard.helpers;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.instacart.library.truetime.TrueTime;
 
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
@@ -19,13 +25,28 @@ import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.R;
+import io.moonshard.moonshard.models.GenericMessage;
+import io.moonshard.moonshard.presentation.presenter.ChatPresenter;
+import io.moonshard.moonshard.services.NewMessageListener;
+import io.reactivex.Observer;
+import io.reactivex.subjects.PublishSubject;
+import java9.util.concurrent.CompletableFuture;
 
 public class NetworkHandler implements IncomingChatMessageListener, PresenceEventListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
+
+    PublishSubject<Message> msgs  = PublishSubject.create();
+
 
     private NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainApplication.getContext());
 
@@ -35,18 +56,22 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        String chatID = chat.getXmppAddressOfChatPartner().asUnescapedString();
-        //if(LocalDBWrapper.getChatByChatID(from.asEntityBareJidString()) == null) {
-        //     LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>());
-        // }
-        //long messageID = LocalDBWrapper.createMessageEntry(chatID, message.getStanzaId(), from.asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
-        // int newUnreadMessagesCount = LocalDBWrapper.getChatByChatID(chatID).unreadMessagesCount + 1;
-        // LocalDBWrapper.updateChatUnreadMessagesCount(chatID, newUnreadMessagesCount);
+        if(msgs.hasObservers()){
+            msgs.onNext(message);
+        }
 
-        // EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
+        String chatID = chat.getXmppAddressOfChatPartner().asUnescapedString();
+        if(LocalDBWrapper.getChatByChatID(from.asEntityBareJidString()) == null) {
+             LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>());
+         }
+         long messageID = LocalDBWrapper.createMessageEntry(chatID, message.getStanzaId(), from.asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
+         int newUnreadMessagesCount = LocalDBWrapper.getChatByChatID(chatID).unreadMessagesCount + 1;
+         LocalDBWrapper.updateChatUnreadMessagesCount(chatID, newUnreadMessagesCount);
+
+      //   EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
         // EventBus.getDefault().post(new LastMessageEvent(chatID, new GenericMessage(LocalDBWrapper.getMessageByID(messageID))));
         if (!MainApplication.getCurrentChatActivity().equals(chatID)) {
-            /*
+
             byte[] avatarBytes = new byte[0];
             try {
                 CompletableFuture<byte[]> future = loadAvatar(chatID);
@@ -60,14 +85,12 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 e.printStackTrace();
             }
 
-
-
             Bitmap avatar = null;
             if(avatarBytes != null) {
                 avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
             }
             NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_message_white_24dp)
+                    .setSmallIcon(R.drawable.amu_bubble_mask)
                     .setContentTitle(chatID)
                     .setContentText(message.getBody())
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -84,9 +107,16 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 notification.setLargeIcon(drawableToBitmap(avatarText));
             }
             notificationManager.notify(new Random().nextInt(), notification.build());
-
-             */
         }
+
+    }
+
+   public void subscribeOnMessage(Observer<Message> observer){
+        msgs.subscribe(observer);
+    }
+
+    public void unSubscribeOnMessage(){
+        msgs.onComplete();
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
@@ -110,7 +140,6 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         drawable.draw(canvas);
         return bitmap;
     }
-
 
     @Override
     public void presenceAvailable(FullJid address, Presence availablePresence) {
@@ -148,7 +177,6 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         }
     }
 
-    /*
     private CompletableFuture<byte[]> loadAvatar(String senderID) {
         if(senderID.length() != 0) {
             if(MainApplication.avatarsCache.containsKey(senderID)) {
@@ -174,5 +202,4 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         }
         return null;
     }
-  */
 }

@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
+import io.moonshard.moonshard.services.NewMessageListener
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smack.chat.ChatMessageListener
 import org.jivesoftware.smack.chat2.Chat
+import org.jivesoftware.smack.packet.Message
+import org.jxmpp.jid.EntityBareJid
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
@@ -33,8 +36,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
 
         sendMessage.setOnClickListener {
-            presenter.sendMessage("myTest message")
+            presenter.sendMessage(editText?.text.toString())
         }
-
     }
+
 }

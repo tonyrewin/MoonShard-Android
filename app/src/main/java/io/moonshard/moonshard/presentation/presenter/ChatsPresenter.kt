@@ -1,6 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import io.moonshard.moonshard.helpers.AppHelper
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.ChatsHelper
 import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericDialog
@@ -38,7 +38,7 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
             chatsHelper.remoteContacts
         }
             .thenAccept { contacts ->
-                AppHelper.getMainUIThread().post {
+                MainApplication.getMainUIThread().post {
                     if (contacts != null) {
                         StreamSupport.stream(contacts).forEach { contact ->
                             val chatID = contact.jid.asUnescapedString()

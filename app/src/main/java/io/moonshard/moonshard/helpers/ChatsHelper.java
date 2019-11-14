@@ -15,8 +15,8 @@ import io.moonshard.moonshard.models.roomEntities.ChatEntity;
     }
 
     public  Set<RosterEntry> getRemoteContacts() {
-        if(AppHelper.getXmppConnection() != null) {
-            return AppHelper.getXmppConnection().getContactList();
+        if(MainApplication.getXmppConnection() != null) {
+            return MainApplication.getXmppConnection().getContactList();
         }
         return null;
     }

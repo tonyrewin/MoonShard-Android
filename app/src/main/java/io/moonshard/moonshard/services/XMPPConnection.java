@@ -173,6 +173,10 @@ public class XMPPConnection implements ConnectionListener {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.CONNECTED;
     }
 
+    public  NetworkHandler getNetwork(){
+        return networkHandler;
+    }
+
     @Override
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;

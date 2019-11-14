@@ -2,7 +2,6 @@ package io.moonshard.moonshard.presentation.presenter
 
 
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnection
 import moxy.InjectViewState
@@ -18,7 +17,7 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
      fun register(email: String, pass: String) {
          viewState.showLoader()
         try {
-            AppHelper.getXmppConnection()?.register(email, pass)
+            MainApplication.getXmppConnection()?.register(email, pass)
             viewState.showToast("Register is success")
            // return true
         } catch (localXMPPException: XMPPException) {

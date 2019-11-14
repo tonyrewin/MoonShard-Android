@@ -21,7 +21,6 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
-import org.matrix.androidsdk.MXSession;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -118,67 +117,6 @@ public class MainApplication extends Application {
 
     public static ApplicationComponent getComponent() {
         return component;
-    }
-
-    //==============================================================================================================
-    // Syncing mxSessions
-    //==============================================================================================================
-
-
-    /**
-     * syncing sessions
-     */
-    private static final Set<MXSession> mSyncingSessions = new HashSet<>();
-
-    /**
-     * Add a session in the syncing sessions list
-     *
-     * @param session the session
-     */
-    public static void addSyncingSession(MXSession session) {
-        synchronized (mSyncingSessions) {
-            mSyncingSessions.add(session);
-        }
-    }
-
-    /**
-     * Remove a session in the syncing sessions list
-     *
-     * @param session the session
-     */
-    public static void removeSyncingSession(MXSession session) {
-        if (null != session) {
-            synchronized (mSyncingSessions) {
-                mSyncingSessions.remove(session);
-            }
-        }
-    }
-
-    /**
-     * Clear syncing sessions list
-     */
-    public static void clearSyncingSessions() {
-        synchronized (mSyncingSessions) {
-            mSyncingSessions.clear();
-        }
-    }
-
-    /**
-     * Tell if a session is syncing
-     *
-     * @param session the session
-     * @return true if the session is syncing
-     */
-    public static boolean isSessionSyncing(MXSession session) {
-        boolean isSyncing = false;
-
-        if (null != session) {
-            synchronized (mSyncingSessions) {
-                isSyncing = mSyncingSessions.contains(session);
-            }
-        }
-
-        return isSyncing;
     }
 
     /*

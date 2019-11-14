@@ -3,7 +3,6 @@ package io.moonshard.moonshard.presentation.presenter
 
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.usecase.TestUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,7 +50,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
     }
 
     fun login(email: String, password: String) {
-        val success = AppHelper.getXmppConnection().login(
+        val success = MainApplication.getXmppConnection().login(
             email,
             password
         )

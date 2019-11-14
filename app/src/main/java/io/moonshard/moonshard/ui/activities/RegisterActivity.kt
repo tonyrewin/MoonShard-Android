@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.TextView
 import android.widget.Toast
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
@@ -50,14 +50,14 @@ class RegisterActivity : MvpAppCompatActivity(), RegisterView {
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 val binder = service as XMPPConnectionService.XMPPServiceBinder
-                AppHelper.setXmppConnection(binder.connection)
+                MainApplication.setXmppConnection(binder.connection)
             }
 
             override fun onServiceDisconnected(name: ComponentName) {
-                AppHelper.setXmppConnection(null)
+                MainApplication.setXmppConnection(null)
             }
         }
-        AppHelper.setServiceConnection(connection)
+        MainApplication.setServiceConnection(connection)
         applicationContext.bindService(
             Intent(applicationContext, XMPPConnectionService::class.java),
             connection,

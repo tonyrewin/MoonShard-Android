@@ -9,9 +9,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
-
-import org.matrix.androidsdk.core.Log;
-
+import android.util.Log;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;

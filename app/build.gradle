@@ -109,9 +109,6 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation('org.jitsi.react:jitsi-meet-sdk:2.2.2')
 
-    //matrix
-    implementation 'com.github.matrix-org:matrix-android-sdk:v0.9.30'
-
     //log
     implementation 'com.orhanobut:logger:2.2.0'
 

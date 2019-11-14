@@ -10,7 +10,7 @@ import android.os.IBinder
 import android.view.View
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
-import io.moonshard.moonshard.helpers.AppHelper
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
@@ -64,14 +64,14 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 val binder = service as XMPPConnectionService.XMPPServiceBinder
-                AppHelper.setXmppConnection(binder.connection)
+                MainApplication.setXmppConnection(binder.connection)
             }
 
             override fun onServiceDisconnected(name: ComponentName) {
-                AppHelper.setXmppConnection(null)
+                MainApplication.setXmppConnection(null)
             }
         }
-        AppHelper.setServiceConnection(connection)
+        MainApplication.setServiceConnection(connection)
         applicationContext.bindService(
             Intent(applicationContext, XMPPConnectionService::class.java),
             connection,
@@ -80,7 +80,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
     }
 
     fun doLogin2() {
-        val success = AppHelper.getXmppConnection().login(
+        val success = MainApplication.getXmppConnection().login(
             editEmail.text.toString(),
             editPassword.text.toString()
         )

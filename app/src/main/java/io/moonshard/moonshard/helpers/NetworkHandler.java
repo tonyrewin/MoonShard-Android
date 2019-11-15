@@ -34,9 +34,6 @@ import java.util.concurrent.ExecutionException;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.R;
-import io.moonshard.moonshard.models.GenericMessage;
-import io.moonshard.moonshard.presentation.presenter.ChatPresenter;
-import io.moonshard.moonshard.services.NewMessageListener;
 import io.reactivex.Observer;
 import io.reactivex.subjects.PublishSubject;
 import java9.util.concurrent.CompletableFuture;
@@ -45,7 +42,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
 
-    PublishSubject<Message> msgs  = PublishSubject.create();
+    PublishSubject<Long> msgs = PublishSubject.create();
 
 
     private NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainApplication.getContext());
@@ -56,26 +53,24 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        if(msgs.hasObservers()){
-            msgs.onNext(message);
-        }
 
         String chatID = chat.getXmppAddressOfChatPartner().asUnescapedString();
-        if(LocalDBWrapper.getChatByChatID(from.asEntityBareJidString()) == null) {
-             LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>());
-         }
-         long messageID = LocalDBWrapper.createMessageEntry(chatID, message.getStanzaId(), from.asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
-         int newUnreadMessagesCount = LocalDBWrapper.getChatByChatID(chatID).unreadMessagesCount + 1;
-         LocalDBWrapper.updateChatUnreadMessagesCount(chatID, newUnreadMessagesCount);
+        if (LocalDBWrapper.getChatByChatID(from.asEntityBareJidString()) == null) {
+            LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>());
+        }
+        long messageID = LocalDBWrapper.createMessageEntry(chatID, message.getStanzaId(), from.asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
+        msgs.onNext(messageID);
+        int newUnreadMessagesCount = LocalDBWrapper.getChatByChatID(chatID).unreadMessagesCount + 1;
+        LocalDBWrapper.updateChatUnreadMessagesCount(chatID, newUnreadMessagesCount);
 
-      //   EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
+        //   EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
         // EventBus.getDefault().post(new LastMessageEvent(chatID, new GenericMessage(LocalDBWrapper.getMessageByID(messageID))));
         if (!MainApplication.getCurrentChatActivity().equals(chatID)) {
 
             byte[] avatarBytes = new byte[0];
             try {
                 CompletableFuture<byte[]> future = loadAvatar(chatID);
-                if(future != null) {
+                if (future != null) {
                     avatarBytes = future.get();
                 }
 
@@ -86,7 +81,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
             }
 
             Bitmap avatar = null;
-            if(avatarBytes != null) {
+            if (avatarBytes != null) {
                 avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
             }
             NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
@@ -94,7 +89,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                     .setContentTitle(chatID)
                     .setContentText(message.getBody())
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            if(avatar != null) {
+            if (avatar != null) {
                 notification.setLargeIcon(avatar);
             } else {
                 String firstLetter = Character.toString(Character.toUpperCase(chatID.charAt(0)));
@@ -111,11 +106,11 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
     }
 
-   public void subscribeOnMessage(Observer<Message> observer){
+    public void subscribeOnMessage(Observer<Long> observer) {
         msgs.subscribe(observer);
     }
 
-    public void unSubscribeOnMessage(){
+    public void unSubscribeOnMessage() {
         msgs.onComplete();
     }
 
@@ -178,13 +173,13 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     }
 
     private CompletableFuture<byte[]> loadAvatar(String senderID) {
-        if(senderID.length() != 0) {
-            if(MainApplication.avatarsCache.containsKey(senderID)) {
+        if (senderID.length() != 0) {
+            if (MainApplication.avatarsCache.containsKey(senderID)) {
                 return CompletableFuture.completedFuture(MainApplication.avatarsCache.get(senderID));
             }
             CompletableFuture<byte[]> completableFuture = CompletableFuture.supplyAsync(() -> {
-                while (MainApplication.getXmppConnection() == null);
-                while (MainApplication.getXmppConnection().isConnectionAlive() != true);
+                while (MainApplication.getXmppConnection() == null) ;
+                while (MainApplication.getXmppConnection().isConnectionAlive() != true) ;
                 EntityBareJid jid = null;
                 try {
                     jid = JidCreate.entityBareFrom(senderID);
@@ -193,7 +188,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 }
                 return MainApplication.getXmppConnection().getAvatar(jid);
             }).thenApply((avatarBytes) -> {
-                if(avatarBytes != null) {
+                if (avatarBytes != null) {
                     MainApplication.avatarsCache.put(senderID, avatarBytes);
                 }
                 return avatarBytes;

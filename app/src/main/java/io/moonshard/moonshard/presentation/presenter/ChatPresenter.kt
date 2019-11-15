@@ -3,10 +3,12 @@ package io.moonshard.moonshard.presentation.presenter
 import com.instacart.library.truetime.TrueTime
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.LocalDBWrapper
+import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.models.roomEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.chat2.Chat
@@ -22,12 +24,16 @@ import java.io.IOException
 @InjectViewState
 class ChatPresenter : MvpPresenter<ChatView>() {
 
+    var chatID:String?=null
+    fun setChatId(chatId:String){
+        this.chatID = chatId
+    }
 
     fun sendMessage(text: String): MessageEntity? {
         if (MainApplication.getXmppConnection().isConnectionAlive) {
             val jid: EntityBareJid
             try {
-                jid = JidCreate.entityBareFrom(MainApplication.getJid())
+                jid = JidCreate.entityBareFrom("testings@moonshard.tech")
             } catch (e: XmppStringprepException) {
                 return null
             }
@@ -60,23 +66,21 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 true,
                 false
             )
+
+
+            val message = LocalDBWrapper.getMessageByID(messageID)
+
+            if (message != null) {
+                val myMessage = GenericMessage(message)
+                // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
+                // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
+                viewState?.addMessage(myMessage)
+            }
             return LocalDBWrapper.getMessageByID(messageID)
         } else {
             return null
         }
     }
-
-    /*
-    fun onNewMessage() {
-        val chatManager = ChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-        chatManager.addIncomingListener(object : IncomingChatMessageListener {
-            override fun newIncomingMessage(from: EntityBareJid, message: Message, chat: Chat) {
-                // Your code to handle the incoming message
-            }
-        })
-    }
-
-     */
 
     override fun onDestroy() {
         MainApplication.getXmppConnection().network.unSubscribeOnMessage()
@@ -87,15 +91,21 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         MainApplication.getXmppConnection().network.subscribeOnMessage(onNewMessage())
     }
 
-    private fun onNewMessage(): Observer<Message> {
-        return object : Observer<Message> {
+    private fun onNewMessage(): Observer<Long> {
+        return object : Observer<Long> {
 
             override fun onSubscribe(d: Disposable) {
                 var kek = ""
             }
 
-            override fun onNext(message: Message) {
-                var kek = ""
+            override fun onNext(idMessage: Long) {
+                 //   if(idMessage.equals(chatID)) {
+                        val message = GenericMessage(LocalDBWrapper.getMessageByID(idMessage))
+                       // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
+                       // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
+                        viewState?.addMessage(message)
+
+                  //  }
             }
 
             override fun onError(e: Throwable) {

@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.models;
 
 import java.util.Date;
+
+import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.models.jabber.GenericUser;
 import io.moonshard.moonshard.models.roomEntities.MessageEntity;
 
@@ -10,6 +12,7 @@ public class GenericMessage {
     private long timestamp;
     private String text;
     private String imageUrl;
+
 
     public GenericMessage(MessageEntity messageEntity) {
         this.messageID = messageEntity.messageID;
@@ -39,5 +42,13 @@ public class GenericMessage {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public boolean isBelongsToCurrentUser() {
+        if(author.getJid().equals(MainApplication.getCurrentLoginCredentials().username)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

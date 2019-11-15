@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.ChatsHelper
 import io.moonshard.moonshard.helpers.LocalDBWrapper
@@ -11,15 +10,11 @@ import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import java.util.ArrayList
-import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.xdata.Form
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
-import org.jxmpp.jid.util.JidUtil
-import org.jxmpp.jid.Jid
-import java.lang.Exception
+import java.util.*
+import org.jivesoftware.smackx.muc.RoomInfo
 
 
 @InjectViewState
@@ -27,7 +22,7 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
 
     private val chatsHelper = ChatsHelper()
 
-    fun setDialogs(){
+    fun setDialogs() {
         val dialogs = ArrayList<GenericDialog>()
         StreamSupport.stream(chatsHelper.loadLocalChats())
             .forEach { chatEntity -> dialogs.add(GenericDialog(chatEntity)) }
@@ -38,40 +33,31 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
                     dialog.lastMessage = GenericMessage(messageEntity)
                 }
             }
-
         viewState?.setData(dialogs)
         loadRemoteContactList()
     }
 
-    fun createConference(){
+    fun createConference() {
         try {
-            val manager = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val jid = JidCreate.entityBareFrom("ploika" + "@conference." + MainApplication.getCurrentLoginCredentials().jabberHost)
-            val muc = manager.getMultiUserChat(jid)
-            val owners = JidUtil.jidSetFrom(arrayOf("just@moonshard.tech"))
-            val nickName = Resourcepart.from("just")
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val jid =
+                "ploika" + "@conference." + MainApplication.getCurrentLoginCredentials().jabberHost
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             muc.create(nickName).makeInstant()
             muc.join(nickName)
-        }catch (e:Exception){
+            viewState?.showChatScreen(jid)
+            viewState.addNewChat()
+
+            val info = manager.getRoomInfo(entityBareJid)
+       } catch (e: Exception) {
             viewState?.showError(e.message!!)
         }
-
-
-      //  muc.create(nickName)
-      //  val form = muc.configurationForm.createAnswerForm()
-      //  form.setAnswer("muc#roomconfig_roomowners", owners)
-      //  muc.sendConfigurationForm(form)
-
-        /*
-        muc.create(nickName)
-            .configFormManager
-            .setRoomOwners(owners)
-            .submitConfigurationForm()
-
-         */
     }
 
-    fun loadRemoteContactList() {
+    private fun loadRemoteContactList() {
         CompletableFuture.supplyAsync {
             chatsHelper.remoteContacts
         }
@@ -93,8 +79,8 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
                                 dialog.lastMessage = GenericMessage(messageEntity)
                             }
 
-                          //  dialogListAdapter.upsertItem(dialog)
-                          //  dialogListAdapter.notifyDataSetChanged()
+                            //  dialogListAdapter.upsertItem(dialog)
+                            //  dialogListAdapter.notifyDataSetChanged()
                         }
                     }
                 }

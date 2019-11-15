@@ -8,6 +8,7 @@
         tools:context=".ui.activities.MainActivity">
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+            android:visibility="gone"
             app:itemTextColor="@color/text_nav_selector"
             app:itemIconTint="#0075FF"
             android:id="@+id/bottomBar"

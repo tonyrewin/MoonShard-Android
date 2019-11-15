@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.helpers.ChatsHelper
+import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
 import io.moonshard.moonshard.presentation.view.ChatsView
@@ -23,13 +24,20 @@ import java.util.ArrayList
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
+
+    override fun addNewChat() {
+       // LocalDBWrapper.createChatEntry()
+    }
+
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun setData(chats:ArrayList<GenericDialog>) {
-        chats.add(GenericDialog())
-        (chatsRv.adapter as? MyChatsAdapter)?.setItems(chats)
+
+        val myChats = ArrayList<GenericDialog>()
+        myChats.add(GenericDialog())
+        (chatsRv.adapter as? MyChatsAdapter)?.setItems(myChats)
         //(chatsRv as? MyChatsAdapter)?.sort(chats)
     }
 
@@ -38,25 +46,22 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        chatsRv?.let {
-            chatsRv.layoutManager = LinearLayoutManager(view.context)
-
-            chatsRv.adapter = MyChatsAdapter(object : RvListener{
+            chatsRv?.layoutManager = LinearLayoutManager(view.context)
+            chatsRv?.adapter = MyChatsAdapter(object : RvListener{
                 override fun clickChat(idChat: String) {
                     showChatScreen(idChat)
                     Log.d("chatsFragment","was click on chat item")
                 }
             }, arrayListOf())
-        }
-        presenter.setDialogs()
 
+        presenter.setDialogs()
 
         find?.setOnClickListener {
             presenter.createConference()
         }
     }
 
-    fun showChatScreen(chatId:String){
+   override fun showChatScreen(chatId:String){
         val bundle = Bundle()
         bundle.putString("chatId",chatId)
         val chatFragment = ChatFragment()

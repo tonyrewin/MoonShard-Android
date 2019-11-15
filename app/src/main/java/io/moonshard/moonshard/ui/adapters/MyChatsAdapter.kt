@@ -33,11 +33,6 @@ class MyChatsAdapter(val listener: RvListener, private var chats: List<GenericDi
             .load("https://dok7xy59qfw9h.cloudfront.net/479/254/442/-329996983-20arpee-1ersd6l4segk3e5/original/file.jpg")
             .into(holder.avatar)
 
-
-        if (position == 14) {
-
-        }
-
         holder.itemView.setOnClickListener {
             listener.clickChat(chats[position].id)
         }

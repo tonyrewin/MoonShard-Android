@@ -23,12 +23,24 @@ public class GenericDialog {
     }
 
     public GenericDialog() {
-        dialogID = "just";
+        dialogID = "ploika@moonshard.tech";
         dialogPhoto = "just";
-        dialogName = "just";
+        dialogName = "ploika";
         users = new ArrayList<>();
         unreadMessagesCount = 0;
     }
+
+    public GenericDialog(String dialogID, String dialogPhoto,
+                         String dialogName, List<GenericUser> users,
+                         GenericMessage lastMessage, int unreadMessagesCount) {
+        this.dialogID = dialogID;
+        this.dialogPhoto = dialogPhoto;
+        this.dialogName = dialogName;
+        this.users = users;
+        this.lastMessage = lastMessage;
+        this.unreadMessagesCount = unreadMessagesCount;
+    }
+
 
     public String getId() {
         return dialogID;

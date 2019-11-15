@@ -9,7 +9,6 @@
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
             app:itemTextColor="@color/text_nav_selector"
-            android:visibility="gone"
             app:itemIconTint="#0075FF"
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"

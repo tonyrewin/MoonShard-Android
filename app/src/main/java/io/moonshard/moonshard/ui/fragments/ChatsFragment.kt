@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,9 @@ import java.util.ArrayList
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
 
     override fun setData(chats:ArrayList<GenericDialog>) {
         chats.add(GenericDialog())
@@ -45,6 +49,11 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
             }, arrayListOf())
         }
         presenter.setDialogs()
+
+
+        find?.setOnClickListener {
+            presenter.createConference()
+        }
     }
 
     fun showChatScreen(chatId:String){

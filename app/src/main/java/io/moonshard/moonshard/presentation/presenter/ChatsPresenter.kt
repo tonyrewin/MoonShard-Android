@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.ChatsHelper
 import io.moonshard.moonshard.helpers.LocalDBWrapper
@@ -11,6 +12,15 @@ import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import java.util.ArrayList
+import org.jivesoftware.smackx.muc.MultiUserChat
+import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.xdata.Form
+import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
+import org.jxmpp.jid.util.JidUtil
+import org.jxmpp.jid.Jid
+import java.lang.Exception
+
 
 @InjectViewState
 class ChatsPresenter : MvpPresenter<ChatsView>() {
@@ -31,6 +41,34 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
 
         viewState?.setData(dialogs)
         loadRemoteContactList()
+    }
+
+    fun createConference(){
+        try {
+            val manager = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val jid = JidCreate.entityBareFrom("ploika" + "@conference." + MainApplication.getCurrentLoginCredentials().jabberHost)
+            val muc = manager.getMultiUserChat(jid)
+            val owners = JidUtil.jidSetFrom(arrayOf("just@moonshard.tech"))
+            val nickName = Resourcepart.from("just")
+            muc.create(nickName).makeInstant()
+            muc.join(nickName)
+        }catch (e:Exception){
+            viewState?.showError(e.message!!)
+        }
+
+
+      //  muc.create(nickName)
+      //  val form = muc.configurationForm.createAnswerForm()
+      //  form.setAnswer("muc#roomconfig_roomowners", owners)
+      //  muc.sendConfigurationForm(form)
+
+        /*
+        muc.create(nickName)
+            .configFormManager
+            .setRoomOwners(owners)
+            .submitConfigurationForm()
+
+         */
     }
 
     fun loadRemoteContactList() {

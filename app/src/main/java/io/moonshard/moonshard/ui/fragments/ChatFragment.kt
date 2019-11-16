@@ -18,7 +18,6 @@ import moxy.presenter.InjectPresenter
 class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun addMessage(message: GenericMessage) {
-
         runOnUiThread {
             (messages.adapter as MessagesAdapter).add(message)
             messages.scrollToPosition((messages.adapter as MessagesAdapter).itemCount - 1)
@@ -39,7 +38,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onViewCreated(view, savedInstanceState)
 
         messages?.layoutManager = LinearLayoutManager(view.context)
-        messages?.adapter = MessagesAdapter(arrayListOf())
+        messages?.adapter = MessagesAdapter(arrayListOf(),messages.layoutManager as LinearLayoutManager)
 
         arguments?.let {
             val idChat = it.getString("chatId")
@@ -50,5 +49,4 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
              presenter.sendMessage(editText?.text.toString())
         }
     }
-
 }

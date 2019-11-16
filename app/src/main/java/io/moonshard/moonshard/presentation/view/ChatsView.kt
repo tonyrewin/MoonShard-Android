@@ -8,5 +8,5 @@ interface ChatsView: MvpView {
     fun setData(chats: ArrayList<GenericDialog>)
     fun showError(error:String)
     fun showChatScreen(chatId:String)
-    fun addNewChat()
+    fun addNewChat(chat:GenericDialog)
 }

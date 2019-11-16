@@ -25,8 +25,8 @@ import java.util.ArrayList
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
-    override fun addNewChat() {
-       // LocalDBWrapper.createChatEntry()
+    override fun addNewChat(chat: GenericDialog) {
+
     }
 
     override fun showError(error: String) {
@@ -34,11 +34,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
     }
 
     override fun setData(chats:ArrayList<GenericDialog>) {
-
-        val myChats = ArrayList<GenericDialog>()
-        myChats.add(GenericDialog())
-        (chatsRv.adapter as? MyChatsAdapter)?.setItems(myChats)
-        //(chatsRv as? MyChatsAdapter)?.sort(chats)
+        (chatsRv.adapter as? MyChatsAdapter)?.setItems(chats)
     }
 
     @InjectPresenter
@@ -57,7 +53,9 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         presenter.setDialogs()
 
         find?.setOnClickListener {
-            presenter.createConference()
+            val newFragment = AddChatFragment()
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(R.id.container, newFragment)?.commit()
         }
     }
 

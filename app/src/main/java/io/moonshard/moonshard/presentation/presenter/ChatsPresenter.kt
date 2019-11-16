@@ -1,10 +1,12 @@
 package io.moonshard.moonshard.presentation.presenter
 
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.helpers.ChatsHelper
 import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.models.GenericMessage
+import io.moonshard.moonshard.models.roomEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ChatsView
 import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
@@ -14,13 +16,28 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
-import org.jivesoftware.smackx.muc.RoomInfo
+import kotlin.collections.ArrayList
 
 
 @InjectViewState
 class ChatsPresenter : MvpPresenter<ChatsView>() {
 
     private val chatsHelper = ChatsHelper()
+
+    private var chats:ArrayList<GenericDialog> = arrayListOf()
+
+    fun downloadChats() {
+        StreamSupport.stream(loadLocalChats())
+            .forEach { chatEntity -> chats.add(GenericDialog(chatEntity)) }
+
+
+
+        viewState?.setData(chats)
+    }
+
+    private fun loadLocalChats(): List<ChatEntity> {
+        return MainApplication.getChatDB().chatDao().getAllChats()
+    }
 
     fun setDialogs() {
         val dialogs = ArrayList<GenericDialog>()
@@ -49,10 +66,9 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
             muc.create(nickName).makeInstant()
             muc.join(nickName)
             viewState?.showChatScreen(jid)
-            viewState.addNewChat()
 
             val info = manager.getRoomInfo(entityBareJid)
-       } catch (e: Exception) {
+        } catch (e: Exception) {
             viewState?.showError(e.message!!)
         }
     }

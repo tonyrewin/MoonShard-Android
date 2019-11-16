@@ -6,8 +6,9 @@ import io.moonshard.moonshard.models.roomEntities.ChatEntity
 
 @Dao
 interface ChatDao {
-    @get:Query("SELECT * FROM chats")
-    val allChats: List<ChatEntity>
+
+    @Query("SELECT * FROM chats")
+    fun getAllChats(): List<ChatEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addChat(chatEntity: ChatEntity)

@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import android.widget.Toast
 import com.instacart.library.truetime.TrueTime
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.LocalDBWrapper
@@ -29,11 +30,22 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         this.chatID = chatId
     }
 
-    fun sendMessage(text: String): MessageEntity? {
+    fun sendMessage(text: String){
+        val message: MessageEntity? = sendMessage2(text)
+        if(message != null) {
+            val myMessage = GenericMessage(message)
+            viewState?.addMessage(myMessage)
+           // EventBus.getDefault().post(LastMessageEvent(chatEntity!!.jid, message))
+           // return true
+        }
+       // Toast.makeText(view.getActivityObject(), "Network error!", Toast.LENGTH_SHORT).show()
+    }
+
+    fun sendMessage2(text: String): MessageEntity? {
         if (MainApplication.getXmppConnection().isConnectionAlive) {
             val jid: EntityBareJid
             try {
-                jid = JidCreate.entityBareFrom("testings@moonshard.tech")
+                jid = JidCreate.entityBareFrom(chatID)
             } catch (e: XmppStringprepException) {
                 return null
             }
@@ -58,7 +70,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
 
             val messageID = LocalDBWrapper.createMessageEntry(
-                "1",
+                chatID,
                 messageUid,
                 MainApplication.getJid(),
                 timestamp,
@@ -66,16 +78,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 true,
                 false
             )
-
-
-            val message = LocalDBWrapper.getMessageByID(messageID)
-
-            if (message != null) {
-                val myMessage = GenericMessage(message)
-                // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
-                // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
-                viewState?.addMessage(myMessage)
-            }
             return LocalDBWrapper.getMessageByID(messageID)
         } else {
             return null

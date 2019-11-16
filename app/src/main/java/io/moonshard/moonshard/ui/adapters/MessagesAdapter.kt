@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.GenericMessage
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class MessagesAdapter(private var messages: ArrayList<GenericMessage>) :
+class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layoutManager: LinearLayoutManager) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -76,6 +78,36 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>) :
         messages.add(message)
         notifyDataSetChanged() // to render the list we need to notify
     }
+
+    /*
+    fun addToStart(message: GenericMessage, scroll: Boolean){
+        messages.add(message)
+        layoutManager.scrollToPosition(itemCount - 1)
+    }
+
+
+    fun addToStart(message: GenericMessage, scroll: Boolean) {
+        val isNewMessageToday = !isPreviousSameDate(0, message.createdAt)
+        if (isNewMessageToday) {
+            messages.add()
+        }
+        val element = Wrapper<MESSAGE>(message)
+        message.add(0, element)
+        notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
+        if (layoutManager != null && scroll) {
+            layoutManager.scrollToPosition(0)
+        }
+    }
+
+    private fun isPreviousSameDate(position: Int, dateToCompare: Date): Boolean {
+        if (messages.size <= position) return false
+        val previousPositionDate = messages[position].createdAt
+        return DateFormatter.isSameDay(dateToCompare, previousPositionDate)
+    }
+
+     */
+
+
 
     override fun getItemCount(): Int = messages.size
 

@@ -35,20 +35,9 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
-
         startService()
 
-
         loginBtn.setOnClickListener {
-
-            /*
-            presenter.login(
-                "https://matrix.moonshard.tech", "https://vector.im",
-                editEmail.text.toString(), editPassword.text.toString()
-            )
-             */
-            // doLogin2()
-
             saveLoginCredentials(editEmail.text.toString(), editPassword.text.toString())
             presenter.login(editEmail.text.toString(), editPassword.text.toString())
         }

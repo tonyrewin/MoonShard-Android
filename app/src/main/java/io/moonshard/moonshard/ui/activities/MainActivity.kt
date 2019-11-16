@@ -72,6 +72,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(supportFragmentManager.findFragmentByTag("chatScreen")!=null){
+           supportFragmentManager.popBackStack()
+        }
+    }
+
     private fun showMapScreen() {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()

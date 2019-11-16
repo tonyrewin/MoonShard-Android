@@ -14,6 +14,10 @@ import moxy.presenter.InjectPresenter
 
 
 class AddChatFragment : MvpAppCompatFragment(), AddChatView {
+    override fun back() {
+        val newFragment = ChatsFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, newFragment)?.commit()    }
 
     @InjectPresenter
     lateinit var presenter: AddChatPresenter

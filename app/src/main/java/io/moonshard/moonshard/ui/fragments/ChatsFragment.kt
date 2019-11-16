@@ -65,7 +65,8 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment)?.commit()
+        ft?.replace(R.id.container, chatFragment,"chatScreen")?.
+            addToBackStack("chatScreen")?.commit()
     }
 
     override fun onCreateView(

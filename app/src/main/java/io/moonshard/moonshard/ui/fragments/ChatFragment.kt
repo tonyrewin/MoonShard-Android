@@ -28,25 +28,34 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     lateinit var presenter: ChatPresenter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_chat, container, false)
+        return inflater.inflate(
+            io.moonshard.moonshard.R.layout.fragment_chat,
+            container, false
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         messages?.layoutManager = LinearLayoutManager(view.context)
-        messages?.adapter = MessagesAdapter(arrayListOf(),messages.layoutManager as LinearLayoutManager)
+        messages?.adapter =
+            MessagesAdapter(arrayListOf(), messages.layoutManager as LinearLayoutManager)
 
         arguments?.let {
             val idChat = it.getString("chatId")
             presenter.setChatId(idChat)
+            presenter.join()
         }
 
         sendMessage.setOnClickListener {
-             presenter.sendMessage(editText?.text.toString())
+            presenter.sendMessageGroupChat(editText?.text.toString())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroy()
     }
 }

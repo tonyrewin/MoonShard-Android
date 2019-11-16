@@ -10,11 +10,12 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 
+
 @InjectViewState
 class AddChatPresenter : MvpPresenter<AddChatView>() {
 
-    fun createChat(username:String){
-        if(!username.contains("@")) {
+    fun createChat(username: String) {
+        if (!username.contains("@")) {
             viewState?.showError("Должен содержать @ host")
             return
         }
@@ -24,11 +25,25 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
             val entityBareJid = JidCreate.entityBareFrom(username)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
-            muc.create(nickName).makeInstant()
-            muc.join(nickName)
-            LocalDBWrapper.createChatEntry(username, username.split("@")[0], ArrayList<GenericUser>())
+
+            muc.create(nickName)
+            // room is now created by locked
+            val form = muc.configurationForm
+            val answerForm = form.createAnswerForm()
+            answerForm.setAnswer("muc#roomconfig_persistentroom", true)
+            muc.sendConfigurationForm(answerForm)
+            // sending the configuration form unlocks the room
+            // muc.create(nickName).makeInstant()
+            // muc.join(nickName)
+            LocalDBWrapper.createChatEntry(
+                username,
+                username.split("@")[0],
+                ArrayList<GenericUser>()
+            )
+            viewState?.back()
         } catch (e: Exception) {
-            viewState?.showError(e.message!!)
+            val kek = ""
+            //viewState?.showError(e.message)
         }
     }
 }

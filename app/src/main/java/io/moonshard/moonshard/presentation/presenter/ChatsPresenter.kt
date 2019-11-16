@@ -47,7 +47,7 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
             .forEach { dialog ->
                 val messageEntity = LocalDBWrapper.getLastMessage(dialog.id)
                 if (messageEntity != null) {
-                    dialog.lastMessage = GenericMessage(messageEntity)
+                   // dialog.lastMessage = GenericMessage(messageEntity)
                 }
             }
         viewState?.setData(dialogs)

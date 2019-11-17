@@ -32,9 +32,7 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
             val answerForm = form.createAnswerForm()
             answerForm.setAnswer("muc#roomconfig_persistentroom", true)
             muc.sendConfigurationForm(answerForm)
-            // sending the configuration form unlocks the room
-            // muc.create(nickName).makeInstant()
-            // muc.join(nickName)
+
             LocalDBWrapper.createChatEntry(
                 username,
                 username.split("@")[0],
@@ -42,8 +40,7 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
             )
             viewState?.back()
         } catch (e: Exception) {
-            val kek = ""
-            //viewState?.showError(e.message)
+            viewState?.showError(e.message)
         }
     }
 }

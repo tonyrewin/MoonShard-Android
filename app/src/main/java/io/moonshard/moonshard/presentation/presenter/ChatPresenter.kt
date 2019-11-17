@@ -53,7 +53,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         val message: MessageEntity? = sendMessageGroupChat2(text)
         if(message != null) {
             val myMessage = GenericMessage(message)
-            viewState?.addMessage(myMessage)
+                //viewState?.addMessage(myMessage)
         }
     }
 
@@ -108,8 +108,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         )
         return LocalDBWrapper.getMessageByID(messageID)
     }
-
-
 
     fun sendMessage2(text: String): MessageEntity? {
         if (MainApplication.getXmppConnection().isConnectionAlive) {

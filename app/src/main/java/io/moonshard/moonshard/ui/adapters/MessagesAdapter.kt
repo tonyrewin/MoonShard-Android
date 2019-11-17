@@ -50,7 +50,7 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layout
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(messages.get(position).isBelongsToCurrentUser){
+        if(messages[position].isBelongsToCurrentUser){
             return 0
         }else{
             return 1
@@ -58,13 +58,24 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layout
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        /*
+        var name = ""
+        if(messages[position].user.name.contains("/")){
+             name = messages[position].user.name.split("/")[1]
+        }else{
+            name = ""
+        }
+
+         */
+
         when(holder.itemViewType){
             0->{
                 (holder as ViewHolderMyMessage).bodyText?.text = messages[position].text
             }
             1->{
+                val name = messages[position].user.name.split("/")[1]
                 (holder as ViewHolderDifferentMessage).bodyText?.text = messages[position].text
-                holder.name?.text = messages[position].user.name
+                holder.name?.text = name
                 holder.avatar?.setBackgroundColor(Color.parseColor("#7CFC00"))
             }
         }

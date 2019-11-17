@@ -45,10 +45,12 @@ public class GenericMessage {
     }
 
     public boolean isBelongsToCurrentUser() {
-        if(author.getJid().equals(MainApplication.getCurrentLoginCredentials().username)){
-            return true;
-        }else{
-            return false;
+        String name = "";
+        if (author.getJid().contains("/")) {
+            name = author.getJid().split("/")[1] + "@" + "moonshard.tech";
+        } else {
+            name = author.getJid();
         }
+        return name.equals(MainApplication.getCurrentLoginCredentials().username+"@"+"moonshard.tech");
     }
 }

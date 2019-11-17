@@ -6,12 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.helpers.ChatsHelper
-import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
 import io.moonshard.moonshard.presentation.view.ChatsView
@@ -20,7 +16,7 @@ import io.moonshard.moonshard.ui.adapters.RvListener
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import java.util.ArrayList
+import java.util.*
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
@@ -33,7 +29,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun setData(chats:ArrayList<GenericDialog>) {
+    override fun setData(chats: ArrayList<GenericDialog>) {
         (chatsRv.adapter as? MyChatsAdapter)?.setItems(chats)
     }
 
@@ -42,13 +38,13 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            chatsRv?.layoutManager = LinearLayoutManager(view.context)
-            chatsRv?.adapter = MyChatsAdapter(object : RvListener{
-                override fun clickChat(idChat: String) {
-                    showChatScreen(idChat)
-                    Log.d("chatsFragment","was click on chat item")
-                }
-            }, arrayListOf())
+        chatsRv?.layoutManager = LinearLayoutManager(view.context)
+        chatsRv?.adapter = MyChatsAdapter(object : RvListener {
+            override fun clickChat(idChat: String) {
+                showChatScreen(idChat)
+                Log.d("chatsFragment", "was click on chat item")
+            }
+        }, arrayListOf())
 
         presenter.setDialogs()
 
@@ -59,18 +55,19 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         }
     }
 
-   override fun showChatScreen(chatId:String){
+    override fun showChatScreen(chatId: String) {
         val bundle = Bundle()
-        bundle.putString("chatId",chatId)
+        bundle.putString("chatId", chatId)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment,"chatScreen")?.
-            addToBackStack("chatScreen")?.commit()
+        ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack("chatScreen")
+            ?.commit()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_chats, container, false)
     }
 }

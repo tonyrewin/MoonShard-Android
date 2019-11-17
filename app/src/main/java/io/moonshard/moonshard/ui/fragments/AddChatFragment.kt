@@ -17,13 +17,16 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
     override fun back() {
         val newFragment = ChatsFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, newFragment)?.commit()    }
+        ft?.replace(R.id.container, newFragment)?.commit()
+    }
 
     @InjectPresenter
     lateinit var presenter: AddChatPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_add_chat, container, false)
     }
 
@@ -34,7 +37,9 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         }
     }
 
-    override fun showError(text: String) {
-        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+    override fun showError(text: String?) {
+        text?.let {
+            Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+        } ?:  Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
     }
 }

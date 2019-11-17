@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.helpers.AvatarImageLoader
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
 import io.moonshard.moonshard.presentation.view.ChatsView
@@ -44,7 +45,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
                 showChatScreen(idChat)
                 Log.d("chatsFragment", "was click on chat item")
             }
-        }, arrayListOf())
+        }, arrayListOf(), AvatarImageLoader(this))
 
         presenter.setDialogs()
 

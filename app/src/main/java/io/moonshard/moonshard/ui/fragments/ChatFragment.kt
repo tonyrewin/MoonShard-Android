@@ -17,6 +17,9 @@ import moxy.presenter.InjectPresenter
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
 
+    @InjectPresenter
+    lateinit var presenter: ChatPresenter
+
     override fun addMessage(message: GenericMessage) {
         runOnUiThread {
             (messages.adapter as MessagesAdapter).add(message)
@@ -24,14 +27,9 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
-    @InjectPresenter
-    lateinit var presenter: ChatPresenter
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            io.moonshard.moonshard.R.layout.fragment_chat,
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_chat,
             container, false
         )
     }

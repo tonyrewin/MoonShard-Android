@@ -20,13 +20,17 @@ public class ChatEntity {
     public int unreadMessagesCount;
     @ColumnInfo
     public String firstMessageUid;
+    @ColumnInfo
+    public Boolean isGroupChat;
 
-    public ChatEntity(@NonNull String jid, String chatName, ArrayList<GenericUser> users, int unreadMessagesCount, String firstMessageUid) {
+    public ChatEntity(@NonNull String jid, String chatName, ArrayList<GenericUser> users,
+                      int unreadMessagesCount, String firstMessageUid,Boolean isGroupChat) {
         this.jid = jid;
         this.chatName = chatName;
         this.users = users;
         this.unreadMessagesCount = unreadMessagesCount;
         this.firstMessageUid = firstMessageUid;
+        this.isGroupChat = isGroupChat;
     }
 
     public boolean isPrivateChat() {

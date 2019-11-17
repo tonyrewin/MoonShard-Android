@@ -56,7 +56,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
         String chatID = chat.getXmppAddressOfChatPartner().asUnescapedString();
         if (LocalDBWrapper.getChatByChatID(from.asEntityBareJidString()) == null) {
-            LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>());
+            LocalDBWrapper.createChatEntry(chatID, chat.getXmppAddressOfChatPartner().asBareJid().asUnescapedString().split("@")[0], new ArrayList<>(),false);
         }
         long messageID = LocalDBWrapper.createMessageEntry(chatID, message.getStanzaId(), from.asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
         msgs.onNext(messageID);
@@ -110,7 +110,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     }
 
     public void unSubscribeOnMessage() {
-        msgs.onComplete();
+        //msgs.onComplete();
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
@@ -209,7 +209,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
         String chatID = roomName;
         if (LocalDBWrapper.getChatByChatID(roomJid) == null) {
-           LocalDBWrapper.createChatEntry(roomJid, roomJid.split("@")[0], new ArrayList<>());
+           LocalDBWrapper.createChatEntry(roomJid, roomJid.split("@")[0], new ArrayList<>(),true);
         }
         long messageID = LocalDBWrapper.createMessageEntry(roomJid, message.getStanzaId(), message.getFrom().asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
         msgs.onNext(messageID);

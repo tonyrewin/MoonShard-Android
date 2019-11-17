@@ -14,7 +14,7 @@ import org.jxmpp.jid.parts.Resourcepart
 @InjectViewState
 class AddChatPresenter : MvpPresenter<AddChatView>() {
 
-    fun createChat(username: String) {
+    fun createGroupChat(username: String) {
         if (!username.contains("@")) {
             viewState?.showError("Должен содержать @ host")
             return
@@ -36,11 +36,20 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
             LocalDBWrapper.createChatEntry(
                 username,
                 username.split("@")[0],
-                ArrayList<GenericUser>()
+                ArrayList<GenericUser>(),true
             )
             viewState?.back()
         } catch (e: Exception) {
             viewState?.showError(e.message)
         }
+    }
+
+    fun startChatWithPeer(username: String) {
+        if (!username.contains("@")) {
+            viewState?.showError("Должен содержать @ host")
+            return
+        }
+        LocalDBWrapper.createChatEntry(username, username.split("@")[0], ArrayList<GenericUser>(),false)
+        viewState?.back()
     }
 }

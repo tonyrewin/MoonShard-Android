@@ -14,8 +14,8 @@ public class LocalDBWrapper {
     private static final String LOG_TAG = "LocalDBWrapper";
     private static RoomHelper dbInstance = MainApplication.getChatDB();
 
-    public static void createChatEntry(String jid, String chatName, ArrayList<GenericUser> users) {
-        dbInstance.chatDao().addChat(new ChatEntity(jid, chatName, users, 0, ""));
+    public static void createChatEntry(String jid, String chatName, ArrayList<GenericUser> users,Boolean isGroupChat) {
+        dbInstance.chatDao().addChat(new ChatEntity(jid, chatName, users, 0, "",isGroupChat));
     }
 
     public static long createMessageEntry(String chatID, String messageUid, String senderJid, long timestamp, String text, boolean isSent, boolean isRead) {

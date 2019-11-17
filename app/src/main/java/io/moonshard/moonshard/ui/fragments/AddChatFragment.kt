@@ -33,13 +33,17 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btn?.setOnClickListener {
-            presenter.createChat(editJid.text.toString())
+            presenter.createGroupChat(editJid.text.toString())
+        }
+
+        btnOneToOne?.setOnClickListener {
+            presenter.startChatWithPeer(editJudOneToOne.text.toString())
         }
     }
 
     override fun showError(text: String?) {
         text?.let {
             Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
-        } ?:  Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+        } ?: Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
     }
 }

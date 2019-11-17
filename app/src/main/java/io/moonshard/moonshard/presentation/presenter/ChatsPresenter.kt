@@ -51,7 +51,7 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
                 }
             }
         viewState?.setData(dialogs)
-        loadRemoteContactList()
+       // loadRemoteContactList()
     }
 
     fun createConference() {
@@ -66,13 +66,12 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
             muc.create(nickName).makeInstant()
             muc.join(nickName)
             viewState?.showChatScreen(jid)
-
-            val info = manager.getRoomInfo(entityBareJid)
         } catch (e: Exception) {
             viewState?.showError(e.message!!)
         }
     }
 
+    /*
     private fun loadRemoteContactList() {
         CompletableFuture.supplyAsync {
             chatsHelper.remoteContacts
@@ -102,4 +101,5 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
                 }
             }
     }
+     */
 }

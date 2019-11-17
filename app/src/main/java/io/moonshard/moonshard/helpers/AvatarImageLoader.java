@@ -30,7 +30,6 @@ public class AvatarImageLoader  {
         this.activity = activity;
     }
 
-
     public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
         if(url.length() != 0) {
             if(!url.contains("http")) {

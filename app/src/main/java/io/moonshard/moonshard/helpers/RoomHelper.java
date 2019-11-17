@@ -9,7 +9,7 @@ import io.moonshard.moonshard.models.dao.MessageDao;
 import io.moonshard.moonshard.models.roomEntities.ChatEntity;
 import io.moonshard.moonshard.models.roomEntities.MessageEntity;
 
-@Database(entities = { MessageEntity.class, ChatEntity.class }, version = 1)
+@Database(entities = { MessageEntity.class, ChatEntity.class }, version = 2)
 
 @TypeConverters({RoomTypeConverter.class})
 public abstract class RoomHelper extends RoomDatabase {

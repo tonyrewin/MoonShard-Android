@@ -1,23 +1,16 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import android.widget.Toast
 import com.instacart.library.truetime.TrueTime
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericMessage
+import io.moonshard.moonshard.models.roomEntities.ChatEntity
 import io.moonshard.moonshard.models.roomEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smack.chat2.Chat
-import org.jivesoftware.smack.chat2.ChatManager
-import org.jivesoftware.smack.chat2.IncomingChatMessageListener
-import org.jivesoftware.smack.packet.Message
-import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
@@ -28,49 +21,51 @@ import java.io.IOException
 @InjectViewState
 class ChatPresenter : MvpPresenter<ChatView>() {
 
-    var chatID:String?=null
-    fun setChatId(chatId:String){
+    var chatID: String? = null
+    var chat: ChatEntity? = null
+    fun setChatId(chatId: String) {
         this.chatID = chatId
+        chat = LocalDBWrapper.getChatByChatID(chatId)
     }
 
-    fun sendMessage(text: String){
-
-    // val meessaage = sendMessageGroupChat(text)
-    //    val myMessage = GenericMessage(meessaage)
-    //    viewState?.addMessage(myMessage)
-
-        val message: MessageEntity? = sendMessage2(text)
-        if(message != null) {
+    fun sendMessageOneToOneChat(text: String) {
+        val message: MessageEntity? = sendMessageOneToOne(text)
+        if (message != null) {
             val myMessage = GenericMessage(message)
             viewState?.addMessage(myMessage)
-           // EventBus.getDefault().post(LastMessageEvent(chatEntity!!.jid, message))
-           // return true
+            viewState?.cleanMessage()
+            // EventBus.getDefault().post(LastMessageEvent(chatEntity!!.jid, message))
+            // return true
         }
-       // Toast.makeText(view.getActivityObject(), "Network error!", Toast.LENGTH_SHORT).show()
+        // Toast.makeText(view.getActivityObject(), "Network error!", Toast.LENGTH_SHORT).show()
     }
 
-    fun sendMessageGroupChat(text: String){
-        val message: MessageEntity? = sendMessageGroupChat2(text)
-        if(message != null) {
+    fun sendMessage(text: String) {
+        if(chat?.isGroupChat!!){
+            sendMessageGroupChat(text)
+        }else{
+            sendMessageOneToOneChat(text)
+        }
+    }
+
+    fun sendMessageGroupChat(text: String) {
+        val message: MessageEntity? = sendMessageGroup(text)
+        if (message != null) {
             val myMessage = GenericMessage(message)
-                //viewState?.addMessage(myMessage)
+            //viewState?.addMessage(myMessage)
         }
+        viewState?.cleanMessage()
     }
 
-    fun join(){
+    fun join() {
         val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
         val jid = JidCreate.entityBareFrom(chatID)
         val muc = MainApplication.getXmppConnection().multiUserChatManager.getMultiUserChat(jid)
         muc.join(nickName)
-
-        android.os.Handler().postDelayed({
-            muc.addMessageListener(MainApplication.getXmppConnection().network)
-        }, 5000)
-
         muc.addMessageListener(MainApplication.getXmppConnection().network)
     }
 
-    fun sendMessageGroupChat2(text:String):MessageEntity?{
+    fun sendMessageGroup(text: String): MessageEntity? {
         val jid: EntityBareJid
         try {
             jid = JidCreate.entityBareFrom(chatID)
@@ -109,7 +104,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         return LocalDBWrapper.getMessageByID(messageID)
     }
 
-    fun sendMessage2(text: String): MessageEntity? {
+    fun sendMessageOneToOne(text: String): MessageEntity? {
         if (MainApplication.getXmppConnection().isConnectionAlive) {
             val jid: EntityBareJid
             try {
@@ -169,13 +164,13 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
 
             override fun onNext(idMessage: Long) {
-                 //   if(idMessage.equals(chatID)) {
-                        val message = GenericMessage(LocalDBWrapper.getMessageByID(idMessage))
-                       // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
-                       // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
-                        viewState?.addMessage(message)
+                //   if(idMessage.equals(chatID)) {
+                val message = GenericMessage(LocalDBWrapper.getMessageByID(idMessage))
+                // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
+                // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
+                viewState?.addMessage(message)
 
-                  //  }
+                //  }
             }
 
             override fun onError(e: Throwable) {

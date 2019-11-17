@@ -28,10 +28,16 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_chat,
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(
+            io.moonshard.moonshard.R.layout.fragment_chat,
             container, false
         )
+    }
+
+    override fun cleanMessage() {
+        editText?.text?.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,11 +50,12 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         arguments?.let {
             val idChat = it.getString("chatId")
             presenter.setChatId(idChat)
-            presenter.join()
-        }
 
-        sendMessage.setOnClickListener {
-            presenter.sendMessageGroupChat(editText?.text.toString())
+            if (idChat.contains("conference")) presenter.join()
+
+            sendMessage.setOnClickListener {
+                presenter.sendMessage(editText?.text.toString())
+            }
         }
     }
 

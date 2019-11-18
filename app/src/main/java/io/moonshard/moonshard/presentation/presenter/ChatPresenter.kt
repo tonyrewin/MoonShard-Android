@@ -9,17 +9,26 @@ import io.moonshard.moonshard.models.roomEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import java9.util.concurrent.CompletableFuture
+import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smackx.forward.packet.Forwarded
+import org.jivesoftware.smackx.mam.MamManager
 import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
 import java.io.IOException
+import org.jivesoftware.smackx.muc.DiscussionHistory
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @InjectViewState
 class ChatPresenter : MvpPresenter<ChatView>() {
+
+    private val messageComparator = Comparator<GenericMessage> { o1, o2 -> o1.createdAt.time.compareTo(o2.createdAt.time) }
 
     var chatID: String? = null
     var chat: ChatEntity? = null
@@ -32,7 +41,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         val message: MessageEntity? = sendMessageOneToOne(text)
         if (message != null) {
             val myMessage = GenericMessage(message)
-            viewState?.addMessage(myMessage)
+            viewState?.addToStart(myMessage,true)
             viewState?.cleanMessage()
             // EventBus.getDefault().post(LastMessageEvent(chatEntity!!.jid, message))
             // return true
@@ -61,7 +70,11 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
         val jid = JidCreate.entityBareFrom(chatID)
         val muc = MainApplication.getXmppConnection().multiUserChatManager.getMultiUserChat(jid)
-        muc.join(nickName)
+        val mec = muc.getEnterConfigurationBuilder(nickName)
+
+        mec.requestNoHistory()
+        val mucEnterConfig = mec.build()
+        muc.join(mucEnterConfig)
         muc.addMessageListener(MainApplication.getXmppConnection().network)
     }
 
@@ -168,7 +181,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 val message = GenericMessage(LocalDBWrapper.getMessageByID(idMessage))
                 // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
                 // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
-                viewState?.addMessage(message)
+                viewState?.addToStart(message,true)
 
                 //  }
             }
@@ -192,6 +205,116 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
         }
     }
-
      */
+
+    fun loadMoreMessages() {
+        loadMessagesFromMAM().thenAccept { query ->
+            if(query != null) {
+                val adapterMessages = ArrayList<GenericMessage>()
+                StreamSupport.stream(query.page.forwarded)
+                    .forEach { forwardedMessage ->
+                        val message = Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
+                        if(message.body != null) {
+                            if(LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
+                                val messageID = LocalDBWrapper.createMessageEntry(chatID, message.stanzaId, message.from.asBareJid().asUnescapedString(), forwardedMessage.delayInformation.stamp.time, message.body, true, true)
+                                adapterMessages.add(GenericMessage(LocalDBWrapper.getMessageByID(messageID)))
+                            }
+                        }
+                    }
+                MainApplication.getMainUIThread().post {
+                     adapterMessages.sortWith(messageComparator)
+                    viewState?.addToEnd(adapterMessages, true)
+                }
+                if(query.messageCount != 0) {
+                    chat!!.firstMessageUid = query.mamResultExtensions[0].id
+                    LocalDBWrapper.updateChatEntity(chat)
+                }
+            }
+        }
+    }
+
+     fun loadLocalMessages() {
+        val entities = loadLocalMessagesLogic()
+        val messages = ArrayList<GenericMessage>()
+        if(entities != null) {
+            entities.forEach {
+                messages.add(GenericMessage(it))
+            }
+        }
+        messages.sortWith(messageComparator)
+         viewState.addToEnd(messages, true)
+    }
+
+    fun loadLocalMessagesLogic(): List<MessageEntity>? {
+        return LocalDBWrapper.getMessagesByChatID(chatID)
+    }
+
+     fun loadRecentPageMessages() {
+         loadRecentPageMessages2().thenAccept { query ->
+            if(query != null) {
+                val adapterMessages = ArrayList<GenericMessage>()
+                StreamSupport.stream(query.page.forwarded)
+                    .forEach { forwardedMessage ->
+                        val message = Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
+                        if(message.body != null) {
+                            if(LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
+                                val messageID = LocalDBWrapper.createMessageEntry(chatID, message.stanzaId, message.from.asBareJid().asUnescapedString(), forwardedMessage.delayInformation.stamp.time, message.body, true, true)
+                                adapterMessages.add(GenericMessage(LocalDBWrapper.getMessageByID(messageID)))
+                            }
+                        }
+                    }
+                MainApplication.getMainUIThread().post {
+                    adapterMessages.sortWith(messageComparator)
+                    adapterMessages.forEach {
+                        viewState.addToStart(it, true)
+                    }
+                }
+                if(query.messageCount != 0 && chat!!.firstMessageUid == "") {
+                    chat?.firstMessageUid = query.mamResultExtensions[0].id
+                    LocalDBWrapper.updateChatEntity(chat)
+                }
+               // EventBus.getDefault().post(LastMessageEvent(chatID, GenericMessage(LocalDBWrapper.getLastMessage(chatID))))
+            }
+        }
+    }
+
+     fun loadRecentPageMessages2(): CompletableFuture<MamManager.MamQuery?> {
+        return CompletableFuture.supplyAsync {
+            if(MainApplication.getXmppConnection() != null) {
+                val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
+                if(mamManager != null) {
+                    return@supplyAsync mamManager.queryMostRecentPage(JidCreate.from(chatID), 20)
+                } else {
+                    return@supplyAsync null
+                }
+            } else {
+                return@supplyAsync null
+            }
+        }
+    }
+
+    fun loadMessagesFromMAM(): CompletableFuture<MamManager.MamQuery?> {
+        return CompletableFuture.supplyAsync {
+            if(MainApplication.getXmppConnection() != null) {
+                val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
+                if(mamManager != null) {
+                    val firstMessageUid = LocalDBWrapper.getChatByChatID(chatID).firstMessageUid
+                    if(firstMessageUid != "") {
+                        return@supplyAsync mamManager.queryArchive(
+                            MamManager.MamQueryArgs.builder()
+                                .beforeUid(firstMessageUid)
+                                .limitResultsToJid(JidCreate.from(chatID))
+                                .setResultPageSizeTo(50)
+                                .build())
+                    } else {
+                        return@supplyAsync null
+                    }
+                } else {
+                    return@supplyAsync null
+                }
+            } else {
+                return@supplyAsync null
+            }
+        }
+    }
 }

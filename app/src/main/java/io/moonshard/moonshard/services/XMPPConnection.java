@@ -55,6 +55,8 @@ public class XMPPConnection implements ConnectionListener {
         DISCONNECTED
     }
 
+
+
     public enum SessionState {
         LOGGED_IN,
         LOGGED_OUT
@@ -115,18 +117,7 @@ public class XMPPConnection implements ConnectionListener {
             roster.addPresenceEventListener(networkHandler);
             MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
 
-            /*
-            mamManager = MamManager.getInstanceFor(connection);
-            try {
-                if(mamManager.isSupported()) {
-                    MamManager.getInstanceFor(connection).enableMamForAllMessages();
-                } else {
-                    mamManager = null;
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-*/
+
             if (MainApplication.isIsMainActivityDestroyed()) {
                 sendUserPresence(new Presence(Presence.Type.unavailable));
             }
@@ -269,17 +260,33 @@ public class XMPPConnection implements ConnectionListener {
         String username = email.split("@")[0];
 
         XMPPTCPConnection connect = getConnection();
-        if (connect.isAuthenticated()) {
-            Logger.d("User already logged in");
-            return true;
-        }
+
+
+
 
         try {
+
+            if (connect.isAuthenticated()) {
+                Logger.d("User already logged in");
+                return true;
+            }
+
             Logger.d("userLog: " + email + " and pass: " + pass);
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
             connect.login(username, pass);
+
+            mamManager = MamManager.getInstanceFor(connection);
+            try {
+                if(mamManager.isSupported()) {
+                    MamManager.getInstanceFor(connection).enableMamForAllMessages();
+                } else {
+                    mamManager = null;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             Logger.d("LOGIN ERROR" + connect.isAuthenticated());
             e.printStackTrace();

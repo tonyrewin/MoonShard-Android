@@ -57,6 +57,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
         if (success) {
             viewState?.showContactsScreen()
         } else {
+            viewState?.createNewConnect()
             viewState?.showError("An error has occurred")
         }
     }

@@ -67,6 +67,8 @@ public class XMPPConnectionService extends Service {
         }
     }
 
+
+
     private void createConnection() {
         if(connection == null) {
             connection = new XMPPConnection(this);

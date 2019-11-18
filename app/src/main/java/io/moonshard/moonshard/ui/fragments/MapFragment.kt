@@ -20,11 +20,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var mMap: GoogleMap? = null
 
-
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         map!!.isMyLocationEnabled = true
-
         map.uiSettings.isMyLocationButtonEnabled = false
         map.uiSettings.isCompassEnabled = false
     }

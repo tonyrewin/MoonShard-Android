@@ -4,6 +4,7 @@ import io.moonshard.moonshard.models.GenericMessage
 import moxy.MvpView
 
 interface ChatView: MvpView {
-    fun addMessage(message: GenericMessage)
     fun cleanMessage()
+    fun addToEnd(msgs:ArrayList<GenericMessage>,reverse: Boolean)
+    fun addToStart(message: GenericMessage, reverse: Boolean)
 }

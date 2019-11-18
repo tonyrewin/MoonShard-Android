@@ -8,4 +8,5 @@ interface LoginView : MvpView {
     fun showContactsScreen()
     fun showError(error:String)
     fun test()
+   fun createNewConnect()
 }

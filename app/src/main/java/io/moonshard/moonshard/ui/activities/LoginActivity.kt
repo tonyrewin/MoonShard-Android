@@ -21,6 +21,9 @@ import java.util.*
 
 
 class LoginActivity : MvpAppCompatActivity(), LoginView {
+    override fun createNewConnect() {
+        startService()
+    }
 
     private val timer = Timer(true)
 

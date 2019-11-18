@@ -29,9 +29,6 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
     fun downloadChats() {
         StreamSupport.stream(loadLocalChats())
             .forEach { chatEntity -> chats.add(GenericDialog(chatEntity)) }
-
-
-
         viewState?.setData(chats)
     }
 

@@ -10,12 +10,34 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.GenericMessage
+import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layoutManager: LinearLayoutManager) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+open class MessagesAdapter(
+    private var myMsgs: ArrayList<GenericMessage>, val layoutManager: LinearLayoutManager
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), RecyclerScrollMoreListener.OnLoadMoreListener {
+
+    private var loadMoreListener: OnLoadMoreListener? = null
+
+    fun setLoadMoreListener(loadMoreListener: OnLoadMoreListener) {
+        this.loadMoreListener = loadMoreListener
+    }
+
+    override fun onLoadMore(page: Int, total: Int) {
+        if (loadMoreListener != null) {
+            loadMoreListener!!.onLoadMore(page, total)
+        }
+    }
+
+    override fun getMessagesCount(): Int {
+        var count = 0
+        for (item in myMsgs) {
+            count++
+        }
+        return count
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -50,31 +72,30 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layout
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(messages[position].isBelongsToCurrentUser){
+        if (myMsgs[position].isBelongsToCurrentUser) {
             return 0
-        }else{
+        } else {
             return 1
         }
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        /*
-        var name = ""
-        if(messages[position].user.name.contains("/")){
-             name = messages[position].user.name.split("/")[1]
-        }else{
-            name = ""
-        }
-
-         */
-
-        when(holder.itemViewType){
-            0->{
-                (holder as ViewHolderMyMessage).bodyText?.text = messages[position].text
+        when (holder.itemViewType) {
+            0 -> {
+                (holder as ViewHolderMyMessage).bodyText?.text = myMsgs[position].text
             }
-            1->{
-                val name = messages[position].user.name.split("/")[1]
-                (holder as ViewHolderDifferentMessage).bodyText?.text = messages[position].text
+            1 -> {
+                val nameInGroups = myMsgs[position].user.name.split("/")
+                var name = ""
+
+                name = if (nameInGroups.size > 1) {
+                    nameInGroups[1]
+                } else {
+                    myMsgs[position].user.name.split("@")[0]
+                }
+
+                (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
                 holder.name?.text = name
                 holder.avatar?.setBackgroundColor(Color.parseColor("#7CFC00"))
             }
@@ -86,41 +107,86 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layout
     }
 
     fun add(message: GenericMessage) {
-        messages.add(message)
+        myMsgs.add(message)
         notifyDataSetChanged() // to render the list we need to notify
     }
 
-    /*
-    fun addToStart(message: GenericMessage, scroll: Boolean){
-        messages.add(message)
-        layoutManager.scrollToPosition(itemCount - 1)
-    }
-
-
+    /**
+     * Adds message to bottom of list and scroll if needed.
+     *
+     * @param message message to add.
+     * @param scroll  `true` if need to scroll list to bottom when message added.
+     */
     fun addToStart(message: GenericMessage, scroll: Boolean) {
         val isNewMessageToday = !isPreviousSameDate(0, message.createdAt)
         if (isNewMessageToday) {
-            messages.add()
+            myMsgs.add(0, message)
         }
-        val element = Wrapper<MESSAGE>(message)
-        message.add(0, element)
+        val element = message
+        myMsgs.add(0, element)
         notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
         if (layoutManager != null && scroll) {
             layoutManager.scrollToPosition(0)
         }
     }
 
+    fun addToEnd(messages: List<GenericMessage>, reverse: Boolean) {
+        if (messages.isEmpty()) return
+
+        if (reverse) Collections.reverse(messages)
+
+        if (myMsgs.isNotEmpty()) {
+            val lastItemPosition = myMsgs.size - 1
+            val lastItem = myMsgs[lastItemPosition].createdAt as Date
+            if (DateFormatter.isSameDay(messages[0].createdAt, lastItem)) {
+                myMsgs.removeAt(lastItemPosition)
+                notifyItemRemoved(lastItemPosition)
+            }
+        }
+
+        val oldSize = myMsgs.size
+        generateDateHeaders(messages)
+        notifyItemRangeInserted(oldSize, myMsgs.size - oldSize)
+    }
+
+
     private fun isPreviousSameDate(position: Int, dateToCompare: Date): Boolean {
-        if (messages.size <= position) return false
-        val previousPositionDate = messages[position].createdAt
+        if (myMsgs.size <= position) return false
+        val previousPositionDate = myMsgs[position].createdAt
         return DateFormatter.isSameDay(dateToCompare, previousPositionDate)
     }
 
+
+    fun generateDateHeaders(messages: List<GenericMessage>) {
+        for (i in messages.indices) {
+            val message = messages[i]
+            this.myMsgs.add(message)
+            if (messages.size > i + 1) {
+                val nextMessage = messages[i + 1]
+                if (!DateFormatter.isSameDay(message.createdAt, nextMessage.createdAt)) {
+                    this.myMsgs.add((message))
+                }
+            } else {
+                this.myMsgs.add(message)
+            }
+        }
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when next part of messages need to be loaded.
      */
+    interface OnLoadMoreListener {
 
+        /**
+         * Fires when user scrolled to the end of list.
+         *
+         * @param page            next page to download.
+         * @param totalItemsCount current items count.
+         */
+        fun onLoadMore(page: Int, totalItemsCount: Int)
+    }
 
-
-    override fun getItemCount(): Int = messages.size
+    override fun getItemCount(): Int = myMsgs.size
 
     inner class ViewHolderMyMessage(view: View) : RecyclerView.ViewHolder(view) {
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
@@ -130,6 +196,5 @@ class MessagesAdapter(private var messages: ArrayList<GenericMessage>,val layout
         internal var avatar: ImageView? = view.findViewById(R.id.avatar)
         internal var name: TextView? = view.findViewById(R.id.name)
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
-
     }
 }

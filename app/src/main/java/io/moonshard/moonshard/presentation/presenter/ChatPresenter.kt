@@ -13,14 +13,18 @@ import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.roster.Roster
+import org.jivesoftware.smackx.filetransfer.FileTransferManager
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
 import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
+import java.io.File
 import java.io.IOException
-import org.jivesoftware.smackx.muc.DiscussionHistory
+import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -28,7 +32,8 @@ import kotlin.collections.ArrayList
 @InjectViewState
 class ChatPresenter : MvpPresenter<ChatView>() {
 
-    private val messageComparator = Comparator<GenericMessage> { o1, o2 -> o1.createdAt.time.compareTo(o2.createdAt.time) }
+    private val messageComparator =
+        Comparator<GenericMessage> { o1, o2 -> o1.createdAt.time.compareTo(o2.createdAt.time) }
 
     var chatID: String? = null
     var chat: ChatEntity? = null
@@ -41,7 +46,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         val message: MessageEntity? = sendMessageOneToOne(text)
         if (message != null) {
             val myMessage = GenericMessage(message)
-            viewState?.addToStart(myMessage,true)
+            viewState?.addToStart(myMessage, true)
             viewState?.cleanMessage()
             // EventBus.getDefault().post(LastMessageEvent(chatEntity!!.jid, message))
             // return true
@@ -50,9 +55,9 @@ class ChatPresenter : MvpPresenter<ChatView>() {
     }
 
     fun sendMessage(text: String) {
-        if(chat?.isGroupChat!!){
+        if (chat?.isGroupChat!!) {
             sendMessageGroupChat(text)
-        }else{
+        } else {
             sendMessageOneToOneChat(text)
         }
     }
@@ -117,7 +122,22 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         return LocalDBWrapper.getMessageByID(messageID)
     }
 
+    fun sendFile(path: File) {
+        if (MainApplication.getXmppConnection().isConnectionAlive) {
+            val jid: FullJid?
+            try {
+                jid = JidCreate.entityFullFrom("$chatID/Smack")
+                MainApplication.getXmppConnection().sendFile(jid,path)
+            } catch (e: XmppStringprepException) {
+
+            }
+        }
+    }
+
+
+
     fun sendMessageOneToOne(text: String): MessageEntity? {
+
         if (MainApplication.getXmppConnection().isConnectionAlive) {
             val jid: EntityBareJid
             try {
@@ -181,7 +201,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 val message = GenericMessage(LocalDBWrapper.getMessageByID(idMessage))
                 // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
                 // LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
-                viewState?.addToStart(message,true)
+                viewState?.addToStart(message, true)
 
                 //  }
             }
@@ -209,23 +229,38 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     fun loadMoreMessages() {
         loadMessagesFromMAM().thenAccept { query ->
-            if(query != null) {
+            if (query != null) {
                 val adapterMessages = ArrayList<GenericMessage>()
                 StreamSupport.stream(query.page.forwarded)
                     .forEach { forwardedMessage ->
-                        val message = Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
-                        if(message.body != null) {
-                            if(LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
-                                val messageID = LocalDBWrapper.createMessageEntry(chatID, message.stanzaId, message.from.asBareJid().asUnescapedString(), forwardedMessage.delayInformation.stamp.time, message.body, true, true)
-                                adapterMessages.add(GenericMessage(LocalDBWrapper.getMessageByID(messageID)))
+                        val message =
+                            Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
+                        if (message.body != null) {
+                            if (LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
+                                val messageID = LocalDBWrapper.createMessageEntry(
+                                    chatID,
+                                    message.stanzaId,
+                                    message.from.asBareJid().asUnescapedString(),
+                                    forwardedMessage.delayInformation.stamp.time,
+                                    message.body,
+                                    true,
+                                    true
+                                )
+                                adapterMessages.add(
+                                    GenericMessage(
+                                        LocalDBWrapper.getMessageByID(
+                                            messageID
+                                        )
+                                    )
+                                )
                             }
                         }
                     }
                 MainApplication.getMainUIThread().post {
-                     adapterMessages.sortWith(messageComparator)
+                    adapterMessages.sortWith(messageComparator)
                     viewState?.addToEnd(adapterMessages, true)
                 }
-                if(query.messageCount != 0) {
+                if (query.messageCount != 0) {
                     chat!!.firstMessageUid = query.mamResultExtensions[0].id
                     LocalDBWrapper.updateChatEntity(chat)
                 }
@@ -233,33 +268,48 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         }
     }
 
-     fun loadLocalMessages() {
+    fun loadLocalMessages() {
         val entities = loadLocalMessagesLogic()
         val messages = ArrayList<GenericMessage>()
-        if(entities != null) {
+        if (entities != null) {
             entities.forEach {
                 messages.add(GenericMessage(it))
             }
         }
         messages.sortWith(messageComparator)
-         viewState.addToEnd(messages, true)
+        viewState.addToEnd(messages, true)
     }
 
     fun loadLocalMessagesLogic(): List<MessageEntity>? {
         return LocalDBWrapper.getMessagesByChatID(chatID)
     }
 
-     fun loadRecentPageMessages() {
-         loadRecentPageMessages2().thenAccept { query ->
-            if(query != null) {
+    fun loadRecentPageMessages() {
+        loadRecentPageMessages2().thenAccept { query ->
+            if (query != null) {
                 val adapterMessages = ArrayList<GenericMessage>()
                 StreamSupport.stream(query.page.forwarded)
                     .forEach { forwardedMessage ->
-                        val message = Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
-                        if(message.body != null) {
-                            if(LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
-                                val messageID = LocalDBWrapper.createMessageEntry(chatID, message.stanzaId, message.from.asBareJid().asUnescapedString(), forwardedMessage.delayInformation.stamp.time, message.body, true, true)
-                                adapterMessages.add(GenericMessage(LocalDBWrapper.getMessageByID(messageID)))
+                        val message =
+                            Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
+                        if (message.body != null) {
+                            if (LocalDBWrapper.getMessageByUID(message.stanzaId) == null) {
+                                val messageID = LocalDBWrapper.createMessageEntry(
+                                    chatID,
+                                    message.stanzaId,
+                                    message.from.asBareJid().asUnescapedString(),
+                                    forwardedMessage.delayInformation.stamp.time,
+                                    message.body,
+                                    true,
+                                    true
+                                )
+                                adapterMessages.add(
+                                    GenericMessage(
+                                        LocalDBWrapper.getMessageByID(
+                                            messageID
+                                        )
+                                    )
+                                )
                             }
                         }
                     }
@@ -269,20 +319,20 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                         viewState.addToStart(it, true)
                     }
                 }
-                if(query.messageCount != 0 && chat!!.firstMessageUid == "") {
+                if (query.messageCount != 0 && chat!!.firstMessageUid == "") {
                     chat?.firstMessageUid = query.mamResultExtensions[0].id
                     LocalDBWrapper.updateChatEntity(chat)
                 }
-               // EventBus.getDefault().post(LastMessageEvent(chatID, GenericMessage(LocalDBWrapper.getLastMessage(chatID))))
+                // EventBus.getDefault().post(LastMessageEvent(chatID, GenericMessage(LocalDBWrapper.getLastMessage(chatID))))
             }
         }
     }
 
-     fun loadRecentPageMessages2(): CompletableFuture<MamManager.MamQuery?> {
+    fun loadRecentPageMessages2(): CompletableFuture<MamManager.MamQuery?> {
         return CompletableFuture.supplyAsync {
-            if(MainApplication.getXmppConnection() != null) {
+            if (MainApplication.getXmppConnection() != null) {
                 val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
-                if(mamManager != null) {
+                if (mamManager != null) {
                     return@supplyAsync mamManager.queryMostRecentPage(JidCreate.from(chatID), 20)
                 } else {
                     return@supplyAsync null
@@ -295,17 +345,18 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     fun loadMessagesFromMAM(): CompletableFuture<MamManager.MamQuery?> {
         return CompletableFuture.supplyAsync {
-            if(MainApplication.getXmppConnection() != null) {
+            if (MainApplication.getXmppConnection() != null) {
                 val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
-                if(mamManager != null) {
+                if (mamManager != null) {
                     val firstMessageUid = LocalDBWrapper.getChatByChatID(chatID).firstMessageUid
-                    if(firstMessageUid != "") {
+                    if (firstMessageUid != "") {
                         return@supplyAsync mamManager.queryArchive(
                             MamManager.MamQueryArgs.builder()
                                 .beforeUid(firstMessageUid)
                                 .limitResultsToJid(JidCreate.from(chatID))
                                 .setResultPageSizeTo(50)
-                                .build())
+                                .build()
+                        )
                     } else {
                         return@supplyAsync null
                     }
@@ -317,4 +368,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
         }
     }
+
+
 }

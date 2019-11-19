@@ -50,6 +50,9 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         presenter.setDialogs()
 
         find?.setOnClickListener {
+        }
+
+        newChat?.setOnClickListener {
             val newFragment = AddChatFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(R.id.container, newFragment)?.commit()

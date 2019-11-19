@@ -1,11 +1,13 @@
 package io.moonshard.moonshard.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
@@ -14,6 +16,8 @@ import io.moonshard.moonshard.ui.adapters.MessagesAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import java.io.File
+import java.io.InputStream
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
@@ -65,16 +69,20 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
             presenter.loadMoreMessages()
             sendMessage.setOnClickListener {
-                presenter.sendMessage(editText?.text.toString())
+                presenter.sendMessage(editText.text.toString())
             }
         }
 
-       (messagesRv.adapter as MessagesAdapter).setLoadMoreListener(object :
-           MessagesAdapter.OnLoadMoreListener{
-           override fun onLoadMore(page: Int, totalItemsCount: Int) {
-               presenter.loadRecentPageMessages()
-           }
-       })
+        addAttachment?.setOnClickListener {
+            chooseFile()
+        }
+
+        (messagesRv.adapter as MessagesAdapter).setLoadMoreListener(object :
+            MessagesAdapter.OnLoadMoreListener {
+            override fun onLoadMore(page: Int, totalItemsCount: Int) {
+                presenter.loadRecentPageMessages()
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -98,8 +106,30 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         messagesRv?.adapter =
             MessagesAdapter(arrayListOf(), messagesRv.layoutManager as LinearLayoutManager)
 
-        val listener = RecyclerScrollMoreListener(layoutManager,messagesRv.adapter as MessagesAdapter)
+        val listener =
+            RecyclerScrollMoreListener(layoutManager, messagesRv.adapter as MessagesAdapter)
 
         messagesRv?.addOnScrollListener(listener)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val uri = data?.data
+
+        if (uri != null) {
+            val input = context?.contentResolver?.openInputStream(uri)
+            if(input!=null){
+                var file = StreamUtil.stream2file(input)
+                presenter.sendFile(file)
+            }
+        }
+    }
+
+    fun chooseFile() {
+        var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
+        chooseFile.type = "*/*"
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file")
+        startActivityForResult(chooseFile, 1)
     }
 }

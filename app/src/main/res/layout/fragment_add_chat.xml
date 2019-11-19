@@ -6,25 +6,86 @@
         tools:context=".ui.fragments.AddChatFragment"
         android:orientation="vertical">
 
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/ic_gps_fixed"
+            android:layout_marginTop="98dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="171dp"
+            android:layout_height="171dp"
+            android:text="conference.moonshard.tech" />
+
+
+    <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="#000000"
+            android:lineSpacingExtra="3sp"
+            android:translationY="1.64sp"
+            android:textSize="17sp"
+            android:text="Create a local group "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="9dp"
+            android:lineSpacingExtra="1sp"
+            android:translationY="0.62sp"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:text="Anyone close to this location will see \n this group. Chat is permanent."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_marginTop="13dp"
+            android:lineSpacingExtra="2sp"
+            android:translationY="0.8sp"
+            android:gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#9B9BB6"
+            android:textSize="14sp"
+            android:text="Your location: \n Улица Парковая, Одинцово, Россия"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:layout_marginTop="22dp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#0075FF"
+            android:textColor="@android:color/white"
+            android:text="start local group"
+            android:layout_width="190dp"
+            android:layout_height="40dp"/>
+
     <!-- TODO: Update blank fragment layout -->
     <EditText
+            android:visibility="gone"
             android:id="@+id/editJid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="conference.moonshard.tech" />
 
     <Button
+            android:visibility="gone"
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     <EditText
+            android:visibility="gone"
             android:text="moonshard.tech"
             android:id="@+id/editJudOneToOne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     <Button
+            android:visibility="gone"
             android:id="@+id/btnOneToOne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

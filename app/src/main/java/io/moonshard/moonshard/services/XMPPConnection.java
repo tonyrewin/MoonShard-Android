@@ -7,7 +7,6 @@ import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackException;
@@ -20,6 +19,8 @@ import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
+import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -28,17 +29,28 @@ import org.jivesoftware.smackx.ping.PingManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Set;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -54,7 +66,6 @@ public class XMPPConnection implements ConnectionListener {
         CONNECTED,
         DISCONNECTED
     }
-
 
 
     public enum SessionState {
@@ -82,12 +93,20 @@ public class XMPPConnection implements ConnectionListener {
         if (credentials.isEmpty()) {
             throw new EmptyLoginCredentialsException();
         }
+
+        HostnameVerifier verifier = (hostname, session) -> {
+            HostnameVerifier hv =
+                    HttpsURLConnection.getDefaultHostnameVerifier();
+            return hv.verify("upload.moonshard.tech", session);
+        };
+
         if (connection == null) {
             XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
                     .setXmppDomain(credentials.jabberHost)
                     .setHost(credentials.jabberHost)
                     .setResource(MainApplication.APP_NAME)
                     .setKeystoreType(null)
+                    .setHostnameVerifier(verifier)
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
                     .setCompressionEnabled(true)
                     .setConnectTimeout(7000)
@@ -116,7 +135,7 @@ public class XMPPConnection implements ConnectionListener {
             roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
             roster.addPresenceEventListener(networkHandler);
             MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
-
+            FileTransferNegotiator.IBB_ONLY = true;
 
             if (MainApplication.isIsMainActivityDestroyed()) {
                 sendUserPresence(new Presence(Presence.Type.unavailable));
@@ -134,6 +153,8 @@ public class XMPPConnection implements ConnectionListener {
                     //  Log.logDebug(TAG, "Connection found, trying to connect");
                     this.connection.connect();
                 } else {
+
+
                     // Log.logDebug(TAG, "No Connection found, trying to create a new connection");
                     XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                             .setXmppDomain(credentials.jabberHost)
@@ -211,6 +232,97 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
+    public void sendFile(EntityFullJid jid, File file) {
+        //  try {
+
+        Observable.fromCallable(() -> {
+            HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
+
+            try {
+                Single.just(manager.uploadFile(file));
+                return true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (XMPPException.XMPPErrorException e) {
+                e.printStackTrace();
+            } catch (SmackException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((result) -> {
+                    String kek = "";
+                    //Use result for something
+                });
+
+        /*
+        getTest(file).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                    String kek = "";
+                }).subscribe(t -> {
+            String kek = "";
+        });
+
+         */
+
+        // } catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //} catch (XMPPException.XMPPErrorException e) {
+        //     e.printStackTrace();
+        // } catch (SmackException e) {
+        //     e.printStackTrace();
+        //  } catch (IOException e) {
+        //     e.printStackTrace();
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+
+
+/*
+        // Create the file transfer manager
+        FileTransferManager manager = FileTransferManager.getInstanceFor(connection);
+        // Create the outgoing file transfer
+        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(jid);
+
+        manager.addFileTransferListener(new FileTransferListener() {
+            @Override
+            public void fileTransferRequest(FileTransferRequest request) {
+                String kek = "";
+            }
+        });
+
+        try {
+            transfer.sendFile(file,"kdsads");
+        } catch (SmackException e) {
+            e.printStackTrace();
+        }
+
+
+ */
+
+    }
+
+    Single<URL> getTest(File file) {
+        HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
+        try {
+            return Single.just(manager.uploadFile(file));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String sendMessageGroupChat(EntityBareJid recipientJid, String messageText) {
         MultiUserChat muc = null;
         try {
@@ -262,8 +374,6 @@ public class XMPPConnection implements ConnectionListener {
         XMPPTCPConnection connect = getConnection();
 
 
-
-
         try {
 
             if (connect.isAuthenticated()) {
@@ -279,7 +389,7 @@ public class XMPPConnection implements ConnectionListener {
 
             mamManager = MamManager.getInstanceFor(connection);
             try {
-                if(mamManager.isSupported()) {
+                if (mamManager.isSupported()) {
                     MamManager.getInstanceFor(connection).enableMamForAllMessages();
                 } else {
                     mamManager = null;

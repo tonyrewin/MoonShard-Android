@@ -26,7 +26,9 @@ class RegisterActivity : MvpAppCompatActivity(), RegisterView {
     private val timer = Timer(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_register)
         startService()
 

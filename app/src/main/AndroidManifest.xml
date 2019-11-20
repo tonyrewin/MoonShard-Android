@@ -27,7 +27,9 @@
 
         <activity android:name=".ui.activities.MainActivity"></activity>
         <activity android:name=".ui.activities.LoginActivity" />
-        <activity android:name=".ui.activities.RegisterActivity">
+        <activity android:name=".ui.activities.RegisterActivity"
+                android:theme="@style/AppTheme.Launcher">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

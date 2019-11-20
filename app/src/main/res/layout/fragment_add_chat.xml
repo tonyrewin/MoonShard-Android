@@ -8,7 +8,7 @@
 
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
             android:src="@drawable/ic_gps_fixed"
             android:layout_marginTop="98dp"
             android:layout_gravity="center_horizontal"
@@ -55,13 +55,14 @@
             android:layout_height="wrap_content"/>
 
     <Button
+            android:id="@+id/startLocalGroup"
             android:layout_marginTop="22dp"
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#0075FF"
             android:textColor="@android:color/white"
             android:text="start local group"
             android:layout_width="190dp"
-            android:layout_height="40dp"/>
+            android:layout_height="wrap_content"/>
 
     <!-- TODO: Update blank fragment layout -->
     <EditText

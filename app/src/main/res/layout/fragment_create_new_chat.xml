@@ -1,14 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.fragments.CreateNewChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+            android:id="@+id/profileSettingsLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="82dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="horizontal">
 
-</FrameLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="12dp"
+                android:src="@color/colorPrimary" />
+
+        <EditText
+                android:layout_width="249dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/rounded_edittext" />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            android:paddingStart="10dp">
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Location"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Улица Парковая, Одинцово, Россия"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="7dp"
+                android:text="Change"
+                android:textColor="#0075FF"
+                android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select categorie"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoriesRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="16dp"
+                android:text="Show on map for"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="right"
+                android:layout_marginTop="19dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginBottom="16dp"
+                android:text="3 days"
+                android:textColor="#8A000000"
+                android:textSize="14sp" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

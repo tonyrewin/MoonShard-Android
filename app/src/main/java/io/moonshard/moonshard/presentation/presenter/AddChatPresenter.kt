@@ -50,6 +50,6 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
             return
         }
         LocalDBWrapper.createChatEntry(username, username.split("@")[0], ArrayList<GenericUser>(),false)
-        viewState?.back()
+        viewState?.showCreateNewChatScreen()
     }
 }

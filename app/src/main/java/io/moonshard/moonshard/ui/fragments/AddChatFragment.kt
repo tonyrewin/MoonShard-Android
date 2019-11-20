@@ -40,11 +40,22 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         btnOneToOne?.setOnClickListener {
             presenter.startChatWithPeer(editJudOneToOne.text.toString())
         }
+
+        startLocalGroup?.setOnClickListener {
+            showCreateNewChatScreen()
+        }
     }
 
     override fun showError(text: String?) {
         text?.let {
             Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
         } ?: Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+    }
+
+   override fun showCreateNewChatScreen(){
+        val chatFragment = CreateNewChatFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, chatFragment, "CreateNewChatFragment")?.addToBackStack("CreateNewChatFragment")
+            ?.commit()
     }
 }

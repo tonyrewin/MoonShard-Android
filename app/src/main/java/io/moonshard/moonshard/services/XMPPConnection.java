@@ -94,19 +94,12 @@ public class XMPPConnection implements ConnectionListener {
             throw new EmptyLoginCredentialsException();
         }
 
-        HostnameVerifier verifier = (hostname, session) -> {
-            HostnameVerifier hv =
-                    HttpsURLConnection.getDefaultHostnameVerifier();
-            return hv.verify("upload.moonshard.tech", session);
-        };
-
         if (connection == null) {
             XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
                     .setXmppDomain(credentials.jabberHost)
                     .setHost(credentials.jabberHost)
                     .setResource(MainApplication.APP_NAME)
                     .setKeystoreType(null)
-                    .setHostnameVerifier(verifier)
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
                     .setCompressionEnabled(true)
                     .setConnectTimeout(7000)
@@ -143,38 +136,6 @@ public class XMPPConnection implements ConnectionListener {
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
 
-    }
-
-    void connection2() throws XMPPException, SmackException, IOException, InterruptedException {
-        if (connection == null) {
-            long l = System.currentTimeMillis();
-            try {
-                if (this.connection != null) {
-                    //  Log.logDebug(TAG, "Connection found, trying to connect");
-                    this.connection.connect();
-                } else {
-
-
-                    // Log.logDebug(TAG, "No Connection found, trying to create a new connection");
-                    XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                            .setXmppDomain(credentials.jabberHost)
-                            .setHost(credentials.jabberHost)
-                            .setResource(MainApplication.APP_NAME)
-                            .setKeystoreType(null)
-                            .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
-                            .setCompressionEnabled(true)
-                            .setConnectTimeout(7000)
-                            .build();
-
-                    this.connection = new XMPPTCPConnection(config);
-                    this.connection.connect();
-                }
-            } catch (Exception e) {
-                // Log.logError(TAG,"some issue with getting connection :" + e.getMessage());
-            }
-            //Log.logDebug(TAG, "Connection Properties: " + connection.getHost() + " " + connection.getServiceName());
-            //Log.logDebug(TAG, "Time taken in first time connect: " + (System.currentTimeMillis() - l));
-        }
     }
 
     public void disconnect() {
@@ -373,9 +334,7 @@ public class XMPPConnection implements ConnectionListener {
 
         XMPPTCPConnection connect = getConnection();
 
-
         try {
-
             if (connect.isAuthenticated()) {
                 Logger.d("User already logged in");
                 return true;

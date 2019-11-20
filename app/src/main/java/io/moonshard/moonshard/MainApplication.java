@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,6 +58,16 @@ public class MainApplication extends Application {
     private static boolean isMainActivityDestroyed = true;
     private static String currentChatActivity = "";
     public final static Map<String, byte[]> avatarsCache = new ConcurrentHashMap<>();
+    private static Location currentLocation;
+
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public static void setCurrentLocation(Location location) {
+        currentLocation = location;
+    }
 
     @Override
     public void onCreate() {

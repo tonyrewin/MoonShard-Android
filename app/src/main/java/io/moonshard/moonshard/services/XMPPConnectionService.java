@@ -1,12 +1,17 @@
 package io.moonshard.moonshard.services;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+
+import com.google.android.gms.location.LocationListener;
 
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackException;
@@ -27,6 +32,16 @@ public class XMPPConnectionService extends Service {
     private XMPPConnection connection;
     private Context context = MainApplication.getContext();
     private XMPPServiceBinder binder = new XMPPServiceBinder();
+
+
+
+    private LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            MainApplication.setCurrentLocation(location);
+        }
+    };
 
     public XMPPConnectionService() { }
 
@@ -67,7 +82,12 @@ public class XMPPConnectionService extends Service {
         }
     }
 
-
+    @SuppressLint("MissingPermission")
+    private void createLocationListener(){
+        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        mLocationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 1000 * 10, 10,
+                (android.location.LocationListener) locationListener);    }
 
     private void createConnection() {
         if(connection == null) {

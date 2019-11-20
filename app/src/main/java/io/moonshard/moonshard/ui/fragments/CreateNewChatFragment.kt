@@ -32,21 +32,21 @@ class CreateNewChatFragment : Fragment() {
 
 
         val categoryOne = Category(R.drawable.ic_star,"Тусовки")
-        val categoryTwo = Category(R.drawable.ic_case,"Тусовки")
-        val categoryThree = Category(R.drawable.ic_heart,"Тусовки")
-        val categoryFour = Category(R.drawable.ic_star,"Тусовки")
+        val categoryTwo = Category(R.drawable.ic_case,"Бизнес ивенты")
+        val categoryThree = Category(R.drawable.ic_heart,"Кружок по интересам")
+        val categoryFour = Category(R.drawable.ic_culture_category,"Культурные мероприятия")
 
         val categories = arrayListOf<Category>()
-        categories.add(categoryTwo)
         categories.add(categoryOne)
+        categories.add(categoryTwo)
         categories.add(categoryThree)
         categories.add(categoryFour)
-
 
         categoriesRv?.layoutManager = LinearLayoutManager(view.context)
         categoriesRv?.adapter = CategoriesAdapter(object : CategoryListener {
             override fun clickChat(idChat: String) {
-                Log.d("chatsFragment", "was click on chat item")
+               // #0075FF
+
             }
         }, categories)
     }

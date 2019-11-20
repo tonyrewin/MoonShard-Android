@@ -120,7 +120,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
             if(input!=null){
-                var file = StreamUtil.stream2file(input)
+                val file = StreamUtil.stream2file(input)
                 presenter.sendFile(file)
             }
         }

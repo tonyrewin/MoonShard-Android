@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.ui.fragments
 
-import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import io.moonshard.moonshard.ui.BottomSheetFragment
 import kotlinx.android.synthetic.main.fragment_map.*
 import pub.devrel.easypermissions.EasyPermissions
-import pub.devrel.easypermissions.EasyPermissions.hasPermissions
-import android.Manifest.permission
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.CAMERA
+import android.R
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
-
     private var mMap: GoogleMap? = null
 
     override fun onMapReady(map: GoogleMap?) {
@@ -33,16 +34,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
+
+       // val dialogView = layoutInflater.inflate(io.moonshard.moonshard.R.layout.bottom_sheet, null)
+      //  val dialog = BottomSheetDialog(context!!)
+      //  dialog.setContentView(dialogView)
+      //  dialog.show()
+
+
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(myBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        bottomSheetBehavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+            }
+
+        })
+
+        //val kek = BottomSheetFragment()
+       // kek.isCancelable = false
+       // kek.show(activity!!.supportFragmentManager, "add_photo_dialog_fragment")
     }
 
     override fun onResume() {

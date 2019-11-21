@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
@@ -47,4 +51,16 @@
             android:scaleType="center"
             android:src="@drawable/ic_location" />
 
-</RelativeLayout>
+    <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/pin_geo"
+            android:scaleType="center" />
+
+    </RelativeLayout>
+
+    <include
+            layout="@layout/fragment_bottom_sheet"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

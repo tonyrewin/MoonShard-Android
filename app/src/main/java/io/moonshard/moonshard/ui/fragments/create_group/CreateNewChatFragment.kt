@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.moonshard.moonshard.MainApplication
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.Category
@@ -30,7 +31,6 @@ class CreateNewChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val categoryOne = Category(R.drawable.ic_star,"Тусовки")
         val categoryTwo = Category(R.drawable.ic_case,"Бизнес ивенты")
         val categoryThree = Category(R.drawable.ic_heart,"Кружок по интересам")
@@ -47,6 +47,8 @@ class CreateNewChatFragment : Fragment() {
             override fun clickChat(idChat: String) {
             }
         }, categories)
+
+        address?.text = MainApplication.getAdress()
 
         timesLayout?.setOnClickListener {
             showTimesScreen()

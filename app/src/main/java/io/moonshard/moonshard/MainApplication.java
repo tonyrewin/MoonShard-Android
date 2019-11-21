@@ -60,8 +60,18 @@ public class MainApplication extends Application {
     public final static Map<String, byte[]> avatarsCache = new ConcurrentHashMap<>();
     private static Location currentLocation;
 
+    public static String getAdress() {
+        return adress;
+    }
 
-    public Location getCurrentLocation() {
+    public static void setAdress(String adress) {
+        MainApplication.adress = adress;
+    }
+
+    private static String adress;
+
+
+    public static Location getCurrentLocation() {
         return currentLocation;
     }
 

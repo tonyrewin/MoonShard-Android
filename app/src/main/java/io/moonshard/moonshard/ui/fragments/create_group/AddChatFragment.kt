@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.create_group
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
+import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter

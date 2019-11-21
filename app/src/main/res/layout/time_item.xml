@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainLayout"
+        android:orientation="vertical">
+
+    <TextView
+            android:layout_marginLeft="14dp"
+            android:textColor="#333333"
+            android:text="12 hours"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:id="@+id/timeTv"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:layout_marginRight="22dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:id="@+id/checkIv"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_check_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <View
+            android:id="@+id/lineView"
+            android:layout_below="@+id/checkIv"
+            android:background="#F5F5F5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+</RelativeLayout>

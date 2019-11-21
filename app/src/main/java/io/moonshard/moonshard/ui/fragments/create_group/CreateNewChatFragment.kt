@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.create_group
 
 import android.content.Context
 import android.net.Uri
@@ -45,9 +45,18 @@ class CreateNewChatFragment : Fragment() {
         categoriesRv?.layoutManager = LinearLayoutManager(view.context)
         categoriesRv?.adapter = CategoriesAdapter(object : CategoryListener {
             override fun clickChat(idChat: String) {
-               // #0075FF
-
             }
         }, categories)
+
+        timesLayout?.setOnClickListener {
+            showTimesScreen()
+        }
+    }
+
+    fun showTimesScreen(){
+        val chatFragment = TimeGroupChatFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, chatFragment, "TimeGroupChatFragment")?.addToBackStack("TimeGroupChatFragment")
+            ?.commit()
     }
 }

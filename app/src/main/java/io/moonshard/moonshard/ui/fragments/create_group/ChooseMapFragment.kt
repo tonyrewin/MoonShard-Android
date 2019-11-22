@@ -13,7 +13,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.db.ChooseChatRepository
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
@@ -25,7 +27,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     private var mMap: GoogleMap? = null
 
-    private var latLngInterestPoint:PointOfInterest?=null
+    private var latLngInterestPoint: PointOfInterest? = null
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -38,6 +40,18 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         mMap?.setOnCameraMoveListener(this)
         mMap?.setOnCameraMoveCanceledListener(this)
         mMap?.setOnPoiClickListener(this)
+
+        zoomPlus?.setOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+
+        zoomMinus?.setOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomOut())
+        }
+
+        myLocationBtn?.setOnClickListener {
+            getMyLocation()
+        }
     }
 
     override fun onCreateView(
@@ -53,8 +67,21 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
 
+        doneBtn?.setOnClickListener {
+            ChooseChatRepository.address = addressTv.text.toString()
+            fragmentManager?.popBackStack()
+        }
+
         back?.setOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        doneBtn?.setOnClickListener {
+            val mapFragment = io.moonshard.moonshard.ui.fragments.MapFragment()
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(R.id.container, mapFragment, null)
+                ?.addToBackStack(null)
+                ?.commit()
         }
     }
 
@@ -63,6 +90,12 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         Toast.makeText(context, pointOfInterest?.name, Toast.LENGTH_SHORT).show()
         val cameraUpdate =
             CameraUpdateFactory.newLatLngZoom(pointOfInterest?.latLng, mMap?.cameraPosition?.zoom!!)
+        mMap?.animateCamera(cameraUpdate)
+    }
+
+    private fun getMyLocation() {
+        val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
         mMap?.animateCamera(cameraUpdate)
     }
 
@@ -86,21 +119,21 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
         latLng?.let {
             val address = getAddress(latLng)
-            addressTv?.text =  address
+            addressTv?.text = address
         }
 
-            /*
-        latLng?.let {
-            latLngInterestPoint = null
-            if(latLngInterestPoint?.latLng == latLng){
-                var kek = ""
-            }else{
-                val adress = getAddress(latLng)
-                Toast.makeText(context, adress, Toast.LENGTH_SHORT).show()
-            }
+        /*
+    latLng?.let {
+        latLngInterestPoint = null
+        if(latLngInterestPoint?.latLng == latLng){
+            var kek = ""
+        }else{
+            val adress = getAddress(latLng)
+            Toast.makeText(context, adress, Toast.LENGTH_SHORT).show()
         }
+    }
 
-             */
+         */
     }
 
     fun getAddress(location: LatLng): String {

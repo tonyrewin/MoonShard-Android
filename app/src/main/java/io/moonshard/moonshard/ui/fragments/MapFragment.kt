@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import pub.devrel.easypermissions.EasyPermissions
 import android.R
 import android.widget.LinearLayout
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import io.moonshard.moonshard.MainApplication
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 
@@ -26,6 +29,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map!!.isMyLocationEnabled = true
         map.uiSettings.isMyLocationButtonEnabled = false
         map.uiSettings.isCompassEnabled = false
+
+        zoomPlus?.setOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+
+        zoomMinus?.setOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomOut())
+        }
+
+        myLocationBtn?.setOnClickListener {
+            getMyLocation()
+        }
     }
 
     override fun onCreateView(
@@ -72,6 +87,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         //val kek = BottomSheetFragment()
        // kek.isCancelable = false
        // kek.show(activity!!.supportFragmentManager, "add_photo_dialog_fragment")
+    }
+
+    private fun getMyLocation() {
+        val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+        mMap?.animateCamera(cameraUpdate)
     }
 
     override fun onResume() {

@@ -74,6 +74,7 @@
                 android:src="@drawable/ic_add_photo" />
 
         <EditText
+                android:id="@+id/nameTv"
                 android:maxLength="255"
                 android:layout_width="249dp"
                 android:layout_height="40dp"
@@ -177,6 +178,7 @@
                 android:textSize="16sp" />
 
         <TextView
+                android:id="@+id/timeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -189,6 +191,4 @@
                 android:textSize="14sp" />
 
     </RelativeLayout>
-
-
 </LinearLayout>

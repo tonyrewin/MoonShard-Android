@@ -45,7 +45,7 @@
                     android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:text="Готово"
-                    android:id="@+id/newChat"
+                    android:id="@+id/doneBtn"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,7 +67,8 @@
             android:background="@drawable/layout_zoom_bg">
 
         <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/zoomPlus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
@@ -75,17 +76,20 @@
                 android:src="@drawable/ic_plus_zoom" />
 
         <ImageView
-                android:layout_width="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:id="@+id/zoomMinus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="13dp"
                 android:src="@drawable/ic_minus_zoom" />
 
-
     </RelativeLayout>
 
     <ImageView
+            android:id="@+id/myLocationBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_below="@+id/zoomLayout"

@@ -8,12 +8,142 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@android:color/white"
+            android:elevation="6dp">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:padding="0dp">
+
+            <ImageView
+                    android:id="@+id/back"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Location"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:textStyle="bold"
+                    android:textColor="#0075FF"
+                    android:textSize="14sp"
+                    android:text="Готово"
+                    android:id="@+id/newChat"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_new_chat" />
+
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+            android:id="@+id/zoomLayout"
+            android:layout_width="40dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="81dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/layout_zoom_bg">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_plus_zoom" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="13dp"
+                android:src="@drawable/ic_minus_zoom" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/zoomLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/circle"
+            android:scaleType="center"
+            android:src="@drawable/ic_location" />
+
     <ImageView
             android:id="@+id/pin"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_pin_2_search"
-            android:scaleType="center" />
+            android:layout_centerInParent="true"
+            android:paddingBottom="80dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_pin_2_search" />
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white">
+
+
+        <ImageView
+                android:id="@+id/locationIconIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="11dp"
+                android:src="@drawable/ic_map_pin_circle" />
+
+        <TextView
+                android:id="@+id/bottomTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="14dp"
+                android:layout_toRightOf="@+id/locationIconIv"
+                android:text="Set this location"
+                android:textColor="#DE000000"
+                android:textSize="16sp" />
+
+        <TextView
+                android:id="@+id/addressTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bottomTv"
+                android:layout_alignLeft="@+id/bottomTv"
+                android:layout_marginBottom="10dp"
+                android:maxLines="1"
+                android:text="Free 6.6 GB of 7.7 Gb"
+                android:textColor="#8A000000"
+                android:textSize="14sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

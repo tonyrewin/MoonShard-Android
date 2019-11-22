@@ -12,6 +12,7 @@ import io.moonshard.moonshard.helpers.AvatarImageLoader
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
 import io.moonshard.moonshard.presentation.view.ChatsView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.MyChatsAdapter
 import io.moonshard.moonshard.ui.adapters.RvListener
 import io.moonshard.moonshard.ui.fragments.create_group.AddChatFragment
@@ -40,6 +41,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).showBottomNavigationBar()
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
         chatsRv?.adapter = MyChatsAdapter(object : RvListener {
             override fun clickChat(idChat: String) {
@@ -56,7 +58,8 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         newChat?.setOnClickListener {
             val newFragment = AddChatFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment)?.commit()
+            ft?.replace(R.id.container, newFragment,"AddChatFragment")?.addToBackStack("AddChatFragment")
+                ?.commit()
         }
     }
 

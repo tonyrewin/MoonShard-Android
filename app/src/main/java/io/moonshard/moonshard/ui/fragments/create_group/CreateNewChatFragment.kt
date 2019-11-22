@@ -60,6 +60,10 @@ class CreateNewChatFragment : Fragment() {
             ft?.replace(R.id.container, chatFragment, "ChooseMapFragment")?.addToBackStack("ChooseMapFragment")
                 ?.commit()
         }
+
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 
     fun showTimesScreen(){

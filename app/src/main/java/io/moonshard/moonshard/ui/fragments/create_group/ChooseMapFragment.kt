@@ -1,23 +1,31 @@
 package io.moonshard.moonshard.ui.fragments.create_group
 
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.R
 import kotlinx.android.synthetic.main.fragment_choose_map.*
-import kotlinx.android.synthetic.main.fragment_choose_map.mapView
-import kotlinx.android.synthetic.main.fragment_map.*
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.IOException
+import java.util.*
 
 class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener,
-    GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener {
-
+    GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveCanceledListener,
+    GoogleMap.OnCameraIdleListener, GoogleMap.OnPoiClickListener {
 
     private var mMap: GoogleMap? = null
+
+    private var latLngInterestPoint:PointOfInterest?=null
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -29,6 +37,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         mMap?.setOnCameraMoveStartedListener(this)
         mMap?.setOnCameraMoveListener(this)
         mMap?.setOnCameraMoveCanceledListener(this)
+        mMap?.setOnPoiClickListener(this)
     }
 
     override fun onCreateView(
@@ -43,6 +52,18 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
+
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
+
+    override fun onPoiClick(pointOfInterest: PointOfInterest?) {
+        latLngInterestPoint = pointOfInterest
+        Toast.makeText(context, pointOfInterest?.name, Toast.LENGTH_SHORT).show()
+        val cameraUpdate =
+            CameraUpdateFactory.newLatLngZoom(pointOfInterest?.latLng, mMap?.cameraPosition?.zoom!!)
+        mMap?.animateCamera(cameraUpdate)
     }
 
     override fun onCameraMove() {
@@ -58,9 +79,54 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         pin?.setImageResource(R.drawable.ic_pin_2_search)
     }
 
-    //finish moove camera
+    //finish move camera
     override fun onCameraIdle() {
         pin?.setImageResource(R.drawable.ic_pin_2_stady)
+        val latLng = mMap?.cameraPosition?.target
+
+        latLng?.let {
+            val address = getAddress(latLng)
+            addressTv?.text =  address
+        }
+
+            /*
+        latLng?.let {
+            latLngInterestPoint = null
+            if(latLngInterestPoint?.latLng == latLng){
+                var kek = ""
+            }else{
+                val adress = getAddress(latLng)
+                Toast.makeText(context, adress, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+             */
+    }
+
+    fun getAddress(location: LatLng): String {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addresses: List<Address>
+
+        try {
+            addresses = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1
+            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            if (addresses.isNotEmpty()) {
+                val address =
+                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                val city = addresses[0].locality
+                val state = addresses[0].adminArea
+                val country = addresses[0].countryName
+                val postalCode = addresses[0].postalCode
+                val knownName = addresses[0].featureName // Only if available else return NULL
+                return address
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return "Нету ничего"
     }
 
     override fun onRequestPermissionsResult(

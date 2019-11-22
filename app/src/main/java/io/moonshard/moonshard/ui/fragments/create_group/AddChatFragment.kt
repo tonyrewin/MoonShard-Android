@@ -8,6 +8,7 @@ import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import moxy.MvpAppCompatFragment
@@ -34,6 +35,11 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+        (activity as MainActivity).hideBottomNavigationBar()
         btn?.setOnClickListener {
             presenter.createGroupChat(editJid.text.toString())
         }

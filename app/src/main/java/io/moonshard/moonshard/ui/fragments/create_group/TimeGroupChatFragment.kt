@@ -28,6 +28,10 @@ class TimeGroupChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
         val times = arrayListOf<String>()
         times.add("6 hours")
         times.add("12 hours")

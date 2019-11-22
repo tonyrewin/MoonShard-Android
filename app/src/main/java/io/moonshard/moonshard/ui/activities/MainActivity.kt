@@ -2,6 +2,7 @@ package io.moonshard.moonshard.ui.activities
 
 import android.Manifest
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.moonshard.moonshard.R
@@ -52,6 +53,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         showMapScreen()
+    }
+
+    fun  showBottomNavigationBar(){
+        bottomBar?.visibility  = View.VISIBLE
+    }
+
+    fun hideBottomNavigationBar(){
+        bottomBar?.visibility  = View.GONE
     }
 
     private fun methodRequiresTwoPermission() {

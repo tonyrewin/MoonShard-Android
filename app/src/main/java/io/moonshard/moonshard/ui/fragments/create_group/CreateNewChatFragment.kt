@@ -53,6 +53,13 @@ class CreateNewChatFragment : Fragment() {
         timesLayout?.setOnClickListener {
             showTimesScreen()
         }
+
+        location?.setOnClickListener {
+            val chatFragment = ChooseMapFragment()
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(R.id.container, chatFragment, "ChooseMapFragment")?.addToBackStack("ChooseMapFragment")
+                ?.commit()
+        }
     }
 
     fun showTimesScreen(){

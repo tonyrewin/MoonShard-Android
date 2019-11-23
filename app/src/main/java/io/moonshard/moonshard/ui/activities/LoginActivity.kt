@@ -25,13 +25,6 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
         startService()
     }
 
-    private val timer = Timer(true)
-
-
-    override fun test() {
-        //val matrixInstance = Matrix.getInstance(applicationContext)
-    }
-
     @InjectPresenter
     lateinit var presenter: LoginPresenter
 
@@ -71,6 +64,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
         )
     }
 
+    // FIXME What is this?
     fun doLogin2() {
         val success = MainApplication.getXmppConnection().login(
             editEmail.text.toString(),

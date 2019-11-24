@@ -20,7 +20,7 @@ public class RoomTypeConverter {
     }
 
     @TypeConverter
-    public static <T> String fromArrayList(ArrayList<GenericUser> list) {
+    public static String fromArrayList(ArrayList<GenericUser> list) {
         Gson gson = new Gson();
         return gson.toJson(list);
     }

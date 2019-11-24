@@ -9,7 +9,7 @@
 
     <RelativeLayout
             android:layout_marginTop="17dp"
-            android:id="@+id/kek"
+            android:id="@+id/chatListProfileImageContainer"
             android:layout_width="54.5dp"
             android:layout_height="54.5dp">
 
@@ -20,14 +20,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:src="@color/colorAccent" />
+                android:src="@android:color/darker_gray" />
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:src="#FF6161" />
+                android:src="@color/colorAccent" />
 
     </RelativeLayout>
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginTop="12dp"
-            android:layout_toEndOf="@+id/kek"
+            android:layout_toEndOf="@+id/chatListProfileImageContainer"
             android:orientation="vertical">
 
         <TextView

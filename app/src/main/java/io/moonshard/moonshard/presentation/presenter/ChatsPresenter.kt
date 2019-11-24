@@ -1,22 +1,19 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.AppHelper
 import io.moonshard.moonshard.helpers.ChatsHelper
 import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.GenericDialog
-import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.models.roomEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ChatsView
-import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 @InjectViewState
@@ -24,20 +21,14 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
 
     private val chatsHelper = ChatsHelper()
 
-    private var chats:ArrayList<GenericDialog> = arrayListOf()
+    private var chats: ArrayList<GenericDialog> = arrayListOf()
 
-    fun downloadChats() {
-        StreamSupport.stream(loadLocalChats())
-            .forEach { chatEntity -> chats.add(GenericDialog(chatEntity)) }
-        viewState?.setData(chats)
-    }
-
-    private fun loadLocalChats(): List<ChatEntity> {
+    private fun loadLocalChats(): LiveData<List<ChatEntity>> {
         return MainApplication.getChatDB().chatDao().getAllChats()
     }
 
     fun setDialogs() {
-        val dialogs = ArrayList<GenericDialog>()
+        /*val dialogs = ArrayList<GenericDialog>()
         StreamSupport.stream(chatsHelper.loadLocalChats())
             .forEach { chatEntity -> dialogs.add(GenericDialog(chatEntity)) }
         StreamSupport.stream(dialogs)
@@ -47,7 +38,9 @@ class ChatsPresenter : MvpPresenter<ChatsView>() {
                    // dialog.lastMessage = GenericMessage(messageEntity)
                 }
             }
-        viewState?.setData(dialogs)
+
+        chatsHelper.loadLocalChats().observe(this, Observer<List<ChatEntity>>())
+        viewState?.setData(dialogs)*/
        // loadRemoteContactList()
     }
 

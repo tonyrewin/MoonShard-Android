@@ -1,0 +1,13 @@
+package io.moonshard.moonshard.repository.interfaces
+
+import io.moonshard.moonshard.models.roomEntities.ChatEntity
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import org.jxmpp.jid.Jid
+
+interface IChatListRepository {
+    fun getChats(): Flowable<List<ChatEntity>>
+    fun addChat(chatEntity: ChatEntity): Completable
+    fun getChatByJid(jid: Jid): Observable<ChatEntity>
+}

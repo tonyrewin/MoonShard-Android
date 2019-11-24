@@ -60,6 +60,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         }
     }
 
+
     override fun showChatScreen(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)

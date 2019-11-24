@@ -43,7 +43,7 @@
                 android:id="@+id/nameChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kanevsky"
+                android:text="Chat name"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 

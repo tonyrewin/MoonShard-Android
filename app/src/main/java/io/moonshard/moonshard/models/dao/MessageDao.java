@@ -8,39 +8,43 @@ import androidx.room.Update;
 import java.util.List;
 
 import io.moonshard.moonshard.models.roomEntities.MessageEntity;
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 @Dao
 public interface MessageDao {
     @Insert
-    long insertMessage(MessageEntity chatModel);
+    Single<Long> insertMessage(MessageEntity messageEntity);
 
     @Query("DELETE FROM messages WHERE messageID = :messageID")
-    void deleteMessage(String messageID);
+    Completable deleteMessage(String messageID);
 
     @Query("DELETE FROM messages WHERE chatID = :jid")
-    void deleteMessagesByChatID(String jid);
+    Completable deleteMessagesByChatID(String jid);
 
     @Query("SELECT * FROM messages WHERE chatID = :jid")
-    List<MessageEntity> getMessagesByChatID(String jid);
+    Flowable<List<MessageEntity>> getMessagesByChatID(String jid);
 
     @Query("SELECT * FROM messages WHERE messageID = :messageID")
-    List<MessageEntity> getMessageByID(long messageID);
+    Flowable<List<MessageEntity>> getMessageByID(long messageID);
 
     @Update
-    void updateMessage(MessageEntity message);
+    Completable updateMessage(MessageEntity message);
 
     @Query("DELETE FROM messages")
-    void clearMessages();
+    Completable clearMessages();
 
     @Query("DELETE FROM messages WHERE chatID = :chatID")
-    void clearMessagesByChatID(String chatID);
+    Completable clearMessagesByChatID(String chatID);
 
-    @Query("SELECT messageID FROM messages WHERE chatID = :chatID GROUP BY :chatID HAVING MAX(timestamp)")
-    long getLastMessageByChatID(String chatID);
+    @Query("SELECT * FROM messages WHERE chatID = :chatID GROUP BY :chatID HAVING MAX(timestamp)")
+    Flowable<List<MessageEntity>> getLastMessageByChatID(String chatID);
 
-    @Query("SELECT messageID FROM messages WHERE chatID = :chatID GROUP BY :chatID HAVING MIN(timestamp)")
-    long getFirstMessageByChatID(String chatID);
+    @Query("SELECT * FROM messages WHERE chatID = :chatID GROUP BY :chatID HAVING MIN(timestamp)")
+    Maybe<MessageEntity> getFirstMessageByChatID(String chatID);
 
     @Query("SELECT * FROM messages WHERE messageUid = :uid")
-    List<MessageEntity> getMessageByUID(String uid);
+    Flowable<List<MessageEntity>> getMessageByUID(String uid);
 }

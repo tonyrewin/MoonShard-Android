@@ -33,6 +33,7 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
+import io.moonshard.moonshard.di.modules.RoomModule;
 import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
@@ -76,7 +77,8 @@ public class MainApplication extends Application {
         setupLogger();
 
         component = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(getApplicationContext()))
+                .applicationModule(new ApplicationModule(getApplicationContext(), this))
+                .roomModule(new RoomModule(this))
                 .webModule(new WebModule(getApplicationContext()))
                 .build();
 
@@ -112,7 +114,6 @@ public class MainApplication extends Application {
         instance = this;
 
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
-        initChatDB();
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
@@ -195,17 +196,7 @@ public class MainApplication extends Application {
             }
         }).start();
     }
-
-
-    private void initChatDB() {
-        chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
-                .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
-                .allowMainThreadQueries()
-                .build();
-    }
-
-
-
+    
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;
     }

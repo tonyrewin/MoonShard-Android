@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
-import io.moonshard.moonshard.ui.fragments.MapFragment
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions

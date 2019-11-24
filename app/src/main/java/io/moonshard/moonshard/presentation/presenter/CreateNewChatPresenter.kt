@@ -1,0 +1,74 @@
+package io.moonshard.moonshard.presentation.presenter
+
+import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.helpers.LocalDBWrapper
+import io.moonshard.moonshard.models.jabber.GenericUser
+import io.moonshard.moonshard.presentation.view.CreateNewChatView
+import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import moxy.InjectViewState
+import moxy.MvpPresenter
+import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
+
+@InjectViewState
+class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
+
+    private var useCase: RoomsUseCase? = null
+    private val compositeDisposable = CompositeDisposable()
+
+    init {
+        useCase = RoomsUseCase()
+    }
+
+    fun createGroupChat(
+        username: String, latitude: String, longitude: String,
+        ttl: String,
+        category: String) {
+        if (!username.contains("@")) {
+            viewState?.showToast("Должен содержать @ host")
+            return
+        }
+        try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(username)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            muc.create(nickName)
+            // room is now created by locked
+            val form = muc.configurationForm
+            val answerForm = form.createAnswerForm()
+            answerForm.setAnswer("muc#roomconfig_persistentroom", true)
+            muc.sendConfigurationForm(answerForm)
+
+            LocalDBWrapper.createChatEntry(
+                username, username.split("@")[0],
+                ArrayList<GenericUser>(), true
+            )
+
+            createRoomOnServer(latitude,longitude,ttl,username,category)
+        } catch (e: Exception) {
+            e.message?.let { viewState?.showToast(it) }
+        }
+    }
+
+    private fun createRoomOnServer(
+        latitude: String, longitude: String, ttl: String, roomId: String,
+        category: String
+    ) {
+        compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, category)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .doOnError {
+                viewState?.showToast("Ошибка: ${it.message}")
+            }
+            .subscribe { t1, t2 ->
+                viewState?.showMapScreen()
+            })
+    }
+}

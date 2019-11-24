@@ -53,10 +53,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //  messagesRv?.layoutManager = LinearLayoutManager(view.context)
-        //messagesRv?.adapter = MessagesAdapter(arrayListOf(), messagesRv.layoutManager as LinearLayoutManager)
-
-
         setAdapter()
 
         arguments?.let {
@@ -95,7 +91,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         presenter.loadRecentPageMessages()
     }
 
-    internal fun setAdapter() {
+    private fun setAdapter() {
         val layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL, true
@@ -126,7 +122,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
-    fun chooseFile() {
+    private fun chooseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
         chooseFile.type = "*/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")

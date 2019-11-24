@@ -167,6 +167,9 @@ dependencies {
 
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
+    implementation "biz.laenger.android:vpbs:0.0.6"
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

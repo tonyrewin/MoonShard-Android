@@ -1,112 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="?attr/colorBackgroundFloating"
+        android:elevation="16dp"
         android:orientation="vertical"
-        android:padding="16dp"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="90dp">
+        app:behavior_peekHeight="?attr/actionBarSize"
+        app:layout_behavior="@string/view_pager_bottom_sheet_behavior"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+   <com.google.android.material.appbar.AppBarLayout
 
-        <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+           android:id="@+id/bottomSheetAppbar"
+           style="@style/BottomSheetAppBarStyle"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
-        <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:orientation="vertical">
+      <com.google.android.material.tabs.TabLayout
+              android:id="@+id/bottomSheetTabs"
+              style="@style/BottomSheetTabLayoutStyle"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dandelion Chocolate"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+   </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4.7" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:text="(51)" />
-
-            </LinearLayout>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#5d5d5d" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12 min away"
-                    android:textColor="#5692F5" />
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#5d5d5d" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:drawableLeft="@drawable/ic_star"
-            android:drawablePadding="16dp"
-            android:text="740 Valencia St, San Fracisco, CA" />
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:drawableLeft="@drawable/ic_star"
-            android:drawablePadding="16dp"
-            android:text="(415) 349-0942" />
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:drawableLeft="@drawable/ic_star"
-            android:drawablePadding="16dp"
-            android:text="Wed, 10 AM - 9 PM" />
-
-    <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#000"
-            android:text="PROCEED PAYMENT"
-            android:textColor="#fff" />
+   <androidx.viewpager.widget.ViewPager
+           android:id="@+id/bottomSheetViewPager"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent" />
 
 </LinearLayout>

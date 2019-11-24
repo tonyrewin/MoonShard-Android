@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
@@ -77,11 +78,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         }
 
         doneBtn?.setOnClickListener {
-            val mapFragment = io.moonshard.moonshard.ui.fragments.MapFragment()
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, mapFragment, null)
-                ?.addToBackStack(null)
-                ?.commit()
+            fragmentManager?.popBackStack()
         }
     }
 
@@ -120,6 +117,8 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         latLng?.let {
             val address = getAddress(latLng)
             addressTv?.text = address
+            ChooseChatRepository.lat = latLng.latitude.toString()
+            ChooseChatRepository.lng = latLng.longitude.toString()
         }
 
         /*

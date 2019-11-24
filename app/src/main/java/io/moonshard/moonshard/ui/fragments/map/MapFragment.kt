@@ -1,27 +1,25 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.map
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import biz.laenger.android.vpbs.BottomSheetUtils
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import io.moonshard.moonshard.ui.BottomSheetFragment
-import kotlinx.android.synthetic.main.fragment_map.*
-import pub.devrel.easypermissions.EasyPermissions
-import android.R
-import android.widget.LinearLayout
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
-import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
+import io.moonshard.moonshard.presentation.view.MapMainView
+import io.moonshard.moonshard.ui.activities.MainActivity
+import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
+import kotlinx.android.synthetic.main.fragment_map.*
+import moxy.MvpAppCompatFragment
+import pub.devrel.easypermissions.EasyPermissions
 
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
     private var mMap: GoogleMap? = null
 
     override fun onMapReady(map: GoogleMap?) {
@@ -49,6 +47,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
     }
 
+    private fun setupBottomSheet() {
+        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
+            activity!!.supportFragmentManager,
+            context,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.CATEGORY
+        )
+        bottomSheetViewPager.offscreenPageLimit = 1
+        bottomSheetViewPager.adapter = sectionsPagerAdapter
+        bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
+        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>,
         grantResults: IntArray
@@ -61,36 +72,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
+        (activity as MainActivity).showBottomNavigationBar()
 
-       // val dialogView = layoutInflater.inflate(io.moonshard.moonshard.R.layout.bottom_sheet, null)
-      //  val dialog = BottomSheetDialog(context!!)
-      //  dialog.setContentView(dialogView)
-      //  dialog.show()
-
-
-
-        val bottomSheetBehavior = BottomSheetBehavior.from(myBottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-        bottomSheetBehavior.setBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-
-            }
-
-        })
-
-        //val kek = BottomSheetFragment()
-       // kek.isCancelable = false
-       // kek.show(activity!!.supportFragmentManager, "add_photo_dialog_fragment")
+        setupBottomSheet()
     }
 
+
+
     private fun getMyLocation() {
-        val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+        val latLng = LatLng(
+            MainApplication.getCurrentLocation().latitude,
+            MainApplication.getCurrentLocation().longitude
+        )
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
         mMap?.animateCamera(cameraUpdate)
     }

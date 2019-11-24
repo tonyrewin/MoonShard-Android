@@ -51,6 +51,9 @@ allprojects {
         maven {
             url "https://github.com/vector-im/jitsi_libre_maven/raw/master/releases"
         }
+
+        maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
+
     }
 }
 

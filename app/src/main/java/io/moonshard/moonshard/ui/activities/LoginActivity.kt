@@ -21,16 +21,6 @@ import java.util.*
 
 
 class LoginActivity : MvpAppCompatActivity(), LoginView {
-    override fun createNewConnect() {
-        startService()
-    }
-
-    private val timer = Timer(true)
-
-
-    override fun test() {
-        //val matrixInstance = Matrix.getInstance(applicationContext)
-    }
 
     @InjectPresenter
     lateinit var presenter: LoginPresenter
@@ -69,6 +59,10 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
             connection,
             Context.BIND_AUTO_CREATE
         )
+    }
+
+    override fun createNewConnect() {
+        startService()
     }
 
     fun doLogin2() {

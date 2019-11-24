@@ -1,33 +1,32 @@
 package io.moonshard.moonshard
 
+import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.ResponseBody
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface API {
-    /*
-    @GET("getRooms")
+
+    @GET("/rooms/getByCoords")
     fun getRooms(
         @Query("gps_lat") lat: String,
         @Query("gps_lon") lng: String,
         @Query("radius") radius: String
-    ): Observable<ArrayList<RoomPin>>
-     */
+    ): Single<ArrayList<RoomPin>>
 
-    @POST("putRoom")
+    @FormUrlEncoded
+    @PUT("/rooms/put")
     fun putRoom(
-        @Query("gps_lat") country: String,
-        @Query("gps_lon") appId: String,
-        @Query("roomID") roomID: String,
-        @Query("ttl") ttl: String
-    ): Observable<String>
+        @Field("latitude") latitude: String,
+        @Field("longtitude") longitude: String,
+        @Field("ttl") ttl: String,
+        @Field("roomId") roomID: String,
+        @Field("category") category: String
+    ): Single<RoomPin>
 
-    @DELETE("removeRoom")
-    fun removeRoom(@Query("id") roomID: String):Observable<String>
+    @GET("/rooms/id")
+    fun getRoomsById()
 
     @GET("/api/v1/employees")
     fun test(): Single<ResponseBody>

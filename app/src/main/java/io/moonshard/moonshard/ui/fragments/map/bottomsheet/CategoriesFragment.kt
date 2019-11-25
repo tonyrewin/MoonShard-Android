@@ -58,4 +58,7 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
         return categories
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }

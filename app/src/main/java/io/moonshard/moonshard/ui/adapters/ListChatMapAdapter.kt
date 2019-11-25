@@ -10,14 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.Category
-import io.moonshard.moonshard.models.api.RoomPin
 
 
 interface ListChatMapListener {
     fun clickChat(categoryName: String)
 }
 
-class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: List<RoomPin>) :
+class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: List<Category>) :
     RecyclerView.Adapter<ListChatMapAdapter.ViewHolder>() {
 
     var focusedItem = -1
@@ -33,16 +32,16 @@ class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.groupIv?.setImageResource(R.drawable.ic_heart)
-        holder.groupNameTv?.text = "test"
-        holder.valueMembersTv?.text = "test"
-        holder.locationValueTv?.text = "test"
+        holder.groupIv?.setImageResource(chats[position].drawable)
+        holder.groupNameTv?.text = chats[position].name
+        holder.valueMembersTv?.text = chats[position].name
+        holder.locationValueTv?.text = chats[position].name
 
 
         holder.itemView.setOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
-            listener.clickChat("test")
+            listener.clickChat(chats[position].name)
         }
     }
 

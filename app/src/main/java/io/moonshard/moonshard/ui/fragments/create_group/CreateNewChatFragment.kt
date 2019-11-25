@@ -63,12 +63,13 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         newChat?.setOnClickListener {
-
-
-            val timeLive = ChooseChatRepository.time
-
-            presenter.createGroupChat(nameTv?.text.toString(),
-                ChooseChatRepository.lat,ChooseChatRepository.lng,ChooseChatRepository.getTimeSec(),ChooseChatRepository.category)
+            presenter.createGroupChat(
+                nameTv?.text.toString(),
+                ChooseChatRepository.lat,
+                ChooseChatRepository.lng,
+                ChooseChatRepository.getTimeSec(),
+                ChooseChatRepository.category
+            )
         }
 
         back?.setOnClickListener {
@@ -101,12 +102,12 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         return categories
     }
 
-   override fun showMapScreen(){
-       val mapFragment = MapFragment()
-       val ft = activity?.supportFragmentManager?.beginTransaction()
-       ft?.replace(R.id.container, mapFragment, null)
-           ?.addToBackStack(null)
-           ?.commit()
+    override fun showMapScreen() {
+        val mapFragment = MapFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, mapFragment, null)
+            ?.addToBackStack(null)
+            ?.commit()
     }
 
     override fun showToast(text: String) {

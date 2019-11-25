@@ -22,7 +22,9 @@ import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
-import io.moonshard.moonshard.R
+
+
+
 
 
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
@@ -56,7 +58,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
@@ -66,7 +68,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
                     MarkerOptions()
                         .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
                         .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                            BitmapDescriptorFactory.fromResource(io.moonshard.moonshard.R.drawable.ic_marker_health)
                         )
                 )
             }else{
@@ -74,7 +76,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
                     MarkerOptions()
                         .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
                         .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                            BitmapDescriptorFactory.fromResource(io.moonshard.moonshard.R.drawable.ic_marker_health)
                         )
                 )
             }
@@ -82,6 +84,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
     }
 
     override fun onDestroyView() {
+        for (fragment in activity?.supportFragmentManager!!.fragments) {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(fragment)?.commit()
+        }
         super.onDestroyView()
         presenter.onDestroy()
     }
@@ -128,6 +133,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         super.onResume()
         mapView?.onResume()
     }
+
+
+
+
 
     override fun onDestroy() {
         super.onDestroy()

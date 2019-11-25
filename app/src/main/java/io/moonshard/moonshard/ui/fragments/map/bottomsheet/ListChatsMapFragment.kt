@@ -28,22 +28,24 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initAdapter()
     }
 
     private fun initAdapter() {
-       // val categories = initCategories()
-        val rooms = RoomsMap.rooms
+        val categories = initCategories()
+       // val rooms = RoomsMap.rooms
         groupsRv?.layoutManager = LinearLayoutManager(context)
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
             override fun clickChat(categoryName: String) {
 
             }
-        }, rooms)
+        }, categories)
     }
 
-    /*
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
     private fun initCategories(): ArrayList<Category> {
         val categoryOne = Category(R.drawable.ic_star, "Тусовки")
         val categoryTwo = Category(R.drawable.ic_case, "Бизнес ивенты")
@@ -58,6 +60,4 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
 
         return categories
     }
-
-     */
 }

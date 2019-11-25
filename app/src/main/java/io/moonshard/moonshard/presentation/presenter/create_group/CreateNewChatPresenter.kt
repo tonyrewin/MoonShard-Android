@@ -60,8 +60,9 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     private fun createRoomOnServer(
         latitude: Float?, longitude: Float?, ttl: Int, roomId: String,
-        category: String) {
-        if(latitude!=null && longitude!=null){
+        category: String
+    ) {
+        if (latitude != null && longitude != null) {
             compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, category)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

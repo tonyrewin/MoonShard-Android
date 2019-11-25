@@ -15,12 +15,11 @@ class RoomsUseCase {
         MainApplication.getComponent().inject(this)
     }
 
-    fun putRoom(latitude: String, longitude: String, ttl: String, roomId: String,
+    fun putRoom(latitude: Float, longitude: Float, ttl: Int, roomId: String,
         category: String
     ): Single<RoomPin> {
         return roomsRepository.putRoom(latitude, longitude, ttl, roomId, category)
     }
-
 
     fun getRooms(lat: String, lng: String, radius: String
     ): Single<ArrayList<RoomPin>> {

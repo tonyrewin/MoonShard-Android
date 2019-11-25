@@ -74,6 +74,7 @@
                 android:src="@drawable/ic_add_photo" />
 
         <EditText
+                android:text="s@conference.moonshard.tech"
                 android:id="@+id/nameTv"
                 android:maxLength="255"
                 android:layout_width="249dp"

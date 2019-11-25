@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.MessagesAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -52,6 +54,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).hideBottomNavigationBar()
 
         setAdapter()
 

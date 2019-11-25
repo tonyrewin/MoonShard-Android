@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.ui.fragments.map
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +10,26 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.MarkerOptions
+import io.moonshard.moonshard.R
 
 
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
+
     private var mMap: GoogleMap? = null
+
+    @InjectPresenter
+    lateinit var presenter: MapPresenter
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -39,12 +48,41 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         myLocationBtn?.setOnClickListener {
             getMyLocation()
         }
+
+        presenter.getRooms("","","")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
+    }
+
+    override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
+        for(i in rooms.indices){
+            if(rooms[i].category=="Культура"){
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                        )
+                )
+            }else{
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                        )
+                )
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroy()
     }
 
     private fun setupBottomSheet() {
@@ -73,11 +111,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
-
         setupBottomSheet()
     }
-
-
 
     private fun getMyLocation() {
         val latLng = LatLng(

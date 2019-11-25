@@ -1,10 +1,11 @@
 package io.moonshard.moonshard
 
+import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.RoomPin
-import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.*
+
 
 interface API {
 
@@ -15,15 +16,9 @@ interface API {
         @Query("radius") radius: String
     ): Single<ArrayList<RoomPin>>
 
-    @FormUrlEncoded
-    @PUT("/rooms/put")
-    fun putRoom(
-        @Field("latitude") latitude: String,
-        @Field("longtitude") longitude: String,
-        @Field("ttl") ttl: String,
-        @Field("roomId") roomID: String,
-        @Field("category") category: String
-    ): Single<RoomPin>
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST("/rooms/put")
+    fun putRoom(@Body request: ModelMapRequest): Single<RoomPin>
 
     @GET("/rooms/id")
     fun getRoomsById()

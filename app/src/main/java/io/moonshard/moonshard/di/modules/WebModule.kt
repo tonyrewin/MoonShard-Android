@@ -22,7 +22,6 @@ class WebModule(var context: Context) {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
-
         val client = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor())
             .connectTimeout(1, TimeUnit.MINUTES)
@@ -43,13 +42,11 @@ class WebModule(var context: Context) {
     }
 
     @Provides
-    @Singleton
     fun providesRetrofitReNetworkRepository(): NetworkRepository {
         return NetworkRepository()
     }
 
     @Provides
-    @Singleton
     fun providesRoomsRepository(): RoomsRepository {
         return RoomsRepository()
     }

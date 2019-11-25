@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.presenter
+package io.moonshard.moonshard.presentation.presenter.create_group
 
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.LocalDBWrapper

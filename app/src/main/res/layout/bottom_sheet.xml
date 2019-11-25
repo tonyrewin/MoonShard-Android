@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@drawable/bottom_sheet_background"
         android:orientation="vertical">
 
@@ -21,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
     <EditText
             android:layout_width="249dp"
             android:layout_height="40dp"
@@ -29,9 +27,8 @@
             android:background="@drawable/edit_text_bottom_sheet"
             android:inputType="text"
             android:maxLines="1"
-            android:paddingStart="5dp"
+            android:paddingStart="30dp"
             android:paddingEnd="5dp" />
-
 
         <ImageView
                 android:layout_centerVertical="true"
@@ -41,6 +38,4 @@
                 android:layout_height="wrap_content"/>
 
     </RelativeLayout>
-
-
 </RelativeLayout>

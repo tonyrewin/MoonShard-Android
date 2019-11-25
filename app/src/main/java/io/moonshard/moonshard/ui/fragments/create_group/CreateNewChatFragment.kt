@@ -10,7 +10,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.Category
-import io.moonshard.moonshard.presentation.presenter.CreateNewChatPresenter
+import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
 import io.moonshard.moonshard.presentation.view.CreateNewChatView
 import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
@@ -63,8 +63,12 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         newChat?.setOnClickListener {
+
+
+            val timeLive = ChooseChatRepository.time
+
             presenter.createGroupChat(nameTv?.text.toString(),
-                ChooseChatRepository.lat,ChooseChatRepository.lng,"1000",ChooseChatRepository.category)
+                ChooseChatRepository.lat,ChooseChatRepository.lng,ChooseChatRepository.getTimeSec(),ChooseChatRepository.category)
         }
 
         back?.setOnClickListener {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.presentation.presenter.AddChatPresenter
+import io.moonshard.moonshard.presentation.presenter.create_group.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.ChatsFragment

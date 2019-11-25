@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.presenter
+package io.moonshard.moonshard.presentation.presenter.create_group
 
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.helpers.LocalDBWrapper
@@ -25,9 +25,10 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     }
 
     fun createGroupChat(
-        username: String, latitude: String, longitude: String,
-        ttl: String,
-        category: String) {
+        username: String, latitude: Float?, longitude: Float?,
+        ttl: Int,
+        category: String
+    ) {
         if (!username.contains("@")) {
             viewState?.showToast("Должен содержать @ host")
             return
@@ -51,24 +52,27 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 ArrayList<GenericUser>(), true
             )
 
-            createRoomOnServer(latitude,longitude,ttl,username,category)
+            createRoomOnServer(latitude, longitude, ttl, username, category)
         } catch (e: Exception) {
             e.message?.let { viewState?.showToast(it) }
         }
     }
 
     private fun createRoomOnServer(
-        latitude: String, longitude: String, ttl: String, roomId: String,
-        category: String
-    ) {
-        compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, category)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .doOnError {
-                viewState?.showToast("Ошибка: ${it.message}")
-            }
-            .subscribe { t1, t2 ->
-                viewState?.showMapScreen()
-            })
+        latitude: Float?, longitude: Float?, ttl: Int, roomId: String,
+        category: String) {
+        if(latitude!=null && longitude!=null){
+            compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, category)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnError {
+                    viewState?.showToast("Ошибка: ${it.message}")
+                }
+                .subscribe { t1, t2 ->
+                    if (t1 != null) {
+                        viewState?.showMapScreen()
+                    }
+                })
+        }
     }
 }

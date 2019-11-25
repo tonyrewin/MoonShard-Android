@@ -1,10 +1,13 @@
 package io.moonshard.moonshard.repository
 
+import com.google.gson.Gson
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.Single
 import okhttp3.ResponseBody
+import retrofit2.http.Field
 import javax.inject.Inject
 
 class RoomsRepository {
@@ -16,10 +19,11 @@ class RoomsRepository {
         MainApplication.getComponent().inject(this)
     }
 
-    fun putRoom(latitude: String, longitude: String, ttl: String, roomId: String,
+    fun putRoom(latitude: Float, longitude: Float, ttl: Int, roomId: String,
         category: String
     ): Single<RoomPin> {
-        return api.putRoom(latitude,longitude,ttl,roomId,category)
+        val request = ModelMapRequest(latitude,longitude,ttl,roomId,category)
+        return api.putRoom(request)
     }
 
 

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 
+import org.jetbrains.annotations.NotNull;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
@@ -51,6 +52,12 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -198,7 +205,6 @@ public class XMPPConnection implements ConnectionListener {
 
         Observable.fromCallable(() -> {
             HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-
             try {
                 Single.just(manager.uploadFile(file));
                 return true;

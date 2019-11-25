@@ -24,22 +24,13 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .doOnError {
-                var response = ""
-            }
-            .doOnSuccess {
-                //  var kek = it.get(0).roomId
-                //  var response = ""
-
-                //  RoomsMap.clean()
-                //  RoomsMap.rooms = it
-
-                //  viewState?.showRoomsOnMap(it)
-            }.subscribe { t1, t2 ->
-                if (t2 == null) {
+            .subscribe { rooms, throwable ->
+                if (throwable == null) {
                     RoomsMap.clean()
-                    RoomsMap.rooms = t1
-                    viewState?.showRoomsOnMap(t1)
+                    RoomsMap.rooms = rooms
+                    viewState?.showRoomsOnMap(rooms)
+                }else{
+                    throwable.message?.let { viewState?.showError(it) }
                 }
             })
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -55,7 +56,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
+        return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
@@ -141,5 +142,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         mapView?.onLowMemory()
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 }

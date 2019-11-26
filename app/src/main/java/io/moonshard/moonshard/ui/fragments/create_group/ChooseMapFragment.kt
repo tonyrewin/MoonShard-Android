@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.create_group
 
+import android.Manifest
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -16,7 +17,7 @@ import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
@@ -65,6 +66,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
 
@@ -76,11 +78,8 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         back?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
-
-        doneBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
-        }
     }
+
 
     override fun onPoiClick(pointOfInterest: PointOfInterest?) {
         latLngInterestPoint = pointOfInterest
@@ -91,7 +90,10 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
     }
 
     private fun getMyLocation() {
-        val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+        val latLng = LatLng(
+            MainApplication.getCurrentLocation().latitude,
+            MainApplication.getCurrentLocation().longitude
+        )
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
         mMap?.animateCamera(cameraUpdate)
     }
@@ -159,14 +161,6 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
             e.printStackTrace()
         }
         return "Нету ничего"
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onResume() {

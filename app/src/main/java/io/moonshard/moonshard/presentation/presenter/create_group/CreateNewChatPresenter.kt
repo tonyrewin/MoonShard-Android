@@ -30,7 +30,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         category: String
     ) {
         if (!username.contains("@")) {
-            viewState?.showToast("Должен содержать @ host")
+            viewState?.showToast("Должен содержать @conference.host")
             return
         }
         try {

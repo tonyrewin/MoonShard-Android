@@ -9,7 +9,6 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.SettingsFragment
-import io.moonshard.moonshard.ui.fragments.create_group.ChooseMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -53,14 +52,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        if(requestCode==1){
-            showMapScreen()
-        }else if(requestCode==2){
-            val chatFragment = ChooseMapFragment()
-            val ft = supportFragmentManager.beginTransaction()
-            ft.replace(R.id.container, chatFragment, "ChooseMapFragment").addToBackStack("ChooseMapFragment")
-                .commit()
-        }
+        showMapScreen()
     }
 
     fun  showBottomNavigationBar(){

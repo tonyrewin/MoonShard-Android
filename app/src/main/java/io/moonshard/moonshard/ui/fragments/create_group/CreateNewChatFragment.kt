@@ -16,9 +16,7 @@ import io.moonshard.moonshard.presentation.view.CreateNewChatView
 import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import kotlinx.android.synthetic.main.fragment_choose_map.*
 import kotlinx.android.synthetic.main.fragment_create_new_chat.*
-import kotlinx.android.synthetic.main.fragment_create_new_chat.back
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
@@ -28,8 +26,10 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     @InjectPresenter
     lateinit var presenter: CreateNewChatPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_new_chat, container, false)
     }
@@ -57,7 +57,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         location?.setOnClickListener {
-           methodRequiresTwoPermission()
+            methodRequiresTwoPermission()
         }
 
         newChat?.setOnClickListener {
@@ -98,10 +98,14 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+
+        if (requestCode == 2) {
+            showChooseMapScreen()
+        }
     }
 
 
-    fun showChooseMapScreen(){
+    fun showChooseMapScreen() {
         val chatFragment = ChooseMapFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, chatFragment, "ChooseMapFragment")

@@ -29,7 +29,6 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         logOut?.setOnClickListener {
             presenter.logOut()
             clearLoginCredentials()

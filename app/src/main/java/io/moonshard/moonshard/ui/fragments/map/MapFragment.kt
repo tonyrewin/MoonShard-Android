@@ -134,10 +134,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         mapView?.onResume()
     }
 
-
-
-
-
     override fun onDestroy() {
         super.onDestroy()
         mapView?.onDestroy()

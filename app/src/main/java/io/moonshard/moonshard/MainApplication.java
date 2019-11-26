@@ -37,6 +37,7 @@ import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
 
 public class MainApplication extends Application {
     private static ApplicationComponent component;
@@ -48,6 +49,8 @@ public class MainApplication extends Application {
     private static Application instance;
     public final static String APP_NAME = "Influence";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
+    private static BaseActivity currentActivity;
+
 
     private static String jid;
      private static RoomHelper chatDB;
@@ -70,6 +73,20 @@ public class MainApplication extends Application {
 
     private static String adress;
 
+
+    public static boolean isForeGround() {
+        return (currentActivity != null
+                && !currentActivity.isFinishing());
+    }
+
+
+    public static BaseActivity getCurrentActivity() {
+        return currentActivity;
+    }
+
+    public static void setCurrentActivity(BaseActivity activity) {
+        currentActivity = activity;
+    }
 
     public static Location getCurrentLocation() {
         return currentLocation;
@@ -206,15 +223,12 @@ public class MainApplication extends Application {
         }).start();
     }
 
-
     private void initChatDB() {
         chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
                 .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
                 .allowMainThreadQueries()
                 .build();
     }
-
-
 
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;

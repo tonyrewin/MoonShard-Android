@@ -19,7 +19,6 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
          viewState.showLoader()
         try {
             MainApplication.getXmppConnection()?.register(email, pass)
-            viewState.showToast("Register is success")
         } catch (localXMPPException: XMPPException) {
             viewState.hideLoader()
             viewState.showToast(localXMPPException.message.toString())

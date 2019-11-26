@@ -7,4 +7,6 @@ interface RegisterView : MvpView {
     fun hideLoader()
     fun showToast(text:String)
     fun showContactsScreen()
+    fun showError(error: String)
+
 }

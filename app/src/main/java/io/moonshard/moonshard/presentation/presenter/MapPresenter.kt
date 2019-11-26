@@ -29,7 +29,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     RoomsMap.clean()
                     RoomsMap.rooms = rooms
                     viewState?.showRoomsOnMap(rooms)
-                }else{
+                } else {
                     throwable.message?.let { viewState?.showError(it) }
                 }
             })

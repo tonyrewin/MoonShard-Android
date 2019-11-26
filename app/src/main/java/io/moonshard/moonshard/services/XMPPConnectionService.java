@@ -19,6 +19,7 @@ import android.util.Log;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +30,10 @@ import io.moonshard.moonshard.MainApplication;
 
 
 public class XMPPConnectionService extends Service {
+
+    private static final int RECONNECT_TRY_INTERVAL_MS = 10000; // 10 Seconds
+
+
     public static XMPPConnection.ConnectionState CONNECTION_STATE = XMPPConnection.ConnectionState.DISCONNECTED;
     public static XMPPConnection.SessionState SESSION_STATE = XMPPConnection.SessionState.LOGGED_OUT;
 
@@ -38,7 +43,6 @@ public class XMPPConnectionService extends Service {
     private XMPPConnection connection;
     private Context context = MainApplication.getContext();
     private XMPPServiceBinder binder = new XMPPServiceBinder();
-
 
     private LocationListener locationListener = new LocationListener() {
 
@@ -97,6 +101,8 @@ public class XMPPConnectionService extends Service {
     public void onServiceStart() {
         createLocationListener();
 
+        new XMPPConnectionDelayedCheckAndStartThread().start();
+/*
         if (!isThreadAlive) {
             isThreadAlive = true;
             if (thread == null || !thread.isAlive()) {
@@ -109,6 +115,25 @@ public class XMPPConnectionService extends Service {
                 });
                 thread.start();
             }
+
+
+        }
+
+ */
+    }
+
+    class XMPPConnectionDelayedCheckAndStartThread extends Thread{
+        @Override
+        public void run() {
+            super.run();
+            XMPPConnection connection = new XMPPConnection(context);
+            MainApplication.setXmppConnection(connection);
+            try {
+                    connection.connect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            //setAlarmToReconnect();
         }
     }
 

@@ -48,6 +48,7 @@ import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,6 +59,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static io.moonshard.moonshard.MainApplication.getCurrentActivity;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -74,12 +77,10 @@ public class XMPPConnection implements ConnectionListener {
         DISCONNECTED
     }
 
-
     public enum SessionState {
         LOGGED_IN,
         LOGGED_OUT
     }
-
 
     public XMPPConnection(Context context) {
         this.context = context;
@@ -114,17 +115,22 @@ public class XMPPConnection implements ConnectionListener {
 
             connection = new XMPPTCPConnection(conf);
             connection.addConnectionListener(this);
+
             if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
                 throw new IOException();
             }
             try {
                 connection.connect();
-                // SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
-                //  connection.login(credentials.username, credentials.password);
-            } catch (InterruptedException e) {
+                SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+                SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+                SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+                connection.login(credentials.username, credentials.password);
+            } catch (Exception e) {
+                BaseActivity baseActivity = getCurrentActivity();
+                if(baseActivity != null){
+                    baseActivity.onError(e);
+                }
                 e.printStackTrace();
-            } catch (NullPointerException e) {
-                throw new IOException();
             }
 
             ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
@@ -166,7 +172,11 @@ public class XMPPConnection implements ConnectionListener {
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
-        //  EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.CONNECT_AND_LOGIN_SUCCESSFUL));
+
+        BaseActivity baseActivity = getCurrentActivity();
+        if(baseActivity != null){
+            baseActivity.onAuthenticated();
+        }
     }
 
     @Override
@@ -225,53 +235,6 @@ public class XMPPConnection implements ConnectionListener {
                     String kek = "";
                     //Use result for something
                 });
-
-        /*
-        getTest(file).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(throwable -> {
-                    String kek = "";
-                }).subscribe(t -> {
-            String kek = "";
-        });
-
-         */
-
-        // } catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //} catch (XMPPException.XMPPErrorException e) {
-        //     e.printStackTrace();
-        // } catch (SmackException e) {
-        //     e.printStackTrace();
-        //  } catch (IOException e) {
-        //     e.printStackTrace();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-
-
-/*
-        // Create the file transfer manager
-        FileTransferManager manager = FileTransferManager.getInstanceFor(connection);
-        // Create the outgoing file transfer
-        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(jid);
-
-        manager.addFileTransferListener(new FileTransferListener() {
-            @Override
-            public void fileTransferRequest(FileTransferRequest request) {
-                String kek = "";
-            }
-        });
-
-        try {
-            transfer.sendFile(file,"kdsads");
-        } catch (SmackException e) {
-            e.printStackTrace();
-        }
-
-
- */
-
     }
 
     Single<URL> getTest(File file) {
@@ -314,19 +277,17 @@ public class XMPPConnection implements ConnectionListener {
 
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
+        BaseActivity baseActivity = getCurrentActivity();
         Log.d("Auth: ", "inside XMPP register method, " + user + " : " + pass);
         long l = System.currentTimeMillis();
         try {
             AccountManager accountManager = AccountManager.getInstance(getConnection());
             accountManager.sensitiveOperationOverInsecureConnection(true);
             accountManager.createAccount(Localpart.from(user), pass);
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (Exception e) {
+            if(baseActivity != null){
+                baseActivity.onError(e);
+            }
             e.printStackTrace();
         }
         Log.d("Auth", "Time taken to register: " + (System.currentTimeMillis() - l));

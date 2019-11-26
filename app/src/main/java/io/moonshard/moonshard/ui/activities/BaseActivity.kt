@@ -40,6 +40,8 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     open fun onError(e: Exception) {}
 
+    open fun onSuccess(){}
+
     fun onInvitationReceivedForMuc(
         room: MultiUserChat, inviter: String,
         reason: String, password: String, message: Message

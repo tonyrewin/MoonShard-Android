@@ -7,6 +7,10 @@
               tools:context=".ui.activities.RegisterActivity" android:orientation="vertical"
               android:background="#EEF6FF">
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <LinearLayout
         android:orientation="vertical"
             android:layout_width="match_parent"
@@ -137,5 +141,15 @@
                 android:src="@drawable/ic_instagram"
                 android:layout_margin="15dp"/>
     </LinearLayout>
+
     </LinearLayout>
+
+        <ProgressBar
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:id="@+id/progressBarReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 </ScrollView>

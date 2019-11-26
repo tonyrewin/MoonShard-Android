@@ -41,14 +41,10 @@ class LoginActivity : BaseActivity(), LoginView {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
 
-        //MainApplication.getXmppConnection().connection.addConnectionListener(this)
-
         loginBtn.setOnClickListener {
             showLoader()
             saveLoginCredentials(editEmail.text.toString(), editPassword.text.toString())
             startService()
-
-            // presenter.login(editEmail.text.toString(), editPassword.text.toString())
         }
 
         dontHaveText.setOnClickListener {

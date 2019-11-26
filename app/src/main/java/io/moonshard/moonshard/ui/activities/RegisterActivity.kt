@@ -2,6 +2,7 @@ package io.moonshard.moonshard.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
@@ -32,6 +33,13 @@ class RegisterActivity : BaseActivity(), RegisterView {
         registerBtn?.setOnClickListener {
             presenter.register(editEmail.text.toString(), editPassword.text.toString())
             //startService()
+        }
+    }
+
+    override fun onSuccess() {
+        runOnUiThread {
+            hideLoader()
+            Toast.makeText(this, "Registration is success", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,9 +106,10 @@ class RegisterActivity : BaseActivity(), RegisterView {
     }
 
     override fun showLoader() {
+        progressBarReg?.visibility = View.VISIBLE
     }
 
     override fun hideLoader() {
-
+        progressBarReg?.visibility = View.GONE
     }
 }

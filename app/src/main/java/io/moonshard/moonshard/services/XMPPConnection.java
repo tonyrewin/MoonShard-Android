@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 
-import org.jetbrains.annotations.NotNull;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
@@ -39,10 +38,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
-
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
@@ -53,12 +48,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Call;
-import okhttp3.Callback;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import static io.moonshard.moonshard.MainApplication.getCurrentActivity;
 
@@ -86,6 +75,7 @@ public class XMPPConnection implements ConnectionListener {
         this.context = context;
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
+
         if (jid != null && password != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
@@ -124,10 +114,14 @@ public class XMPPConnection implements ConnectionListener {
                 SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
                 SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
                 SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
-                connection.login(credentials.username, credentials.password);
+
+                if (!credentials.username.equals("") || !credentials.password.equals("")) {
+                    connection.login(credentials.username, credentials.password);
+                }
+
             } catch (Exception e) {
                 BaseActivity baseActivity = getCurrentActivity();
-                if(baseActivity != null){
+                if (baseActivity != null) {
                     baseActivity.onError(e);
                 }
                 e.printStackTrace();
@@ -148,7 +142,6 @@ public class XMPPConnection implements ConnectionListener {
             }
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
-
     }
 
     public void disconnect() {
@@ -174,7 +167,7 @@ public class XMPPConnection implements ConnectionListener {
         SecurePreferences.setValue("logged_in", true);
 
         BaseActivity baseActivity = getCurrentActivity();
-        if(baseActivity != null){
+        if (baseActivity != null) {
             baseActivity.onAuthenticated();
         }
     }
@@ -284,8 +277,11 @@ public class XMPPConnection implements ConnectionListener {
             AccountManager accountManager = AccountManager.getInstance(getConnection());
             accountManager.sensitiveOperationOverInsecureConnection(true);
             accountManager.createAccount(Localpart.from(user), pass);
+            if (baseActivity != null) {
+                baseActivity.onSuccess();
+            }
         } catch (Exception e) {
-            if(baseActivity != null){
+            if (baseActivity != null) {
                 baseActivity.onError(e);
             }
             e.printStackTrace();

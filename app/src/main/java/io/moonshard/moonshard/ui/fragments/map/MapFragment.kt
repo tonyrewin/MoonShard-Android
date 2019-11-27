@@ -77,12 +77,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         for (i in RoomsMap.rooms.indices) {
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
-                    var test = presenter.getRoom(it)
+                    var room = presenter.getRoom(it)
                     val distance = (calculationByDistance(
                         RoomsMap.rooms[i].latitude,
                         RoomsMap.rooms[i].longtitude
                     ))
-                    locationValueTestTv?.text = "$distance"
+                    locationValueTestTv?.text = distance
                 }
                 groupNameInfoTv?.text = RoomsMap.rooms[i].roomId?.split("@")?.get(0)
             }
@@ -90,25 +90,23 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
-    fun calculationByDistance(latRoom: String, lngRoom: String): String {
-
+    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
         val myLat = MainApplication.getCurrentLocation().latitude
         val myLng = MainApplication.getCurrentLocation().longitude
-
 
         val km = SphericalUtil.computeDistanceBetween(
             LatLng(latRoom.toDouble(), lngRoom.toDouble()),
             LatLng(myLat, myLng)
         ).toInt() / 1000
-        if (km < 1) {
-            return (SphericalUtil.computeDistanceBetween(
+        return if (km < 1) {
+            (SphericalUtil.computeDistanceBetween(
                 LatLng(
                     latRoom.toDouble(),
                     lngRoom.toDouble()
                 ), LatLng(myLat, myLng)
             ).toInt()).toString() + " m away"
         }else{
-            return (SphericalUtil.computeDistanceBetween(
+            (SphericalUtil.computeDistanceBetween(
                 LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                 LatLng(myLat, myLng)
             ).toInt() / 1000).toString() + " km away"

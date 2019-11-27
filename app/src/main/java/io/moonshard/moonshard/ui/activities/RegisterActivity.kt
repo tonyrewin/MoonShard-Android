@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
@@ -37,10 +38,13 @@ class RegisterActivity : BaseActivity(), RegisterView {
     }
 
     override fun onSuccess() {
-        runOnUiThread {
-            hideLoader()
-            Toast.makeText(this, "Registration is success", Toast.LENGTH_SHORT).show()
-        }
+        saveLoginCredentials(editEmail.text.toString()+"@moonshard.tech", editPassword.text.toString())
+        startService()
+    }
+
+    private fun saveLoginCredentials(email: String, password: String) {
+        SecurePreferences.setValue("jid", email)
+        SecurePreferences.setValue("pass", password)
     }
 
     fun startService() {
@@ -98,7 +102,10 @@ class RegisterActivity : BaseActivity(), RegisterView {
     }
 
     override fun onAuthenticated() {
-        //showContactsScreen()
+        runOnUiThread {
+            hideLoader()
+        }
+        showContactsScreen()
     }
 
     override fun showToast(text: String) {

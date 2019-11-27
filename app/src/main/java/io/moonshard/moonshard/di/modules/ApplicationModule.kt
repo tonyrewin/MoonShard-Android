@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 
 @Module
-class ApplicationModule(var context: Context, private val application: Application) {
+class ApplicationModule(var context: Context) {
     @Provides
     @Singleton
     fun providesContext(): Context {
@@ -27,11 +27,5 @@ class ApplicationModule(var context: Context, private val application: Applicati
     @Singleton
     fun provideTopicStorage(context: Context): TopicStorage {
         return TopicStorage(context)
-    }
-
-    @Provides
-    @Singleton
-    fun providesApplication(): Application {
-        return application
     }
 }

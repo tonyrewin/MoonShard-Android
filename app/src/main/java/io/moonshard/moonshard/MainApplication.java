@@ -13,8 +13,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import androidx.room.Room;
-
 import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -22,20 +20,15 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
-
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
-import io.moonshard.moonshard.di.modules.RoomModule;
 import io.moonshard.moonshard.di.modules.WebModule;
-import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 
@@ -51,7 +44,6 @@ public class MainApplication extends Application {
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
 
     private static String jid;
-     private static RoomHelper chatDB;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;
     private static LoginCredentials currentLoginCredentials;
@@ -77,8 +69,7 @@ public class MainApplication extends Application {
         setupLogger();
 
         component = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(getApplicationContext(), this))
-                .roomModule(new RoomModule(this))
+                .applicationModule(new ApplicationModule(getApplicationContext()))
                 .webModule(new WebModule(getApplicationContext()))
                 .build();
 
@@ -112,7 +103,7 @@ public class MainApplication extends Application {
 
 
         instance = this;
-
+        ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
@@ -145,8 +136,6 @@ public class MainApplication extends Application {
     public static String getJid() { return jid; }
 
     public static void setJid(String jid1) { jid = jid1; }
-
-     public static RoomHelper getChatDB() { return chatDB; }
 
     public static SharedPreferences getPreferences() {
         return preferences;

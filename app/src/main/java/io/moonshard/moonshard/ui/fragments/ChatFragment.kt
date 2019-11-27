@@ -35,7 +35,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
         runOnUiThread {
-            (messagesRv.adapter as MessagesAdapter).addToEnd(msgs, reverse)
+            (messagesRv?.adapter as MessagesAdapter).addToEnd(msgs, reverse)
         }
     }
 
@@ -55,7 +55,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).hideBottomNavigationBar()
+        (activity as MainActivity)?.hideBottomNavigationBar()
 
         setAdapter()
 
@@ -77,7 +77,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             chooseFile()
         }
 
-        (messagesRv.adapter as MessagesAdapter).setLoadMoreListener(object :
+        (messagesRv?.adapter as? MessagesAdapter)?.setLoadMoreListener(object :
             MessagesAdapter.OnLoadMoreListener {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 presenter.loadRecentPageMessages()
@@ -88,6 +88,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
+        (activity as MainActivity).showBottomNavigationBar()
     }
 
     override fun onResume() {

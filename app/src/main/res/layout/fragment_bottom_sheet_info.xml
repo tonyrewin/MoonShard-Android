@@ -11,6 +11,7 @@
 
     <!-- include main content -->
     <include
+            android:visibility="gone"
             android:id="@+id/bottomSheetInfo"
             layout="@layout/bottom_sheet_info" />
 

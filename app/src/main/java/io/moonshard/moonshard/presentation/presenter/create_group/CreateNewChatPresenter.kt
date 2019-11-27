@@ -35,7 +35,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             viewState?.showToast("Вы ввели недопустимый символ")
             return
         } else {
-            actualUserName =  username.split("@")[0] + "conference.moonshard.tech"
+            actualUserName = username.split("@")[0] + "conference.moonshard.tech"
         }
 
         try {

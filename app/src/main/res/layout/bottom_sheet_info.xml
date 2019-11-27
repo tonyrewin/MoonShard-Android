@@ -93,7 +93,7 @@
     <Button
             android:layout_weight="1"
             android:layout_below="@+id/mainLayout"
-            android:id="@+id/readBtn"
+            android:id="@+id/readGroupBtn"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -107,7 +107,7 @@
             android:layout_weight="1"
             android:layout_toRightOf="@+id/readBtn"
             android:layout_below="@+id/mainLayout"
-            android:id="@+id/joinBtn"
+            android:id="@+id/joinGroupBtn"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
             android:layout_height="40dp"

@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         val newFragment = ChatsFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.add(R.id.container, newFragment).commit()
+        ft.replace(R.id.container, newFragment).commit()
 
         initEvent()
     }

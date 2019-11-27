@@ -160,7 +160,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Нету ничего"
+        return "Информация отсутствует"
     }
 
     override fun onResume() {

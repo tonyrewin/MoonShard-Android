@@ -40,7 +40,7 @@
                 android:src="@drawable/ic_users" />
 
         <TextView
-                android:id="@+id/groupNameTv"
+                android:id="@+id/groupNameInfoContentTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -50,20 +50,20 @@
                 android:textSize="17sp" />
 
         <TextView
-                android:id="@+id/valueMembersTv"
+                android:id="@+id/valueMembersInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/groupNameTv"
+                android:layout_below="@+id/groupNameInfoContentTv"
                 android:layout_alignStart="@+id/usersIv"
                 android:text="666 members, 30 online"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
         <TextView
-                android:id="@+id/locationValueTv"
+                android:id="@+id/locationValueInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/valueMembersTv"
+                android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
                 android:text="130 m away" />
 
@@ -76,6 +76,44 @@
 
     </RelativeLayout>
 
+        <LinearLayout
+                android:id="@+id/buttonsTop"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="45dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <Button
+                    android:background="@drawable/button_background_transparent"
+                    android:textColor="#0075FF"
+                    android:id="@+id/readBtn2"
+                    style="@style/Theme.MaterialComponents.Light"
+                    android:layout_width="159dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Читать" />
+
+            <Button
+                    android:layout_marginStart="8dp"
+                    android:layout_toRightOf="@+id/readBtn"
+                    android:layout_below="@+id/mainLayout"
+                    android:id="@+id/joinBtn2"
+                    style="@style/Theme.MaterialComponents.Light"
+                    android:layout_width="159dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:gravity="center"
+                    android:text="Присоединиться"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="7pt" />
+
+        </LinearLayout>
+
 
     <TextView
             android:layout_width="wrap_content"
@@ -87,6 +125,7 @@
             android:textSize="14sp" />
 
     <TextView
+            android:id="@+id/locationInfoTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -112,6 +151,7 @@
 
 
     <TextView
+            android:id="@+id/descriptionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"

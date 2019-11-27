@@ -42,9 +42,15 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
 
         loginBtn.setOnClickListener {
-            showLoader()
-            saveLoginCredentials(editEmail.text.toString(), editPassword.text.toString())
-            startService()
+            val actualUserName: String
+            if (editEmail.text.toString().contains("@")) {
+                showError("Вы ввели недопустимый символ")
+            } else {
+                actualUserName =  editEmail.text.toString() + "@moonshard.tech"
+                showLoader()
+                saveLoginCredentials(actualUserName, editPassword.text.toString())
+                startService()
+            }
         }
 
         dontHaveText.setOnClickListener {

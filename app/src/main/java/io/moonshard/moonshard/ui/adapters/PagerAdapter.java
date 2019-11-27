@@ -11,13 +11,15 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import io.moonshard.moonshard.R;
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.CategoriesFragment;
+import io.moonshard.moonshard.ui.fragments.map.bottomsheet.InfoPointFragment;
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
     public enum TabItem {
         LIST(ListChatsMapFragment.class,  R.string.list),
-        CATEGORY(CategoriesFragment.class,  R.string.category);
+        CATEGORY(CategoriesFragment.class,  R.string.category),
+        INFO(InfoPointFragment.class,R.string.category);
 
         private final Class<? extends Fragment> fragmentClass;
         private final int titleResId;

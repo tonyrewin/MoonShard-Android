@@ -59,6 +59,13 @@
     </RelativeLayout>
 
     <include
+            android:visibility="visible"
+            android:id="@+id/defaultBottomSheet"
             layout="@layout/fragment_bottom_sheet"/>
+
+    <include
+            android:visibility="gone"
+            android:id="@+id/infoBottomSheet"
+            layout="@layout/fragment_bottom_sheet_info"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import android.util.Log
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.RoomsUseCase
@@ -28,6 +29,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 if (throwable == null) {
                     RoomsMap.clean()
                     RoomsMap.rooms = rooms
+                    Log.d("rooms", rooms.size.toString())
                     viewState?.showRoomsOnMap(rooms)
                 } else {
                     throwable.message?.let { viewState?.showError(it) }

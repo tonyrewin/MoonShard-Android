@@ -4,30 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_info.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.MarkerOptions
 
 
+class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
+    GoogleMap.OnMarkerClickListener {
 
-
-
-class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
 
     private var mMap: GoogleMap? = null
 
@@ -39,6 +43,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         map!!.isMyLocationEnabled = true
         map.uiSettings.isMyLocationButtonEnabled = false
         map.uiSettings.isCompassEnabled = false
+        mMap?.setOnMarkerClickListener(this)
+
+        mMap?.setOnMapClickListener {
+            defaultBottomSheet.visibility = View.VISIBLE
+            infoBottomSheet.visibility = View.GONE
+        }
+
 
         zoomPlus?.setOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomIn())
@@ -52,7 +63,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
             getMyLocation()
         }
 
-        presenter.getRooms("","","")
+        presenter.getRooms("", "", "")
     }
 
     override fun onCreateView(
@@ -61,20 +72,36 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_map, container, false)
     }
 
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        defaultBottomSheet.visibility = View.GONE
+        infoBottomSheet.visibility = View.VISIBLE
+        return true
+    }
+
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
-        for(i in rooms.indices){
-            if(rooms[i].category=="Культура"){
+        for (i in rooms.indices) {
+            if (rooms[i].category == "Культура") {
                 mMap?.addMarker(
                     MarkerOptions()
-                        .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
+                        .position(
+                            LatLng(
+                                rooms[i].latitude.toDouble(),
+                                rooms[i].longtitude.toDouble()
+                            )
+                        )
                         .icon(
                             BitmapDescriptorFactory.fromResource(io.moonshard.moonshard.R.drawable.ic_marker_health)
                         )
                 )
-            }else{
+            } else {
                 mMap?.addMarker(
                     MarkerOptions()
-                        .position(LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble()))
+                        .position(
+                            LatLng(
+                                rooms[i].latitude.toDouble(),
+                                rooms[i].longtitude.toDouble()
+                            )
+                        )
                         .icon(
                             BitmapDescriptorFactory.fromResource(io.moonshard.moonshard.R.drawable.ic_marker_health)
                         )
@@ -104,6 +131,24 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
+    private fun setupClickBottomSheet() {
+        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
+            activity!!.supportFragmentManager,
+            context,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.INFO
+        )
+        bottomSheetAppbar.visibility = View.GONE
+
+        bottomSheetViewPager.offscreenPageLimit = 1
+        bottomSheetViewPager.adapter = sectionsPagerAdapter
+        bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
+        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
+    }
+
+    fun setBottomJoinVisible() {
+        infoBottomSheet.visibility = View.VISIBLE
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>,
         grantResults: IntArray
@@ -117,7 +162,30 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback {
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
-        setupBottomSheet()
+         setupBottomSheet()
+
+
+        val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
+        val sheetBehavior = BottomSheetBehavior.from(myBottoms)
+
+
+
+
+        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> bottomSheetInfo.visibility = View.GONE
+                    BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetInfo.visibility = View.VISIBLE
+                }
+            }
+
+        })
     }
 
     private fun getMyLocation() {

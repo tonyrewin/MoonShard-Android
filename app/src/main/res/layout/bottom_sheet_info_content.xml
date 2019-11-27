@@ -130,16 +130,15 @@
             android:orientation="horizontal">
 
         <Button
-                android:layout_below="@+id/mainLayout"
+                android:background="@drawable/button_background_transparent"
+                android:textColor="#0075FF"
                 android:id="@+id/readBtn"
                 style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="159dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_background"
                 android:gravity="center"
-                android:text="Читать"
-                android:textColor="@android:color/background_light" />
+                android:text="Читать" />
 
         <Button
                 android:layout_marginStart="8dp"

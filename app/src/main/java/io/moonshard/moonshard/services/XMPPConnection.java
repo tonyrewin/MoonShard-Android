@@ -17,6 +17,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
@@ -32,6 +33,7 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.File;
 import java.io.IOException;
@@ -377,6 +379,40 @@ public class XMPPConnection implements ConnectionListener {
 
     public Presence getUserPresence(BareJid jid) {
         return roster.getPresence(jid);
+    }
+
+    public  Roster getRoster(){
+        return roster;
+    }
+
+    public void addUserToGroup(String userName, String groupName) {
+        try {
+            BareJid bareJid = JidCreate.bareFrom(userName);
+
+            RosterGroup group = roster.getGroup(groupName);
+            if (null == group) {
+                group = roster.createGroup(groupName);
+            }
+            RosterEntry entry = roster.getEntry(bareJid);
+            if (entry != null) {
+                try {
+                    group.addEntry(entry);
+                } catch (XMPPException e) {
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void sendUserPresence(Presence presence) {

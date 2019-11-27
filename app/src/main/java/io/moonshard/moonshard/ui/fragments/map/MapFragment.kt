@@ -15,13 +15,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
+import kotlinx.android.synthetic.main.bottom_sheet_info.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_info.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
@@ -32,7 +33,6 @@ import pub.devrel.easypermissions.EasyPermissions
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
 
-
     private var mMap: GoogleMap? = null
 
     @InjectPresenter
@@ -40,16 +40,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
-        map!!.isMyLocationEnabled = true
-        map.uiSettings.isMyLocationButtonEnabled = false
-        map.uiSettings.isCompassEnabled = false
+        map?.isMyLocationEnabled = true
+        map?.uiSettings?.isMyLocationButtonEnabled = false
+        map?.uiSettings?.isCompassEnabled = false
         mMap?.setOnMarkerClickListener(this)
 
         mMap?.setOnMapClickListener {
             defaultBottomSheet.visibility = View.VISIBLE
             infoBottomSheet.visibility = View.GONE
         }
-
 
         zoomPlus?.setOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomIn())
@@ -73,9 +72,47 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-        defaultBottomSheet.visibility = View.GONE
-        infoBottomSheet.visibility = View.VISIBLE
+        defaultBottomSheet?.visibility = View.GONE
+        infoBottomSheet?.visibility = View.VISIBLE
+        for (i in RoomsMap.rooms.indices) {
+            if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
+                RoomsMap.rooms[i].roomId?.let {
+                    var test = presenter.getRoom(it)
+                    val distance = (calculationByDistance(
+                        RoomsMap.rooms[i].latitude,
+                        RoomsMap.rooms[i].longtitude
+                    ))
+                    locationValueTestTv?.text = "$distance"
+                }
+                groupNameInfoTv?.text = RoomsMap.rooms[i].roomId?.split("@")?.get(0)
+            }
+        }
         return true
+    }
+
+    fun calculationByDistance(latRoom: String, lngRoom: String): String {
+
+        val myLat = MainApplication.getCurrentLocation().latitude
+        val myLng = MainApplication.getCurrentLocation().longitude
+
+
+        val km = SphericalUtil.computeDistanceBetween(
+            LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+            LatLng(myLat, myLng)
+        ).toInt() / 1000
+        if (km < 1) {
+            return (SphericalUtil.computeDistanceBetween(
+                LatLng(
+                    latRoom.toDouble(),
+                    lngRoom.toDouble()
+                ), LatLng(myLat, myLng)
+            ).toInt()).toString() + " m away"
+        }else{
+            return (SphericalUtil.computeDistanceBetween(
+                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                LatLng(myLat, myLng)
+            ).toInt() / 1000).toString() + " km away"
+        }
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
@@ -162,13 +199,11 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
-         setupBottomSheet()
+        setupBottomSheet()
 
 
-        val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
+        val myBottoms = view.findViewById<LinearLayout>(io.moonshard.moonshard.R.id.infoBottomSheet)
         val sheetBehavior = BottomSheetBehavior.from(myBottoms)
-
-
 
 
         sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {

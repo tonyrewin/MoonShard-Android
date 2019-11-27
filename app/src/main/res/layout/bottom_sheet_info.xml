@@ -45,7 +45,8 @@
                 android:src="@drawable/ic_users" />
 
         <TextView
-                android:id="@+id/groupNameTv"
+                android:maxLines="1"
+                android:id="@+id/groupNameInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -58,20 +59,18 @@
                 android:id="@+id/valueMembersTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/groupNameTv"
+                android:layout_below="@+id/groupNameInfoTv"
                 android:layout_alignStart="@+id/usersIv"
                 android:text="666 members, 30 online"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
         <TextView
-                android:id="@+id/locationValueTv"
+                android:id="@+id/locationValueTestTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersTv"
-                android:layout_alignStart="@+id/usersIv"
-                android:text="130 m away" />
-
+                android:layout_alignStart="@+id/usersIv" />
 
         <View
                 android:layout_width="match_parent"
@@ -83,36 +82,43 @@
 
 
 
-    <Button
-            android:layout_below="@+id/mainLayout"
-            android:id="@+id/readBtn"
-            style="@style/Theme.MaterialComponents.Light"
-            android:layout_width="159dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
+    <LinearLayout
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/button_background"
+            android:orientation="horizontal"
+            android:layout_below="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <Button
+            android:layout_weight="1"
+            android:layout_below="@+id/mainLayout"
+            android:id="@+id/readBtn"
+            style="@style/Theme.MaterialComponents.Light"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background_transparent"
+            android:textColor="#0075FF"
             android:gravity="center"
-            android:text="Читать"
-            android:textColor="@android:color/background_light" />
+            android:text="ЧИТАТЬ" />
 
     <Button
+            android:layout_weight="1"
             android:layout_toRightOf="@+id/readBtn"
             android:layout_below="@+id/mainLayout"
             android:id="@+id/joinBtn"
             style="@style/Theme.MaterialComponents.Light"
-            android:layout_width="159dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
             android:background="@drawable/button_background"
             android:gravity="center"
-            android:text="Присоединиться"
+            android:text="ПРИСОЕДИНИТЬСЯ"
             android:textColor="@android:color/background_light"
             android:textSize="7pt" />
+
+    </LinearLayout>
 
 </RelativeLayout>

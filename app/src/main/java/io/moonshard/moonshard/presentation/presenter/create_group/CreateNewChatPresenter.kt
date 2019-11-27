@@ -29,14 +29,19 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         ttl: Int,
         category: String
     ) {
-        if (!username.contains("@")) {
-            viewState?.showToast("Должен содержать @conference.host")
+        val actualUserName: String
+
+        if (username.contains("@")) {
+            viewState?.showToast("Вы ввели недопустимый символ")
             return
+        } else {
+            actualUserName =  username.split("@")[0] + "conference.moonshard.tech"
         }
+
         try {
             val manager =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val entityBareJid = JidCreate.entityBareFrom(username)
+            val entityBareJid = JidCreate.entityBareFrom(actualUserName)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
 
@@ -48,11 +53,11 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             muc.sendConfigurationForm(answerForm)
 
             LocalDBWrapper.createChatEntry(
-                username, username.split("@")[0],
+                actualUserName, actualUserName.split("@")[0],
                 ArrayList<GenericUser>(), true
             )
 
-            createRoomOnServer(latitude, longitude, ttl, username, category)
+            createRoomOnServer(latitude, longitude, ttl, actualUserName, category)
         } catch (e: Exception) {
             e.message?.let { viewState?.showToast(it) }
         }

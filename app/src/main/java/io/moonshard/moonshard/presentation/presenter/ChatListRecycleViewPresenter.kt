@@ -3,6 +3,7 @@ package io.moonshard.moonshard.presentation.presenter
 import android.view.View
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
+import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.MessageRepository
@@ -24,8 +25,13 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     private val disposables = emptyList<Disposable>().toMutableList()
 
     init {
-        disposables.add(chatListRepository.getChats().subscribe {
-            chats = it
+        disposables.add(chatListRepository.getChats().subscribe { newChats ->
+            chats = newChats
+            chats = chats.sortedWith(Comparator { o1, o2 ->
+                val timestamp1 = o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp
+                val timestamp2 = o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp
+                timestamp2.compareTo(timestamp1)
+            })
         })
     }
 

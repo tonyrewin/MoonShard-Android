@@ -66,7 +66,7 @@
             android:layout_alignBottom="@+id/lastMessageDate"
             android:layout_toStartOf="@+id/lastMessageDate"
             android:scaleType="center"
-            android:src="@drawable/ic_check_message" />
+            android:src="@drawable/ic_checked_message_state" />
 
     <TextView
             android:id="@+id/lastMessageDate"

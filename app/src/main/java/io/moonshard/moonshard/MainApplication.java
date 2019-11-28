@@ -13,7 +13,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import androidx.room.Room;
 
 import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;

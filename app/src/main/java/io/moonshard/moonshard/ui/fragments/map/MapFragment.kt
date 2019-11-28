@@ -84,49 +84,50 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
                     val roomInfo = presenter.getRoom(it)
+                    roomInfo?.let {
+                        val distance = (calculationByDistance(
+                            RoomsMap.rooms[i].latitude,
+                            RoomsMap.rooms[i].longtitude
+                        ))
 
-                    val distance = (calculationByDistance(
-                        RoomsMap.rooms[i].latitude,
-                        RoomsMap.rooms[i].longtitude
-                    ))
+                        locationValueTestTv?.text = distance
+                        groupNameInfoTv?.text = roomInfo?.name
+                        valueMembersTv?.text =
+                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
 
-                    locationValueTestTv?.text = distance
-                    groupNameInfoTv?.text = roomInfo?.name
-                    valueMembersTv?.text =
-                        "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                        joinGroupBtn?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
 
-                    joinGroupBtn?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                    }
+                        readGroupBtn?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
 
-                    readGroupBtn?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                    }
-
-                    groupNameInfoContentTv?.text = roomInfo?.name
-                    valueMembersInfoTv?.text =
-                        "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
-                    locationValueInfoTv?.text = distance
-                    locationInfoTv?.text = getAddress(
-                        LatLng(
-                            RoomsMap.rooms[i].latitude.toDouble(),
-                            RoomsMap.rooms[i].longtitude.toDouble()
+                        groupNameInfoContentTv?.text = roomInfo?.name
+                        valueMembersInfoTv?.text =
+                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                        locationValueInfoTv?.text = distance
+                        locationInfoTv?.text = getAddress(
+                            LatLng(
+                                RoomsMap.rooms[i].latitude.toDouble(),
+                                RoomsMap.rooms[i].longtitude.toDouble()
+                            )
                         )
-                    )
-                    descriptionTv?.text = roomInfo?.description
+                        descriptionTv?.text = roomInfo?.description
 
-                    joinBtn?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                    }
-                    readBtn?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                    }
+                        joinBtn?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
+                        readBtn?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
 
-                    joinBtn2?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                    }
-                    readBtn2?.setOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        joinBtn2?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
+                        readBtn2?.setOnClickListener {
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        }
                     }
                 }
             }

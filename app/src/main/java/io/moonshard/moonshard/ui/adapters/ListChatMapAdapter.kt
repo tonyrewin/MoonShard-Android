@@ -51,7 +51,7 @@ class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: 
         internal var groupNameTv: TextView? = view.findViewById(R.id.groupNameTv)
         internal var valueMembersTv: TextView? = view.findViewById(R.id.valueMembersTv)
         internal var locationValueTv: TextView? = view.findViewById(R.id.locationValueTv)
-        internal var groupIv: ImageView? = view.findViewById(R.id.profile_image)
+        internal var groupIv: ImageView? = view.findViewById(R.id.profileImage)
         internal var mainLayout: RelativeLayout? = view.findViewById(R.id.mainLayout)
     }
 }

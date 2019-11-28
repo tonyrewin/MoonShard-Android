@@ -2,8 +2,6 @@ package io.moonshard.moonshard.presentation.presenter
 
 import android.util.Log
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.LocalDBWrapper
-import io.moonshard.moonshard.models.jabber.GenericUser
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.RoomsUseCase
@@ -12,15 +10,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smack.packet.Presence
-import org.jivesoftware.smack.roster.RosterGroup
-import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jxmpp.jid.impl.JidCreate
-import org.jivesoftware.smack.roster.RosterEntry
-import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smackx.muc.RoomInfo
-import org.jxmpp.jid.EntityFullJid
+import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 
 
@@ -52,26 +44,36 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     fun getRoom(jid: String): RoomInfo? {
-        val groupId = JidCreate.entityBareFrom(jid)
-        val muc = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            .getMultiUserChat(groupId)
-        val info = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection).getRoomInfo(muc.room)
-        return info
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val info =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getRoomInfo(muc.room)
+            return info
+        } catch (e: java.lang.Exception) {
+
+        }
+        return null
     }
 
     fun joinChat(jid: String) {
         try {
-            val manager = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             muc.join(nickName)
-           // var occupants = muc.occupants
-            LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
-            if(muc.isJoined){
+            // var occupants = muc.occupants
+
+            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
+            if (muc.isJoined) {
                 viewState?.showChatScreens(jid)
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
     }

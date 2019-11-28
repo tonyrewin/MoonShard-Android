@@ -62,9 +62,9 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
             if (idChat.contains("conference")) presenter.join()
 
-            presenter.loadLocalMessages()
+           // presenter.loadLocalMessages()
 
-            presenter.loadMoreMessages()
+           // presenter.loadMoreMessages()
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }
@@ -85,7 +85,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
-        (activity as MainActivity).showBottomNavigationBar()
+        //(activity as MainActivity).showBottomNavigationBar()
     }
 
     override fun onResume() {

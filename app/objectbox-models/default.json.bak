@@ -41,7 +41,7 @@
     },
     {
       "id": "2:6800849399877525902",
-      "lastPropertyId": "9:5117650651712387239",
+      "lastPropertyId": "10:4002800396543773766",
       "name": "MessageEntity",
       "properties": [
         {
@@ -93,6 +93,12 @@
           "type": 11,
           "flags": 1548,
           "relationTarget": "ChatUser"
+        },
+        {
+          "id": "10:4002800396543773766",
+          "name": "isCurrentUserSender",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []

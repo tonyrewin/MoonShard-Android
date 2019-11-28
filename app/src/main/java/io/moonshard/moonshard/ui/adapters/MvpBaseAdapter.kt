@@ -15,5 +15,7 @@ abstract class MvpBaseAdapter<T : RecyclerView.ViewHolder?>(
         @Suppress("LeakingThis")
         adapterDelegate = MvpDelegate(this)
         adapterDelegate.setParentDelegate(parentDelegate, childId)
+        adapterDelegate.onCreate()
+        adapterDelegate.onAttach()
     }
 }

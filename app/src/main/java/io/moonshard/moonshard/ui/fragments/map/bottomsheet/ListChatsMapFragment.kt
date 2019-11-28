@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.Category
 import io.moonshard.moonshard.presentation.view.ListChatMapView

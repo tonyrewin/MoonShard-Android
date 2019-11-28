@@ -39,14 +39,6 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         back?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
-        (activity as MainActivity).hideBottomNavigationBar()
-        btn?.setOnClickListener {
-            presenter.createGroupChat(editJid.text.toString())
-        }
-
-        btnOneToOne?.setOnClickListener {
-            presenter.startChatWithPeer(editJudOneToOne.text.toString())
-        }
 
         startLocalGroup?.setOnClickListener {
             showCreateNewChatScreen()

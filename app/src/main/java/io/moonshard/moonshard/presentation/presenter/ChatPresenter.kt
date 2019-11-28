@@ -43,12 +43,14 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
-        chatID = chatId
+        chatID = chatId+"@moonshard.tech"
         chatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 chat = it
+                loadLocalMessages()
+                loadMoreMessages()
             }
     }
 

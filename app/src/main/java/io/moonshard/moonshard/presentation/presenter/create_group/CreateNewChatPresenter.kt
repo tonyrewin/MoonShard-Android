@@ -1,9 +1,9 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.LocalDBWrapper
-import io.moonshard.moonshard.models.jabber.GenericUser
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.CreateNewChatView
+import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,6 +19,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
+    private val chatListRepository = ChatListRepository()
+
 
     init {
         useCase = RoomsUseCase()
@@ -52,12 +54,22 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             answerForm.setAnswer("muc#roomconfig_persistentroom", true)
             muc.sendConfigurationForm(answerForm)
 
-            LocalDBWrapper.createChatEntry(
-                actualUserName, actualUserName.split("@")[0],
-                ArrayList<GenericUser>(), true
+            //need  LocalDBWrapper.createChatEntry(actualUserName, actualUserName.split("@")[0], ArrayList<GenericUser>(), true)
+
+            val chatEntity = ChatEntity(
+                0,
+                username,
+                JidCreate.entityBareFrom(actualUserName).split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0],
+                true,
+                0
             )
 
-            createRoomOnServer(latitude, longitude, ttl, actualUserName, category)
+            chatListRepository.addChat(chatEntity)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    createRoomOnServer(latitude, longitude, ttl, actualUserName, category)
+                }
         } catch (e: Exception) {
             e.message?.let { viewState?.showToast(it) }
         }

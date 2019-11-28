@@ -5,7 +5,7 @@ import moxy.MvpView
 import java.util.ArrayList
 
 interface ChatsView: MvpView {
-    fun setData(chats: ArrayList<GenericDialog>)
+    //fun setData(chats: ArrayList<GenericDialog>)
     fun showError(error:String)
     fun showChatScreen(chatId:String)
     fun addNewChat(chat:GenericDialog)

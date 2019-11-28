@@ -7,6 +7,7 @@ import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.MessageRepository
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
+import io.moonshard.moonshard.ui.adapters.ChatListListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -42,7 +43,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         return chats.size
     }
 
-    fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int) {
+    fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
         val chat = chats[position]
         holder.chatName.text = chat.chatName
         disposables.add(messageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
@@ -91,6 +92,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             viewState.onItemChange(position)
         }))
         viewState.onItemChange(position)
+
+        holder.itemView.setOnClickListener {
+            listener.clickChat(chat)
+        }
     }
 
     override fun onDestroy() {

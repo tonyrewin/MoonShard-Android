@@ -1,8 +1,11 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.MapMainView
+import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +21,7 @@ import org.jxmpp.jid.parts.Resourcepart
 
 @InjectViewState
 class MapPresenter : MvpPresenter<MapMainView>() {
-
+    private val chatListRepository = ChatListRepository()
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -59,6 +62,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         return null
     }
 
+    @SuppressLint("CheckResult")
     fun joinChat(jid: String) {
         try {
             val manager =
@@ -68,11 +72,21 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             muc.join(nickName)
             // var occupants = muc.occupants
-
-            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
-            if (muc.isJoined) {
-                viewState?.showChatScreens(jid)
+            val chatEntity = ChatEntity(
+                jid = jid,
+                chatName = jid.split("@")[0],
+                isGroupChat = true,
+                unreadMessagesCount = 0
+            )
+            chatListRepository.addChat(chatEntity)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (muc.isJoined) {
+                        viewState?.showChatScreens(jid)
+                    }
             }
+            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

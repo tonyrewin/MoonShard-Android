@@ -20,7 +20,7 @@ interface ChatListListener {
     fun clickChat(chat: ChatEntity)
 }
 
-class ChatListAdapter(parentDelegate: MvpDelegate<*>,val listener: ChatListListener):
+class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: ChatListListener):
     MvpBaseAdapter<ChatListAdapter.ChatListViewHolder>(parentDelegate, 0.toString()), ChatListRecyclerView {
 
     @InjectPresenter

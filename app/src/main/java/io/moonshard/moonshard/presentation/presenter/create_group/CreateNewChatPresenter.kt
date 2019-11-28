@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
+import android.annotation.SuppressLint
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.CreateNewChatView
@@ -26,6 +27,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         useCase = RoomsUseCase()
     }
 
+    @SuppressLint("CheckResult")
     fun createGroupChat(
         username: String, latitude: Float?, longitude: Float?,
         ttl: Int,

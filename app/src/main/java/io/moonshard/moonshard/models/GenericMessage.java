@@ -3,54 +3,40 @@ package io.moonshard.moonshard.models;
 import java.util.Date;
 
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.models.dbEntities.ChatUser;
 import io.moonshard.moonshard.models.jabber.GenericUser;
 import io.moonshard.moonshard.models.dbEntities.MessageEntity;
 
 public class GenericMessage {
-    private long messageID;
-    private GenericUser author;
-    private long timestamp;
-    private String text;
-    private String imageUrl;
+private MessageEntity messageEntity;
 
 
     public GenericMessage(MessageEntity messageEntity) {
-        /*this.messageID = messageEntity.messageID;
-        this.author = new GenericUser(messageEntity.senderJid, messageEntity.senderJid, messageEntity.senderJid);
-        this.timestamp = messageEntity.timestamp;
-        this.text = messageEntity.text;
-        if (messageEntity.text.contains("http") && messageEntity.text.contains(".jpg")) {
-            imageUrl = messageEntity.text;
-        }*/
+        this.messageEntity = messageEntity;
+        messageEntity.sender.setTarget(new ChatUser());
     }
 
     public String getId() {
-        return String.valueOf(messageID);
+        return messageEntity.getMessageUid();
     }
 
     public String getText() {
-        return text;
+        return messageEntity.getText();
     }
 
     public GenericUser getUser() {
-        return author;
+        return new GenericUser(messageEntity.sender.getTarget().getJid(), messageEntity.sender.getTarget().getName(), "");
     }
 
     public Date getCreatedAt() {
-        return new Date(timestamp);
+        return new Date(messageEntity.getTimestamp());
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return "";
     }
 
     public boolean isBelongsToCurrentUser() {
-        String name = "";
-        if (author.getJid().contains("/")) {
-            name = author.getJid().split("/")[1] + "@" + "moonshard.tech";
-        } else {
-            name = author.getJid();
-        }
-        return name.equals(MainApplication.getCurrentLoginCredentials().username+"@"+"moonshard.tech");
+        return messageEntity.isCurrentUserSender();
     }
 }

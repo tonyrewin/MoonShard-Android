@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smack.roster.RosterGroup
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
@@ -19,6 +20,7 @@ import org.jxmpp.jid.impl.JidCreate
 import org.jivesoftware.smack.roster.RosterEntry
 import org.jivesoftware.smack.roster.Roster
 import org.jivesoftware.smackx.muc.RoomInfo
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.parts.Resourcepart
 
 
@@ -64,6 +66,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             muc.join(nickName)
+           // var occupants = muc.occupants
             LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
             if(muc.isJoined){
                 viewState?.showChatScreens(jid)
@@ -72,4 +75,20 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             e.message?.let { viewState?.showError(it) }
         }
     }
+
+
+    /*
+
+    fun getValueOnlineUsers(muc:MultiUserChat,usersInGroup:List<EntityFullJid>){
+        var onlineValue = 0
+        for(i in usersInGroup.indices){
+            val user =  muc.getOccupantPresence(usersInGroup[i])
+            if(user.type == Presence.Type.available){
+                onlineValue++
+            }
+        }
+        return onlineValue
+    }
+
+     */
 }

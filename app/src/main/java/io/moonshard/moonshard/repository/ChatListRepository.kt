@@ -10,6 +10,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
+import okhttp3.internal.notify
 import org.jxmpp.jid.Jid
 
 class ChatListRepository: IChatListRepository {
@@ -40,6 +41,33 @@ class ChatListRepository: IChatListRepository {
                     return@subscribe
                 }
                 it.onNext(chat.first())
+            }
+        }
+    }
+
+    override fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
+        return Completable.create {
+            val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
+            RxQuery.observable(query).subscribe { chat ->
+                if (chat.isEmpty()) {
+                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    return@subscribe
+                }
+                chat.first().unreadMessagesCount = newCountValue
+                it.onComplete()
+            }
+        }
+    }
+
+    override fun getUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
+        return Observable.create {
+            val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
+            RxQuery.observable(query).subscribe { chat ->
+                if (chat.isEmpty()) {
+                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    return@subscribe
+                }
+                it.onNext(chat.first().unreadMessagesCount)
             }
         }
     }

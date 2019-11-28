@@ -88,7 +88,7 @@ class MessageRepository: IMessageRepository {
         }
     }
 
-    override fun getUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
+    override fun getRealUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
         return Observable.create {
             val msgQuery = messageBox.query {
                 equal(MessageEntity_.isCurrentUserSender, false)
@@ -102,6 +102,26 @@ class MessageRepository: IMessageRepository {
                 } else {
                     it.onNext(0)
                 }
+            }, { e ->
+                it.onError(e)
+            })
+        }
+    }
+
+    override fun updateRealUnreadMessagesCount(jid: Jid): Completable {
+        return Completable.create {
+            val msgQuery = messageBox.query {
+                equal(MessageEntity_.isCurrentUserSender, false)
+                equal(MessageEntity_.isRead, false)
+                link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
+            }
+
+            RxQuery.observable(msgQuery).subscribe({ unreadMessages ->
+                unreadMessages.forEach {
+                    it.isRead = false
+                }
+                messageBox.put(unreadMessages)
+                it.onComplete()
             }, { e ->
                 it.onError(e)
             })

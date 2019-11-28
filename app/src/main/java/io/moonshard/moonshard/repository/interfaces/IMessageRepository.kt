@@ -12,5 +12,8 @@ interface IMessageRepository {
     fun getMessageById(messageUid: String): Single<MessageEntity>
     fun getLastMessage(jid: Jid): Observable<MessageEntity>
     fun getFirstMessage(jid: Jid): Observable<MessageEntity>
-    fun getUnreadMessagesCountByJid(jid: Jid): Observable<Int>
+    fun getRealUnreadMessagesCountByJid(jid: Jid): Observable<Int>
+
+    // FIXME this one should update specific message instead of all messages
+    fun updateRealUnreadMessagesCount(jid: Jid): Completable
 }

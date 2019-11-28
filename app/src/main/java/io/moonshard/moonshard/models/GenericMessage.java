@@ -4,7 +4,7 @@ import java.util.Date;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.models.jabber.GenericUser;
-import io.moonshard.moonshard.models.roomEntities.MessageEntity;
+import io.moonshard.moonshard.models.dbEntities.MessageEntity;
 
 public class GenericMessage {
     private long messageID;
@@ -15,13 +15,13 @@ public class GenericMessage {
 
 
     public GenericMessage(MessageEntity messageEntity) {
-        this.messageID = messageEntity.messageID;
+        /*this.messageID = messageEntity.messageID;
         this.author = new GenericUser(messageEntity.senderJid, messageEntity.senderJid, messageEntity.senderJid);
         this.timestamp = messageEntity.timestamp;
         this.text = messageEntity.text;
         if (messageEntity.text.contains("http") && messageEntity.text.contains(".jpg")) {
             imageUrl = messageEntity.text;
-        }
+        }*/
     }
 
     public String getId() {

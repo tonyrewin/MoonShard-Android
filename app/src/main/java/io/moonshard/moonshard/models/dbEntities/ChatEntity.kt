@@ -9,8 +9,9 @@ import io.objectbox.relation.ToMany
 data class ChatEntity(
     @Id var id: Long = 0,
     var jid: String,
-    var chatName: String,
-    var isGroupChat: Boolean
+    var chatName: String = "",
+    var isGroupChat: Boolean = false,
+    var unreadMessagesCount: Int = 0
 ) {
     lateinit var users: ToMany<ChatUser>
     @Backlink(to = "chat")

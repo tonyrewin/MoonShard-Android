@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.moonshard.moonshard.models.jabber.GenericUser;
-import io.moonshard.moonshard.models.roomEntities.ChatEntity;
+import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 
 public class GenericDialog {
     private String dialogID;
@@ -15,11 +15,11 @@ public class GenericDialog {
     private int unreadMessagesCount;
 
     public GenericDialog(ChatEntity chatEntity) {
-        dialogID = chatEntity.jid;
-        dialogPhoto = chatEntity.jid;
+        /*dialogID = chatEntity.jid;
+        dialogPhoto = chatEntity.getJid();
         dialogName = chatEntity.chatName;
         users = new ArrayList<>();
-        unreadMessagesCount = chatEntity.unreadMessagesCount;
+        unreadMessagesCount = chatEntity.unreadMessagesCount;*/
     }
 
     public GenericDialog() {

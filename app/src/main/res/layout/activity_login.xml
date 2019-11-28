@@ -50,7 +50,6 @@
             android:textSize="8pt" />
 
     <EditText
-            android:text="just@moonshard.tech"
             android:id="@+id/editEmail"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
@@ -61,12 +60,11 @@
             android:background="@drawable/edittext_background"
             android:ems="10"
             android:gravity="center"
-            android:hint="Enter your email"
+            android:hint="Enter your username"
             android:inputType="textEmailAddress"
             android:textSize="7pt" />
 
     <EditText
-            android:text="just"
             android:id="@+id/editPassword"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"

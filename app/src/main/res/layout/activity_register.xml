@@ -47,14 +47,13 @@
             android:layout_gravity="center"
             android:textSize="8pt"/>
     <EditText
-            android:text=""
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:inputType="textEmailAddress"
             android:ems="10"
             android:id="@+id/editEmail"
-            android:hint="Enter your email"
+            android:hint="Enter your username"
             android:gravity="center"
             android:background="@drawable/edittext_background"
             android:textSize="7pt"

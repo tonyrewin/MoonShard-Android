@@ -68,7 +68,7 @@
                 android:layout_marginLeft="11dp"
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@+id/avatar"
-                android:text="Kanevsky"
+                android:text="Example Username"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -79,7 +79,7 @@
                 android:layout_below="@+id/nameTv"
                 android:layout_alignLeft="@+id/nameTv"
                 android:layout_marginTop="1dp"
-                android:text="+7 026 432 43 23"
+                android:text="+1 234 567 89 01"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phoneTv"
                 android:layout_alignLeft="@+id/phoneTv"
-                android:text="kanevsky1986@gmail.com"
+                android:text="user@example.com"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -408,6 +408,7 @@
                 android:textSize="16sp"
                 android:layout_below="@+id/lineEight"
                 android:textColor="#FF6161"
+                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Log out" />

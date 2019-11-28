@@ -11,3 +11,7 @@
 /build
 /captures
 .externalNativeBuild
+/p2mobile/p2mobile.aar
+/p2mobile/p2mobile-sources.jar
+/p2mobile/build
+/app/schemas

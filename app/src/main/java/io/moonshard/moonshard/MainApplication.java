@@ -34,7 +34,6 @@ import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
 import io.moonshard.moonshard.di.modules.WebModule;
-import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
@@ -53,7 +52,6 @@ public class MainApplication extends Application {
 
 
     private static String jid;
-     private static RoomHelper chatDB;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;
     private static LoginCredentials currentLoginCredentials;
@@ -137,9 +135,8 @@ public class MainApplication extends Application {
 
 
         instance = this;
-
+        ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
-        initChatDB();
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
@@ -171,8 +168,6 @@ public class MainApplication extends Application {
     public static String getJid() { return jid; }
 
     public static void setJid(String jid1) { jid = jid1; }
-
-     public static RoomHelper getChatDB() { return chatDB; }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -221,13 +216,6 @@ public class MainApplication extends Application {
                 }
             }
         }).start();
-    }
-
-    private void initChatDB() {
-        chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
-                .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
-                .allowMainThreadQueries()
-                .build();
     }
 
     public static Handler getMainUIThread() {

@@ -1,7 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.helpers.LocalDBWrapper
 import io.moonshard.moonshard.models.jabber.GenericUser
 import io.moonshard.moonshard.presentation.view.AddChatView
 import moxy.InjectViewState

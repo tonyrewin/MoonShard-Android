@@ -292,15 +292,12 @@ public class XMPPConnection implements ConnectionListener {
     }
 
 
-    public boolean login(String email, String pass)
-            throws XMPPException, SmackException, IOException, InterruptedException {
-
+    public boolean login(String email, String pass) {
         String username = email.split("@")[0];
-
-        XMPPTCPConnection connect = getConnection();
+        XMPPTCPConnection connection = getConnection();
 
         try {
-            if (connect.isAuthenticated()) {
+            if (connection.isAuthenticated()) {
                 Logger.d("User already logged in");
                 return true;
             }
@@ -309,12 +306,15 @@ public class XMPPConnection implements ConnectionListener {
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
-            connect.login(username, pass);
+            if (!connection.isConnected()) {
+                connection.connect();
+            }
+            connection.login(username, pass);
 
-            mamManager = MamManager.getInstanceFor(connection);
+            mamManager = MamManager.getInstanceFor(this.connection);
             try {
                 if (mamManager.isSupported()) {
-                    MamManager.getInstanceFor(connection).enableMamForAllMessages();
+                    MamManager.getInstanceFor(this.connection).enableMamForAllMessages();
                 } else {
                     mamManager = null;
                 }
@@ -322,11 +322,11 @@ public class XMPPConnection implements ConnectionListener {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            Logger.d("LOGIN ERROR" + connect.isAuthenticated());
+            Logger.d("LOGIN ERROR" + connection.isAuthenticated());
             e.printStackTrace();
             return false;
         }
-        PingManager pingManager = PingManager.getInstanceFor(connect);
+        PingManager pingManager = PingManager.getInstanceFor(connection);
         pingManager.setPingInterval(5000);
         Logger.d("LOGIN JUST");
         return true;

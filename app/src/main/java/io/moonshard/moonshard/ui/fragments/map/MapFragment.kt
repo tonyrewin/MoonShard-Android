@@ -25,7 +25,7 @@ import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.fragments.ChatFragment
+import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.bottom_sheet_info.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
@@ -204,8 +204,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
         for (i in rooms.indices) {
-            if (rooms[i].category == "Тусовки") {
-                mMap?.addMarker(
+            when {
+                rooms[i].category == "Тусовки" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -217,8 +217,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
                         )
                 )
-            } else if (rooms[i].category == "Бизнес ивенты") {
-                mMap?.addMarker(
+                rooms[i].category == "Бизнес ивенты" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -230,8 +229,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
                         )
                 )
-            } else if (rooms[i].category == "Кружок по интересам") {
-                mMap?.addMarker(
+                rooms[i].category == "Кружок по интересам" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -243,8 +241,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-            } else if (rooms[i].category == "Культурные мероприятия") {
-                mMap?.addMarker(
+                rooms[i].category == "Культурные мероприятия" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -298,10 +295,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
-    fun setBottomJoinVisible() {
-        infoBottomSheet.visibility = View.VISIBLE
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>,
         grantResults: IntArray
@@ -317,10 +310,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (activity as MainActivity).showBottomNavigationBar()
         setupBottomSheet()
 
-
         val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         val sheetBehavior = BottomSheetBehavior.from(myBottoms)
-
 
         sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {

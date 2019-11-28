@@ -15,6 +15,7 @@ import io.moonshard.moonshard.presentation.view.ChatsView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.MyChatsAdapter
 import io.moonshard.moonshard.ui.adapters.RvListener
+import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
 import io.moonshard.moonshard.ui.fragments.create_group.AddChatFragment
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment

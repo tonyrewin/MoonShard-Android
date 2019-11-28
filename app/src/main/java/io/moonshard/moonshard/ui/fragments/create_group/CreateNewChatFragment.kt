@@ -60,6 +60,8 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
             methodRequiresTwoPermission()
         }
 
+        nameTv?.setText(ChooseChatRepository.name)
+
         newChat?.setOnClickListener {
             presenter.createGroupChat(
                 nameTv?.text.toString(),
@@ -104,8 +106,8 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
     }
 
-
     fun showChooseMapScreen() {
+        ChooseChatRepository.name = nameTv?.text.toString()
         val chatFragment = ChooseMapFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, chatFragment, "ChooseMapFragment")

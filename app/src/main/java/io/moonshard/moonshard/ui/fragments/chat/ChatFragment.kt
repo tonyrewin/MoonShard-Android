@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.chat
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
@@ -18,8 +17,6 @@ import io.moonshard.moonshard.ui.adapters.MessagesAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import java.io.File
-import java.io.InputStream
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {

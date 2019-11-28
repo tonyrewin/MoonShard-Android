@@ -80,7 +80,6 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         }
     }
 
-
     override fun onPoiClick(pointOfInterest: PointOfInterest?) {
         latLngInterestPoint = pointOfInterest
         Toast.makeText(context, pointOfInterest?.name, Toast.LENGTH_SHORT).show()

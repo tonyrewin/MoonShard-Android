@@ -204,7 +204,33 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
         for (i in rooms.indices) {
-            if (rooms[i].category == "Культура") {
+            if (rooms[i].category == "Тусовки") {
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude.toDouble(),
+                                rooms[i].longtitude.toDouble()
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
+                        )
+                )
+            } else if (rooms[i].category == "Бизнес ивенты") {
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude.toDouble(),
+                                rooms[i].longtitude.toDouble()
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
+                        )
+                )
+            } else if (rooms[i].category == "Кружок по интересам") {
                 mMap?.addMarker(
                     MarkerOptions()
                         .position(
@@ -217,7 +243,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-            } else {
+            } else if (rooms[i].category == "Культурные мероприятия") {
                 mMap?.addMarker(
                     MarkerOptions()
                         .position(
@@ -227,7 +253,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             )
                         )
                         .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_culture)
                         )
                 )
             }

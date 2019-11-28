@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.chat
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,13 +11,12 @@ import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.MessagesAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import java.io.File
-import java.io.InputStream
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
@@ -33,7 +32,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
         runOnUiThread {
-            (messagesRv.adapter as MessagesAdapter).addToEnd(msgs, reverse)
+            (messagesRv?.adapter as MessagesAdapter).addToEnd(msgs, reverse)
         }
     }
 
@@ -53,9 +52,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //  messagesRv?.layoutManager = LinearLayoutManager(view.context)
-        //messagesRv?.adapter = MessagesAdapter(arrayListOf(), messagesRv.layoutManager as LinearLayoutManager)
-
+        (activity as MainActivity)?.hideBottomNavigationBar()
 
         setAdapter()
 
@@ -65,9 +62,9 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
             if (idChat.contains("conference")) presenter.join()
 
-            presenter.loadLocalMessages()
+           // presenter.loadLocalMessages()
 
-            presenter.loadMoreMessages()
+           // presenter.loadMoreMessages()
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }
@@ -77,7 +74,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             chooseFile()
         }
 
-        (messagesRv.adapter as MessagesAdapter).setLoadMoreListener(object :
+        (messagesRv?.adapter as? MessagesAdapter)?.setLoadMoreListener(object :
             MessagesAdapter.OnLoadMoreListener {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 presenter.loadRecentPageMessages()
@@ -88,6 +85,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
+        //(activity as MainActivity).showBottomNavigationBar()
     }
 
     override fun onResume() {
@@ -95,7 +93,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         presenter.loadRecentPageMessages()
     }
 
-    internal fun setAdapter() {
+    private fun setAdapter() {
         val layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL, true
@@ -126,7 +124,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
-    fun chooseFile() {
+    private fun chooseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
         chooseFile.type = "*/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")

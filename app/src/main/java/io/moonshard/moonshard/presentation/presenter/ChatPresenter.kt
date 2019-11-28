@@ -43,12 +43,14 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
-        chatID = chatId
+        chatID = chatId+"@moonshard.tech"
         chatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 chat = it
+                loadLocalMessages()
+                loadMoreMessages()
             }
     }
 
@@ -68,15 +70,19 @@ class ChatPresenter : MvpPresenter<ChatView>() {
     }
 
     fun join() {
-        val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
-        val jid = JidCreate.entityBareFrom(chatID)
-        val muc = MainApplication.getXmppConnection().multiUserChatManager.getMultiUserChat(jid)
-        val mec = muc.getEnterConfigurationBuilder(nickName)
+        try {
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+            val jid = JidCreate.entityBareFrom(chatID)
+            val muc = MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
+            val mec = muc?.getEnterConfigurationBuilder(nickName)
 
-        mec.requestNoHistory()
-        val mucEnterConfig = mec.build()
-        muc.join(mucEnterConfig)
-        muc.addMessageListener(MainApplication.getXmppConnection().network)
+            mec?.requestNoHistory()
+            val mucEnterConfig = mec?.build()
+            muc?.join(mucEnterConfig)
+            muc?.addMessageListener(MainApplication.getXmppConnection().network)
+        }catch (e:java.lang.Exception){
+            //will add toast
+        }
     }
 
     private fun sendMessageInternal(text: String): Single<MessageEntity> {

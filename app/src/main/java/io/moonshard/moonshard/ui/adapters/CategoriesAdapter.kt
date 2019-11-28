@@ -9,16 +9,29 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.Category
 
 interface CategoryListener {
-    fun clickChat(idChat: String)
+    fun clickChat(categoryName: String)
 }
 
 class CategoriesAdapter(val listener: CategoryListener, private var chats: List<Category>) :
     RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     var focusedItem = -1
+    fun setFocusedItem(){
+        for(i in chats.indices){
+            if(chats[i].name== ChooseChatRepository.category){
+                focusedItem = i
+            }
+        }
+    }
+
+    init {
+        setFocusedItem()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -30,7 +43,6 @@ class CategoriesAdapter(val listener: CategoryListener, private var chats: List<
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         if (focusedItem == position) {
             holder.categoryName?.setTextColor(Color.parseColor("#0075FF"))
             holder.mainLayout?.setBackgroundColor(Color.parseColor("#EEF6FF"))

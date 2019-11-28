@@ -16,15 +16,12 @@ import javax.inject.Inject
 @InjectViewState
 class LoginPresenter : MvpPresenter<LoginView>() {
 
-    @Inject
-    internal lateinit var api: API
 
     private var testUseCase: TestUseCase? = null
 
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        MainApplication.getComponent().inject(this)
         testUseCase = TestUseCase()
     }
 

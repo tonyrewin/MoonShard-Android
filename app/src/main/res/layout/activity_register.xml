@@ -7,6 +7,10 @@
               tools:context=".ui.activities.RegisterActivity" android:orientation="vertical"
               android:background="#EEF6FF">
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <LinearLayout
         android:orientation="vertical"
             android:layout_width="match_parent"
@@ -43,14 +47,13 @@
             android:layout_gravity="center"
             android:textSize="8pt"/>
     <EditText
-            android:text=""
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:inputType="textEmailAddress"
             android:ems="10"
             android:id="@+id/editEmail"
-            android:hint="Enter your email"
+            android:hint="Enter your username"
             android:gravity="center"
             android:background="@drawable/edittext_background"
             android:textSize="7pt"
@@ -137,5 +140,15 @@
                 android:src="@drawable/ic_instagram"
                 android:layout_margin="15dp"/>
     </LinearLayout>
+
     </LinearLayout>
+
+        <ProgressBar
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:id="@+id/progressBarReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 </ScrollView>

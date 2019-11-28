@@ -6,14 +6,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.ChatListRecycleViewPresenter
 import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import kotlinx.android.synthetic.main.chat_item.view.*
 import moxy.MvpDelegate
 import moxy.presenter.InjectPresenter
 
-class ChatListAdapter(parentDelegate: MvpDelegate<*>):
+
+interface ChatListListener {
+    fun clickChat(chat: ChatEntity)
+}
+
+class ChatListAdapter(parentDelegate: MvpDelegate<*>,val listener: ChatListListener):
     MvpBaseAdapter<ChatListAdapter.ChatListViewHolder>(parentDelegate, 0.toString()), ChatListRecyclerView {
 
     @InjectPresenter
@@ -38,11 +45,13 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>):
     }
 
     override fun onItemChange(position: Int) {
-        notifyItemChanged(position)
+        runOnUiThread{
+            notifyItemChanged(position)
+        }
     }
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
-        presenter.onBindViewHolder(holder, position)
+        presenter.onBindViewHolder(holder, position,listener)
     }
 
     inner class ChatListViewHolder(view: View): RecyclerView.ViewHolder(view) {

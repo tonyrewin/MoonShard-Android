@@ -13,16 +13,25 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
+import io.moonshard.moonshard.services.XMPPConnection
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_login.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smack.ConnectionListener
 import java.util.*
+import com.dropbox.core.v2.teamlog.ActorLogInfo.app
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import kotlin.Exception
 
 
-class LoginActivity : MvpAppCompatActivity(), LoginView {
-    override fun createNewConnect() {
-        startService()
+class LoginActivity : BaseActivity(), LoginView {
+    override fun onError(e: Exception) {
+        runOnUiThread {
+            hideLoader()
+            e.message?.let { showError(it) }?:showError("Произошла ошибка")
+        }
     }
 
     @InjectPresenter
@@ -31,11 +40,17 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
-        startService()
 
         loginBtn.setOnClickListener {
-            saveLoginCredentials(editEmail.text.toString(), editPassword.text.toString())
-            presenter.login(editEmail.text.toString(), editPassword.text.toString())
+            val actualUserName: String
+            if (editEmail.text.toString().contains("@")) {
+                showError("Вы ввели недопустимый символ")
+            } else {
+                actualUserName =  editEmail.text.toString() + "@moonshard.tech"
+                showLoader()
+                saveLoginCredentials(actualUserName, editPassword.text.toString())
+                startService()
+            }
         }
 
         dontHaveText.setOnClickListener {
@@ -46,6 +61,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
 
     private fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
+        /*
         val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 val binder = service as XMPPConnectionService.XMPPServiceBinder
@@ -62,25 +78,23 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
             connection,
             Context.BIND_AUTO_CREATE
         )
+         */
+
     }
 
-    // FIXME What is this?
-    fun doLogin2() {
-        val success = MainApplication.getXmppConnection().login(
-            editEmail.text.toString(),
-            editPassword.text.toString()
-        )
-        if (success) {
+    override fun createNewConnect() {
+    }
+
+    override fun onAuthenticated() {
+        runOnUiThread {
+            hideLoader()
             showContactsScreen()
-        } else {
-            showError("Error")
         }
     }
 
     private fun saveLoginCredentials(email: String, password: String) {
         SecurePreferences.setValue("jid", email)
         SecurePreferences.setValue("pass", password)
-        SecurePreferences.setValue("logged_in", true)
     }
 
     override fun showContactsScreen() {
@@ -102,4 +116,5 @@ class LoginActivity : MvpAppCompatActivity(), LoginView {
     override fun showError(error: String) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
+
 }

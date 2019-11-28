@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+
 import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -20,8 +21,11 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
+
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
@@ -31,6 +35,7 @@ import io.moonshard.moonshard.di.modules.ApplicationModule;
 import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
 
 public class MainApplication extends Application {
     private static ApplicationComponent component;
@@ -42,6 +47,8 @@ public class MainApplication extends Application {
     private static Application instance;
     public final static String APP_NAME = "Influence";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
+    private static BaseActivity currentActivity;
+
 
     private static String jid;
     private static SharedPreferences preferences;
@@ -53,8 +60,32 @@ public class MainApplication extends Application {
     public final static Map<String, byte[]> avatarsCache = new ConcurrentHashMap<>();
     private static Location currentLocation;
 
+    public static String getAdress() {
+        return adress;
+    }
 
-    public Location getCurrentLocation() {
+    public static void setAdress(String adress) {
+        MainApplication.adress = adress;
+    }
+
+    private static String adress;
+
+
+    public static boolean isForeGround() {
+        return (currentActivity != null
+                && !currentActivity.isFinishing());
+    }
+
+
+    public static BaseActivity getCurrentActivity() {
+        return currentActivity;
+    }
+
+    public static void setCurrentActivity(BaseActivity activity) {
+        currentActivity = activity;
+    }
+
+    public static Location getCurrentLocation() {
         return currentLocation;
     }
 
@@ -185,7 +216,7 @@ public class MainApplication extends Application {
             }
         }).start();
     }
-    
+
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;
     }

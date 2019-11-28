@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
@@ -18,7 +22,8 @@
             android:background="@drawable/layout_zoom_bg">
 
         <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/zoomPlus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
@@ -26,25 +31,41 @@
                 android:src="@drawable/ic_plus_zoom" />
 
         <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/zoomMinus"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="13dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:src="@drawable/ic_minus_zoom" />
 
 
     </RelativeLayout>
 
-    <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/zoomLayout"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/circle"
-            android:scaleType="center"
-            android:src="@drawable/ic_location" />
+        <ImageView
+                android:id="@+id/myLocationBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/zoomLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/circle"
+                android:scaleType="center"
+                android:src="@drawable/ic_location" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <include
+            android:visibility="visible"
+            android:id="@+id/defaultBottomSheet"
+            layout="@layout/fragment_bottom_sheet"/>
+
+    <include
+            android:visibility="gone"
+            android:id="@+id/infoBottomSheet"
+            layout="@layout/fragment_bottom_sheet_info"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

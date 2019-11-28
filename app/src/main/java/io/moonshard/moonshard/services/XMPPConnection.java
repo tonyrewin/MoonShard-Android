@@ -17,6 +17,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
@@ -32,25 +33,25 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
-
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static io.moonshard.moonshard.MainApplication.getCurrentActivity;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -67,17 +68,16 @@ public class XMPPConnection implements ConnectionListener {
         DISCONNECTED
     }
 
-
     public enum SessionState {
         LOGGED_IN,
         LOGGED_OUT
     }
 
-
     public XMPPConnection(Context context) {
         this.context = context;
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
+
         if (jid != null && password != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
@@ -107,17 +107,26 @@ public class XMPPConnection implements ConnectionListener {
 
             connection = new XMPPTCPConnection(conf);
             connection.addConnectionListener(this);
+
             if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
                 throw new IOException();
             }
             try {
                 connection.connect();
-                // SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
-                //  connection.login(credentials.username, credentials.password);
-            } catch (InterruptedException e) {
+                SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+                SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+                SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+
+                if (!credentials.username.equals("") || !credentials.password.equals("")) {
+                    connection.login(credentials.username, credentials.password);
+                }
+
+            } catch (Exception e) {
+                BaseActivity baseActivity = getCurrentActivity();
+                if (baseActivity != null) {
+                    baseActivity.onError(e);
+                }
                 e.printStackTrace();
-            } catch (NullPointerException e) {
-                throw new IOException();
             }
 
             ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
@@ -135,7 +144,6 @@ public class XMPPConnection implements ConnectionListener {
             }
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
-
     }
 
     public void disconnect() {
@@ -159,7 +167,11 @@ public class XMPPConnection implements ConnectionListener {
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
-        //  EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.CONNECT_AND_LOGIN_SUCCESSFUL));
+
+        BaseActivity baseActivity = getCurrentActivity();
+        if (baseActivity != null) {
+            baseActivity.onAuthenticated();
+        }
     }
 
     @Override
@@ -198,7 +210,6 @@ public class XMPPConnection implements ConnectionListener {
 
         Observable.fromCallable(() -> {
             HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-
             try {
                 Single.just(manager.uploadFile(file));
                 return true;
@@ -219,53 +230,6 @@ public class XMPPConnection implements ConnectionListener {
                     String kek = "";
                     //Use result for something
                 });
-
-        /*
-        getTest(file).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(throwable -> {
-                    String kek = "";
-                }).subscribe(t -> {
-            String kek = "";
-        });
-
-         */
-
-        // } catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //} catch (XMPPException.XMPPErrorException e) {
-        //     e.printStackTrace();
-        // } catch (SmackException e) {
-        //     e.printStackTrace();
-        //  } catch (IOException e) {
-        //     e.printStackTrace();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-
-
-/*
-        // Create the file transfer manager
-        FileTransferManager manager = FileTransferManager.getInstanceFor(connection);
-        // Create the outgoing file transfer
-        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(jid);
-
-        manager.addFileTransferListener(new FileTransferListener() {
-            @Override
-            public void fileTransferRequest(FileTransferRequest request) {
-                String kek = "";
-            }
-        });
-
-        try {
-            transfer.sendFile(file,"kdsads");
-        } catch (SmackException e) {
-            e.printStackTrace();
-        }
-
-
- */
-
     }
 
     Single<URL> getTest(File file) {
@@ -308,19 +272,20 @@ public class XMPPConnection implements ConnectionListener {
 
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
+        BaseActivity baseActivity = getCurrentActivity();
         Log.d("Auth: ", "inside XMPP register method, " + user + " : " + pass);
         long l = System.currentTimeMillis();
         try {
             AccountManager accountManager = AccountManager.getInstance(getConnection());
             accountManager.sensitiveOperationOverInsecureConnection(true);
             accountManager.createAccount(Localpart.from(user), pass);
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (baseActivity != null) {
+                baseActivity.onSuccess();
+            }
         } catch (Exception e) {
+            if (baseActivity != null) {
+                baseActivity.onError(e);
+            }
             e.printStackTrace();
         }
         Log.d("Auth", "Time taken to register: " + (System.currentTimeMillis() - l));
@@ -414,6 +379,40 @@ public class XMPPConnection implements ConnectionListener {
 
     public Presence getUserPresence(BareJid jid) {
         return roster.getPresence(jid);
+    }
+
+    public  Roster getRoster(){
+        return roster;
+    }
+
+    public void addUserToGroup(String userName, String groupName) {
+        try {
+            BareJid bareJid = JidCreate.bareFrom(userName);
+
+            RosterGroup group = roster.getGroup(groupName);
+            if (null == group) {
+                group = roster.createGroup(groupName);
+            }
+            RosterEntry entry = roster.getEntry(bareJid);
+            if (entry != null) {
+                try {
+                    group.addEntry(entry);
+                } catch (XMPPException e) {
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void sendUserPresence(Presence presence) {

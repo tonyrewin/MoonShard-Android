@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        app:behavior_peekHeight="210dp"
+        android:id="@+id/myBottom"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:orientation="vertical">
+
+    <!-- include main content -->
+    <include
+            android:visibility="gone"
+            android:id="@+id/bottomSheetInfo"
+            layout="@layout/bottom_sheet_info" />
+
+    <!-- include main content -->
+    <include layout="@layout/bottom_sheet_info_content" />
+
+</LinearLayout>

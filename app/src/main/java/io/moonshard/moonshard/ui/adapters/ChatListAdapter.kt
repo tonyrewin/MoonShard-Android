@@ -33,6 +33,14 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>):
         return presenter.getChatListSize()
     }
 
+    override fun onDataChange() {
+        notifyDataSetChanged()
+    }
+
+    override fun onItemChange(position: Int) {
+        notifyItemChanged(position)
+    }
+
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
         presenter.onBindViewHolder(holder, position)
     }

@@ -3,7 +3,6 @@ package io.moonshard.moonshard.presentation.presenter
 import android.view.View
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
-import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.MessageRepository
@@ -12,8 +11,6 @@ import io.reactivex.disposables.Disposable
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jxmpp.jid.impl.JidCreate
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @InjectViewState
@@ -32,6 +29,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                 val timestamp2 = o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp
                 timestamp2.compareTo(timestamp1)
             })
+            viewState.onDataChange()
         })
     }
 
@@ -45,8 +43,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         disposables.add(messageRepository.getUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid)).subscribe {
             if (it > 0) {
                 holder.unreadMessageCount.text = it.toString()
+                viewState.onItemChange(position)
             } else {
                 holder.unreadMessageCount.visibility = View.INVISIBLE
+                viewState.onItemChange(position)
             }
         })
         disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid)).subscribe({ message ->
@@ -72,11 +72,14 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             }
 
             holder.lastMessageDate.text = lastMessageDateText
+            viewState.onItemChange(position)
         }, {
             holder.lastMessageText.visibility = View.INVISIBLE
             holder.lastMessageDate.visibility = View.INVISIBLE
             holder.lastMessageReadState.visibility = View.INVISIBLE
+            viewState.onItemChange(position)
         }))
+        viewState.onItemChange(position)
     }
 
     override fun onDestroy() {

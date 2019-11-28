@@ -7,7 +7,9 @@ import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.MessageRepository
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jxmpp.jid.impl.JidCreate
@@ -22,7 +24,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     private val disposables = emptyList<Disposable>().toMutableList()
 
     init {
-        disposables.add(chatListRepository.getChats().subscribe { newChats ->
+        disposables.add(chatListRepository.getChats()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { newChats ->
             chats = newChats
             chats = chats.sortedWith(Comparator { o1, o2 ->
                 val timestamp1 = o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp
@@ -40,7 +45,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int) {
         val chat = chats[position]
         holder.chatName.text = chat.chatName
-        disposables.add(messageRepository.getUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid)).subscribe {
+        disposables.add(messageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
             if (it > 0) {
                 holder.unreadMessageCount.text = it.toString()
                 viewState.onItemChange(position)
@@ -49,7 +57,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                 viewState.onItemChange(position)
             }
         })
-        disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid)).subscribe({ message ->
+        disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ message ->
             holder.lastMessageText.visibility = View.VISIBLE
             holder.lastMessageDate.visibility = View.VISIBLE
             holder.lastMessageReadState.visibility = View.VISIBLE

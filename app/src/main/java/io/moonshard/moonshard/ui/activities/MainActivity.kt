@@ -18,9 +18,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val newFragment = ChatsFragment()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, newFragment).commit()
+            // val newFragment = ChatsFragment()
+    //    val ft = supportFragmentManager.beginTransaction()
+        //ft.replace(R.id.container, newFragment).commit()
+
+        methodRequiresTwoPermission()
+
 
         mainBottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -48,6 +51,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         showMapScreen()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     private fun methodRequiresTwoPermission() {

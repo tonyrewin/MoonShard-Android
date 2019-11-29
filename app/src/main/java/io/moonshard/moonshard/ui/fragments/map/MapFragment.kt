@@ -192,12 +192,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         latRoom.toDouble(),
                         lngRoom.toDouble()
                     ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " m away"
+                ).toInt()).toString() + " метрах"
             } else {
                 (SphericalUtil.computeDistanceBetween(
                     LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " km away"
+                ).toInt() / 1000).toString() + " км"
             }
         }
         return ""
@@ -294,14 +294,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         bottomSheetViewPager.adapter = sectionsPagerAdapter
         bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

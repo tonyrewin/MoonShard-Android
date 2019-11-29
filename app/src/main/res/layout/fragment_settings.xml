@@ -27,7 +27,7 @@
                    android:textStyle="bold"
                    android:textSize="14sp"
                    android:textColor="#333333"
-                   android:text="Settings"
+                   android:text="Настройки"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"/>
 

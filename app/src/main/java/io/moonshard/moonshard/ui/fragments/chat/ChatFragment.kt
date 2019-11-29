@@ -85,7 +85,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
-        //(activity as MainActivity).showBottomNavigationBar()
+        (activity as MainActivity).showBottomNavigationBar()
     }
 
     override fun onResume() {

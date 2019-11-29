@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Show on map for"
+                    android:text="Показывать на карте"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />

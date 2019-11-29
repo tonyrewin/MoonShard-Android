@@ -144,6 +144,7 @@ public class XMPPConnection implements ConnectionListener {
             }
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
+
     }
 
     public void disconnect() {

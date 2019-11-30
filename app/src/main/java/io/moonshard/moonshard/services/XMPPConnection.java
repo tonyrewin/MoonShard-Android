@@ -94,54 +94,52 @@ public class XMPPConnection implements ConnectionListener {
             throw new EmptyLoginCredentialsException();
         }
 
-        if (connection == null) {
-            XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
-                    .setXmppDomain(credentials.jabberHost)
-                    .setHost(credentials.jabberHost)
-                    .setResource(MainApplication.APP_NAME)
-                    .setKeystoreType(null)
-                    .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
-                    .setCompressionEnabled(true)
-                    .setConnectTimeout(7000)
-                    .build();
+        XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain(credentials.jabberHost)
+                .setHost(credentials.jabberHost)
+                .setResource(MainApplication.APP_NAME)
+                .setKeystoreType(null)
+                .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
+                .setCompressionEnabled(true)
+                .setConnectTimeout(7000)
+                .build();
 
-            connection = new XMPPTCPConnection(conf);
-            connection.addConnectionListener(this);
+        connection = new XMPPTCPConnection(conf);
+        connection.addConnectionListener(this);
 
-            if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
-                throw new IOException();
-            }
-            try {
-                connection.connect();
-                SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
-                SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
-                SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+        if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
+            throw new IOException();
+        }
+        try {
+            connection.connect();
+            SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+            SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+            SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
 
-                if (!credentials.username.equals("") || !credentials.password.equals("")) {
-                    connection.login(credentials.username, credentials.password);
-                }
-
-            } catch (Exception e) {
-                BaseActivity baseActivity = getCurrentActivity();
-                if (baseActivity != null) {
-                    baseActivity.onError(e);
-                }
-                e.printStackTrace();
+            if (!credentials.username.equals("") || !credentials.password.equals("")) {
+                connection.login(credentials.username, credentials.password);
             }
 
-            ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
-            ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
-            ReconnectionManager.setEnabledPerDefault(true);
-            reconnectionManager.enableAutomaticReconnection();
-            roster = Roster.getInstanceFor(connection);
-            roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
-            roster.addPresenceEventListener(networkHandler);
-            MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
-            FileTransferNegotiator.IBB_ONLY = true;
-
-            if (MainApplication.isIsMainActivityDestroyed()) {
-                sendUserPresence(new Presence(Presence.Type.unavailable));
+        } catch (Exception e) {
+            BaseActivity baseActivity = getCurrentActivity();
+            if (baseActivity != null) {
+                baseActivity.onError(e);
             }
+            e.printStackTrace();
+        }
+
+        ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
+        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
+        ReconnectionManager.setEnabledPerDefault(true);
+        reconnectionManager.enableAutomaticReconnection();
+        roster = Roster.getInstanceFor(connection);
+        roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
+        roster.addPresenceEventListener(networkHandler);
+        MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
+        FileTransferNegotiator.IBB_ONLY = true;
+
+        if (MainApplication.isIsMainActivityDestroyed()) {
+            sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
     }
@@ -199,6 +197,9 @@ public class XMPPConnection implements ConnectionListener {
             return message.getStanzaId();
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
+            if(connectAndLogin()) {
+                sendMessage(recipientJid, messageText);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -261,6 +262,9 @@ public class XMPPConnection implements ConnectionListener {
                 return message.getStanzaId();
             } catch (SmackException.NotConnectedException ex) {
                 ex.printStackTrace();
+                if(connectAndLogin()) {
+                    sendMessageGroupChat(recipientJid, messageText);
+                }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -292,8 +296,8 @@ public class XMPPConnection implements ConnectionListener {
     }
 
 
-    public boolean login(String email, String pass) {
-        String username = email.split("@")[0];
+    public boolean login(String jid, String pass) {
+        String username = jid.split("@")[0];
         XMPPTCPConnection connection = getConnection();
 
         try {
@@ -302,7 +306,7 @@ public class XMPPConnection implements ConnectionListener {
                 return true;
             }
 
-            Logger.d("userLog: " + email + " and pass: " + pass);
+            Logger.d("userLog: " + username + " and pass: " + pass);
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
@@ -365,6 +369,19 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
+    private boolean connectAndLogin() {
+        if (!credentials.isEmpty()) {
+            try {
+                connect();
+            } catch (XMPPException | SmackException | IOException | EmptyLoginCredentialsException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return login(credentials.username, credentials.password);
+        }
+        return false;
+    }
+
     public Set<RosterEntry> getContactList() {
         if (isConnectionAlive()) {
             while (roster == null) ;
@@ -404,7 +421,9 @@ public class XMPPConnection implements ConnectionListener {
                 } catch (SmackException.NoResponseException e) {
                     e.printStackTrace();
                 } catch (SmackException.NotConnectedException e) {
-                    e.printStackTrace();
+                    if(connectAndLogin()) {
+                        addUserToGroup(userName, groupName);
+                    }
                 }
             }
 

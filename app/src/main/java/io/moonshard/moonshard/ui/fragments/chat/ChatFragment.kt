@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
-import io.moonshard.moonshard.ui.adapters.MessagesAdapter
+import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -23,6 +24,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
+
+    var idChat:String = ""
 
     override fun addToStart(message: GenericMessage, reverse: Boolean) {
         runOnUiThread {
@@ -52,19 +55,19 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity)?.hideBottomNavigationBar()
+        (activity as? MainActivity)?.hideBottomNavigationBar()
 
         setAdapter()
 
         arguments?.let {
-            val idChat = it.getString("chatId")
+             idChat = it.getString("chatId")
             presenter.setChatId(idChat)
 
             if (idChat.contains("conference")) presenter.join()
 
-           // presenter.loadLocalMessages()
+            // presenter.loadLocalMessages()
 
-           // presenter.loadMoreMessages()
+            // presenter.loadMoreMessages()
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }
@@ -80,6 +83,10 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
                 presenter.loadRecentPageMessages()
             }
         })
+
+        avatarChat?.setOnClickListener {
+            showAdminsScreen(idChat)
+        }
     }
 
     override fun onDestroyView() {
@@ -102,7 +109,10 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         messagesRv?.layoutManager = layoutManager
 
         messagesRv?.adapter =
-            MessagesAdapter(arrayListOf(), messagesRv.layoutManager as LinearLayoutManager)
+            MessagesAdapter(
+                arrayListOf(),
+                messagesRv.layoutManager as LinearLayoutManager
+            )
 
         val listener =
             RecyclerScrollMoreListener(layoutManager, messagesRv.adapter as MessagesAdapter)
@@ -117,7 +127,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
-            if(input!=null){
+            if (input != null) {
                 val file = StreamUtil.stream2file(input)
                 presenter.sendFile(file)
             }
@@ -129,5 +139,16 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         chooseFile.type = "*/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
+    }
+
+    fun showAdminsScreen(chatId: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", chatId)
+        val chatFragment = AdminsFragment()
+        chatFragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, chatFragment, "AdminsFragment")?.hide(this)
+            ?.addToBackStack("AdminsFragment")
+            ?.commit()
     }
 }

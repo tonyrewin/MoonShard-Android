@@ -208,7 +208,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         }
     }
 
-    private CompletableFuture<byte[]> loadAvatar(String senderID) {
+    public CompletableFuture<byte[]> loadAvatar(String senderID) {
         if (senderID.length() != 0) {
             if (MainApplication.avatarsCache.containsKey(senderID)) {
                 return CompletableFuture.completedFuture(MainApplication.avatarsCache.get(senderID));

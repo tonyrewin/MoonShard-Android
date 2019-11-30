@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.adapters
+package io.moonshard.moonshard.ui.adapters.chat
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
+import io.moonshard.moonshard.ui.adapters.DateFormatter
 import java.util.*
 
 
@@ -138,7 +139,11 @@ open class MessagesAdapter(
         if (myMsgs.isNotEmpty()) {
             val lastItemPosition = myMsgs.size - 1
             val lastItem = myMsgs[lastItemPosition].createdAt as Date
-            if (DateFormatter.isSameDay(messages[0].createdAt, lastItem)) {
+            if (DateFormatter.isSameDay(
+                    messages[0].createdAt,
+                    lastItem
+                )
+            ) {
                 myMsgs.removeAt(lastItemPosition)
                 notifyItemRemoved(lastItemPosition)
             }
@@ -153,7 +158,10 @@ open class MessagesAdapter(
     private fun isPreviousSameDate(position: Int, dateToCompare: Date): Boolean {
         if (myMsgs.size <= position) return false
         val previousPositionDate = myMsgs[position].createdAt
-        return DateFormatter.isSameDay(dateToCompare, previousPositionDate)
+        return DateFormatter.isSameDay(
+            dateToCompare,
+            previousPositionDate
+        )
     }
 
 
@@ -163,7 +171,11 @@ open class MessagesAdapter(
             this.myMsgs.add(message)
             if (messages.size > i + 1) {
                 val nextMessage = messages[i + 1]
-                if (!DateFormatter.isSameDay(message.createdAt, nextMessage.createdAt)) {
+                if (!DateFormatter.isSameDay(
+                        message.createdAt,
+                        nextMessage.createdAt
+                    )
+                ) {
                     this.myMsgs.add((message))
                 }
             } else {

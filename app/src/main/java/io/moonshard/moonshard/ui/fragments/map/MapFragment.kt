@@ -1,5 +1,7 @@
 package io.moonshard.moonshard.ui.fragments.map
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -35,6 +37,7 @@ import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.ExecutionException
 
 
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
@@ -322,6 +325,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         })
     }
+
 
     private fun getMyLocation() {
         val latLng = LatLng(

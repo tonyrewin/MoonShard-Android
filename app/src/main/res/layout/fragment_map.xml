@@ -68,4 +68,5 @@
             android:id="@+id/infoBottomSheet"
             layout="@layout/fragment_bottom_sheet_info"/>
 
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

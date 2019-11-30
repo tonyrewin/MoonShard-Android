@@ -97,7 +97,7 @@
                 android:layout_height="1dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/peopleGroupRv"
+                android:id="@+id/adminsRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

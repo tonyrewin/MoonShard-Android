@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
-import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -136,7 +135,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun showChatScreens(chatId: String) {
-        runOnUiThread {
+        MainApplication.getMainUIThread().post {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             val chatFragment = ChatFragment()

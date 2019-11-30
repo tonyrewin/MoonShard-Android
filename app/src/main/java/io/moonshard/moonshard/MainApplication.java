@@ -13,21 +13,17 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-
-import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
-
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import cat.ereza.customactivityoncrash.config.CaocConfig;
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
@@ -137,6 +133,11 @@ public class MainApplication extends Application {
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
+
+        CaocConfig.Builder.create()
+                .logErrorOnRestart(false) //default: true
+                .trackActivities(true) //default: false
+                .apply();
     }
 
     private static void setupLogger() {
@@ -151,12 +152,9 @@ public class MainApplication extends Application {
         return component;
     }
 
-    /*
-    public static P2ChatService getP2ChatService() {
+    /*public static P2ChatService getP2ChatService() {
         return service;
-    }
-
-     */
+    }*/
 
     public static Context getContext() {
         return instance.getApplicationContext();

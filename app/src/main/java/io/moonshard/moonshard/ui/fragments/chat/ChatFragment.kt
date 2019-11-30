@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
@@ -25,13 +25,13 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     lateinit var presenter: ChatPresenter
 
     override fun addToStart(message: GenericMessage, reverse: Boolean) {
-        runOnUiThread {
+        MainApplication.getMainUIThread().post {
             (messagesRv?.adapter as MessagesAdapter).addToStart(message, reverse)
         }
     }
 
     override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
-        runOnUiThread {
+        MainApplication.getMainUIThread().post {
             (messagesRv?.adapter as MessagesAdapter).addToEnd(msgs, reverse)
         }
     }

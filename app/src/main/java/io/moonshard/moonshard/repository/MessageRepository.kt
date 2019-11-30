@@ -62,7 +62,7 @@ class MessageRepository: IMessageRepository {
                 if (message.isNotEmpty()) {
                     it.onNext(message.first())
                 } else {
-                    it.onError(Exception("Chat doesn't exist or chat is empty"))
+                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist or chat is empty"))
                 }
             }, { e ->
                 it.onError(e)

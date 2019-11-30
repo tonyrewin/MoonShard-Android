@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.ChatListRecycleViewPresenter
@@ -45,7 +45,7 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
     }
 
     override fun onItemChange(position: Int) {
-        runOnUiThread{
+        MainApplication.getMainUIThread().post {
             notifyItemChanged(position)
         }
     }

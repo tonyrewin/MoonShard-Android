@@ -23,6 +23,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     private val chatListRepository = ChatListRepository()
     private val messageRepository = MessageRepository()
 
+    private val bindedItems = emptyMap<ChatEntity, Boolean>().toMutableMap()
     private val disposables = emptyList<Disposable>().toMutableList()
 
     init {
@@ -46,59 +47,63 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
 
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
         val chat = chats[position]
-        holder.chatName.visibility = View.VISIBLE
-        holder.chatName.text = chat.chatName
-        disposables.add(messageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-            if (it > 0) {
-                holder.unreadMessageCount.visibility = View.VISIBLE
-                holder.unreadMessageCount.text = it.toString()
-                viewState.onItemChange(position)
-            } else {
-                holder.unreadMessageCount.visibility = View.INVISIBLE
-                viewState.onItemChange(position)
+        if (bindedItems[chat] == null) {
+            holder.chatName.visibility = View.VISIBLE
+            holder.chatName.text = chat.chatName
+            disposables.add(messageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    if (it > 0) {
+                        holder.unreadMessageCount.visibility = View.VISIBLE
+                        holder.unreadMessageCount.text = it.toString()
+                        viewState.onItemChange(position)
+                    } else {
+                        holder.unreadMessageCount.visibility = View.INVISIBLE
+                        viewState.onItemChange(position)
+                    }
+                })
+            disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ message ->
+                    holder.lastMessageText.visibility = View.VISIBLE
+                    holder.lastMessageDate.visibility = View.VISIBLE
+                    holder.lastMessageReadState.visibility = View.VISIBLE
+
+                    holder.lastMessageText.text = message.text
+
+                    val currentDate = DateHolder(System.currentTimeMillis())
+                    val messageDate = DateHolder(message.timestamp)
+                    val lastMessageDateText = if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
+                        && messageDate.dayOfMonth == currentDate.dayOfMonth) {
+                        String.format("%d:%d", messageDate.hour, messageDate.minute)
+                    } else if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
+                        && messageDate.weekOfMonth == currentDate.weekOfMonth) {
+                        String.format("%ta", messageDate.calendar)
+                    } else if ((messageDate.year == currentDate.year && messageDate.month == currentDate.month)
+                        || messageDate.year == currentDate.year) {
+                        String.format("%d %tB", messageDate.dayOfMonth, messageDate.calendar)
+                    } else {
+                        String.format("%d.%d.%d", messageDate.dayOfMonth, messageDate.month, messageDate.year)
+                    }
+                    holder.lastMessageReadState.visibility = View.VISIBLE
+                    holder.lastMessageReadState.setImageResource(if (message.isSent && message.isRead) R.drawable.ic_checked_message_state else R.drawable.ic_sent_message_state)
+                    holder.lastMessageDate.text = lastMessageDateText
+                    viewState.onItemChange(position)
+                }, {
+                    holder.lastMessageText.visibility = View.INVISIBLE
+                    holder.lastMessageDate.visibility = View.INVISIBLE
+                    holder.lastMessageReadState.visibility = View.INVISIBLE
+                    viewState.onItemChange(position)
+                }))
+            viewState.onItemChange(position)
+
+            holder.itemView.setOnClickListener {
+                listener.clickChat(chat)
             }
-        })
-        disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({ message ->
-                holder.lastMessageText.visibility = View.VISIBLE
-                holder.lastMessageDate.visibility = View.VISIBLE
-                holder.lastMessageReadState.visibility = View.VISIBLE
 
-                holder.lastMessageText.text = message.text
-
-                val currentDate = DateHolder(System.currentTimeMillis())
-                val messageDate = DateHolder(message.timestamp)
-                val lastMessageDateText = if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
-                    && messageDate.dayOfMonth == currentDate.dayOfMonth) {
-                    String.format("%d:%d", messageDate.hour, messageDate.minute)
-                } else if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
-                    && messageDate.weekOfMonth == currentDate.weekOfMonth) {
-                    String.format("%ta", messageDate.calendar)
-                } else if ((messageDate.year == currentDate.year && messageDate.month == currentDate.month)
-                    || messageDate.year == currentDate.year) {
-                    String.format("%d %tB", messageDate.dayOfMonth, messageDate.calendar)
-                } else {
-                    String.format("%d.%d.%d", messageDate.dayOfMonth, messageDate.month, messageDate.year)
-                }
-                holder.lastMessageReadState.visibility = View.VISIBLE
-                holder.lastMessageReadState.setImageResource(if (message.isSent && message.isRead) R.drawable.ic_checked_message_state else R.drawable.ic_sent_message_state)
-                holder.lastMessageDate.text = lastMessageDateText
-                viewState.onItemChange(position)
-        }, {
-                holder.lastMessageText.visibility = View.INVISIBLE
-                holder.lastMessageDate.visibility = View.INVISIBLE
-                holder.lastMessageReadState.visibility = View.INVISIBLE
-                viewState.onItemChange(position)
-        }))
-        viewState.onItemChange(position)
-
-        holder.itemView.setOnClickListener {
-            listener.clickChat(chat)
+            bindedItems[chat] = true
         }
     }
 

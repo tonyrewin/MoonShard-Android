@@ -43,7 +43,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
-        chatID = chatId+"@moonshard.tech" // FIXME remove hardcode
+        chatID = chatId // FIXME remove hardcode
         chatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

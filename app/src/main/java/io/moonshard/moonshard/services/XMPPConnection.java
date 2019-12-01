@@ -1,9 +1,5 @@
 package io.moonshard.moonshard.services;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -24,7 +20,6 @@ import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
-import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.ping.PingManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
@@ -39,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
+import java.util.UUID;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
@@ -50,6 +46,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import trikita.log.Log;
 
 import static io.moonshard.moonshard.MainApplication.getCurrentActivity;
 
@@ -58,7 +55,6 @@ public class XMPPConnection implements ConnectionListener {
     private LoginCredentials credentials = new LoginCredentials();
     private XMPPTCPConnection connection = null;
     private NetworkHandler networkHandler;
-    private Context context;
     private Roster roster;
     private MamManager mamManager;
     public MultiUserChatManager multiUserChatManager = null;
@@ -73,8 +69,7 @@ public class XMPPConnection implements ConnectionListener {
         LOGGED_OUT
     }
 
-    public XMPPConnection(Context context) {
-        this.context = context;
+    public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
 
@@ -84,6 +79,12 @@ public class XMPPConnection implements ConnectionListener {
             credentials.username = username;
             credentials.jabberHost = jabberHost;
             credentials.password = password;
+            MainApplication.setCurrentLoginCredentials(credentials);
+            try {
+                MainApplication.setJid(JidCreate.from(username + "@" + jabberHost).asUnescapedString());
+            } catch (XmppStringprepException e) {
+                Log.e(e.getMessage());
+            }
         }
         networkHandler = new NetworkHandler();
     }
@@ -97,7 +98,7 @@ public class XMPPConnection implements ConnectionListener {
         XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(credentials.jabberHost)
                 .setHost(credentials.jabberHost)
-                .setResource(MainApplication.APP_NAME)
+                .setResource(MainApplication.APP_NAME + "." + UUID.randomUUID().toString())
                 .setKeystoreType(null)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
                 .setCompressionEnabled(true)
@@ -250,15 +251,11 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public String sendMessageGroupChat(EntityBareJid recipientJid, String messageText) {
-        MultiUserChat muc = null;
         try {
-            EntityBareJid entityBareJid = JidCreate.entityBareFrom(recipientJid);
-            muc = multiUserChatManager.getMultiUserChat(entityBareJid);
-
             Message message = new Message(recipientJid, Message.Type.groupchat);
             message.setBody(messageText);
             try {
-                muc.sendMessage(messageText);
+                MainApplication.getXmppConnection().connection.sendStanza(message);
                 return message.getStanzaId();
             } catch (SmackException.NotConnectedException ex) {
                 ex.printStackTrace();
@@ -302,11 +299,11 @@ public class XMPPConnection implements ConnectionListener {
 
         try {
             if (connection.isAuthenticated()) {
-                Logger.d("User already logged in");
+                Log.d("User already logged in");
                 return true;
             }
 
-            Logger.d("userLog: " + username + " and pass: " + pass);
+            Log.d("userLog: " + username + " and pass: " + pass);
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
@@ -326,13 +323,13 @@ public class XMPPConnection implements ConnectionListener {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            Logger.d("LOGIN ERROR" + connection.isAuthenticated());
+            Log.d("LOGIN ERROR" + connection.isAuthenticated());
             e.printStackTrace();
             return false;
         }
         PingManager pingManager = PingManager.getInstanceFor(connection);
         pingManager.setPingInterval(5000);
-        Logger.d("LOGIN JUST");
+        Log.d("LOGIN SUCCESSFUL");
         return true;
     }
 

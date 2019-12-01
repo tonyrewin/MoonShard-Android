@@ -234,6 +234,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         return null;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void processMessage(Message message) {
 
@@ -243,7 +244,10 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
             String roomJid = (message.getFrom().toString().split("/"))[0];
 
 
-            message.getFrom();
+            Jid fromJid = message.getFrom();
+            if (fromJid.getResourceOrEmpty().toString().equals(MainApplication.getCurrentLoginCredentials().username)) {
+                return; // this is our message, dropping
+            }
 
             //LocalDBWrapper.getChatByChatID("qaz@conference.moonshard.tech")
 

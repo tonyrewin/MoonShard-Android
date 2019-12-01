@@ -5,7 +5,7 @@
         android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userAdminAvatar"
+            android:id="@+id/userMemberAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="12dp"
@@ -14,27 +14,26 @@
             android:src="@color/colorPrimary" />
 
     <TextView
-            android:id="@+id/nameAdminTv"
+            android:id="@+id/nameMemberTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_toEndOf="@+id/userAdminAvatar"
+            android:layout_toEndOf="@+id/userMemberAvatar"
             android:text="Oleg Petrov"
             android:textColor="#DE000000"
             android:textSize="16sp" />
 
     <TextView
-            android:id="@+id/roleTv"
+            android:id="@+id/statusMemberTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/nameAdminTv"
-            android:layout_alignStart="@+id/nameAdminTv"
+            android:layout_below="@+id/nameMemberTv"
+            android:layout_alignStart="@+id/nameMemberTv"
             android:layout_marginTop="4dp"
-            android:text="Создатель"
-            android:textColor="#9B9BB6" />
+            android:text="Online"
+            android:textColor="#0075FF" />
 
     <ImageView
-            android:visibility="gone"
             android:id="@+id/removeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +45,7 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/roleTv"
+            android:layout_below="@+id/statusMemberTv"
             android:layout_marginStart="8dp"
             android:layout_marginTop="11dp"
             android:layout_marginEnd="8dp"

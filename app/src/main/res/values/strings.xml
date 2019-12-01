@@ -40,4 +40,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="members">Участники</string>
+    <string name="change_txt">Изменить</string>
+    <string name="add_member">Добавить участника</string>
 </resources>

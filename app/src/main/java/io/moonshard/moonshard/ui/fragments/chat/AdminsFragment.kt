@@ -14,7 +14,6 @@ import io.moonshard.moonshard.ui.adapters.chat.AdminsAdapter
 import kotlinx.android.synthetic.main.fragment_admins.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.Occupant
 
 
@@ -27,7 +26,6 @@ class AdminsFragment : MvpAppCompatFragment(), AdminsView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_admins, container, false)
     }
 
@@ -38,6 +36,10 @@ class AdminsFragment : MvpAppCompatFragment(), AdminsView {
         arguments?.let {
             val idChat = it.getString("chatId")
             presenter.getAdmins(idChat!!)
+        }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
         }
     }
 

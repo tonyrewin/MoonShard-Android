@@ -32,21 +32,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Администраторы"
+                    android:text="@string/members"
                     android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            <TextView
-                    android:id="@+id/newChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="14dp"
-                    android:src="@drawable/ic_new_chat"
-                    android:text="Изменить"
-                    android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -65,6 +52,7 @@
             tools:ignore="RtlSymmetry">
 
         <LinearLayout
+                android:id="@+id/addMemberBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -81,10 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
-                    android:text="Добавить администратора"
+                    android:text="@string/add_member"
                     android:textColor="#0075FF"
                     android:textSize="16sp" />
-
         </LinearLayout>
 
         <View
@@ -97,7 +84,7 @@
                 android:background="#F5F5F5" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/adminsRv"
+                android:id="@+id/membersRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

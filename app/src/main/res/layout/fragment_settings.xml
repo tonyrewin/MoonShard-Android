@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="General"
+                android:text="Основные"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -142,7 +142,7 @@
                     android:id="@+id/notificationsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notifications"
+                    android:text="Уведомления"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 

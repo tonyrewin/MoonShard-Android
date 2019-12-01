@@ -24,7 +24,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_settings, container, false)
+        return inflater.inflate(io.moonshard.moonshard.R.layout.fragment_settings_new, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

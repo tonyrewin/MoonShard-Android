@@ -1,6 +1,13 @@
 package io.moonshard.moonshard.services;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
@@ -30,6 +37,7 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -40,10 +48,13 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.common.NotConnectedException;
+import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import trikita.log.Log;
@@ -271,6 +282,44 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+    public Single<byte[]> loadAvatar(String senderID) {
+        return Single.create(emitter -> {
+            if (!senderID.isEmpty()) {
+                if (MainApplication.avatarsCache.containsKey(senderID)) {
+                    emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                }
+                if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
+                    String firstLetter = Character.toString(Character.toUpperCase(senderID.charAt(0)));
+                    Drawable avatarText = TextDrawable.builder()
+                            .beginConfig()
+                            .width(64)
+                            .height(64)
+                            .endConfig()
+                            .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    emitter.onSuccess(stream.toByteArray());
+                    return;
+                }
+                EntityBareJid jid = null;
+                try {
+                    jid = JidCreate.entityBareFrom(senderID);
+                } catch (XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+
+                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
+
+                if (avatarBytes != null) {
+                    MainApplication.avatarsCache.put(senderID, avatarBytes);
+                }
+                emitter.onSuccess(avatarBytes);
+            } else {
+                emitter.onError(new IllegalArgumentException());
+            }
+        });
+    }
+
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
         BaseActivity baseActivity = getCurrentActivity();
@@ -347,7 +396,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public byte[] getAvatar(EntityBareJid jid) {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             VCardManager manager = VCardManager.getInstanceFor(connection);
             byte[] avatar = null;
             try {
@@ -380,15 +429,15 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public Set<RosterEntry> getContactList() {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             while (roster == null) ;
             return roster.getEntries();
         }
         return null;
     }
 
-    public boolean isConnectionAlive() {
-        return XMPPConnectionService.CONNECTION_STATE.equals(ConnectionState.CONNECTED) && XMPPConnectionService.SESSION_STATE.equals(SessionState.LOGGED_IN);
+    public boolean isConnectionReady() {
+        return connection.isConnected() && connection.isAuthenticated();
     }
 
     public Presence getUserPresence(BareJid jid) {
@@ -433,7 +482,7 @@ public class XMPPConnection implements ConnectionListener {
 
     public void sendUserPresence(Presence presence) {
         if (connection != null) {
-            if (isConnectionAlive()) {
+            if (isConnectionReady()) {
                 try {
                     connection.sendStanza(presence);
                 } catch (SmackException.NotConnectedException e) {
@@ -446,7 +495,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public MamManager getMamManager() {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             return mamManager;
         }
         return null;

@@ -5,16 +5,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.instacart.library.truetime.TrueTime;
 
 import org.jivesoftware.smack.MessageListener;
@@ -28,13 +23,12 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
-import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.R;
+import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.models.dbEntities.ChatUser;
 import io.moonshard.moonshard.models.dbEntities.MessageEntity;
@@ -44,7 +38,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import java9.util.concurrent.CompletableFuture;
+import trikita.log.Log;
 
 public class NetworkHandler implements IncomingChatMessageListener, PresenceEventListener, MessageListener {
     private final static String LOG_TAG = "NetworkHandler";
@@ -105,71 +99,31 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
                     chatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
-                    // EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
-                    // EventBus.getDefault().post(new LastMessageEvent(chatID, new GenericMessage(LocalDBWrapper.getMessageByID(messageID))));
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
-
-                        byte[] avatarBytes = new byte[0];
-                        try {
-                            CompletableFuture<byte[]> future = loadAvatar(chatJid);
-                            if (future != null) {
-                                avatarBytes = future.get();
+                        MainApplication.getXmppConnection().loadAvatar(chatJid)
+                                .observeOn(Schedulers.io())
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribe(bytes -> {
+                            Bitmap avatar = null;
+                            if (bytes != null) {
+                                avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                             }
-
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-
-                        Bitmap avatar = null;
-                        if (avatarBytes != null) {
-                            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
-                        }
-                        NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
-                                .setSmallIcon(R.drawable.amu_bubble_mask)
-                                .setContentTitle(chatJid)
-                                .setContentText(message.getBody())
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                        if (avatar != null) {
-                            notification.setLargeIcon(avatar);
-                        } else {
-                            String firstLetter = Character.toString(Character.toUpperCase(chatJid.charAt(0)));
-                            Drawable avatarText = TextDrawable.builder()
-                                    .beginConfig()
-                                    .width(64)
-                                    .height(64)
-                                    .endConfig()
-                                    .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
-                            notification.setLargeIcon(drawableToBitmap(avatarText));
-                        }
-                        notificationManager.notify(new Random().nextInt(), notification.build());
+                            NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                                    .setSmallIcon(R.drawable.amu_bubble_mask)
+                                    .setContentTitle(chatJid)
+                                    .setContentText(message.getBody())
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                            if (avatar != null) {
+                                notification.setLargeIcon(avatar);
+                            }
+                            notificationManager.notify(new Random().nextInt(), notification.build());
+                        }, throwable -> Log.e(throwable.getMessage()));
                     }
                 });
     }
 
     public void subscribeOnMessage(Observer<MessageEntity> observer) {
         messagePubsub.subscribe(observer);
-    }
-
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap;
-
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if (bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
     }
 
     @Override
@@ -206,32 +160,6 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
             NotificationManager notificationManager = MainApplication.getContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-    private CompletableFuture<byte[]> loadAvatar(String senderID) {
-        if (senderID.length() != 0) {
-            if (MainApplication.avatarsCache.containsKey(senderID)) {
-                return CompletableFuture.completedFuture(MainApplication.avatarsCache.get(senderID));
-            }
-            CompletableFuture<byte[]> completableFuture = CompletableFuture.supplyAsync(() -> {
-                while (MainApplication.getXmppConnection() == null) ;
-                while (MainApplication.getXmppConnection().isConnectionAlive() != true) ;
-                EntityBareJid jid = null;
-                try {
-                    jid = JidCreate.entityBareFrom(senderID);
-                } catch (XmppStringprepException e) {
-                    e.printStackTrace();
-                }
-                return MainApplication.getXmppConnection().getAvatar(jid);
-            }).thenApply((avatarBytes) -> {
-                if (avatarBytes != null) {
-                    MainApplication.avatarsCache.put(senderID, avatarBytes);
-                }
-                return avatarBytes;
-            });
-            return completableFuture;
-        }
-        return null;
     }
 
     @SuppressLint("CheckResult")
@@ -283,50 +211,30 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 e.printStackTrace();
             }
 
-        /*long messageID = LocalDBWrapper.createMessageEntry(roomJid, message.getStanzaId(), message.getFrom().asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
-        messagePubsub.onNext(messageID);*/
+            /*long messageID = LocalDBWrapper.createMessageEntry(roomJid, message.getStanzaId(), message.getFrom().asUnescapedString(), TrueTime.now().getTime(), message.getBody(), true, false);
+            messagePubsub.onNext(messageID);*/
             // int newUnreadMessagesCount = LocalDBWrapper.getChatByChatID(chatID).unreadMessagesCount + 1;
             //  LocalDBWrapper.updateChatUnreadMessagesCount(chatID, newUnreadMessagesCount);
 
-            //   EventBus.getDefault().post(new NewMessageEvent(chatID, messageID));
-            // EventBus.getDefault().post(new LastMessageEvent(chatID, new GenericMessage(LocalDBWrapper.getMessageByID(messageID))));
             if (!MainApplication.getCurrentChatActivity().equals(chatID)) {
-
-                byte[] avatarBytes = new byte[0];
-                try {
-                    CompletableFuture<byte[]> future = loadAvatar(chatID);
-                    if (future != null) {
-                        avatarBytes = future.get();
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-                Bitmap avatar = null;
-                if (avatarBytes != null) {
-                    avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
-                }
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
-                        .setSmallIcon(R.drawable.amu_bubble_mask)
-                        .setContentTitle(chatID)
-                        .setContentText(message.getBody())
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                if (avatar != null) {
-                    notification.setLargeIcon(avatar);
-                } else {
-                    String firstLetter = Character.toString(Character.toUpperCase(chatID.charAt(0)));
-                    Drawable avatarText = TextDrawable.builder()
-                            .beginConfig()
-                            .width(64)
-                            .height(64)
-                            .endConfig()
-                            .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
-                    notification.setLargeIcon(drawableToBitmap(avatarText));
-                }
-                notificationManager.notify(new Random().nextInt(), notification.build());
+                MainApplication.getXmppConnection().loadAvatar(chatID)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(bytes -> {
+                            Bitmap avatar = null;
+                            if (bytes != null) {
+                                avatar = Utils.INSTANCE.bytesToBitmap(bytes);
+                            }
+                            NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                                    .setSmallIcon(R.drawable.amu_bubble_mask)
+                                    .setContentTitle(chatID)
+                                    .setContentText(message.getBody())
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                            if (avatar != null) {
+                                notification.setLargeIcon(avatar);
+                            }
+                            notificationManager.notify(new Random().nextInt(), notification.build());
+                        }, throwable -> Log.e(throwable.getMessage()));
             }
         }
     }

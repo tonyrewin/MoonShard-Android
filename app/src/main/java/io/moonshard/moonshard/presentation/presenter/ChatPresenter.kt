@@ -132,7 +132,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
     }
 
     fun sendFile(path: File) {
-        if (MainApplication.getXmppConnection().isConnectionAlive) {
+        if (MainApplication.getXmppConnection().isConnectionReady) {
             val jid: FullJid?
             try {
                 jid = JidCreate.entityFullFrom("$chatID/Smack")

@@ -41,7 +41,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
 
     private static Application instance;
-    public final static String APP_NAME = "Influence";
+    public final static String APP_NAME = "MoonShard";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
     private static BaseActivity currentActivity;
 
@@ -239,6 +239,10 @@ public class MainApplication extends Application {
 
     public static void setCurrentChatActivity(String currentChatActivity) {
         MainApplication.currentChatActivity = currentChatActivity;
+    }
+
+    public static void setCurrentLoginCredentials(LoginCredentials currentLoginCredentials) {
+        MainApplication.currentLoginCredentials = currentLoginCredentials;
     }
 
     public static LoginCredentials getCurrentLoginCredentials() {

@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.repository
 
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.ObjectBox
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
@@ -10,20 +9,11 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
-import okhttp3.internal.notify
 import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
-import javax.inject.Inject
 
-class ChatListRepository: IChatListRepository {
+object ChatListRepository: IChatListRepository {
     private val chatBox: Box<ChatEntity> = ObjectBox.boxStore.boxFor()
-
-    @Inject
-    lateinit var messageRepository: MessageRepository
-
-    init {
-        MainApplication.getComponent().inject(this)
-    }
 
     override fun getChats(): Observable<List<ChatEntity>> {
         val query = chatBox.query().build()
@@ -43,7 +33,7 @@ class ChatListRepository: IChatListRepository {
                 it.onError(Exception("Chat ${chatEntity.jid} doesn't exist"))
                 return@create
             }
-            messageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
+            MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
                 it.onComplete()
             }
         }

@@ -20,7 +20,6 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
-    private val chatListRepository = ChatListRepository()
 
 
     init {
@@ -66,7 +65,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 0
             )
 
-            chatListRepository.addChat(chatEntity)
+            ChatListRepository.addChat(chatEntity)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe {

@@ -33,8 +33,6 @@ import kotlin.collections.ArrayList
 
 @InjectViewState
 class ChatPresenter : MvpPresenter<ChatView>() {
-    private val messageRepository = MessageRepository()
-    private val chatListRepository = ChatListRepository()
     private val messageComparator =
         Comparator<GenericMessage> { o1, o2 -> o1.createdAt.time.compareTo(o2.createdAt.time) }
     private lateinit var chatID: String
@@ -44,7 +42,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
         chatID = chatId // FIXME remove hardcode
-        chatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
+        ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -125,7 +123,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             )
             // message.sender = ??? FIXME
             message.chat.target = this.chat
-            messageRepository.saveMessage(message).subscribe {
+            MessageRepository.saveMessage(message).subscribe {
                 it.onSuccess(message)
             }
         }
@@ -162,7 +160,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             override fun onNext(message: MessageEntity) {
                 //   if(idMessage.equals(chatID)) {
                 // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
-                chatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
+                ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
                 viewState?.addToStart(GenericMessage(message), true)
 
                 //  }
@@ -195,7 +193,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                         val message =
                             Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
                         if (message.body != null) {
-                            messageRepository.getMessageById(message.stanzaId)
+                            MessageRepository.getMessageById(message.stanzaId)
                                 .observeOn(Schedulers.io())
                                 .subscribeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
@@ -232,7 +230,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
     }
 
     private fun loadLocalMessagesLogic(): Observable<List<MessageEntity>> {
-        return messageRepository.getMessagesByJid(JidCreate.bareFrom(chat.jid))
+        return MessageRepository.getMessagesByJid(JidCreate.bareFrom(chat.jid))
     }
 
     fun loadRecentPageMessages() {

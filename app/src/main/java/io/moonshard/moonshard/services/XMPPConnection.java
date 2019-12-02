@@ -2,7 +2,6 @@ package io.moonshard.moonshard.services;
 
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -48,18 +47,16 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
-import io.moonshard.moonshard.common.NotConnectedException;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import trikita.log.Log;
 
-import static io.moonshard.moonshard.MainApplication.getCurrentActivity;
+import static io.moonshard.moonshard.MainApplication.getLoginActivity;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -133,7 +130,7 @@ public class XMPPConnection implements ConnectionListener {
             }
 
         } catch (Exception e) {
-            BaseActivity baseActivity = getCurrentActivity();
+            BaseActivity baseActivity = getLoginActivity();
             if (baseActivity != null) {
                 baseActivity.onError(e);
             }
@@ -178,7 +175,7 @@ public class XMPPConnection implements ConnectionListener {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
 
-        BaseActivity baseActivity = getCurrentActivity();
+        BaseActivity baseActivity = getLoginActivity();
         if (baseActivity != null) {
             baseActivity.onAuthenticated();
         }
@@ -322,7 +319,7 @@ public class XMPPConnection implements ConnectionListener {
 
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
-        BaseActivity baseActivity = getCurrentActivity();
+        BaseActivity baseActivity = getLoginActivity();
         Log.d("Auth: ", "inside XMPP register method, " + user + " : " + pass);
         long l = System.currentTimeMillis();
         try {

@@ -1,5 +1,6 @@
 package io.moonshard.moonshard;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,11 +29,11 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
-import io.moonshard.moonshard.di.modules.RepositoriesModule;
 import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
+import io.moonshard.moonshard.ui.activities.MainActivity;
 
 public class MainApplication extends Application {
     private static ApplicationComponent component;
@@ -45,6 +46,7 @@ public class MainApplication extends Application {
     public final static String APP_NAME = "MoonShard";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
     private static BaseActivity currentActivity;
+    private static MainActivity mainActivity;
 
 
     private static String jid;
@@ -74,12 +76,21 @@ public class MainApplication extends Application {
     }
 
 
-    public static BaseActivity getCurrentActivity() {
+    public static BaseActivity getLoginActivity() {
         return currentActivity;
     }
 
-    public static void setCurrentActivity(BaseActivity activity) {
+    public static void setLoginActivity(BaseActivity activity) {
         currentActivity = activity;
+    }
+
+    // FIXME Dirty hack goes here (for obtaining views)
+    public static Activity getMainActivity() {
+        return mainActivity;
+    }
+
+    public static void setMainActivity(MainActivity activity) {
+        mainActivity = activity;
     }
 
     public static Location getCurrentLocation() {
@@ -99,7 +110,6 @@ public class MainApplication extends Application {
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplicationContext()))
                 .webModule(new WebModule(getApplicationContext()))
-                .repositoriesModule(new RepositoriesModule())
                 .build();
 
         ServiceConnection serviceConnection = new ServiceConnection() {

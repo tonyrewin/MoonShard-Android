@@ -19,25 +19,20 @@ import java.util.*
 
 @InjectViewState
 class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
-    private var chats = emptyList<ChatEntity>()
-    private val chatListRepository = ChatListRepository()
-    private val messageRepository = MessageRepository()
+    private var chats = emptyList<ChatEntity>().toMutableList()
+    private var recentlyDeletedItem: ChatEntity? = null
 
-    private val bindedItems = emptyMap<ChatEntity, Boolean>().toMutableMap()
+    private val bindedItems = emptyList<ChatEntity>().toMutableList()
     private val disposables = emptyList<Disposable>().toMutableList()
 
     init {
-        disposables.add(chatListRepository.getChats()
+        disposables.add(ChatListRepository.getChats()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { newChats ->
-            chats = newChats
-            chats = chats.sortedWith(Comparator { o1, o2 ->
-                val timestamp1 = if (o1.messages.isNotEmpty()) o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
-                val timestamp2 = if (o2.messages.isNotEmpty()) o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
-                timestamp2.compareTo(timestamp1)
-            })
-            viewState.onDataChange()
+                chats = newChats.toMutableList()
+                sortChatsByRecentlyUpdatedDate()
+                viewState.onDataChange()
         })
     }
 
@@ -47,10 +42,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
 
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
         val chat = chats[position]
-        if (bindedItems[chat] == null) {
+        if (bindedItems.indexOf(chat) == -1) {
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
-            disposables.add(messageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
+            disposables.add(MessageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -63,7 +58,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                         viewState.onItemChange(position)
                     }
                 })
-            disposables.add(messageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
+            disposables.add(MessageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ message ->
@@ -103,8 +98,40 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                 listener.clickChat(chat)
             }
 
-            bindedItems[chat] = true
+            bindedItems.add(chat)
         }
+    }
+
+    private fun sortChatsByRecentlyUpdatedDate() {
+        chats = chats.sortedWith(Comparator { o1, o2 ->
+            val timestamp1 = if (o1.messages.isNotEmpty()) o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
+            val timestamp2 = if (o2.messages.isNotEmpty()) o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
+            timestamp2.compareTo(timestamp1)
+        }).toMutableList()
+    }
+
+    fun deleteChatOnUI(position: Int) {
+        val chat = chats[position]
+        recentlyDeletedItem = chat
+        chats.removeAt(position)
+        viewState.onItemDelete(position)
+        bindedItems.remove(chat)
+    }
+
+    fun bringChatBack() {
+        recentlyDeletedItem ?: return
+        chats.add(recentlyDeletedItem!!)
+        sortChatsByRecentlyUpdatedDate()
+        viewState.onDataChange()
+    }
+
+    fun deleteChatFinally() {
+        recentlyDeletedItem ?: return
+        ChatListRepository.removeChat(recentlyDeletedItem!!)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+        recentlyDeletedItem = null
     }
 
     override fun onDestroy() {

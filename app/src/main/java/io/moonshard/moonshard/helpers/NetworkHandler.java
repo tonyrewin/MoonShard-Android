@@ -45,8 +45,6 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
     private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
     private NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainApplication.getContext());
-    private MessageRepository messageRepository = new MessageRepository();
-    private ChatListRepository chatListRepository = new ChatListRepository();
 
     public NetworkHandler() {
         createNotificationChannel();
@@ -56,7 +54,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
         String chatJid = chat.getXmppAddressOfChatPartner().asUnescapedString();
-        chatListRepository.getChatByJid(chat.getXmppAddressOfChatPartner().asBareJid())
+        ChatListRepository.INSTANCE.getChatByJid(chat.getXmppAddressOfChatPartner().asBareJid())
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(chatEntity -> {
@@ -69,7 +67,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                             false,
                             0
                     );
-                    chatListRepository.addChat(chatEntity)
+                    ChatListRepository.INSTANCE.addChat(chatEntity)
                             .observeOn(Schedulers.io())
                             .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(() -> {
@@ -93,12 +91,12 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         String messageAuthorNickname = fromJid.split("@")[0];
         messageEntity.sender.setTarget(new ChatUser(0, fromJid, messageAuthorNickname, -1, false));
         //noinspection ResultOfMethodCallIgnored
-        messageRepository.saveMessage(messageEntity)
+        MessageRepository.INSTANCE.saveMessage(messageEntity)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    chatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
                         MainApplication.getXmppConnection().loadAvatar(chatJid)
                                 .observeOn(Schedulers.io())
@@ -187,7 +185,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
 
             try {
-                chatListRepository.getChatByJid(JidCreate.from(roomJid))
+                ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(roomJid))
                         .observeOn(Schedulers.io())
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .subscribe(chatEntity -> {
@@ -200,7 +198,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                                     false,
                                     0
                             );
-                            chatListRepository.addChat(chatEntity)
+                            ChatListRepository.INSTANCE.addChat(chatEntity)
                                     .observeOn(Schedulers.io())
                                     .subscribeOn(AndroidSchedulers.mainThread())
                                     .subscribe(() -> {

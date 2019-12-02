@@ -5,4 +5,5 @@ import moxy.MvpView
 interface ChatListRecyclerView : MvpView {
     fun onDataChange()
     fun onItemChange(position: Int)
+    fun onItemDelete(position: Int)
 }

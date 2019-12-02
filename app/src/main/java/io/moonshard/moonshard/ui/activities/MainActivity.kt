@@ -18,12 +18,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-            // val newFragment = ChatsFragment()
-    //    val ft = supportFragmentManager.beginTransaction()
-        //ft.replace(R.id.container, newFragment).commit()
-
         methodRequiresTwoPermission()
-
 
         mainBottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {

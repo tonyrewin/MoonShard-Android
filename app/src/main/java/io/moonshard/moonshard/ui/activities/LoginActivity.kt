@@ -1,39 +1,20 @@
 package io.moonshard.moonshard.ui.activities
 
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
-import io.moonshard.moonshard.services.XMPPConnection
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_login.*
-import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smack.ConnectionListener
-import java.util.*
-import com.dropbox.core.v2.teamlog.ActorLogInfo.app
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import kotlin.Exception
 
 
 class LoginActivity : BaseActivity(), LoginView {
-    override fun onError(e: Exception) {
-        runOnUiThread {
-            hideLoader()
-            e.message?.let { showError(it) }?:showError("Произошла ошибка")
-        }
-    }
 
     @InjectPresenter
     lateinit var presenter: LoginPresenter
@@ -43,20 +24,19 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-
-        loginBtn.setOnClickListener {
+        loginBtn?.setOnClickListener {
             val actualUserName: String
-            if (editEmail.text.toString().contains("@")) {
+            if (editEmail?.text.toString().contains("@")) {
                 showError("Вы ввели недопустимый символ")
             } else {
-                actualUserName =  editEmail.text.toString() + "@moonshard.tech"
+                actualUserName = editEmail.text.toString() + "@moonshard.tech"
                 showLoader()
                 saveLoginCredentials(actualUserName, editPassword.text.toString())
                 startService()
             }
         }
 
-        dontHaveText.setOnClickListener {
+        dontHaveText?.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
@@ -64,28 +44,6 @@ class LoginActivity : BaseActivity(), LoginView {
 
     private fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
-        /*
-        val connection = object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                val binder = service as XMPPConnectionService.XMPPServiceBinder
-                MainApplication.setXmppConnection(binder.connection)
-            }
-
-            override fun onServiceDisconnected(name: ComponentName) {
-                MainApplication.setXmppConnection(null)
-            }
-        }
-        MainApplication.setServiceConnection(connection)
-        applicationContext.bindService(
-            Intent(applicationContext, XMPPConnectionService::class.java),
-            connection,
-            Context.BIND_AUTO_CREATE
-        )
-         */
-
-    }
-
-    override fun createNewConnect() {
     }
 
     override fun onAuthenticated() {
@@ -118,6 +76,13 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun showError(error: String) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(e: Exception) {
+        runOnUiThread {
+            hideLoader()
+            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
@@ -302,6 +303,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (activity as MainActivity).showBottomNavigationBar()
         setupBottomSheet()
 
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        
         val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         val sheetBehavior = BottomSheetBehavior.from(myBottoms)
 

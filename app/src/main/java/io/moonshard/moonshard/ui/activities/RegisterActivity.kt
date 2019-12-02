@@ -3,6 +3,7 @@ package io.moonshard.moonshard.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.LoginCredentials
@@ -24,6 +25,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         startService()
         auth()
         alreadyHaveText?.setOnClickListener {

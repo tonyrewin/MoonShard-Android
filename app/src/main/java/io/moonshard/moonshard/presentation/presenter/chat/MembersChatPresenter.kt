@@ -16,10 +16,12 @@ class MembersChatPresenter: MvpPresenter<MembersChatView>() {
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
-            val members = muc.members
+            val members = muc.occupants
             viewState?.showMembers(members)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
     }
+
+
 }

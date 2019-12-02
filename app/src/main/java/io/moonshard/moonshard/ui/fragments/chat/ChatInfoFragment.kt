@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Affiliate
+import org.jivesoftware.smackx.muc.Occupant
+import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
 
@@ -81,7 +83,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             ?.commit()
     }
 
-    override fun showMembers(members: List<Affiliate>) {
+    override fun showMembers(members: List<EntityFullJid>) {
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 

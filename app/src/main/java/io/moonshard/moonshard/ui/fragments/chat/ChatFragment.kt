@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.ui.fragments.chat
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +26,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     @InjectPresenter
     lateinit var presenter: ChatPresenter
 
-    var idChat:String = ""
+    var idChat: String = ""
 
     override fun addToStart(message: GenericMessage, reverse: Boolean) {
         runOnUiThread {
@@ -60,7 +61,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         setAdapter()
 
         arguments?.let {
-             idChat = it.getString("chatId")
+            idChat = it.getString("chatId")
             presenter.setChatId(idChat)
 
             if (idChat.contains("conference")) presenter.join()
@@ -68,6 +69,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             // presenter.loadLocalMessages()
 
             // presenter.loadMoreMessages()
+
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }
@@ -87,6 +89,22 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         avatarChat?.setOnClickListener {
             showChatInfo(idChat)
         }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
+
+    override fun setData(
+        name: String,
+        avatar: Bitmap?,
+        valueOccupants: Int,
+        valueOnlineMembers: Int
+    ) {
+        nameChat?.text = name
+        avatarChat?.setImageBitmap(avatar)
+        valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+
     }
 
     override fun onDestroyView() {

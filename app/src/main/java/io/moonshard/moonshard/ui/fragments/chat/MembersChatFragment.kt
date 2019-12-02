@@ -20,6 +20,7 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.Occupant
+import org.jxmpp.jid.EntityFullJid
 
 
 class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
@@ -52,7 +53,7 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showMembers(members:List<Affiliate>) {
+    override fun showMembers(members:List<EntityFullJid>) {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 

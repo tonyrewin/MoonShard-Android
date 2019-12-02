@@ -51,6 +51,7 @@
                     android:textStyle="bold" />
 
             <TextView
+                    android:id="@+id/valueMembersChatTv"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/nameChat"
                     android:text="666 людей, 32 онлайн"

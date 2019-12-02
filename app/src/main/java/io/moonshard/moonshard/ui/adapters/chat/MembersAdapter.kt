@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import org.jivesoftware.smackx.muc.Affiliate
+import org.jivesoftware.smackx.muc.Occupant
+import org.jxmpp.jid.EntityFullJid
 import java.util.concurrent.ExecutionException
 
 
@@ -20,7 +22,7 @@ interface MemberListener {
 
 class MembersAdapter(
     val listener: MemberListener,
-    private var members: List<Affiliate>
+    private var members: List<EntityFullJid>
 ) :
     RecyclerView.Adapter<MembersAdapter.ViewHolder>() {
 
@@ -36,9 +38,9 @@ class MembersAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nameTv?.text = members[position].nick
+        holder.nameTv?.text = members[position].resourceOrEmpty
         //holder.statusTv?.text = members[position].affiliation.
-        setAvatar(members[position].jid.asUnescapedString(), holder.userAvatar!!)
+        setAvatar(members[position].resourceOrEmpty.toString() + "@moonshard.tech", holder.userAvatar!!)
     }
 
     private fun setAvatar(jid: String, imageView: ImageView) {
@@ -64,8 +66,8 @@ class MembersAdapter(
         }
     }
 
-    fun setMembers(moderators: List<Affiliate>) {
-        this.members = moderators
+    fun setMembers(members: List<EntityFullJid>) {
+        this.members = members
         notifyDataSetChanged()
     }
 

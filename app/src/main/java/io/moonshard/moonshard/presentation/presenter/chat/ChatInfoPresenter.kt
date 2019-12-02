@@ -13,6 +13,8 @@ import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.muc.Occupant
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import java.util.concurrent.ExecutionException
 
@@ -30,7 +32,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(groupId)
 
-            val members = muc.members
+            val members = muc.occupants
 
             var location: LatLng? = null
             var category = ""
@@ -43,8 +45,6 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 }
             }
             val avatar = getAvatar(jid)
-
-
 
 
             viewState?.showData(avatar,
@@ -84,11 +84,13 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         return avatar
     }
 
-    private fun getValueOnlineUsers(muc: MultiUserChat, members: List<Affiliate>): Int {
+
+    //muc.getOccupantPresence(JidCreate.entityFullFrom("dgggrrg@conference.moonshard.tech/just")) must be
+    private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {
         var onlineValue = 0
         for (i in members.indices) {
-            val user = muc.getOccupantPresence(JidCreate.entityFullFrom(members[i].jid))
-            if (user.type == Presence.Type.available) {
+            val userOccupantPresence = muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            if (userOccupantPresence.type == Presence.Type.available) {
                 onlineValue++
             }
         }
@@ -106,6 +108,4 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             e.message?.let { viewState?.showError(it) }
         }
     }
-
-
 }

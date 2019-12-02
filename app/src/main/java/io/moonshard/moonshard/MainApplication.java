@@ -28,6 +28,7 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
+import io.moonshard.moonshard.di.modules.RepositoriesModule;
 import io.moonshard.moonshard.di.modules.WebModule;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
@@ -98,6 +99,7 @@ public class MainApplication extends Application {
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(getApplicationContext()))
                 .webModule(new WebModule(getApplicationContext()))
+                .repositoriesModule(new RepositoriesModule())
                 .build();
 
         ServiceConnection serviceConnection = new ServiceConnection() {

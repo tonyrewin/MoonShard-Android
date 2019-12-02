@@ -17,10 +17,13 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.jxmpp.jid.Jid
 import java.util.*
+import javax.inject.Inject
 
 class MessageRepository: IMessageRepository {
-    private val chatListRepository = ChatListRepository()
     private val messageBox: Box<MessageEntity> = ObjectBox.boxStore.boxFor()
+
+    @Inject
+    lateinit var chatListRepository: ChatListRepository
 
     init {
         MainApplication.getComponent().inject(this)
@@ -40,6 +43,15 @@ class MessageRepository: IMessageRepository {
             }, { e ->
                 it.onError(e)
             })
+        }
+    }
+
+    override fun removeMessagesByJid(jid: Jid): Completable {
+        return Completable.create {
+            messageBox.query {
+                link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
+            }.remove()
+            it.onComplete()
         }
     }
 

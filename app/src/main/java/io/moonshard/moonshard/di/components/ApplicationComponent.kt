@@ -2,6 +2,7 @@ package io.moonshard.moonshard.di.components
 
 import dagger.Component
 import io.moonshard.moonshard.di.modules.ApplicationModule
+import io.moonshard.moonshard.di.modules.RepositoriesModule
 import io.moonshard.moonshard.di.modules.WebModule
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -13,7 +14,7 @@ import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.moonshard.moonshard.usecase.TestUseCase
 import javax.inject.Singleton
 
-@Component(modules = [ApplicationModule::class, WebModule::class])
+@Component(modules = [ApplicationModule::class, WebModule::class, RepositoriesModule::class])
 @Singleton
 interface ApplicationComponent {
     fun inject(p2chatService: P2ChatService)
@@ -22,7 +23,6 @@ interface ApplicationComponent {
     fun inject(testUseCase: TestUseCase)
     fun inject(useCase: RoomsUseCase)
     fun inject(repository: RoomsRepository)
-
 
     fun inject(chatListRepository: ChatListRepository)
     fun inject(messageRepository: MessageRepository)

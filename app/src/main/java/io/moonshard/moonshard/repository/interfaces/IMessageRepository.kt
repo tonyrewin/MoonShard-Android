@@ -9,6 +9,7 @@ import org.jxmpp.jid.Jid
 interface IMessageRepository {
     fun saveMessage(messageEntity: MessageEntity): Completable
     fun getMessagesByJid(jid: Jid): Observable<List<MessageEntity>>
+    fun removeMessagesByJid(jid: Jid): Completable
     fun getMessageById(messageUid: String): Single<MessageEntity>
     fun getLastMessage(jid: Jid): Observable<MessageEntity>
     fun getFirstMessage(jid: Jid): Observable<MessageEntity>

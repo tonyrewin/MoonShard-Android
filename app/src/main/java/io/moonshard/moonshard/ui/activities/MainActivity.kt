@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         setContentView(R.layout.activity_main)
 
         methodRequiresTwoPermission()
+        mainBottomNav?.selectedItemId = R.id.find_chats_map_bottom_nav_item
 
         mainBottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {

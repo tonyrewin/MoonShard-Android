@@ -1,7 +1,5 @@
 package io.moonshard.moonshard.ui.fragments.map
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -35,10 +33,8 @@ import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.ExecutionException
 
 
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
@@ -97,7 +93,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         locationValueTestTv?.text = distance
                         groupNameInfoTv?.text = roomInfo.name
                         valueMembersTv?.text =
-                            "${roomInfo?.occupantsCount} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, 0 онлайн"
 
                         joinGroupBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -109,7 +105,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
                         groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
-                            "${roomInfo?.occupantsCount} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, 0 онлайн"
                         locationValueInfoTv?.text = distance
                         locationInfoTv?.text = getAddress(
                             LatLng(
@@ -304,7 +300,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         setupBottomSheet()
 
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-        
+
         val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         val sheetBehavior = BottomSheetBehavior.from(myBottoms)
 
@@ -324,7 +320,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         })
     }
-
 
     private fun getMyLocation() {
         val latLng = LatLng(

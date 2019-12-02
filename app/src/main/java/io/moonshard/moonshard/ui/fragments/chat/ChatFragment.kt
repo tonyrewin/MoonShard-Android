@@ -104,7 +104,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         nameChat?.text = name
         avatarChat?.setImageBitmap(avatar)
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
-
     }
 
     override fun onDestroyView() {

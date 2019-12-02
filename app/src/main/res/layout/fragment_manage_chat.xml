@@ -39,7 +39,7 @@
                     android:textStyle="bold" />
 
             <TextView
-                    android:id="@+id/newChat"
+                    android:id="@+id/readBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -151,11 +151,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
+        <RelativeLayout
+                android:layout_below="@+id/viewOne"
+                android:id="@+id/membersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
         <ImageView
                 android:layout_marginEnd="13dp"
                 android:layout_marginStart="14dp"
                 android:src="@drawable/ic_members"
-                android:layout_below="@+id/viewOne"
                 android:id="@+id/icMember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -164,7 +169,6 @@
                 android:id="@+id/membersTv"
                 android:textSize="16sp"
                 android:textColor="#333333"
-                android:layout_below="@+id/viewOne"
                 android:layout_toRightOf="@+id/icMember"
                 android:text="Участники"
                 android:layout_width="wrap_content"
@@ -173,29 +177,34 @@
         <TextView
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
-                android:layout_below="@+id/viewOne"
                 android:layout_alignParentRight="true"
                 android:text="123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+    </RelativeLayout>
+
         <View
                 android:layout_marginTop="15dp"
                 android:background="#F5F5F5"
                 android:layout_marginBottom="13dp"
-                android:layout_below="@+id/membersTv"
+                android:layout_below="@+id/membersLayout"
                 android:id="@+id/viewTwo"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
 
+        <RelativeLayout
+                android:layout_marginBottom="16dp"
+                android:id="@+id/adminsLayout"
+                android:layout_below="@+id/viewTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
         <ImageView
-                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="13dp"
                 android:layout_marginStart="14dp"
                 android:src="@drawable/ic_admin_star"
-                android:layout_below="@+id/viewTwo"
                 android:id="@+id/icAdmins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -204,7 +213,6 @@
                 android:id="@+id/adminsTv"
                 android:textSize="16sp"
                 android:textColor="#333333"
-                android:layout_below="@+id/viewTwo"
                 android:layout_toRightOf="@+id/icAdmins"
                 android:text="Администраторы"
                 android:layout_width="wrap_content"
@@ -213,11 +221,11 @@
         <TextView
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
-                android:layout_below="@+id/viewTwo"
                 android:layout_alignParentRight="true"
                 android:text="123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 

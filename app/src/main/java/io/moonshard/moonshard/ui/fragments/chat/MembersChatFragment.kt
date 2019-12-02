@@ -18,6 +18,7 @@ import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_members_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.Occupant
 
 
@@ -51,7 +52,7 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showMembers(members:List<Occupant>) {
+    override fun showMembers(members:List<Affiliate>) {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 

@@ -85,7 +85,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         })
 
         avatarChat?.setOnClickListener {
-            showAdminsScreen(idChat)
+            showChatInfo(idChat)
         }
     }
 
@@ -141,14 +141,14 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         startActivityForResult(chooseFile, 1)
     }
 
-    fun showAdminsScreen(chatId: String) {
+    private fun showChatInfo(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
-        val chatFragment = AdminsFragment()
+        val chatFragment = ChatInfoFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "AdminsFragment")?.hide(this)
-            ?.addToBackStack("AdminsFragment")
+        ft?.add(R.id.container, chatFragment, "ChatInfoFragment")?.hide(this)
+            ?.addToBackStack("ChatInfoFragment")
             ?.commit()
     }
 }

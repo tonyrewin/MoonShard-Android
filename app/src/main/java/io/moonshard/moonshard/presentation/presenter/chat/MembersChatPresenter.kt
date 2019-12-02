@@ -2,10 +2,12 @@ package io.moonshard.moonshard.presentation.presenter.chat
 
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.MembersChatView
+import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 
+@InjectViewState
 class MembersChatPresenter: MvpPresenter<MembersChatView>() {
 
     fun getMembers(jid: String) {
@@ -14,8 +16,8 @@ class MembersChatPresenter: MvpPresenter<MembersChatView>() {
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
-            val moderators = muc.moderators
-            viewState?.showMembers(moderators)
+            val members = muc.members
+            viewState?.showMembers(members)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

@@ -82,6 +82,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
         }catch (e:java.lang.Exception){
             //will add toast
+            var error = ""
         }
     }
 

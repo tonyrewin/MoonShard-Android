@@ -94,9 +94,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         ))
 
                         locationValueTestTv?.text = distance
-                        groupNameInfoTv?.text = roomInfo?.name
+                        groupNameInfoTv?.text = roomInfo.name
                         valueMembersTv?.text =
-                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                            "${roomInfo?.occupantsCount} человек, 0 онлайн"
 
                         joinGroupBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -106,9 +106,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
                         }
 
-                        groupNameInfoContentTv?.text = roomInfo?.name
+                        groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
-                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                            "${roomInfo?.occupantsCount} человек, 0 онлайн"
                         locationValueInfoTv?.text = distance
                         locationInfoTv?.text = getAddress(
                             LatLng(
@@ -116,7 +116,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                                 RoomsMap.rooms[i].longtitude.toDouble()
                             )
                         )
-                        descriptionTv?.text = roomInfo?.description
+                        descriptionTv?.text = roomInfo.description
 
                         joinBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -150,10 +150,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         }
     }
 
-    override fun test() {
-        var kek = ""
-    }
-
     fun getAddress(location: LatLng): String {
         val geocoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address>
@@ -177,7 +173,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Нету ничего"
+        return "Информация отсутствует"
     }
 
     private fun calculationByDistance(latRoom: String, lngRoom: String): String {

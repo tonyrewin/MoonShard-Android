@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8481161831935261792",
-      "lastPropertyId": "4:2386991475402660279",
+      "lastPropertyId": "5:3306364403533145931",
       "name": "ChatEntity",
       "properties": [
         {
@@ -28,6 +28,12 @@
           "id": "4:2386991475402660279",
           "name": "isGroupChat",
           "type": 1,
+          "flags": 4
+        },
+        {
+          "id": "5:3306364403533145931",
+          "name": "unreadMessagesCount",
+          "type": 5,
           "flags": 4
         }
       ],

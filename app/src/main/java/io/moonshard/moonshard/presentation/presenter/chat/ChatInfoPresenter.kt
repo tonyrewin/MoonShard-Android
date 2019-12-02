@@ -1,9 +1,11 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.widget.ImageView
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
-import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap.rooms
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -12,9 +14,10 @@ import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
+import java.util.concurrent.ExecutionException
 
 @InjectViewState
-class ChatInfoPresenter: MvpPresenter<ChatInfoView>() {
+class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
     fun getMembers(jid: String) {
         try {
@@ -23,43 +26,86 @@ class ChatInfoPresenter: MvpPresenter<ChatInfoView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
 
-            val roomInfo = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                .getRoomInfo(groupId)
+            val roomInfo =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getRoomInfo(groupId)
 
             val members = muc.members
 
-
-            var location: LatLng? =null
+            var location: LatLng? = null
             var category = ""
-            val onlineMembersValue = getValueOnlineUsers(muc,members)
+            val onlineMembersValue = getValueOnlineUsers(muc, members)
 
-            for(i in RoomsMap.rooms.indices){
-                if(roomInfo.room.asEntityBareJidString() == rooms[i].roomId){
-                    location = LatLng(rooms[i].latitude.toDouble(),rooms[i].longtitude.toDouble())
+            for (i in rooms.indices) {
+                if (roomInfo.room.asEntityBareJidString() == rooms[i].roomId) {
+                    location = LatLng(rooms[i].latitude.toDouble(), rooms[i].longtitude.toDouble())
                     category = rooms[i].category.toString()
                 }
             }
+            val avatar = getAvatar(jid)
 
 
-            viewState?.showData(roomInfo.name,roomInfo.occupantsCount,onlineMembersValue,location,category,roomInfo.description)
+
+
+            viewState?.showData(avatar,
+                roomInfo.name,
+                roomInfo.occupantsCount,
+                onlineMembersValue,
+                location,
+                category,
+                roomInfo.description
+            )
             viewState?.showMembers(members)
         } catch (e: Exception) {
-            val kek = ""
-            //e.message?.let { viewState?.showError(it) }
+            e.message?.let { viewState?.showError(it) }
         }
     }
 
-    private fun getValueOnlineUsers(muc: MultiUserChat, members:List<Affiliate>):Int{
+    private fun getAvatar(jid: String):Bitmap? {
+        var avatarBytes: ByteArray? = ByteArray(0)
+        try {
+            val future =
+                MainApplication.getXmppConnection().network.loadAvatar(jid)
+
+            if (future != null) {
+                avatarBytes = future.get()
+            }
+
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        } catch (e: ExecutionException) {
+            e.printStackTrace()
+        }
+
+        var avatar: Bitmap?=null
+        if (avatarBytes != null) {
+            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+        }
+        return avatar
+    }
+
+    private fun getValueOnlineUsers(muc: MultiUserChat, members: List<Affiliate>): Int {
         var onlineValue = 0
-        for(i in members.indices){
-            val user =  muc.getOccupantPresence(JidCreate.entityFullFrom(members[i].jid))
-            if(user.type == Presence.Type.available){
+        for (i in members.indices) {
+            val user = muc.getOccupantPresence(JidCreate.entityFullFrom(members[i].jid))
+            if (user.type == Presence.Type.available) {
                 onlineValue++
             }
         }
         return onlineValue
     }
 
+    fun leaveGroup(jid: String) {
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            muc.leave()
+        } catch (e: Exception) {
+            e.message?.let { viewState?.showError(it) }
+        }
+    }
 
 
 }

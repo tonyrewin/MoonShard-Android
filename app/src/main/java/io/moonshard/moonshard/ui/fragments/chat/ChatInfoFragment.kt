@@ -1,11 +1,13 @@
 package io.moonshard.moonshard.ui.fragments.chat
 
+import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -16,7 +18,6 @@ import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_chat_info.*
-import kotlinx.android.synthetic.main.fragment_members_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Affiliate
@@ -25,6 +26,11 @@ import java.util.*
 
 
 class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
+
+    override fun showChatsScreen() {
+        fragmentManager?.popBackStack()
+        fragmentManager?.popBackStack()
+    }
 
     @InjectPresenter
     lateinit var presenter: ChatInfoPresenter
@@ -37,14 +43,42 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         return inflater.inflate(R.layout.fragment_chat_info, container, false)
     }
 
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-
+        var idChat = ""
         arguments?.let {
-            val idChat = it.getString("chatId")
-            presenter.getMembers(idChat!!)
+            idChat = it.getString("chatId")
+            presenter.getMembers(idChat)
         }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
+        changeChatInfoBtn?.setOnClickListener {
+            showManageChatScreen(idChat)
+        }
+
+        removeLayout?.setOnClickListener {
+            presenter.leaveGroup(idChat)
+        }
+    }
+
+
+    fun showManageChatScreen(idChat: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val manageChatFragment = ManageChatFragment()
+        manageChatFragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, manageChatFragment, "manageChatFragment")?.hide(this)
+            ?.addToBackStack("manageChatFragment")
+            ?.commit()
     }
 
     override fun showMembers(members: List<Affiliate>) {
@@ -61,12 +95,15 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     override fun showData(
+        avatar: Bitmap?,
         name: String, occupantsCount: Int,
         onlineMembersValue: Int, latLngLocation: LatLng?,
-        category: String, description: String) {
+        category: String, description: String
+    ) {
         val location = getAddress(latLngLocation)
         val distance = calculationByDistance(latLngLocation)
 
+        profileImage?.setImageBitmap(avatar)
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance

@@ -32,6 +32,7 @@ import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
+import trikita.log.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -359,7 +360,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             return@supplyAsync null
         }
     }
-
+/*
     private fun getAvatar(jid: String): Bitmap? {
         var avatarBytes: ByteArray? = ByteArray(0)
         try {
@@ -379,6 +380,24 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         var avatar: Bitmap?=null
         if (avatarBytes != null) {
             avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+        }
+        return avatar
+    }
+
+ */
+
+    private fun getAvatar(jid: String):Bitmap? {
+        var avatar: Bitmap?=null
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    }
+                }, { throwable ->
+                    Log.e(throwable.message) })
         }
         return avatar
     }

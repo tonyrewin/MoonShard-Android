@@ -83,6 +83,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
                     val roomInfo = presenter.getRoom(it)
+                    val onlineUsers = presenter.getValueOnlineUsers(it)
                     roomInfo?.let {
                         val distance = (calculationByDistance(
                             RoomsMap.rooms[i].latitude,
@@ -92,7 +93,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         locationValueTestTv?.text = distance
                         groupNameInfoTv?.text = roomInfo.name
                         valueMembersTv?.text =
-                            "${roomInfo.occupantsCount} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
 
                         joinGroupBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -104,7 +105,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
                         groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
-                            "${roomInfo.occupantsCount} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
                         locationValueInfoTv?.text = distance
                         locationInfoTv?.text = getAddress(
                             LatLng(

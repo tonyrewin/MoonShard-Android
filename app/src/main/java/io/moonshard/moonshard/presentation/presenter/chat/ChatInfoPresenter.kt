@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap.rooms
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
@@ -16,6 +18,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
+import trikita.log.Log
 import java.util.concurrent.ExecutionException
 
 @InjectViewState
@@ -61,6 +64,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         }
     }
 
+    /*
     private fun getAvatar(jid: String):Bitmap? {
         var avatarBytes: ByteArray? = ByteArray(0)
         try {
@@ -80,6 +84,24 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         var avatar: Bitmap?=null
         if (avatarBytes != null) {
             avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+        }
+        return avatar
+    }
+
+     */
+
+    private fun getAvatar(jid: String):Bitmap? {
+        var avatar: Bitmap?=null
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    }
+                }, { throwable ->
+                    Log.e(throwable.message) })
         }
         return avatar
     }

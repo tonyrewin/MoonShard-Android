@@ -13,6 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
@@ -45,6 +46,26 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             })
     }
 
+
+    fun getValueOnlineUsers(jid: String): Int {
+        val groupId = JidCreate.entityBareFrom(jid)
+
+        val muc =
+            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                .getMultiUserChat(groupId)
+        val members = muc.occupants
+
+        var onlineValue = 0
+        for (i in members.indices) {
+            val userOccupantPresence =
+                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            if (userOccupantPresence.type == Presence.Type.available) {
+                onlineValue++
+            }
+        }
+        return onlineValue
+    }
+
     fun getRoom(jid: String): RoomInfo? {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
@@ -56,7 +77,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     .getRoomInfo(muc.room)
             return info
         } catch (e: java.lang.Exception) {
-
+            val kek = ""
         }
         return null
     }
@@ -84,7 +105,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
-            }
+                }
             //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }

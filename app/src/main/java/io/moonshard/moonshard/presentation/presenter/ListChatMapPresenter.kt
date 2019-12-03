@@ -14,7 +14,6 @@ import moxy.MvpPresenter
 @InjectViewState
 class ListChatMapPresenter : MvpPresenter<ListChatMapView>(){
 
-    private val chatListRepository = ChatListRepository()
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 

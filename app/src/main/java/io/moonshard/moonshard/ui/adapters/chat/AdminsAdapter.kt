@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.chat.AdminsFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smackx.muc.Occupant
+import trikita.log.Log
 import java.util.concurrent.ExecutionException
 
 
@@ -43,27 +46,18 @@ class AdminsAdapter(
         setAvatar(moderators[position].jid.asUnescapedString(), holder.userAvatar!!)
     }
 
-    fun setAvatar(jid: String, imageView: ImageView) {
-        // MainApplication.getXmppConnection().network.loadAvatar("mytest@moonshard.tech")
-        var avatarBytes: ByteArray? = ByteArray(0)
-        try {
-            val future =
-                MainApplication.getXmppConnection().network.loadAvatar("mytest@moonshard.tech")
-
-            if (future != null) {
-                avatarBytes = future.get()
-            }
-
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-        }
-
-        var avatar: Bitmap? = null
-        if (avatarBytes != null) {
-            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-            imageView.setImageBitmap(avatar)
+    private fun setAvatar(jid: String, imageView: ImageView) {
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        imageView.setImageBitmap(avatar)
+                    }
+                }, { throwable -> Log.e(throwable.message) })
         }
     }
 

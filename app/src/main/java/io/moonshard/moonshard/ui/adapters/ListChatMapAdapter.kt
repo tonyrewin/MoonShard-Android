@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,20 +13,20 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.models.Category
 import io.moonshard.moonshard.models.api.RoomPin
-import java.util.concurrent.ExecutionException
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import trikita.log.Log
 
 
 interface ListChatMapListener {
-    fun clickChat(categoryName: String)
+    fun clickChat(room: RoomPin)
 }
 
-class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: List<RoomPin>) :
+class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: ArrayList<RoomPin>) :
     RecyclerView.Adapter<ListChatMapAdapter.ViewHolder>() {
 
     var focusedItem = -1
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -39,16 +38,14 @@ class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        setAvatar(chats[position].roomId.toString(),holder.groupIv!!)
+        setAvatar(chats[position].roomId.toString(), holder.groupIv!!)
         holder.groupNameTv?.text = chats[position].roomId
         holder.valueMembersTv?.text = "1000"
-        holder.locationValueTv?.text = calculationByDistance(chats[position].latitude,chats[position].longtitude)
-
+        holder.locationValueTv?.text =
+            calculationByDistance(chats[position].latitude, chats[position].longtitude)
 
         holder.itemView.setOnClickListener {
-            focusedItem = position
-            notifyDataSetChanged()
-            //listener.clickChat(chats[position].name)
+            listener.clickChat(chats[position])
         }
     }
 
@@ -79,30 +76,25 @@ class ListChatMapAdapter (val listener: ListChatMapListener, private var chats: 
     }
 
     private fun setAvatar(jid: String, imageView: ImageView) {
-        var avatarBytes: ByteArray? = ByteArray(0)
-        try {
-            val future =
-                MainApplication.getXmppConnection().network.loadAvatar(jid)
-
-            if (future != null) {
-                avatarBytes = future.get()
-            }
-
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-        }
-
-        val avatar: Bitmap?
-        if (avatarBytes != null) {
-            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-            imageView.setImageBitmap(avatar)
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        MainApplication.getMainUIThread().post {
+                            imageView.setImageBitmap(avatar)
+                        }
+                    }
+                }, { throwable -> Log.e(throwable.message) })
         }
     }
 
-    fun setChats(moderators: List<RoomPin>) {
-        this.chats = moderators
+    fun setChats(moderators: ArrayList<RoomPin>) {
+        chats.clear()
+        chats.addAll(moderators)
         notifyDataSetChanged()
     }
 

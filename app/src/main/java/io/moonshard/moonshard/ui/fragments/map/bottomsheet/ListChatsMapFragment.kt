@@ -45,7 +45,7 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         // val rooms = RoomsMap.rooms
         groupsRv?.layoutManager = LinearLayoutManager(context)
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
-            override fun clickChat(categoryName: String) {
+            override fun clickChat(room: RoomPin) {
 
             }
         }, arrayListOf())

@@ -278,20 +278,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
-    private fun setupClickBottomSheet() {
-        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
-            activity!!.supportFragmentManager,
-            context,
-            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.INFO
-        )
-        bottomSheetAppbar.visibility = View.GONE
-
-        bottomSheetViewPager.offscreenPageLimit = 1
-        bottomSheetViewPager.adapter = sectionsPagerAdapter
-        bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
-        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
@@ -317,7 +303,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     BottomSheetBehavior.STATE_COLLAPSED -> buttonsTop.visibility = View.VISIBLE
                 }
             }
-
         })
     }
 

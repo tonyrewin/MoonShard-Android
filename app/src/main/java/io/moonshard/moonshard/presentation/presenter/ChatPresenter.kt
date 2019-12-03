@@ -77,9 +77,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             })
     }
 
-
-
-
     fun getDataInfo(){
         try {
             val groupId = JidCreate.entityBareFrom(chatID)

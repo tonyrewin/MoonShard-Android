@@ -135,6 +135,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
+    fun hideBottomSheet(){
+        defaultBottomSheet.visibility = View.GONE
+    }
+
+    fun showBottomSheet(){
+        defaultBottomSheet.visibility = View.VISIBLE
+    }
+
     override fun showChatScreens(chatId: String) {
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()

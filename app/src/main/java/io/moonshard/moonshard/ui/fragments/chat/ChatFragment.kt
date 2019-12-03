@@ -16,6 +16,7 @@ import io.moonshard.moonshard.presentation.view.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -110,6 +111,12 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onDestroyView()
         presenter.onDestroy()
         (activity as MainActivity).showBottomNavigationBar()
+
+        for(i in fragmentManager!!.fragments.indices){
+            if(fragmentManager!!.fragments[i].tag == "MapScreen"){
+                (fragmentManager!!.fragments[i] as? MapFragment)?.showBottomSheet()
+            }
+        }
     }
 
     override fun onResume() {

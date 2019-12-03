@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun showMapScreen() {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, newFragment).commit()
+        ft.replace(R.id.container, newFragment,"MapScreen").commit()
     }
 
     override fun onDestroy() {

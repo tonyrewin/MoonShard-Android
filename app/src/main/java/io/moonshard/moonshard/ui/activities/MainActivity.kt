@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.SettingsFragment
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         methodRequiresTwoPermission()
         mainBottomNav?.selectedItemId = R.id.find_chats_map_bottom_nav_item
+        MainApplication.setMainActivity(this)
 
         mainBottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -94,5 +96,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, newFragment).commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MainApplication.setMainActivity(null)
     }
 }

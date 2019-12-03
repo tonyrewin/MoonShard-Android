@@ -21,7 +21,6 @@ import org.jxmpp.jid.parts.Resourcepart
 
 @InjectViewState
 class MapPresenter : MvpPresenter<MapMainView>() {
-    private val chatListRepository = ChatListRepository()
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -78,7 +77,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 isGroupChat = true,
                 unreadMessagesCount = 0
             )
-            chatListRepository.addChat(chatEntity)
+            ChatListRepository.addChat(chatEntity)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe {

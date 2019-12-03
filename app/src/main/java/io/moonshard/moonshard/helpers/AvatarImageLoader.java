@@ -48,7 +48,7 @@ public class AvatarImageLoader  {
                         .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter)));
                 CompletableFuture.supplyAsync(() -> {
                     while (MainApplication.getXmppConnection() == null);
-                    while (MainApplication.getXmppConnection().isConnectionAlive() != true);
+                    while (MainApplication.getXmppConnection().isConnectionReady() != true);
                     EntityBareJid jid = null;
                     try {
                         jid = JidCreate.entityBareFrom(url);

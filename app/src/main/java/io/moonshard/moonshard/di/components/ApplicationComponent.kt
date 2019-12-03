@@ -22,9 +22,5 @@ interface ApplicationComponent {
     fun inject(testUseCase: TestUseCase)
     fun inject(useCase: RoomsUseCase)
     fun inject(repository: RoomsRepository)
-
-
-    fun inject(chatListRepository: ChatListRepository)
-    fun inject(messageRepository: MessageRepository)
     // fun inject(p2ChatModule: P2ChatModule)
 }

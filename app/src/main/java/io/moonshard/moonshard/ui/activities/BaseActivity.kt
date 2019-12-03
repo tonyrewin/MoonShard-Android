@@ -3,7 +3,6 @@ package io.moonshard.moonshard.ui.activities
 import android.util.Log
 import io.moonshard.moonshard.MainApplication
 import moxy.MvpAppCompatActivity
-import org.jivesoftware.smack.ConnectionListener
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.muc.MultiUserChat
 
@@ -13,7 +12,7 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        MainApplication.setCurrentActivity(this)
+        MainApplication.setLoginActivity(this)
         TAG = this.javaClass.name
     }
 
@@ -28,9 +27,9 @@ abstract class BaseActivity : MvpAppCompatActivity() {
     }
 
     private fun clearReferences() {
-        val currActivity = MainApplication.getCurrentActivity()
+        val currActivity = MainApplication.getLoginActivity()
         if (this == currActivity) {
-            MainApplication.setCurrentActivity(null)
+            MainApplication.setLoginActivity(null)
         }
     }
 

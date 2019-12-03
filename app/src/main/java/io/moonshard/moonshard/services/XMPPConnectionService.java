@@ -126,7 +126,7 @@ public class XMPPConnectionService extends Service {
         @Override
         public void run() {
             super.run();
-            XMPPConnection connection = new XMPPConnection(context);
+            XMPPConnection connection = new XMPPConnection();
             MainApplication.setXmppConnection(connection);
             try {
                     connection.connect();
@@ -166,7 +166,7 @@ public class XMPPConnectionService extends Service {
 
     private void createConnection() {
         if (connection == null) {
-            connection = new XMPPConnection(this);
+            connection = new XMPPConnection();
         }
         try {
             connection.connect();

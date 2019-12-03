@@ -1,9 +1,7 @@
 package io.moonshard.moonshard.repository
 
-import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.ObjectBox
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
-import io.moonshard.moonshard.models.dbEntities.ChatUser_
 import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.models.dbEntities.MessageEntity_
 import io.moonshard.moonshard.repository.interfaces.IMessageRepository
@@ -16,15 +14,9 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.jxmpp.jid.Jid
-import java.util.*
 
-class MessageRepository: IMessageRepository {
-    private val chatListRepository = ChatListRepository()
+object MessageRepository: IMessageRepository {
     private val messageBox: Box<MessageEntity> = ObjectBox.boxStore.boxFor()
-
-    init {
-        MainApplication.getComponent().inject(this)
-    }
 
     override fun saveMessage(messageEntity: MessageEntity): Completable {
         return Completable.create {
@@ -35,11 +27,20 @@ class MessageRepository: IMessageRepository {
 
     override fun getMessagesByJid(jid: Jid): Observable<List<MessageEntity>> {
         return Observable.create {
-            chatListRepository.getChatByJid(jid).subscribe({ chat ->
+            ChatListRepository.getChatByJid(jid).subscribe({ chat ->
                 it.onNext(chat.messages.toList())
             }, { e ->
                 it.onError(e)
             })
+        }
+    }
+
+    override fun removeMessagesByJid(jid: Jid): Completable {
+        return Completable.create {
+            messageBox.query {
+                link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
+            }.remove()
+            it.onComplete()
         }
     }
 
@@ -62,7 +63,7 @@ class MessageRepository: IMessageRepository {
                 if (message.isNotEmpty()) {
                     it.onNext(message.first())
                 } else {
-                    it.onError(Exception("Chat doesn't exist or chat is empty"))
+                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist or chat is empty"))
                 }
             }, { e ->
                 it.onError(e)

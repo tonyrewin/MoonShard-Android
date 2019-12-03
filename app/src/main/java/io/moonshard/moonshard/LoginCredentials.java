@@ -6,6 +6,6 @@ public class LoginCredentials {
     public String jabberHost = "moonshard.tech";
 
     public boolean isEmpty() {
-        return username.equals("") && password.equals("") && jabberHost.equals("");
+        return username.equals("") && password.equals("");
     }
 }

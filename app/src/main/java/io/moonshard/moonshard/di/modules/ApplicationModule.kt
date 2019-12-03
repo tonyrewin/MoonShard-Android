@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.di.modules
 
-import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
 import dagger.Module

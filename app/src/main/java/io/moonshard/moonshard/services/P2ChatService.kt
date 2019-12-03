@@ -12,7 +12,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.facebook.react.bridge.Arguments
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.orhanobut.logger.Logger
@@ -145,8 +144,8 @@ class P2ChatService : Service() {
           //  val user = future.get() // FIXME may be blocking
            // messageObject.user = UserModel(messageObject.from, user.name, user.avatarUrl)
             LocalChatsRepository.getLocalChat(messageObject.topic)!!.putMessage(messageObject)
-            val writableMap = Arguments.createMap()
-            writableMap.putString("message", gson.toJson(messageObject))
+            //val writableMap = Arguments.createMap()
+            //writableMap.putString("message", gson.toJson(messageObject))
         }
     }
 

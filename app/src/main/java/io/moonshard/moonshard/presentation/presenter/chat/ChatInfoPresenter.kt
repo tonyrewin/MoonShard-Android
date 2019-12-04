@@ -47,10 +47,9 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                     category = rooms[i].category.toString()
                 }
             }
-            val avatar = getAvatar(jid)
 
-
-            viewState?.showData(avatar,
+            getAvatar(jid)
+            viewState?.showData(
                 roomInfo.name,
                 roomInfo.occupantsCount,
                 onlineMembersValue,
@@ -64,46 +63,18 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         }
     }
 
-    /*
-    private fun getAvatar(jid: String):Bitmap? {
-        var avatarBytes: ByteArray? = ByteArray(0)
-        try {
-            val future =
-                MainApplication.getXmppConnection().network.loadAvatar(jid)
-
-            if (future != null) {
-                avatarBytes = future.get()
-            }
-
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-        }
-
-        var avatar: Bitmap?=null
-        if (avatarBytes != null) {
-            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-        }
-        return avatar
-    }
-
-     */
-
-    private fun getAvatar(jid: String):Bitmap? {
-        var avatar: Bitmap?=null
-        if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bytes ->
-                    if (bytes != null) {
-                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    }
-                }, { throwable ->
-                    Log.e(throwable.message) })
-        }
-        return avatar
+    private fun getAvatar(jid: String) {
+        MainApplication.getXmppConnection().loadAvatar(jid)
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe({ bytes ->
+                if (bytes != null) {
+                    val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    viewState?.setAvatar(avatar)
+                }
+            }, { throwable ->
+                Log.e(throwable.message)
+            })
     }
 
 

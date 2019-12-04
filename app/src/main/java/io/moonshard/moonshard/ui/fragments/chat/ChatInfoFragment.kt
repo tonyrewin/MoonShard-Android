@@ -97,7 +97,6 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     override fun showData(
-        avatar: Bitmap?,
         name: String, occupantsCount: Int,
         onlineMembersValue: Int, latLngLocation: LatLng?,
         category: String, description: String
@@ -105,13 +104,18 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         val location = getAddress(latLngLocation)
         val distance = calculationByDistance(latLngLocation)
 
-        profileImage?.setImageBitmap(avatar)
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance
         address?.text = location
         categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
+    }
+
+    override fun setAvatar(avatar: Bitmap?) {
+        MainApplication.getMainUIThread().post{
+            profileImage?.setImageBitmap(avatar)
+        }
     }
 
     private fun getAddress(location: LatLng?): String {

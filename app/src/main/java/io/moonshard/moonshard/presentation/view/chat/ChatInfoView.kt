@@ -9,7 +9,7 @@ import org.jxmpp.jid.EntityFullJid
 
 interface ChatInfoView: MvpView {
     fun showMembers(members:List<EntityFullJid>)
-    fun showData(avatar:Bitmap?,
+    fun showData(
         name: String,
         occupantsCount: Int,
         onlineMembersValue: Int,
@@ -19,4 +19,6 @@ interface ChatInfoView: MvpView {
     )
     fun showError(error:String)
     fun showChatsScreen()
+    fun setAvatar(avatar: Bitmap?)
+
 }

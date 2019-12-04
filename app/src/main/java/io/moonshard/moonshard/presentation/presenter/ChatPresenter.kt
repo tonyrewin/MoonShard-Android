@@ -88,10 +88,10 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             val occupants = muc.occupants
 
             val name = roomInfo.name
-            val avatar = getAvatar(chatID)
+            getAvatar(chatID)
             val valueOccupants = roomInfo.occupantsCount
             val valueOnlineMembers = getValueOnlineUsers(muc,occupants)
-            viewState?.setData(name,avatar,valueOccupants,valueOnlineMembers)
+            viewState?.setData(name,valueOccupants,valueOnlineMembers)
         }catch (e:Exception){
 
         }
@@ -386,20 +386,18 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
  */
 
-    private fun getAvatar(jid: String):Bitmap? {
-        var avatar: Bitmap?=null
-        if (MainApplication.getCurrentChatActivity() != jid) {
+    private fun getAvatar(jid: String) {
             MainApplication.getXmppConnection().loadAvatar(jid)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     if (bytes != null) {
-                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        viewState?.setAvatar(avatar)
                     }
                 }, { throwable ->
-                    Log.e(throwable.message) })
-        }
-        return avatar
+                    Log.e(throwable.message)
+                })
     }
 
 

@@ -98,13 +98,18 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun setData(
         name: String,
-        avatar: Bitmap?,
         valueOccupants: Int,
         valueOnlineMembers: Int
     ) {
         nameChat?.text = name
-        avatarChat?.setImageBitmap(avatar)
+       // avatarChat?.setImageBitmap(avatar)
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+    }
+
+    override fun setAvatar(avatar: Bitmap?) {
+        MainApplication.getMainUIThread().post {
+            avatarChat?.setImageBitmap(avatar)
+        }
     }
 
     override fun onDestroyView() {

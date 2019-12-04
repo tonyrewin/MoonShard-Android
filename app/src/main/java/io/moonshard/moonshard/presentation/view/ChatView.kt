@@ -10,8 +10,9 @@ interface ChatView: MvpView {
     fun addToStart(message: GenericMessage, reverse: Boolean)
     fun setData(
         name: String,
-        avatar: Bitmap?,
         valueOccupants: Int,
         valueOnlineMembers: Int
     )
+
+    fun setAvatar(avatar: Bitmap?)
 }

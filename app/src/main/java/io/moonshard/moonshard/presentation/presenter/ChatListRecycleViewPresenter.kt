@@ -1,6 +1,10 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
+import android.widget.ImageView
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -15,6 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jxmpp.jid.impl.JidCreate
+import trikita.log.Log
 import java.util.*
 
 @InjectViewState
@@ -43,8 +48,10 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
         val chat = chats[position]
         if (bindedItems.indexOf(chat) == -1) {
+            setAvatar(chat.jid,holder.avatar)
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
+
             disposables.add(MessageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -99,6 +106,23 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             }
 
             bindedItems.add(chat)
+        }
+    }
+
+    private fun setAvatar(jid: String, imageView: ImageView) {
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        MainApplication.getMainUIThread().post {
+                            imageView.setImageBitmap(avatar)
+                        }
+                    }
+                }, { throwable -> Log.e(throwable.message) })
         }
     }
 

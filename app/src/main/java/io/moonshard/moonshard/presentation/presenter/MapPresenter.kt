@@ -46,7 +46,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             })
     }
 
-
     fun getValueOnlineUsers(jid: String): Int {
         val groupId = JidCreate.entityBareFrom(jid)
 
@@ -98,15 +97,25 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 isGroupChat = true,
                 unreadMessagesCount = 0
             )
-            ChatListRepository.addChat(chatEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+
+            ChatListRepository.getChatByJid(JidCreate.from(jid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    ChatListRepository.addChat(chatEntity)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            if (muc.isJoined) {
+                                viewState?.showChatScreens(jid)
+                            }
+                        }
+                }
                 .subscribe {
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
                 }
-            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

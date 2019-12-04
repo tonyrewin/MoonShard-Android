@@ -16,9 +16,13 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jivesoftware.smack.packet.Presence
+import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.muc.RoomInfo
+import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
-
+//todo need add presenter
 interface ListChatMapListener {
     fun clickChat(room: RoomPin)
 }
@@ -38,15 +42,55 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val roomInfo = getRoom(chats[position].roomId.toString())
+        val onlineUser = getValueOnlineUsers(
+            chats[position].roomId.toString())
+
         setAvatar(chats[position].roomId.toString(), holder.groupIv!!)
-        holder.groupNameTv?.text = chats[position].roomId
-        holder.valueMembersTv?.text = "1000"
+        holder.groupNameTv?.text = roomInfo?.name.toString()
+        holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
         holder.locationValueTv?.text =
             calculationByDistance(chats[position].latitude, chats[position].longtitude)
 
         holder.itemView.setOnClickListener {
             listener.clickChat(chats[position])
         }
+    }
+
+    fun getRoom(jid: String): RoomInfo? {
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val info =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getRoomInfo(muc.room)
+            return info
+        } catch (e: java.lang.Exception) {
+            val error = ""
+        }
+        return null
+    }
+
+    fun getValueOnlineUsers(jid: String): Int {
+        val groupId = JidCreate.entityBareFrom(jid)
+
+        val muc =
+            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                .getMultiUserChat(groupId)
+        val members = muc.occupants
+
+        var onlineValue = 0
+        for (i in members.indices) {
+            val userOccupantPresence =
+                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            if (userOccupantPresence.type == Presence.Type.available) {
+                onlineValue++
+            }
+        }
+        return onlineValue
     }
 
     private fun calculationByDistance(latRoom: String, lngRoom: String): String {

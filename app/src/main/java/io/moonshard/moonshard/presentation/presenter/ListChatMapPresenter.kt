@@ -60,15 +60,25 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 isGroupChat = true,
                 unreadMessagesCount = 0
             )
-            ChatListRepository.addChat(chatEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+
+            ChatListRepository.getChatByJid(JidCreate.from(jid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    ChatListRepository.addChat(chatEntity)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            if (muc.isJoined) {
+                                viewState?.showChatScreens(jid)
+                            }
+                        }
+                }
                 .subscribe {
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
                 }
-            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
         } catch (e: Exception) {
             com.orhanobut.logger.Logger.d(e.message)
             // e.message?.let { viewState?.showError(it) }

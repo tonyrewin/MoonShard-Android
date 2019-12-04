@@ -286,16 +286,7 @@ public class XMPPConnection implements ConnectionListener {
                     emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
                 }
                 if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
-                    String firstLetter = Character.toString(Character.toUpperCase(senderID.charAt(0)));
-                    Drawable avatarText = TextDrawable.builder()
-                            .beginConfig()
-                            .width(64)
-                            .height(64)
-                            .endConfig()
-                            .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    emitter.onSuccess(stream.toByteArray());
+                    emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(senderID.charAt(0)))));
                     return;
                 }
                 EntityBareJid jid = null;
@@ -309,12 +300,26 @@ public class XMPPConnection implements ConnectionListener {
 
                 if (avatarBytes != null) {
                     MainApplication.avatarsCache.put(senderID, avatarBytes);
+                } else {
+                    avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(senderID.charAt(0))));
                 }
                 emitter.onSuccess(avatarBytes);
             } else {
                 emitter.onError(new IllegalArgumentException());
             }
         });
+    }
+    
+    private byte[] createTextAvatar(String firstLetter) {
+        Drawable avatarText = TextDrawable.builder()
+            .beginConfig()
+            .width(64)
+            .height(64)
+            .endConfig()
+            .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
     }
 
     //must be without @

@@ -1,5 +1,7 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.DateFormatter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import trikita.log.Log
 import java.util.*
 
 
@@ -98,8 +104,25 @@ open class MessagesAdapter(
 
                 (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
                 holder.name?.text = name
-                holder.avatar?.setBackgroundColor(Color.parseColor("#7CFC00"))
+                setAvatar( myMsgs[position].user.jid,holder.avatar!!)
             }
+        }
+    }
+
+    private fun setAvatar(jid: String, imageView: ImageView) {
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        MainApplication.getMainUIThread().post {
+                            imageView.setImageBitmap(avatar)
+                        }
+                    }
+                }, { throwable -> Log.e(throwable.message) })
         }
     }
 

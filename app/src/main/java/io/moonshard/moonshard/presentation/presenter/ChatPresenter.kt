@@ -200,12 +200,8 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
 
             override fun onNext(message: MessageEntity) {
-                //   if(idMessage.equals(chatID)) {
-                // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
                 ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
                 viewState?.addToStart(GenericMessage(message), true)
-
-                //  }
             }
 
             override fun onError(e: Throwable) {}

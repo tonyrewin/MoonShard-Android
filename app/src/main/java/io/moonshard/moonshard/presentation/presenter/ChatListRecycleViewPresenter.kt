@@ -48,7 +48,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
         val chat = chats[position]
         if (bindedItems.indexOf(chat) == -1) {
-            setAvatar(chat.jid,holder.avatar)
+            setAvatar(chat.jid,chat.chatName,holder.avatar)
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
 
@@ -109,9 +109,9 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         }
     }
 
-    private fun setAvatar(jid: String, imageView: ImageView) {
+    private fun setAvatar(jid: String,nameChat:String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid)
+            MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->

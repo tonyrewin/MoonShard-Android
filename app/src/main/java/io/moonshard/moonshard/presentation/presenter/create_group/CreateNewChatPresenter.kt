@@ -14,6 +14,7 @@ import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
+import java.util.*
 
 @InjectViewState
 class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
@@ -33,18 +34,19 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         category: String
     ) {
         val actualUserName: String
+        val jidRoomString  = UUID.randomUUID().toString()+ "@conference.moonshard.tech"
 
         if (username.contains("@")) {
             viewState?.showToast("Вы ввели недопустимый символ")
             return
         } else {
-            actualUserName = username.split("@")[0] + "@conference.moonshard.tech"
+            actualUserName = username.split("@")[0]
         }
 
         try {
             val manager =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val entityBareJid = JidCreate.entityBareFrom(actualUserName)
+            val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
 
@@ -53,14 +55,15 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             val form = muc.configurationForm
             val answerForm = form.createAnswerForm()
             answerForm.setAnswer("muc#roomconfig_persistentroom", true)
+            answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
             muc.sendConfigurationForm(answerForm)
 
             //need  LocalDBWrapper.createChatEntry(actualUserName, actualUserName.split("@")[0], ArrayList<GenericUser>(), true)
 
             val chatEntity = ChatEntity(
                 0,
-                username,
-                JidCreate.entityBareFrom(actualUserName).split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0],
+                jidRoomString,
+                actualUserName,
                 true,
                 0
             )
@@ -69,7 +72,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    createRoomOnServer(latitude, longitude, ttl, actualUserName, category)
+                    createRoomOnServer(latitude, longitude, ttl, jidRoomString, category)
                 }
         } catch (e: Exception) {
             e.message?.let { viewState?.showToast(it) }

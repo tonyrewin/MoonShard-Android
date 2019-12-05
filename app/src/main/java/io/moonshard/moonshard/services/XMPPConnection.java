@@ -310,6 +310,37 @@ public class XMPPConnection implements ConnectionListener {
             }
         });
     }
+
+    public Single<byte[]> loadAvatar(String senderID,String nameChat) {
+        return Single.create(emitter -> {
+            if (!senderID.isEmpty()) {
+                if (MainApplication.avatarsCache.containsKey(senderID)) {
+                    emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                }
+                if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
+                    emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
+                    return;
+                }
+                EntityBareJid jid = null;
+                try {
+                    jid = JidCreate.entityBareFrom(senderID);
+                } catch (XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+
+                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
+
+                if (avatarBytes != null) {
+                    MainApplication.avatarsCache.put(senderID, avatarBytes);
+                } else {
+                    avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                }
+                emitter.onSuccess(avatarBytes);
+            } else {
+                emitter.onError(new IllegalArgumentException());
+            }
+        });
+    }
     
     private byte[] createTextAvatar(String firstLetter) {
         Drawable avatarText = TextDrawable.builder()

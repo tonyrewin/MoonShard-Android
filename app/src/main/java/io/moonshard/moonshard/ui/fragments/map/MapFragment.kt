@@ -315,12 +315,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     private fun getMyLocation() {
-        val latLng = LatLng(
-            MainApplication.getCurrentLocation().latitude,
-            MainApplication.getCurrentLocation().longitude
-        )
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
-        mMap?.animateCamera(cameraUpdate)
+        if(MainApplication.getCurrentLocation()!=null){
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+            mMap?.animateCamera(cameraUpdate)
+        }
     }
 
     override fun onResume() {

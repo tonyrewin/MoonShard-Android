@@ -64,21 +64,22 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
             ChatListRepository.getChatByJid(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    ChatListRepository.addChat(chatEntity)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            if (muc.isJoined) {
-                                viewState?.showChatScreens(jid)
-                            }
-                        }
-                }
-                .subscribe {
+                .subscribe({
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
-                }
+                },{
+                    ChatListRepository.addChat(chatEntity)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe( {
+                            if (muc.isJoined) {
+                                viewState?.showChatScreens(jid)
+                            }
+                        },{
+                            com.orhanobut.logger.Logger.d(it.message)
+                        })
+                })
         } catch (e: Exception) {
             com.orhanobut.logger.Logger.d(e.message)
             // e.message?.let { viewState?.showError(it) }

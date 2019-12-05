@@ -101,21 +101,22 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             ChatListRepository.getChatByJid(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    ChatListRepository.addChat(chatEntity)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            if (muc.isJoined) {
-                                viewState?.showChatScreens(jid)
-                            }
-                        }
-                }
-                .subscribe {
+                .subscribe({
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
-                }
+                },{
+                    ChatListRepository.addChat(chatEntity)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe( {
+                            if (muc.isJoined) {
+                                viewState?.showChatScreens(jid)
+                            }
+                        },{
+                            it.message?.let { it1 -> viewState?.showError(it1) }
+                        })
+                })
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -123,7 +124,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
 
 
     /*
-
     fun getValueOnlineUsers(muc:MultiUserChat,usersInGroup:List<EntityFullJid>){
         var onlineValue = 0
         for(i in usersInGroup.indices){
@@ -134,6 +134,5 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         }
         return onlineValue
     }
-
      */
 }

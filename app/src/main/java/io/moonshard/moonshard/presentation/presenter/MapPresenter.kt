@@ -18,6 +18,15 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
+import org.jivesoftware.smackx.muc.DiscussionHistory
+import org.jivesoftware.smackx.muc.MucEnterConfiguration
+import com.instacart.library.truetime.TrueTime.build
+
+
+
+
+
+
 
 
 @InjectViewState
@@ -89,8 +98,11 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
-            muc.join(nickName)
-            // var occupants = muc.occupants
+
+            if(!muc.isJoined){
+                muc.join(nickName)
+            }
+
             val chatEntity = ChatEntity(
                 jid = jid,
                 chatName = jid.split("@")[0],

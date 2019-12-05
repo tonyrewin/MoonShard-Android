@@ -119,13 +119,16 @@ open class MessagesAdapter(
      * @param scroll  `true` if need to scroll list to bottom when message added.
      */
     fun addToStart(message: GenericMessage, scroll: Boolean) {
+        /*
         val isNewMessageToday = !isPreviousSameDate(0, message.createdAt)
         if (isNewMessageToday) {
             myMsgs.add(0, message)
         }
+         */
         val element = message
         myMsgs.add(0, element)
-        notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
+        //notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
+        notifyItemRangeInserted(0,  1)
         if (layoutManager != null && scroll) {
             layoutManager.scrollToPosition(0)
         }
@@ -156,7 +159,7 @@ open class MessagesAdapter(
 
 
     private fun isPreviousSameDate(position: Int, dateToCompare: Date): Boolean {
-        if (myMsgs.size <= position) return false
+        if (myMsgs.size <= position) return true
         val previousPositionDate = myMsgs[position].createdAt
         return DateFormatter.isSameDay(
             dateToCompare,

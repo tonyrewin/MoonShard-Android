@@ -52,8 +52,11 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
-            muc.join(nickName)
-            // var occupants = muc.occupants
+
+            if(!muc.isJoined){
+                muc.join(nickName)
+            }
+
             val chatEntity = ChatEntity(
                 jid = jid,
                 chatName = jid.split("@")[0],

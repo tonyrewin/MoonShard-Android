@@ -20,10 +20,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:padding="48dp">
+            android:orientation="vertical">
 
         <ImageView
+                android:layout_marginTop="40dp"
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,16 +38,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="TODO"
-                android:src="@drawable/ic_text_logo" />
+                android:src="@drawable/ic_text_logo_new" />
     </LinearLayout>
 
     <TextView
+            android:layout_marginTop="75dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Вход"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textSize="8pt" />
+            android:textSize="17sp" />
 
     <EditText
             android:id="@+id/editEmail"
@@ -55,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="26dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/edittext_background"
             android:ems="10"
@@ -64,13 +65,17 @@
             android:inputType="textEmailAddress"
             android:textSize="7pt" />
 
+        <RelativeLayout
+                android:layout_marginTop="21dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
     <EditText
             android:id="@+id/editPassword"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/edittext_background"
             android:ems="10"
@@ -79,6 +84,18 @@
             android:inputType="textPassword"
             android:textSize="7pt" />
 
+            <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/visiblePassBtn"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="31dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_pass_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
     <Button
             android:id="@+id/loginBtn"
             style="@style/Theme.MaterialComponents.Light"
@@ -86,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="43dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/button_background"
             android:gravity="center"
@@ -109,10 +126,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="60dp"
             android:gravity="center"
-            android:text="Еще нет аккаунта? Регистрация"
             android:textSize="7pt" />
 
     <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"

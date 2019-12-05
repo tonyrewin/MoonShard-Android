@@ -20,10 +20,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:padding="48dp">
+                    android:orientation="vertical">
 
                 <ImageView
+                        android:layout_marginTop="40dp"
                         android:id="@+id/imageView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -38,18 +38,20 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:contentDescription="TODO"
-                        android:src="@drawable/ic_text_logo" />
+                        android:src="@drawable/ic_text_logo_new" />
             </LinearLayout>
 
             <TextView
+                    android:layout_marginTop="75dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Регистрация"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textSize="8pt" />
+                    android:textSize="17sp" />
 
             <EditText
+                    android:layout_marginBottom="21dp"
                     android:id="@+id/editEmail"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="match_parent"
@@ -64,29 +66,44 @@
                     android:inputType="textEmailAddress"
                     android:textSize="7pt" />
 
-            <EditText
-                    android:id="@+id/editPassword"
-                    style="@style/Theme.MaterialComponents.Light"
+            <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/edittext_background"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:hint="Пароль"
-                    android:inputType="textPassword"
-                    android:textSize="7pt" />
+                    android:layout_height="wrap_content">
+                <EditText
+                        android:id="@+id/editPassword"
+                        style="@style/Theme.MaterialComponents.Light"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/edittext_background"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="Пароль"
+                        android:inputType="textPassword"
+                        android:textSize="7pt" />
+
+
+                <ImageView
+                        android:padding="10dp"
+                        android:id="@+id/visiblePassBtn"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="31dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_pass_off"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
 
             <Button
+                    android:layout_marginTop="43dp"
                     android:id="@+id/registerBtn"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/button_background"
                     android:gravity="center"
@@ -99,12 +116,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="15dp"
                     android:gravity="center"
                     android:text="У вас уже есть аккаунт? Войти"
                     android:textSize="7pt" />
 
             <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"

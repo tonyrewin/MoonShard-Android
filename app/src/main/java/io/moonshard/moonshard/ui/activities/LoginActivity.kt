@@ -12,6 +12,16 @@ import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_login.*
 import moxy.presenter.InjectPresenter
+import android.text.style.UnderlineSpan
+import android.text.SpannableString
+import android.text.method.PasswordTransformationMethod
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import io.moonshard.moonshard.R
+import kotlinx.android.synthetic.main.activity_login.editEmail
+import kotlinx.android.synthetic.main.activity_login.editPassword
+import kotlinx.android.synthetic.main.activity_login.visiblePassBtn
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class LoginActivity : BaseActivity(), LoginView {
@@ -23,6 +33,23 @@ class LoginActivity : BaseActivity(), LoginView {
         super.onCreate(savedInstanceState)
         setContentView(io.moonshard.moonshard.R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
+        val content = SpannableString("Еще нет аккаунта? Регистрация")
+        content.setSpan(UnderlineSpan(), 18, content.length, 0)
+        dontHaveText.text = content
+
+        var isSecurity = true
+        visiblePassBtn?.setOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
+        }
 
         loginBtn?.setOnClickListener {
             val actualUserName: String

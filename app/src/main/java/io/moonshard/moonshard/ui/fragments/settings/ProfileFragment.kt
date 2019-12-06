@@ -29,18 +29,34 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
         super.onViewCreated(view, savedInstanceState)
         presenter.getInfoProfile()
         presenter.getAvatar()
+
+        changeBtn?.setOnClickListener {
+            showChangeProfileScreen()
+        }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
+
+    fun showChangeProfileScreen() {
+        val fragment = ChangeProfileFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, fragment, "ChangeProfileFragment")
+            ?.addToBackStack("ChangeProfileFragment")
+            ?.commit()
     }
 
     override fun setData(nickName: String?, description: String?) {
-        if(nickName!=null){
+        if (nickName != null) {
             nickNameTv?.text = nickName.toString()
-        }else{
+        } else {
             nickNameTv?.text = "Имя"
         }
 
-        if(description!=null){
+        if (description != null) {
             descriptionTv?.text = description.toString()
-        }else{
+        } else {
             descriptionTv?.text = "Информация о вас не заполнена"
         }
     }

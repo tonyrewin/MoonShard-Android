@@ -38,7 +38,7 @@
                     android:textStyle="bold" />
 
             <TextView
-                    android:id="@+id/newChat"
+                    android:id="@+id/changeBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

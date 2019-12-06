@@ -57,7 +57,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         startActivity(intentRegistration)
     }
 
-    fun showProfileScreen(){
+    private fun showProfileScreen(){
             val fragment = ProfileFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(R.id.container, fragment, "ProfileFragment")?.addToBackStack("ProfileFragment")

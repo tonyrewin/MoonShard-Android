@@ -23,6 +23,7 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.Random;
 
@@ -33,6 +34,7 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.models.dbEntities.ChatUser;
 import io.moonshard.moonshard.models.dbEntities.MessageEntity;
 import io.moonshard.moonshard.repository.ChatListRepository;
+import io.moonshard.moonshard.repository.ChatUserRepository;
 import io.moonshard.moonshard.repository.MessageRepository;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -89,8 +91,29 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         );
         messageEntity.chat.setTarget(chatEntity);
         String messageAuthorNickname = fromJid.split("/")[1];
-        messageEntity.sender.setTarget(new ChatUser(0, fromJid, messageAuthorNickname, -1, false));
-        //noinspection ResultOfMethodCallIgnored
+
+        try {
+            Jid jidFrom = JidCreate.from(fromJid);
+
+            ChatUserRepository.INSTANCE.getUserAsObservable(jidFrom).
+                    observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(user -> {
+                                messageEntity.sender.setTarget(user);
+                                saveMessage(messageEntity, chatJid, message, chatEntity);
+                            }, throwable -> {
+                                ChatUser user = new ChatUser(0, fromJid, messageAuthorNickname, -1, false);
+                                ChatUserRepository.INSTANCE.saveUser(user);
+                                messageEntity.sender.setTarget(user);
+                                saveMessage(messageEntity, chatJid, message, chatEntity);
+                            }
+                    );
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void saveMessage(MessageEntity messageEntity, String chatJid, Message message, ChatEntity chatEntity) {
         MessageRepository.INSTANCE.saveMessage(messageEntity)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -98,28 +121,32 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                     messagePubsub.onNext(messageEntity);
                     ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
-                        MainApplication.getXmppConnection().loadAvatar(chatJid)
-                                .observeOn(Schedulers.io())
-                                .subscribeOn(AndroidSchedulers.mainThread())
-                                .subscribe(bytes -> {
-                            Bitmap avatar = null;
-                            if (bytes != null) {
-                                avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            }
-                            NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
-                                    .setSmallIcon(R.drawable.amu_bubble_mask)
-                                    .setContentTitle(chatJid)
-                                    .setContentText(message.getBody())
-                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                            if (avatar != null) {
-                                notification.setLargeIcon(avatar);
-                            }
-                            notificationManager.notify(new Random().nextInt(), notification.build());
-                        }, throwable -> Log.e(throwable.getMessage()));
+                        loadAvatar(chatJid, message);
                     }
-                },throwable -> {
+                }, throwable -> {
                     Log.e(throwable.getMessage());
                 });
+    }
+
+    private void loadAvatar(String chatJid, Message message) {
+        MainApplication.getXmppConnection().loadAvatar(chatJid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(bytes -> {
+                    Bitmap avatar = null;
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    }
+                    NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                            .setSmallIcon(R.drawable.amu_bubble_mask)
+                            .setContentTitle(chatJid)
+                            .setContentText(message.getBody())
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    if (avatar != null) {
+                        notification.setLargeIcon(avatar);
+                    }
+                    notificationManager.notify(new Random().nextInt(), notification.build());
+                }, throwable -> Log.e(throwable.getMessage()));
     }
 
     public void subscribeOnMessage(Observer<MessageEntity> observer) {

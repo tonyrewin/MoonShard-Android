@@ -67,10 +67,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
             if (idChat.contains("conference")) presenter.join()
 
-            // presenter.loadLocalMessages()
-
-            // presenter.loadMoreMessages()
-
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }

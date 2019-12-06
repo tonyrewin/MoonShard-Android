@@ -86,7 +86,6 @@ open class MessagesAdapter(
         }
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
@@ -104,7 +103,9 @@ open class MessagesAdapter(
 
                 (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
                 holder.name?.text = name
-                setAvatar( myMsgs[position].user.jid,holder.avatar!!)
+
+
+                setAvatar( myMsgs[position].user.name+"@moonshard.tech",holder.avatar!!)
             }
         }
     }

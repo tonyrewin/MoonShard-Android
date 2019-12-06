@@ -12,9 +12,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
 import io.moonshard.moonshard.ui.activities.RegisterActivity
-import io.moonshard.moonshard.ui.fragments.create_group.CreateNewChatFragment
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_settings_new.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -44,6 +42,10 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         profileSettingsLayout?.setOnClickListener {
             showProfileScreen()
         }
+
+        securityLayout?.setOnClickListener {
+            showSecurityScreen()
+        }
     }
 
     override fun setData(nickName: String?, jidPart: String?) {
@@ -63,6 +65,14 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
             ft?.replace(R.id.container, fragment, "ProfileFragment")?.addToBackStack("ProfileFragment")
                 ?.commit()
     }
+
+    private fun showSecurityScreen(){
+        val fragment = SecurityFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, fragment, "SecurityFragment")?.addToBackStack("SecurityFragment")
+            ?.commit()
+    }
+
 
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()

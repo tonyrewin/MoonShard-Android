@@ -11,6 +11,7 @@ import io.moonshard.moonshard.presentation.view.settings.ProfileView
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.iqregister.AccountManager
 
 
 class ProfileFragment : MvpAppCompatFragment(), ProfileView {

@@ -31,7 +31,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(io.moonshard.moonshard.R.layout.activity_login)
+        setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         val content = SpannableString("Еще нет аккаунта? Регистрация")

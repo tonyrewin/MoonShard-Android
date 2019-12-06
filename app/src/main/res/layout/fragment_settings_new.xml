@@ -54,7 +54,7 @@
                     android:background="@drawable/layout_settings_bg">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/avatar"
+                        android:id="@+id/avatarIv"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginLeft="8dp"
@@ -67,7 +67,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="11dp"
                         android:layout_marginTop="20dp"
-                        android:layout_toRightOf="@+id/avatar"
+                        android:layout_toRightOf="@+id/avatarIv"
                         android:text="Kanaevsky"
                         android:textColor="#333333"
                         android:textSize="17sp" />

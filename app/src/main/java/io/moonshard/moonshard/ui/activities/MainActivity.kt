@@ -3,12 +3,11 @@ package io.moonshard.moonshard.ui.activities
 import android.Manifest
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
-import io.moonshard.moonshard.ui.fragments.SettingsFragment
+import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions

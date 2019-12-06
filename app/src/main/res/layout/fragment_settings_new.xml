@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:background="#F9F9F9"
         android:orientation="vertical"
-        tools:context=".ui.fragments.SettingsFragment">
+        tools:context=".ui.fragments.settings.SettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -148,6 +148,7 @@
                             android:textSize="16sp" />
 
                     <androidx.appcompat.widget.SwitchCompat
+                            android:checked="true"
                             android:id="@+id/switchNotifications"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

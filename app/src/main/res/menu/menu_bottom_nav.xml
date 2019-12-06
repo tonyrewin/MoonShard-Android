@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:id="@+id/myChats"
+            android:id="@+id/my_chats_bottom_nav_item"
             android:checked="true"
             android:icon="@drawable/ic_chat_map_selector"
             android:title="Мои чаты"/>
     <item
-            android:id="@+id/findChatsMap"
+            android:id="@+id/find_chats_map_bottom_nav_item"
             android:icon="@drawable/ic_map_nav_selector"
-            android:title="Найти чаты"/>
+            android:title="Поиск чатов"/>
     <item
-            android:id="@+id/settings"
+            android:id="@+id/settings_bottom_nav_item"
             android:icon="@drawable/ic_settings_nav_selector"
             android:title="Настройки"/>
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.ui.adapters.RvTimeListener
 import io.moonshard.moonshard.ui.adapters.TimeGroupChatAdapter
 import kotlinx.android.synthetic.main.fragment_time_group_chat.*
@@ -28,6 +29,10 @@ class TimeGroupChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
         val times = arrayListOf<String>()
         times.add("6 hours")
         times.add("12 hours")
@@ -39,7 +44,7 @@ class TimeGroupChatFragment : Fragment() {
         timesRv?.layoutManager = LinearLayoutManager(view.context)
         timesRv?.adapter = TimeGroupChatAdapter(object : RvTimeListener {
             override fun clickChat(time: String) {
-
+                ChooseChatRepository.time = time
             }
         }, times)
     }

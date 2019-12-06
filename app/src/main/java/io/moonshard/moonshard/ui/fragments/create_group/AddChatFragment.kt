@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.presentation.presenter.AddChatPresenter
+import io.moonshard.moonshard.presentation.presenter.create_group.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import moxy.MvpAppCompatFragment
@@ -34,12 +35,9 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn?.setOnClickListener {
-            presenter.createGroupChat(editJid.text.toString())
-        }
 
-        btnOneToOne?.setOnClickListener {
-            presenter.startChatWithPeer(editJudOneToOne.text.toString())
+        back?.setOnClickListener {
+            fragmentManager?.popBackStack()
         }
 
         startLocalGroup?.setOnClickListener {

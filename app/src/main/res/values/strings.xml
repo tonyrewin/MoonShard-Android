@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Moonshard</string>
+    <string name="app_name">MoonShard</string>
 
     <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>
     <string name="auth_add_email_message">"Add an email address to your account to let users discover you, and let you reset password."</string>
@@ -30,10 +30,19 @@
     <string name="offline">Offline</string>
     <string name="online">Online</string>
     <string name="clear_chat">Clear chat</string>
-    <string name="notification_channel_name">Influence Notifications</string>
-    <string name="notification_channel_desc">Influence chat notifications</string>
+    <string name="notification_channel_name">MoonShard Notifications</string>
+    <string name="notification_channel_desc">MoonShard chat notifications</string>
     <string name="copied_to_clipboard">Message is copied to clipboard</string>
+
+
+    <string name="category">Категории</string>
+    <string name="list">Списком</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="snackbar_undo">Undo</string>
+    <string name="chatlist_chat_deleted">Chat was deleted</string>
+    <string name="members">Участники</string>
+    <string name="change_txt">Изменить</string>
+    <string name="add_member">Добавить участника</string>
 </resources>

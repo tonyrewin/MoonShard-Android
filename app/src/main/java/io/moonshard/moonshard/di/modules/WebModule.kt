@@ -7,6 +7,7 @@ import dagger.Provides
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.common.ApiConstants
 import io.moonshard.moonshard.repository.NetworkRepository
+import io.moonshard.moonshard.repository.RoomsRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.logging.HttpLoggingInterceptor
@@ -21,7 +22,6 @@ class WebModule(var context: Context) {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
-
         val client = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor())
             .connectTimeout(1, TimeUnit.MINUTES)
@@ -42,8 +42,12 @@ class WebModule(var context: Context) {
     }
 
     @Provides
-    @Singleton
-    fun providesRetrofitReNetworkRepositorypository(): NetworkRepository {
+    fun providesRetrofitReNetworkRepository(): NetworkRepository {
         return NetworkRepository()
+    }
+
+    @Provides
+    fun providesRoomsRepository(): RoomsRepository {
+        return RoomsRepository()
     }
 }

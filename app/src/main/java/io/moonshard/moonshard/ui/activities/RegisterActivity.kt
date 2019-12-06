@@ -1,70 +1,110 @@
 package io.moonshard.moonshard.ui.activities
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
-import android.widget.TextView
+import android.text.SpannableString
+import android.text.method.PasswordTransformationMethod
+import android.text.style.UnderlineSpan
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
-import io.moonshard.moonshard.MainApplication
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_register.*
-import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
-import java.util.*
 
-class RegisterActivity : MvpAppCompatActivity(), RegisterView {
+
+class RegisterActivity : BaseActivity(), RegisterView {
 
     @InjectPresenter
     lateinit var presenter: RegisterPresenter
 
-    private val timer = Timer(true)
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        setTheme(io.moonshard.moonshard.R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_register)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         startService()
-
-
-        val alreadyHaveText: TextView = findViewById(R.id.alreadyHaveText)
-        alreadyHaveText.setOnClickListener {
+        auth()
+        alreadyHaveText?.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        registerBtn.setOnClickListener {
-            // val connect = XMPPConnection(applicationContext)
-            // MainApplication.setXmppConnection(connect)
+        registerBtn?.setOnClickListener {
             presenter.register(editEmail.text.toString(), editPassword.text.toString())
-            //startService()
+        }
+
+        val content = SpannableString("Уже есть аккаунт? Войти")
+        content.setSpan(UnderlineSpan(), 18, content.length, 0)
+        alreadyHaveText?.text = content
+
+        var isSecurity = true
+        visiblePassBtn?.setOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
         }
     }
 
-    fun startService() {
-        startService(Intent(applicationContext, XMPPConnectionService::class.java))
-        val connection = object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                val binder = service as XMPPConnectionService.XMPPServiceBinder
-                MainApplication.setXmppConnection(binder.connection)
-            }
-
-            override fun onServiceDisconnected(name: ComponentName) {
-                MainApplication.setXmppConnection(null)
-            }
-        }
-        MainApplication.setServiceConnection(connection)
-        applicationContext.bindService(
-            Intent(applicationContext, XMPPConnectionService::class.java),
-            connection,
-            Context.BIND_AUTO_CREATE
+    override fun onSuccess() {
+        saveLoginCredentials(
+            editEmail.text.toString() + "@moonshard.tech",
+            editPassword.text.toString()
         )
+        startService()
+    }
+
+    private fun saveLoginCredentials(email: String, password: String) {
+        SecurePreferences.setValue("jid", email)
+        SecurePreferences.setValue("pass", password)
+    }
+
+    private fun startService() {
+        startService(Intent(applicationContext, XMPPConnectionService::class.java))
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(e: Exception) {
+        runOnUiThread {
+            hideLoader()
+            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+        }
+    }
+
+    override fun showContactsScreen() {
+        val intentContactsActivity = Intent(
+            this,
+            MainActivity::class.java
+        )
+        startActivity(intentContactsActivity)
+    }
+
+    private fun auth() {
+        val logged = SecurePreferences.getBooleanValue("logged_in", false)
+        if (logged) {
+            showContactsScreen()
+        } else {
+            setContentView(io.moonshard.moonshard.R.layout.activity_register)
+        }
+    }
+
+    override fun onAuthenticated() {
+        runOnUiThread {
+            hideLoader()
+        }
+        showContactsScreen()
     }
 
     override fun showToast(text: String) {
@@ -72,9 +112,10 @@ class RegisterActivity : MvpAppCompatActivity(), RegisterView {
     }
 
     override fun showLoader() {
+        progressBarReg?.visibility = View.VISIBLE
     }
 
     override fun hideLoader() {
-
+        progressBarReg?.visibility = View.GONE
     }
 }

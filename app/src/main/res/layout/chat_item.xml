@@ -9,25 +9,27 @@
 
     <RelativeLayout
             android:layout_marginTop="17dp"
-            android:id="@+id/kek"
+            android:id="@+id/chatListProfileImageContainer"
             android:layout_width="54.5dp"
             android:layout_height="54.5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
                 app:civ_border_color="@android:color/transparent"
                 android:background="@android:color/white"
-                android:id="@+id/profile_image"
+                android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:src="@color/colorAccent" />
+                android:src="@android:color/darker_gray" />
 
         <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/onlineStatusIcon"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:src="#FF6161" />
+                android:src="@color/colorAccent"
+                android:visibility="invisible" />
 
     </RelativeLayout>
 
@@ -36,39 +38,43 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginTop="12dp"
-            android:layout_toEndOf="@+id/kek"
-            android:orientation="vertical">
+            android:layout_toEndOf="@+id/chatListProfileImageContainer"
+            android:orientation="vertical"
+            android:visibility="visible">
 
         <TextView
-                android:id="@+id/nameChat"
+                android:id="@+id/chatItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kanevsky"
+                android:text="ChatName"
                 android:textColor="#333333"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="invisible" />
 
         <TextView
-                android:id="@+id/lastMessageChat"
+                android:id="@+id/lastMessageChatText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Message text"
+                android:text="MessageText"
                 android:textColor="#9B9BB6"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="invisible" />
 
     </LinearLayout>
 
     <ImageView
-            android:id="@+id/checkMessageIv"
+            android:id="@+id/lastMessageReadState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/timeOrDayTv"
-            android:layout_alignBottom="@+id/timeOrDayTv"
-            android:layout_toStartOf="@+id/timeOrDayTv"
+            android:layout_alignTop="@+id/lastMessageDate"
+            android:layout_alignBottom="@+id/lastMessageDate"
+            android:layout_toStartOf="@+id/lastMessageDate"
             android:scaleType="center"
-            android:src="@drawable/ic_check_message" />
+            android:src="@drawable/ic_checked_message_state"
+            android:visibility="invisible" />
 
     <TextView
-            android:id="@+id/timeOrDayTv"
+            android:id="@+id/lastMessageDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -76,22 +82,26 @@
             android:layout_marginEnd="18dp"
             android:text="14:14"
             android:textColor="#9B9BB6"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="invisible" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_below="@+id/timeOrDayTv"
+    <TextView
+            android:id="@+id/unreadMessageCount"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_below="@+id/lastMessageDate"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="11dp"
             android:layout_marginEnd="17dp"
-            android:background="@android:color/white"
-            android:src="@color/catalyst_redbox_background" />
+            android:background="@drawable/unread_message_count_background"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:visibility="invisible" />
 
     <View
             android:layout_alignParentBottom="true"
             android:background="#F9F9F9"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-
 </RelativeLayout>

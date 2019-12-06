@@ -6,7 +6,5 @@ interface LoginView : MvpView {
     fun showLoader()
     fun hideLoader()
     fun showContactsScreen()
-    fun showError(error:String)
-    fun test()
-   fun createNewConnect()
+    fun showError(error: String)
 }

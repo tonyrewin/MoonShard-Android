@@ -1,9 +1,11 @@
 package io.moonshard.moonshard.services;
 
-import android.content.Context;
-import android.util.Log;
 
-import com.orhanobut.logger.Logger;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -17,13 +19,13 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
-import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.ping.PingManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
@@ -32,32 +34,35 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
+import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
+import java.util.UUID;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import trikita.log.Log;
+
+import static io.moonshard.moonshard.MainApplication.getLoginActivity;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
     private LoginCredentials credentials = new LoginCredentials();
     private XMPPTCPConnection connection = null;
     private NetworkHandler networkHandler;
-    private Context context;
     private Roster roster;
     private MamManager mamManager;
     public MultiUserChatManager multiUserChatManager = null;
@@ -67,23 +72,27 @@ public class XMPPConnection implements ConnectionListener {
         DISCONNECTED
     }
 
-
     public enum SessionState {
         LOGGED_IN,
         LOGGED_OUT
     }
 
-
-    public XMPPConnection(Context context) {
-        this.context = context;
+    public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
+
         if (jid != null && password != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
             credentials.username = username;
             credentials.jabberHost = jabberHost;
             credentials.password = password;
+            MainApplication.setCurrentLoginCredentials(credentials);
+            try {
+                MainApplication.setJid(JidCreate.from(username + "@" + jabberHost).asUnescapedString());
+            } catch (XmppStringprepException e) {
+                Log.e(e.getMessage());
+            }
         }
         networkHandler = new NetworkHandler();
     }
@@ -94,45 +103,52 @@ public class XMPPConnection implements ConnectionListener {
             throw new EmptyLoginCredentialsException();
         }
 
-        if (connection == null) {
-            XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
-                    .setXmppDomain(credentials.jabberHost)
-                    .setHost(credentials.jabberHost)
-                    .setResource(MainApplication.APP_NAME)
-                    .setKeystoreType(null)
-                    .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
-                    .setCompressionEnabled(true)
-                    .setConnectTimeout(7000)
-                    .build();
+        XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
+                .setXmppDomain(credentials.jabberHost)
+                .setHost(credentials.jabberHost)
+                .setResource(MainApplication.APP_NAME + "." + UUID.randomUUID().toString())
+                .setKeystoreType(null)
+                .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
+                .setCompressionEnabled(true)
+                .setConnectTimeout(7000)
+                .build();
 
-            connection = new XMPPTCPConnection(conf);
-            connection.addConnectionListener(this);
-            if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
-                throw new IOException();
-            }
-            try {
-                connection.connect();
-                // SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
-                //  connection.login(credentials.username, credentials.password);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                throw new IOException();
+        connection = new XMPPTCPConnection(conf);
+        connection.addConnectionListener(this);
+
+        if (credentials.jabberHost.equals("") && credentials.password.equals("") && credentials.username.equals("")) {
+            throw new IOException();
+        }
+        try {
+            connection.connect();
+            SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
+            SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
+            SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+
+            if (!credentials.username.equals("") || !credentials.password.equals("")) {
+                connection.login(credentials.username, credentials.password);
             }
 
-            ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
-            ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
-            ReconnectionManager.setEnabledPerDefault(true);
-            reconnectionManager.enableAutomaticReconnection();
-            roster = Roster.getInstanceFor(connection);
-            roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
-            roster.addPresenceEventListener(networkHandler);
-            MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
-            FileTransferNegotiator.IBB_ONLY = true;
-
-            if (MainApplication.isIsMainActivityDestroyed()) {
-                sendUserPresence(new Presence(Presence.Type.unavailable));
+        } catch (Exception e) {
+            BaseActivity baseActivity = getLoginActivity();
+            if (baseActivity != null) {
+                baseActivity.onError(e);
             }
+            e.printStackTrace();
+        }
+
+        ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
+        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
+        ReconnectionManager.setEnabledPerDefault(true);
+        reconnectionManager.enableAutomaticReconnection();
+        roster = Roster.getInstanceFor(connection);
+        roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
+        roster.addPresenceEventListener(networkHandler);
+        MainApplication.setJid(credentials.username + "@" + credentials.jabberHost);
+        FileTransferNegotiator.IBB_ONLY = true;
+
+        if (MainApplication.isIsMainActivityDestroyed()) {
+            sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
 
@@ -159,7 +175,11 @@ public class XMPPConnection implements ConnectionListener {
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
-        //  EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.CONNECT_AND_LOGIN_SUCCESSFUL));
+
+        BaseActivity baseActivity = getLoginActivity();
+        if (baseActivity != null) {
+            baseActivity.onAuthenticated();
+        }
     }
 
     @Override
@@ -187,6 +207,9 @@ public class XMPPConnection implements ConnectionListener {
             return message.getStanzaId();
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
+            if(connectAndLogin()) {
+                sendMessage(recipientJid, messageText);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -198,7 +221,6 @@ public class XMPPConnection implements ConnectionListener {
 
         Observable.fromCallable(() -> {
             HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-
             try {
                 Single.just(manager.uploadFile(file));
                 return true;
@@ -219,53 +241,6 @@ public class XMPPConnection implements ConnectionListener {
                     String kek = "";
                     //Use result for something
                 });
-
-        /*
-        getTest(file).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(throwable -> {
-                    String kek = "";
-                }).subscribe(t -> {
-            String kek = "";
-        });
-
-         */
-
-        // } catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //} catch (XMPPException.XMPPErrorException e) {
-        //     e.printStackTrace();
-        // } catch (SmackException e) {
-        //     e.printStackTrace();
-        //  } catch (IOException e) {
-        //     e.printStackTrace();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-
-
-/*
-        // Create the file transfer manager
-        FileTransferManager manager = FileTransferManager.getInstanceFor(connection);
-        // Create the outgoing file transfer
-        OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(jid);
-
-        manager.addFileTransferListener(new FileTransferListener() {
-            @Override
-            public void fileTransferRequest(FileTransferRequest request) {
-                String kek = "";
-            }
-        });
-
-        try {
-            transfer.sendFile(file,"kdsads");
-        } catch (SmackException e) {
-            e.printStackTrace();
-        }
-
-
- */
-
     }
 
     Single<URL> getTest(File file) {
@@ -285,18 +260,17 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public String sendMessageGroupChat(EntityBareJid recipientJid, String messageText) {
-        MultiUserChat muc = null;
         try {
-            EntityBareJid entityBareJid = JidCreate.entityBareFrom(recipientJid);
-            muc = multiUserChatManager.getMultiUserChat(entityBareJid);
-
             Message message = new Message(recipientJid, Message.Type.groupchat);
             message.setBody(messageText);
             try {
-                muc.sendMessage(messageText);
+                MainApplication.getXmppConnection().connection.sendStanza(message);
                 return message.getStanzaId();
             } catch (SmackException.NotConnectedException ex) {
                 ex.printStackTrace();
+                if(connectAndLogin()) {
+                    sendMessageGroupChat(recipientJid, messageText);
+                }
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -306,50 +280,125 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+    public Single<byte[]> loadAvatar(String senderID) {
+        return Single.create(emitter -> {
+            if (!senderID.isEmpty()) {
+                if (MainApplication.avatarsCache.containsKey(senderID)) {
+                    emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                }
+                if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
+                    emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(senderID.charAt(0)))));
+                    return;
+                }
+                EntityBareJid jid = null;
+                try {
+                    jid = JidCreate.entityBareFrom(senderID);
+                } catch (XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+
+                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
+
+                if (avatarBytes != null) {
+                    MainApplication.avatarsCache.put(senderID, avatarBytes);
+                } else {
+                    avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(senderID.charAt(0))));
+                }
+                emitter.onSuccess(avatarBytes);
+            } else {
+                emitter.onError(new IllegalArgumentException());
+            }
+        });
+    }
+
+    public Single<byte[]> loadAvatar(String senderID,String nameChat) {
+        return Single.create(emitter -> {
+            if (!senderID.isEmpty()) {
+                if (MainApplication.avatarsCache.containsKey(senderID)) {
+                    emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                }
+                if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
+                    emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
+                    return;
+                }
+                EntityBareJid jid = null;
+                try {
+                    jid = JidCreate.entityBareFrom(senderID);
+                } catch (XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+
+                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
+
+                if (avatarBytes != null) {
+                    MainApplication.avatarsCache.put(senderID, avatarBytes);
+                } else {
+                    avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                }
+                emitter.onSuccess(avatarBytes);
+            } else {
+                emitter.onError(new IllegalArgumentException());
+            }
+        });
+    }
+    
+    private byte[] createTextAvatar(String firstLetter) {
+        Drawable avatarText = TextDrawable.builder()
+            .beginConfig()
+            .width(64)
+            .height(64)
+            .endConfig()
+            .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
+    }
+
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
+        BaseActivity baseActivity = getLoginActivity();
         Log.d("Auth: ", "inside XMPP register method, " + user + " : " + pass);
         long l = System.currentTimeMillis();
         try {
             AccountManager accountManager = AccountManager.getInstance(getConnection());
             accountManager.sensitiveOperationOverInsecureConnection(true);
             accountManager.createAccount(Localpart.from(user), pass);
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if (baseActivity != null) {
+                baseActivity.onSuccess();
+            }
         } catch (Exception e) {
+            if (baseActivity != null) {
+                baseActivity.onError(e);
+            }
             e.printStackTrace();
         }
         Log.d("Auth", "Time taken to register: " + (System.currentTimeMillis() - l));
     }
 
 
-    public boolean login(String email, String pass)
-            throws XMPPException, SmackException, IOException, InterruptedException {
-
-        String username = email.split("@")[0];
-
-        XMPPTCPConnection connect = getConnection();
+    public boolean login(String jid, String pass) {
+        String username = jid.split("@")[0];
+        XMPPTCPConnection connection = getConnection();
 
         try {
-            if (connect.isAuthenticated()) {
-                Logger.d("User already logged in");
+            if (connection.isAuthenticated()) {
+                Log.d("User already logged in");
                 return true;
             }
 
-            Logger.d("userLog: " + email + " and pass: " + pass);
+            Log.d("userLog: " + username + " and pass: " + pass);
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
-            connect.login(username, pass);
+            if (!connection.isConnected()) {
+                connection.connect();
+            }
+            connection.login(username, pass);
 
-            mamManager = MamManager.getInstanceFor(connection);
+            mamManager = MamManager.getInstanceFor(this.connection);
             try {
                 if (mamManager.isSupported()) {
-                    MamManager.getInstanceFor(connection).enableMamForAllMessages();
+                    MamManager.getInstanceFor(this.connection).enableMamForAllMessages();
                 } else {
                     mamManager = null;
                 }
@@ -357,13 +406,13 @@ public class XMPPConnection implements ConnectionListener {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            Logger.d("LOGIN ERROR" + connect.isAuthenticated());
+            Log.d("LOGIN ERROR" + connection.isAuthenticated());
             e.printStackTrace();
             return false;
         }
-        PingManager pingManager = PingManager.getInstanceFor(connect);
+        PingManager pingManager = PingManager.getInstanceFor(connection);
         pingManager.setPingInterval(5000);
-        Logger.d("LOGIN JUST");
+        Log.d("LOGIN SUCCESSFUL");
         return true;
     }
 
@@ -381,7 +430,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public byte[] getAvatar(EntityBareJid jid) {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             VCardManager manager = VCardManager.getInstanceFor(connection);
             byte[] avatar = null;
             try {
@@ -400,25 +449,74 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
+    private boolean connectAndLogin() {
+        if (!credentials.isEmpty()) {
+            try {
+                connect();
+            } catch (XMPPException | SmackException | IOException | EmptyLoginCredentialsException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return login(credentials.username, credentials.password);
+        }
+        return false;
+    }
+
     public Set<RosterEntry> getContactList() {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             while (roster == null) ;
             return roster.getEntries();
         }
         return null;
     }
 
-    public boolean isConnectionAlive() {
-        return XMPPConnectionService.CONNECTION_STATE.equals(ConnectionState.CONNECTED) && XMPPConnectionService.SESSION_STATE.equals(SessionState.LOGGED_IN);
+    public boolean isConnectionReady() {
+        return connection.isConnected() && connection.isAuthenticated();
     }
 
     public Presence getUserPresence(BareJid jid) {
         return roster.getPresence(jid);
     }
 
+    public  Roster getRoster(){
+        return roster;
+    }
+
+    public void addUserToGroup(String userName, String groupName) {
+        try {
+            BareJid bareJid = JidCreate.bareFrom(userName);
+
+            RosterGroup group = roster.getGroup(groupName);
+            if (null == group) {
+                group = roster.createGroup(groupName);
+            }
+            RosterEntry entry = roster.getEntry(bareJid);
+            if (entry != null) {
+                try {
+                    group.addEntry(entry);
+                } catch (XMPPException e) {
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    if(connectAndLogin()) {
+                        addUserToGroup(userName, groupName);
+                    }
+                }
+            }
+
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public void sendUserPresence(Presence presence) {
         if (connection != null) {
-            if (isConnectionAlive()) {
+            if (isConnectionReady()) {
                 try {
                     connection.sendStanza(presence);
                 } catch (SmackException.NotConnectedException e) {
@@ -431,7 +529,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public MamManager getMamManager() {
-        if (isConnectionAlive()) {
+        if (isConnectionReady()) {
             return mamManager;
         }
         return null;

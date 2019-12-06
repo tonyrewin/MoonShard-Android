@@ -1,5 +1,6 @@
 package io.moonshard.moonshard;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,30 +14,26 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import androidx.room.Room;
-
-import com.facebook.soloader.SoLoader;
 import com.instacart.library.truetime.TrueTime;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
-
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import cat.ereza.customactivityoncrash.config.CaocConfig;
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.di.components.ApplicationComponent;
 import io.moonshard.moonshard.di.components.DaggerApplicationComponent;
 import io.moonshard.moonshard.di.modules.ApplicationModule;
 import io.moonshard.moonshard.di.modules.WebModule;
-import io.moonshard.moonshard.helpers.RoomHelper;
 import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
+import io.moonshard.moonshard.ui.activities.BaseActivity;
+import io.moonshard.moonshard.ui.activities.MainActivity;
 
 public class MainApplication extends Application {
     private static ApplicationComponent component;
@@ -46,11 +43,13 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
 
     private static Application instance;
-    public final static String APP_NAME = "Influence";
+    public final static String APP_NAME = "MoonShard";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
+    private static BaseActivity currentActivity;
+    private static MainActivity mainActivity;
+
 
     private static String jid;
-     private static RoomHelper chatDB;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;
     private static LoginCredentials currentLoginCredentials;
@@ -60,8 +59,41 @@ public class MainApplication extends Application {
     public final static Map<String, byte[]> avatarsCache = new ConcurrentHashMap<>();
     private static Location currentLocation;
 
+    public static String getAdress() {
+        return adress;
+    }
 
-    public Location getCurrentLocation() {
+    public static void setAdress(String adress) {
+        MainApplication.adress = adress;
+    }
+
+    private static String adress;
+
+
+    public static boolean isForeGround() {
+        return (currentActivity != null
+                && !currentActivity.isFinishing());
+    }
+
+
+    public static BaseActivity getLoginActivity() {
+        return currentActivity;
+    }
+
+    public static void setLoginActivity(BaseActivity activity) {
+        currentActivity = activity;
+    }
+
+    // FIXME Dirty hack goes here (for obtaining views)
+    public static Activity getMainActivity() {
+        return mainActivity;
+    }
+
+    public static void setMainActivity(MainActivity activity) {
+        mainActivity = activity;
+    }
+
+    public static Location getCurrentLocation() {
         return currentLocation;
     }
 
@@ -79,8 +111,6 @@ public class MainApplication extends Application {
                 .applicationModule(new ApplicationModule(getApplicationContext()))
                 .webModule(new WebModule(getApplicationContext()))
                 .build();
-
-        SoLoader.init(this, /* native exopackage */ false);
 
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
@@ -110,12 +140,16 @@ public class MainApplication extends Application {
 
 
         instance = this;
-
+        ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
-        initChatDB();
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
         initTrueTime();
         loadLoginCredentials();
+
+        CaocConfig.Builder.create()
+                .logErrorOnRestart(false) //default: true
+                .trackActivities(true) //default: false
+                .apply();
     }
 
     private static void setupLogger() {
@@ -130,12 +164,9 @@ public class MainApplication extends Application {
         return component;
     }
 
-    /*
-    public static P2ChatService getP2ChatService() {
+    /*public static P2ChatService getP2ChatService() {
         return service;
-    }
-
-     */
+    }*/
 
     public static Context getContext() {
         return instance.getApplicationContext();
@@ -144,8 +175,6 @@ public class MainApplication extends Application {
     public static String getJid() { return jid; }
 
     public static void setJid(String jid1) { jid = jid1; }
-
-     public static RoomHelper getChatDB() { return chatDB; }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -196,16 +225,6 @@ public class MainApplication extends Application {
         }).start();
     }
 
-
-    private void initChatDB() {
-        chatDB = Room.databaseBuilder(getApplicationContext(), RoomHelper.class, "chatDB")
-                .fallbackToDestructiveMigration() // FIXME   ONLY FOR TEST ENVIRONMENT! DON'T USE THIS IN PRODUCTION!
-                .allowMainThreadQueries()
-                .build();
-    }
-
-
-
     public static Handler getMainUIThread() {
         return mainUIThreadHandler;
     }
@@ -232,6 +251,10 @@ public class MainApplication extends Application {
 
     public static void setCurrentChatActivity(String currentChatActivity) {
         MainApplication.currentChatActivity = currentChatActivity;
+    }
+
+    public static void setCurrentLoginCredentials(LoginCredentials currentLoginCredentials) {
+        MainApplication.currentLoginCredentials = currentLoginCredentials;
     }
 
     public static LoginCredentials getCurrentLoginCredentials() {

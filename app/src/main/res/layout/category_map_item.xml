@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:orientation="vertical">
+
+    <ImageView
+            android:id="@+id/categoryIv"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_heart" />
+
+    <TextView
+            android:id="@+id/nameCategoryTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/categoryIv"
+            android:text="Ночные тусовки"
+            android:textColor="#333333"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    <TextView
+            android:maxLines="2"
+            android:layout_marginEnd="19dp"
+            android:id="@+id/categoryInfoTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nameCategoryTv"
+            android:layout_alignStart="@+id/nameCategoryTv"
+            android:text="С этим понятно, техно на районе, фестивали, мясорубка."
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+    <View
+            android:layout_marginTop="17dp"
+            android:layout_below="@+id/categoryIv"
+            android:background="#F9F9F9"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+</RelativeLayout>

@@ -7,9 +7,9 @@ import dagger.Provides
 import io.moonshard.moonshard.common.TopicStorage
 import javax.inject.Singleton
 
+
 @Module
 class ApplicationModule(var context: Context) {
-
     @Provides
     @Singleton
     fun providesContext(): Context {

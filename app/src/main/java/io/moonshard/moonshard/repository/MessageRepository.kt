@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.repository
 
 import io.moonshard.moonshard.ObjectBox
+import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
 import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.models.dbEntities.MessageEntity_
@@ -49,7 +50,7 @@ object MessageRepository: IMessageRepository {
             val msg = messageBox.query {
                 equal(MessageEntity_.messageUid, messageUid)
             }.findFirst()
-            if (msg != null) it.onSuccess(msg) else it.onError(Exception("Message doesn't exist"))
+            if (msg != null) it.onSuccess(msg) else it.onError(NotFoundException())
         }
     }
 
@@ -63,7 +64,7 @@ object MessageRepository: IMessageRepository {
                 if (message.isNotEmpty()) {
                     it.onNext(message.first())
                 } else {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist or chat is empty"))
+                    it.onError(NotFoundException())
                 }
             }, { e ->
                 it.onError(e)
@@ -81,7 +82,7 @@ object MessageRepository: IMessageRepository {
                 if (message.isNotEmpty()) {
                     it.onNext(message.first())
                 } else {
-                    it.onError(Exception("Chat doesn't exist or chat is empty"))
+                    it.onError(NotFoundException())
                 }
             }, { e ->
                 it.onError(e)

@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.repository
 
 import io.moonshard.moonshard.ObjectBox
+import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
 import io.moonshard.moonshard.repository.interfaces.IChatListRepository
@@ -30,7 +31,7 @@ object ChatListRepository: IChatListRepository {
     override fun removeChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
             if (!chatBox.remove(chatEntity)) {
-                it.onError(Exception("Chat ${chatEntity.jid} doesn't exist"))
+                it.onError(NotFoundException())
                 return@create
             }
             MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
@@ -44,7 +45,7 @@ object ChatListRepository: IChatListRepository {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.observable(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 it.onNext(chat.first())
@@ -57,7 +58,7 @@ object ChatListRepository: IChatListRepository {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.observable(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 chat.first().unreadMessagesCount = newCountValue
@@ -71,7 +72,7 @@ object ChatListRepository: IChatListRepository {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.observable(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 it.onNext(chat.first().unreadMessagesCount)

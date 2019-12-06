@@ -4,6 +4,7 @@ package io.moonshard.moonshard.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
@@ -11,36 +12,58 @@ import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
 import kotlinx.android.synthetic.main.activity_login.*
 import moxy.presenter.InjectPresenter
+import android.text.style.UnderlineSpan
+import android.text.SpannableString
+import android.text.method.PasswordTransformationMethod
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import io.moonshard.moonshard.R
+import kotlinx.android.synthetic.main.activity_login.editEmail
+import kotlinx.android.synthetic.main.activity_login.editPassword
+import kotlinx.android.synthetic.main.activity_login.visiblePassBtn
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class LoginActivity : BaseActivity(), LoginView {
-    override fun onError(e: Exception) {
-        runOnUiThread {
-            hideLoader()
-            e.message?.let { showError(it) }?:showError("Произошла ошибка")
-        }
-    }
 
     @InjectPresenter
     lateinit var presenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(io.moonshard.moonshard.R.layout.activity_login)
+        setContentView(R.layout.activity_login)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        loginBtn.setOnClickListener {
+        val content = SpannableString("Еще нет аккаунта? Регистрация")
+        content.setSpan(UnderlineSpan(), 18, content.length, 0)
+        dontHaveText.text = content
+
+        var isSecurity = true
+        visiblePassBtn?.setOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
+        }
+
+        loginBtn?.setOnClickListener {
             val actualUserName: String
-            if (editEmail.text.toString().contains("@")) {
+            if (editEmail?.text.toString().contains("@")) {
                 showError("Вы ввели недопустимый символ")
             } else {
-                actualUserName =  editEmail.text.toString() + "@moonshard.tech"
+                actualUserName = editEmail.text.toString() + "@moonshard.tech"
                 showLoader()
                 saveLoginCredentials(actualUserName, editPassword.text.toString())
                 startService()
             }
         }
 
-        dontHaveText.setOnClickListener {
+        dontHaveText?.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
@@ -48,28 +71,6 @@ class LoginActivity : BaseActivity(), LoginView {
 
     private fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
-        /*
-        val connection = object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                val binder = service as XMPPConnectionService.XMPPServiceBinder
-                MainApplication.setXmppConnection(binder.connection)
-            }
-
-            override fun onServiceDisconnected(name: ComponentName) {
-                MainApplication.setXmppConnection(null)
-            }
-        }
-        MainApplication.setServiceConnection(connection)
-        applicationContext.bindService(
-            Intent(applicationContext, XMPPConnectionService::class.java),
-            connection,
-            Context.BIND_AUTO_CREATE
-        )
-         */
-
-    }
-
-    override fun createNewConnect() {
     }
 
     override fun onAuthenticated() {
@@ -102,6 +103,13 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun showError(error: String) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(e: Exception) {
+        runOnUiThread {
+            hideLoader()
+            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+        }
     }
 
 }

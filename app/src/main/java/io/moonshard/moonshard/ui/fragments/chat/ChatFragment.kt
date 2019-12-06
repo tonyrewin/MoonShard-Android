@@ -1,19 +1,22 @@
 package io.moonshard.moonshard.ui.fragments.chat
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.ChatPresenter
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
-import io.moonshard.moonshard.ui.adapters.MessagesAdapter
+import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -23,6 +26,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
+
+    var idChat: String = ""
 
     override fun addToStart(message: GenericMessage, reverse: Boolean) {
         MainApplication.getMainUIThread().post {
@@ -52,19 +57,20 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity)?.hideBottomNavigationBar()
+        (activity as? MainActivity)?.hideBottomNavigationBar()
 
         setAdapter()
 
         arguments?.let {
-            val idChat = it.getString("chatId")
+            idChat = it.getString("chatId")
             presenter.setChatId(idChat)
 
             if (idChat.contains("conference")) presenter.join()
 
-           // presenter.loadLocalMessages()
+            // presenter.loadLocalMessages()
 
-           // presenter.loadMoreMessages()
+            // presenter.loadMoreMessages()
+
             sendMessage.setOnClickListener {
                 presenter.sendMessage(editText.text.toString())
             }
@@ -80,12 +86,42 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
                 presenter.loadRecentPageMessages()
             }
         })
+
+        avatarChat?.setOnClickListener {
+            showChatInfo(idChat)
+        }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
+
+    override fun setData(
+        name: String,
+        valueOccupants: Int,
+        valueOnlineMembers: Int
+    ) {
+        nameChat?.text = name
+       // avatarChat?.setImageBitmap(avatar)
+        valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+    }
+
+    override fun setAvatar(avatar: Bitmap?) {
+        MainApplication.getMainUIThread().post {
+            avatarChat?.setImageBitmap(avatar)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
-        //(activity as MainActivity).showBottomNavigationBar()
+        (activity as MainActivity).showBottomNavigationBar()
+
+        for(i in fragmentManager!!.fragments.indices){
+            if(fragmentManager!!.fragments[i].tag == "MapScreen"){
+                (fragmentManager!!.fragments[i] as? MapFragment)?.showBottomSheet()
+            }
+        }
     }
 
     override fun onResume() {
@@ -102,7 +138,10 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         messagesRv?.layoutManager = layoutManager
 
         messagesRv?.adapter =
-            MessagesAdapter(arrayListOf(), messagesRv.layoutManager as LinearLayoutManager)
+            MessagesAdapter(
+                arrayListOf(),
+                messagesRv.layoutManager as LinearLayoutManager
+            )
 
         val listener =
             RecyclerScrollMoreListener(layoutManager, messagesRv.adapter as MessagesAdapter)
@@ -129,5 +168,16 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         chooseFile.type = "*/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
+    }
+
+    private fun showChatInfo(chatId: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", chatId)
+        val chatFragment = ChatInfoFragment()
+        chatFragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, chatFragment, "ChatInfoFragment")?.hide(this)
+            ?.addToBackStack("ChatInfoFragment")
+            ?.commit()
     }
 }

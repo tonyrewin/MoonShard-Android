@@ -13,10 +13,20 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
+import org.jivesoftware.smackx.muc.DiscussionHistory
+import org.jivesoftware.smackx.muc.MucEnterConfiguration
+import com.instacart.library.truetime.TrueTime.build
+
+
+
+
+
+
 
 
 @InjectViewState
@@ -45,6 +55,25 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             })
     }
 
+    fun getValueOnlineUsers(jid: String): Int {
+        val groupId = JidCreate.entityBareFrom(jid)
+
+        val muc =
+            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                .getMultiUserChat(groupId)
+        val members = muc.occupants
+
+        var onlineValue = 0
+        for (i in members.indices) {
+            val userOccupantPresence =
+                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            if (userOccupantPresence.type == Presence.Type.available) {
+                onlineValue++
+            }
+        }
+        return onlineValue
+    }
+
     fun getRoom(jid: String): RoomInfo? {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
@@ -56,7 +85,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     .getRoomInfo(muc.room)
             return info
         } catch (e: java.lang.Exception) {
-
+            val kek = ""
         }
         return null
     }
@@ -69,23 +98,37 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
-            muc.join(nickName)
-            // var occupants = muc.occupants
+
+            if(!muc.isJoined){
+                muc.join(nickName)
+            }
+
             val chatEntity = ChatEntity(
                 jid = jid,
                 chatName = jid.split("@")[0],
                 isGroupChat = true,
                 unreadMessagesCount = 0
             )
-            ChatListRepository.addChat(chatEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+
+            ChatListRepository.getChatByJid(JidCreate.from(jid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
-            }
-            //LocalDBWrapper.createChatEntry(jid, jid.split("@")[0], ArrayList<GenericUser>(), true)
+                },{
+                    ChatListRepository.addChat(chatEntity)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe( {
+                            if (muc.isJoined) {
+                                viewState?.showChatScreens(jid)
+                            }
+                        },{
+                            it.message?.let { it1 -> viewState?.showError(it1) }
+                        })
+                })
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -93,7 +136,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
 
 
     /*
-
     fun getValueOnlineUsers(muc:MultiUserChat,usersInGroup:List<EntityFullJid>){
         var onlineValue = 0
         for(i in usersInGroup.indices){
@@ -104,6 +146,5 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         }
         return onlineValue
     }
-
      */
 }

@@ -10,10 +10,9 @@ import io.moonshard.moonshard.models.dbEntities.MessageEntity;
 public class GenericMessage {
 private MessageEntity messageEntity;
 
-
     public GenericMessage(MessageEntity messageEntity) {
         this.messageEntity = messageEntity;
-        messageEntity.sender.setTarget(new ChatUser());
+     //   messageEntity.sender.setTarget(new ChatUser());
     }
 
     public String getId() {

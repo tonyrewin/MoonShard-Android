@@ -70,38 +70,36 @@
                 android:orientation="horizontal">
 
             <ImageView
-                    android:layout_marginEnd="21dp"
-                    android:layout_marginTop="11dp"
-                    android:layout_marginStart="21dp"
-                    android:src="@drawable/ic_user_plus"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginEnd="21dp"
+                    android:src="@drawable/ic_user_plus" />
 
             <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
                     android:text="Добавить администратора"
-                    android:textSize="16sp"
                     android:textColor="#0075FF"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="16sp" />
 
         </LinearLayout>
 
         <View
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="11dp"
-                android:layout_marginTop="8dp"
-                android:background="#F5F5F5"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="11dp"
+                android:background="#F5F5F5" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/peopleGroupRv"
+                android:id="@+id/adminsRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-
     </LinearLayout>
-
 </LinearLayout>

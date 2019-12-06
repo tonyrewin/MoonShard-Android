@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        tools:context=".ui.fragments.SettingsFragment">
+        tools:context=".ui.fragments.settings.SettingsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
                    android:textStyle="bold"
                    android:textSize="14sp"
                    android:textColor="#333333"
-                   android:text="Settings"
+                   android:text="Настройки"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"/>
 
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="General"
+                android:text="Основные"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -142,7 +142,7 @@
                     android:id="@+id/notificationsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notifications"
+                    android:text="Уведомления"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 

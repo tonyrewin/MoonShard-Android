@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.instacart.library.truetime.TrueTime
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.GenericMessage
@@ -19,16 +21,22 @@ import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.muc.MultiUserChat
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
+import trikita.log.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.ExecutionException
 import kotlin.collections.ArrayList
 
 @InjectViewState
@@ -49,6 +57,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 chat = it
                 loadLocalMessages()
                 loadMoreMessages()
+                getDataInfo()
             }
     }
 
@@ -67,6 +76,38 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             })
     }
 
+    fun getDataInfo(){
+        try {
+            val groupId = JidCreate.entityBareFrom(chatID)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val roomInfo =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getRoomInfo(groupId)
+            val occupants = muc.occupants
+
+            val name = roomInfo.name
+            getAvatar(chatID)
+            val valueOccupants = roomInfo.occupantsCount
+            val valueOnlineMembers = getValueOnlineUsers(muc,occupants)
+            viewState?.setData(name,valueOccupants,valueOnlineMembers)
+        }catch (e:Exception){
+
+        }
+    }
+
+    private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {
+        var onlineValue = 0
+        for (i in members.indices) {
+            val userOccupantPresence = muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            if (userOccupantPresence.type == Presence.Type.available) {
+                onlineValue++
+            }
+        }
+        return onlineValue
+    }
+
     fun join() {
         try {
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
@@ -80,6 +121,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
         }catch (e:java.lang.Exception){
             //will add toast
+            var error = ""
         }
     }
 
@@ -158,12 +200,8 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
 
             override fun onNext(message: MessageEntity) {
-                //   if(idMessage.equals(chatID)) {
-                // chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(idMessage)), true)
                 ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
                 viewState?.addToStart(GenericMessage(message), true)
-
-                //  }
             }
 
             override fun onError(e: Throwable) {}
@@ -317,6 +355,45 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }*/
             return@supplyAsync null
         }
+    }
+/*
+    private fun getAvatar(jid: String): Bitmap? {
+        var avatarBytes: ByteArray? = ByteArray(0)
+        try {
+            val future =
+                MainApplication.getXmppConnection().network.loadAvatar(jid)
+
+            if (future != null) {
+                avatarBytes = future.get()
+            }
+
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        } catch (e: ExecutionException) {
+            e.printStackTrace()
+        }
+
+        var avatar: Bitmap?=null
+        if (avatarBytes != null) {
+            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+        }
+        return avatar
+    }
+
+ */
+
+    private fun getAvatar(jid: String) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    if (bytes != null) {
+                        val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        viewState?.setAvatar(avatar)
+                    }
+                }, { throwable ->
+                    Log.e(throwable.message)
+                })
     }
 
 

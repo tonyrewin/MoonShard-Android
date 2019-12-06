@@ -1,5 +1,7 @@
-package io.moonshard.moonshard.ui.adapters
+package io.moonshard.moonshard.ui.adapters.chat
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
+import io.moonshard.moonshard.ui.adapters.DateFormatter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import trikita.log.Log
 import java.util.*
 
 
@@ -97,8 +104,25 @@ open class MessagesAdapter(
 
                 (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
                 holder.name?.text = name
-                holder.avatar?.setBackgroundColor(Color.parseColor("#7CFC00"))
+                setAvatar( myMsgs[position].user.jid,holder.avatar!!)
             }
+        }
+    }
+
+    private fun setAvatar(jid: String, imageView: ImageView) {
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        MainApplication.getMainUIThread().post {
+                            imageView.setImageBitmap(avatar)
+                        }
+                    }
+                }, { throwable -> Log.e(throwable.message) })
         }
     }
 
@@ -118,13 +142,16 @@ open class MessagesAdapter(
      * @param scroll  `true` if need to scroll list to bottom when message added.
      */
     fun addToStart(message: GenericMessage, scroll: Boolean) {
+        /*
         val isNewMessageToday = !isPreviousSameDate(0, message.createdAt)
         if (isNewMessageToday) {
             myMsgs.add(0, message)
         }
+         */
         val element = message
         myMsgs.add(0, element)
-        notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
+        //notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
+        notifyItemRangeInserted(0,  1)
         if (layoutManager != null && scroll) {
             layoutManager.scrollToPosition(0)
         }
@@ -138,7 +165,11 @@ open class MessagesAdapter(
         if (myMsgs.isNotEmpty()) {
             val lastItemPosition = myMsgs.size - 1
             val lastItem = myMsgs[lastItemPosition].createdAt as Date
-            if (DateFormatter.isSameDay(messages[0].createdAt, lastItem)) {
+            if (DateFormatter.isSameDay(
+                    messages[0].createdAt,
+                    lastItem
+                )
+            ) {
                 myMsgs.removeAt(lastItemPosition)
                 notifyItemRemoved(lastItemPosition)
             }
@@ -151,9 +182,12 @@ open class MessagesAdapter(
 
 
     private fun isPreviousSameDate(position: Int, dateToCompare: Date): Boolean {
-        if (myMsgs.size <= position) return false
+        if (myMsgs.size <= position) return true
         val previousPositionDate = myMsgs[position].createdAt
-        return DateFormatter.isSameDay(dateToCompare, previousPositionDate)
+        return DateFormatter.isSameDay(
+            dateToCompare,
+            previousPositionDate
+        )
     }
 
 
@@ -163,7 +197,11 @@ open class MessagesAdapter(
             this.myMsgs.add(message)
             if (messages.size > i + 1) {
                 val nextMessage = messages[i + 1]
-                if (!DateFormatter.isSameDay(message.createdAt, nextMessage.createdAt)) {
+                if (!DateFormatter.isSameDay(
+                        message.createdAt,
+                        nextMessage.createdAt
+                    )
+                ) {
                     this.myMsgs.add((message))
                 }
             } else {

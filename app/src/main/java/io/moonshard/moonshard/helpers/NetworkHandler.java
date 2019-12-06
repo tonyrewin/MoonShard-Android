@@ -88,7 +88,7 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                 false
         );
         messageEntity.chat.setTarget(chatEntity);
-        String messageAuthorNickname = fromJid.split("@")[0];
+        String messageAuthorNickname = fromJid.split("/")[1];
         messageEntity.sender.setTarget(new ChatUser(0, fromJid, messageAuthorNickname, -1, false));
         //noinspection ResultOfMethodCallIgnored
         MessageRepository.INSTANCE.saveMessage(messageEntity)
@@ -117,6 +117,8 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                             notificationManager.notify(new Random().nextInt(), notification.build());
                         }, throwable -> Log.e(throwable.getMessage()));
                     }
+                },throwable -> {
+                    Log.e(throwable.getMessage());
                 });
     }
 

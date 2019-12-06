@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
@@ -31,7 +32,6 @@ import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.util.*
 
@@ -83,6 +83,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
                     val roomInfo = presenter.getRoom(it)
+                    val onlineUsers = presenter.getValueOnlineUsers(it)
                     roomInfo?.let {
                         val distance = (calculationByDistance(
                             RoomsMap.rooms[i].latitude,
@@ -90,9 +91,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         ))
 
                         locationValueTestTv?.text = distance
-                        groupNameInfoTv?.text = roomInfo?.name
+                        groupNameInfoTv?.text = roomInfo.name
                         valueMembersTv?.text =
-                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
 
                         joinGroupBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -102,9 +103,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
                         }
 
-                        groupNameInfoContentTv?.text = roomInfo?.name
+                        groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
-                            "${roomInfo?.occupantsCount.toString()} человек, 0 онлайн"
+                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
                         locationValueInfoTv?.text = distance
                         locationInfoTv?.text = getAddress(
                             LatLng(
@@ -112,7 +113,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                                 RoomsMap.rooms[i].longtitude.toDouble()
                             )
                         )
-                        descriptionTv?.text = roomInfo?.description
+                        descriptionTv?.text = roomInfo.description
 
                         joinBtn?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -134,6 +135,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
+    fun hideBottomSheet(){
+        defaultBottomSheet.visibility = View.GONE
+    }
+
+    fun showBottomSheet(){
+        defaultBottomSheet.visibility = View.VISIBLE
+    }
+
     override fun showChatScreens(chatId: String) {
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()
@@ -144,10 +153,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             ft?.add(R.id.container, chatFragment)?.hide(this)?.addToBackStack(null)
                 ?.commit()
         }
-    }
-
-    override fun test() {
-        var kek = ""
     }
 
     fun getAddress(location: LatLng): String {
@@ -173,7 +178,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Нету ничего"
+        return "Информация отсутствует"
     }
 
     private fun calculationByDistance(latRoom: String, lngRoom: String): String {
@@ -191,12 +196,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         latRoom.toDouble(),
                         lngRoom.toDouble()
                     ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " m away"
+                ).toInt()).toString() + " метрах"
             } else {
                 (SphericalUtil.computeDistanceBetween(
                     LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " km away"
+                ).toInt() / 1000).toString() + " км"
             }
         }
         return ""
@@ -281,34 +286,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
-    private fun setupClickBottomSheet() {
-        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
-            activity!!.supportFragmentManager,
-            context,
-            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.INFO
-        )
-        bottomSheetAppbar.visibility = View.GONE
-
-        bottomSheetViewPager.offscreenPageLimit = 1
-        bottomSheetViewPager.adapter = sectionsPagerAdapter
-        bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
-        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
         setupBottomSheet()
+
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         val sheetBehavior = BottomSheetBehavior.from(myBottoms)
@@ -326,17 +311,18 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     BottomSheetBehavior.STATE_COLLAPSED -> buttonsTop.visibility = View.VISIBLE
                 }
             }
-
         })
     }
 
     private fun getMyLocation() {
-        val latLng = LatLng(
-            MainApplication.getCurrentLocation().latitude,
-            MainApplication.getCurrentLocation().longitude
-        )
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
-        mMap?.animateCamera(cameraUpdate)
+        if(MainApplication.getCurrentLocation()!=null){
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+            mMap?.animateCamera(cameraUpdate)
+        }
     }
 
     override fun onResume() {

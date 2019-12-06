@@ -37,6 +37,10 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
+
+        editIv?.setOnClickListener {
+            showChangeProfileScreen()
+        }
     }
 
     fun showChangeProfileScreen() {

@@ -96,6 +96,7 @@
                 android:layout_height="wrap_content"/>
 
         <ImageView
+                android:id="@+id/editIv"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="18dp"
                 android:layout_alignParentEnd="true"

@@ -45,7 +45,8 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         if (ChooseChatRepository.time.isEmpty()) {
-            timeTv?.text = "6 hours"
+            timeTv?.text = "6 часов"
+            ChooseChatRepository.time = "6 часов"
         } else {
             timeTv?.text = ChooseChatRepository.time
         }

@@ -21,11 +21,11 @@ object ChooseChatRepository {
     fun getTimeSec():Int{
         var ttl = 60*60*6
         when (time) {
-            "6 hours" -> ttl = 60*60*6
-            "12 hours" -> ttl = 60*60*12
-            "24 hours" -> ttl = 60*60*24
-            "3 days" -> ttl = 60*60*(24*3)
-            "1 week" -> ttl = 60*60*(24*7)
+            "6 часов" -> ttl = 60*60*6
+            "12 часов" -> ttl = 60*60*12
+            "24 часа" -> ttl = 60*60*24
+            "3 дня" -> ttl = 60*60*(24*3)
+            "1 неделю" -> ttl = 60*60*(24*7)
         }
         return ttl
     }

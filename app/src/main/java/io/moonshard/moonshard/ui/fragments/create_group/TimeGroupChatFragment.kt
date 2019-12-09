@@ -34,12 +34,11 @@ class TimeGroupChatFragment : Fragment() {
         }
 
         val times = arrayListOf<String>()
-        times.add("6 hours")
-        times.add("12 hours")
-        times.add("24 hours")
-        times.add("3 days")
-        times.add("1 week")
-
+        times.add("6 часов")
+        times.add("12 часов")
+        times.add("24 часа")
+        times.add("3 дня")
+        times.add("1 неделю")
 
         timesRv?.layoutManager = LinearLayoutManager(view.context)
         timesRv?.adapter = TimeGroupChatAdapter(object : RvTimeListener {

@@ -13,7 +13,7 @@ import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.api.Category
 
 interface CategoryListener {
-    fun clickChat(categoryName: String)
+    fun clickChat(categoryName: Category)
 }
 
 class CategoriesAdapter(val listener: CategoryListener, private var categories: ArrayList<Category>) :
@@ -22,19 +22,16 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
     var focusedItem = -1
     private fun setFocusedItem(){
         for(i in categories.indices){
-            if(categories[i].categoryName== ChooseChatRepository.category){
+            if(categories[i].categoryName== ChooseChatRepository.category?.categoryName){
                 focusedItem = i
             }
         }
     }
 
-    init {
-        setFocusedItem()
-    }
-
     fun updateCategories(categories:ArrayList<Category>){
         this.categories.clear()
         this.categories.addAll(categories)
+        setFocusedItem()
         notifyDataSetChanged()
     }
 
@@ -66,7 +63,7 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
         holder.itemView.setOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
-            listener.clickChat(categories[position].categoryName)
+            listener.clickChat(categories[position])
         }
     }
 

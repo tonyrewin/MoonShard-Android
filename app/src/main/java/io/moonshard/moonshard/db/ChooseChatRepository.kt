@@ -1,17 +1,19 @@
 package io.moonshard.moonshard.db
 
+import io.moonshard.moonshard.models.api.Category
+
 object ChooseChatRepository {
     var lat:Float?=null
     var lng:Float?=null
     var address:String = ""
     var time:String = ""
-    var category:String = ""
+    var category:Category? = null
     var name:String = ""
 
     fun clean(){
         address=""
         time = ""
-        category=""
+        category=null
         name=""
         lat= null
         lng= null

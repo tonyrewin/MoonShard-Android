@@ -12,7 +12,7 @@ data class RoomPin(@SerializedName("id")
                    var createdAt: Boolean,
                    @SerializedName("ttl")
                    var ttl: String?,
-                   @SerializedName("category")
-                   var category: ArrayList<Category>,
+                   @SerializedName("categories")
+                   var category: ArrayList<Category>?,
                    @SerializedName("roomId")
                    var roomId: String?)

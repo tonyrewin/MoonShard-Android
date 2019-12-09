@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.ui.fragments.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
@@ -88,6 +89,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onBackPressed()
         if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
             supportFragmentManager.popBackStack()
+        }
+
+        if(supportFragmentManager.findFragmentByTag("AddChatFragment")!=null){
+            supportFragmentManager.popBackStack()
+            ChooseChatRepository.clean()
         }
     }
 

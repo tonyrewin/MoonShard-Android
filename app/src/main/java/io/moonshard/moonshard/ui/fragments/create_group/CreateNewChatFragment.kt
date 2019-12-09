@@ -74,6 +74,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
 
         back?.setOnClickListener {
             fragmentManager?.popBackStack()
+            ChooseChatRepository.clean()
         }
 
         presenter.getCategories()
@@ -120,7 +121,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     private fun initAdapter() {
         categoriesRv?.layoutManager = LinearLayoutManager(context)
         categoriesRv?.adapter = CategoriesAdapter(object : CategoryListener {
-            override fun clickChat(categoryName: String) {
+            override fun clickChat(categoryName: io.moonshard.moonshard.models.api.Category) {
                 ChooseChatRepository.category = categoryName
             }
         }, arrayListOf())

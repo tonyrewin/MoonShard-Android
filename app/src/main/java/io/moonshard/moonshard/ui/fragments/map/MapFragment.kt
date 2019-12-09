@@ -210,7 +210,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
         for (i in rooms.indices) {
             when {
-                rooms[i].category[0].categoryName == "Тусовки" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -222,7 +222,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
                         )
                 )
-                rooms[i].category[0].categoryName == "Бизнес ивенты" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Бизнес ивенты" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -234,7 +234,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
                         )
                 )
-                rooms[i].category[0].categoryName == "Кружок по интересам" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Кружок по интересам" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -246,7 +246,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-                rooms[i].category[0].categoryName == "Культурные мероприятия" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Культурные мероприятия" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(

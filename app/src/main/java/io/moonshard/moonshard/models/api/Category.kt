@@ -6,4 +6,4 @@ data class Category(
     @SerializedName("id")
     var id: Int,
     @SerializedName("categoryName")
-    var categoryName: String)
+    var categoryName: String?)

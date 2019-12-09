@@ -13,5 +13,5 @@ data class ModelMapRequest (
     private val ttl: Int? = null,
     @SerializedName("roomId")
     private val roomId: String? = null,
-    @SerializedName("category")
+    @SerializedName("categories")
     private val category: ArrayList<Category>? = null)

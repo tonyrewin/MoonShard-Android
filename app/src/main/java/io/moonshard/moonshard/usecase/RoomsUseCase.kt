@@ -32,4 +32,8 @@ class RoomsUseCase {
     fun getCategories(): Single<ArrayList<Category>> {
         return roomsRepository.getCategories()
     }
+
+    fun getRoomsByCategory(categoryId: Int,lat: String, lng: String, radius: String):Single<ArrayList<RoomPin>>{
+        return roomsRepository.getRoomsByCategory(categoryId,lat, lng,radius)
+    }
 }

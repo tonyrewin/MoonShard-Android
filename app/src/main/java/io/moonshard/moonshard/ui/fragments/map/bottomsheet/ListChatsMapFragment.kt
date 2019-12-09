@@ -71,8 +71,6 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.add(R.id.container, chatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack(null)
                 ?.commit()
-
-
         }
     }
 

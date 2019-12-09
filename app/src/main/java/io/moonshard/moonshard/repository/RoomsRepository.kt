@@ -10,6 +10,7 @@ import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.Field
 import javax.inject.Inject
+import kotlin.math.ln
 
 class RoomsRepository {
 
@@ -36,4 +37,9 @@ class RoomsRepository {
     fun getCategories():Single<ArrayList<Category>>{
         return api.getCategories()
     }
+
+    fun getRoomsByCategory(categoryId: Int,lat: String, lng: String, radius: String):Single<ArrayList<RoomPin>>{
+        return api.getRoomsByCategory(categoryId,lat, lng,radius)
+    }
+
 }

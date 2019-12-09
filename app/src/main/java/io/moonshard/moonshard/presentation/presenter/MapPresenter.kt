@@ -21,12 +21,7 @@ import org.jxmpp.jid.parts.Resourcepart
 import org.jivesoftware.smackx.muc.DiscussionHistory
 import org.jivesoftware.smackx.muc.MucEnterConfiguration
 import com.instacart.library.truetime.TrueTime.build
-
-
-
-
-
-
+import io.moonshard.moonshard.models.api.Category
 
 
 @InjectViewState
@@ -54,6 +49,22 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 }
             })
     }
+
+   fun getRoomsByCategory(lat: String, lng: String, radius: String,category:Category){
+       compositeDisposable.add(useCase!!.getRoomsByCategory(category.id,"55.751244", "37.618423", 10000.toString())
+           .observeOn(AndroidSchedulers.mainThread())
+           .subscribeOn(Schedulers.io())
+           .subscribe { rooms, throwable ->
+               if (throwable == null) {
+                   RoomsMap.clean()
+                   RoomsMap.rooms = rooms
+                   Log.d("rooms", rooms.size.toString())
+                   viewState?.showRoomsOnMap(rooms)
+               } else {
+                   throwable.message?.let { viewState?.showError(it) }
+               }
+           })
+   }
 
     fun getValueOnlineUsers(jid: String): Int {
         val groupId = JidCreate.entityBareFrom(jid)

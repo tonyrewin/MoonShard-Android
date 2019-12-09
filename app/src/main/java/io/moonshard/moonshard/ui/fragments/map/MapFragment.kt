@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
@@ -135,6 +136,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
+    fun update(category:Category){
+        presenter.getRoomsByCategory("","","",category)
+    }
+
     fun hideBottomSheet(){
         defaultBottomSheet.visibility = View.GONE
     }
@@ -208,6 +213,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
+        mMap?.clear()
         for (i in rooms.indices) {
             when {
                 rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(

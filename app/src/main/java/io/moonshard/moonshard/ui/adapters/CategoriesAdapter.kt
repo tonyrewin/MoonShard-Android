@@ -10,19 +10,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.models.Category
+import io.moonshard.moonshard.models.api.Category
 
 interface CategoryListener {
     fun clickChat(categoryName: String)
 }
 
-class CategoriesAdapter(val listener: CategoryListener, private var chats: List<Category>) :
+class CategoriesAdapter(val listener: CategoryListener, private var categories: ArrayList<Category>) :
     RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     var focusedItem = -1
-    fun setFocusedItem(){
-        for(i in chats.indices){
-            if(chats[i].name== ChooseChatRepository.category){
+    private fun setFocusedItem(){
+        for(i in categories.indices){
+            if(categories[i].categoryName== ChooseChatRepository.category){
                 focusedItem = i
             }
         }
@@ -30,6 +30,12 @@ class CategoriesAdapter(val listener: CategoryListener, private var chats: List<
 
     init {
         setFocusedItem()
+    }
+
+    fun updateCategories(categories:ArrayList<Category>){
+        this.categories.clear()
+        this.categories.addAll(categories)
+        notifyDataSetChanged()
     }
 
 
@@ -51,17 +57,39 @@ class CategoriesAdapter(val listener: CategoryListener, private var chats: List<
             holder.categoryName?.setTextColor(Color.parseColor("#333333"))
         }
 
-        holder.iconCategory?.setImageResource(chats[position].drawable)
-        holder.categoryName?.text = chats[position].name
+        holder.iconCategory?.let {
+            setDrawable(it,categories[position])
+        }
+
+        holder.categoryName?.text = categories[position].categoryName
 
         holder.itemView.setOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
-            listener.clickChat(chats[position].name)
+            listener.clickChat(categories[position].categoryName)
         }
     }
 
-    override fun getItemCount(): Int = chats.size
+    private fun setDrawable(imageView:ImageView, category:Category){
+        when {
+            category.categoryName=="Тусовки" -> {
+                imageView.setImageResource(R.drawable.ic_star)
+            }
+            category.categoryName=="Бизнес ивенты" -> {
+                imageView.setImageResource(R.drawable.ic_case)
+
+            }
+            category.categoryName=="Кружок по интересам" -> {
+                imageView.setImageResource(R.drawable.ic_heart)
+
+            }
+            category.categoryName=="Культурные мероприятия" -> {
+                imageView.setImageResource(R.drawable.ic_culture_category)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int = categories.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var categoryName: TextView? = view.findViewById(R.id.name)

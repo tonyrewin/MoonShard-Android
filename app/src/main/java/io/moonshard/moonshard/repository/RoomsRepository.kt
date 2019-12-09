@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.ModelMapRequest
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -20,9 +21,9 @@ class RoomsRepository {
     }
 
     fun putRoom(latitude: Float, longitude: Float, ttl: Int, roomId: String,
-        category: String
+        categories: ArrayList<Category>
     ): Single<RoomPin> {
-        val request = ModelMapRequest(latitude,longitude,ttl,roomId,category)
+        val request = ModelMapRequest(latitude,longitude,ttl,roomId,categories)
         return api.putRoom(request)
     }
 
@@ -30,5 +31,9 @@ class RoomsRepository {
     fun getRooms(lat: String, lng: String, radius: String
     ): Single<ArrayList<RoomPin>> {
         return api.getRooms(lat,lng,radius)
+    }
+
+    fun getCategories():Single<ArrayList<Category>>{
+        return api.getCategories()
     }
 }

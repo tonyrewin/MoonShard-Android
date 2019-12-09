@@ -1,8 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.ImageView
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
@@ -12,14 +10,11 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
-import org.jivesoftware.smackx.muc.Affiliate
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
-import java.util.concurrent.ExecutionException
 
 @InjectViewState
 class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
@@ -43,7 +38,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
             for (i in rooms.indices) {
                 if (roomInfo.room.asEntityBareJidString() == rooms[i].roomId) {
-                    location = LatLng(rooms[i].latitude.toDouble(), rooms[i].longtitude.toDouble())
+                    location = LatLng(rooms[i].latitude.toDouble(), rooms[i].longitude.toDouble())
                     category = rooms[i].category.toString()
                 }
             }

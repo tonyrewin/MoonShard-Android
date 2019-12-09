@@ -87,7 +87,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     roomInfo?.let {
                         val distance = (calculationByDistance(
                             RoomsMap.rooms[i].latitude,
-                            RoomsMap.rooms[i].longtitude
+                            RoomsMap.rooms[i].longitude
                         ))
 
                         locationValueTestTv?.text = distance
@@ -110,7 +110,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         locationInfoTv?.text = getAddress(
                             LatLng(
                                 RoomsMap.rooms[i].latitude.toDouble(),
-                                RoomsMap.rooms[i].longtitude.toDouble()
+                                RoomsMap.rooms[i].longitude.toDouble()
                             )
                         )
                         descriptionTv?.text = roomInfo.description
@@ -210,48 +210,48 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
         for (i in rooms.indices) {
             when {
-                rooms[i].category == "Тусовки" -> mMap?.addMarker(
+                rooms[i].category[0].categoryName == "Тусовки" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
                         )
                 )
-                rooms[i].category == "Бизнес ивенты" -> mMap?.addMarker(
+                rooms[i].category[0].categoryName == "Бизнес ивенты" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
                         )
                 )
-                rooms[i].category == "Кружок по интересам" -> mMap?.addMarker(
+                rooms[i].category[0].categoryName == "Кружок по интересам" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-                rooms[i].category == "Культурные мероприятия" -> mMap?.addMarker(
+                rooms[i].category[0].categoryName == "Культурные мероприятия" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(

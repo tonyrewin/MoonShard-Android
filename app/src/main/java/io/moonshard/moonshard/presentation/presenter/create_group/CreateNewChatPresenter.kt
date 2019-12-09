@@ -2,6 +2,7 @@ package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.CreateNewChatView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -15,6 +16,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
+import kotlin.collections.ArrayList
 
 @InjectViewState
 class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
@@ -22,9 +24,23 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
-
     init {
         useCase = RoomsUseCase()
+    }
+
+    fun getCategories(){
+        viewState?.showProgressBar()
+        compositeDisposable.add(useCase!!.getCategories()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { categories, throwable ->
+                viewState?.hideProgressBar()
+                if (throwable == null) {
+                    viewState?.showCategories(categories)
+                }else{
+                    viewState?.showToast("Ошибка: ${throwable.message}")
+                }
+            })
     }
 
     @SuppressLint("CheckResult")
@@ -83,16 +99,19 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         latitude: Float?, longitude: Float?, ttl: Int, roomId: String,
         category: String
     ) {
+
+        val myCategory = Category(1,"blabla")
+        val categories = arrayListOf<Category>()
+        categories.add(myCategory)
         if (latitude != null && longitude != null) {
-            compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, category)
+            compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, categories)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doOnError {
-                    viewState?.showToast("Ошибка: ${it.message}")
-                }
-                .subscribe { t1, t2 ->
-                    if (t1 != null) {
+                .subscribe { _, throwable ->
+                    if (throwable == null) {
                         viewState?.showMapScreen()
+                    }else{
+                        viewState?.showToast("Ошибка: ${throwable.message}")
                     }
                 })
         }

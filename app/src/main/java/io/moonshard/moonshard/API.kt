@@ -1,6 +1,7 @@
 package io.moonshard.moonshard
 
 import io.moonshard.moonshard.models.ModelMapRequest
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -23,7 +24,7 @@ interface API {
     @GET("/rooms/id")
     fun getRoomsById()
 
-    @GET("/api/v1/employees")
-    fun test(): Single<ResponseBody>
+    @GET("/categories")
+    fun getCategories():Single<ArrayList<Category>>
 
 }

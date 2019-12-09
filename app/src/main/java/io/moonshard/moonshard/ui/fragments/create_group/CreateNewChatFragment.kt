@@ -30,7 +30,6 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_new_chat, container, false)
     }
 
@@ -46,7 +45,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         if (ChooseChatRepository.time.isEmpty()) {
-            timeTv?.text = "3 hours"
+            timeTv?.text = "6 hours"
         } else {
             timeTv?.text = ChooseChatRepository.time
         }
@@ -75,6 +74,8 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         back?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
+
+        presenter.getCategories()
     }
 
     private fun methodRequiresTwoPermission() {
@@ -116,13 +117,16 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     }
 
     private fun initAdapter() {
-        val categories = initCategories()
         categoriesRv?.layoutManager = LinearLayoutManager(context)
         categoriesRv?.adapter = CategoriesAdapter(object : CategoryListener {
             override fun clickChat(categoryName: String) {
                 ChooseChatRepository.category = categoryName
             }
-        }, categories)
+        }, arrayListOf())
+    }
+
+    override fun showCategories(categories: ArrayList<io.moonshard.moonshard.models.api.Category>) {
+        (categoriesRv?.adapter as? CategoriesAdapter)?.updateCategories(categories)
     }
 
     private fun initCategories(): ArrayList<Category> {
@@ -158,5 +162,13 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         ft?.replace(R.id.container, chatFragment, "TimeGroupChatFragment")
             ?.addToBackStack("TimeGroupChatFragment")
             ?.commit()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

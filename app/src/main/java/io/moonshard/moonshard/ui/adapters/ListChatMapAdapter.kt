@@ -51,7 +51,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         holder.groupNameTv?.text = roomInfo?.name.toString()
         holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
         holder.locationValueTv?.text =
-            calculationByDistance(chats[position].latitude, chats[position].longtitude)
+            calculationByDistance(chats[position].latitude, chats[position].longitude)
 
         holder.itemView.setOnClickListener {
             listener.clickChat(chats[position])

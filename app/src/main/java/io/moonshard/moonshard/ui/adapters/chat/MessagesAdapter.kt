@@ -195,7 +195,7 @@ open class MessagesAdapter(
     fun generateDateHeaders(messages: List<GenericMessage>) {
         for (i in messages.indices) {
             val message = messages[i]
-            this.myMsgs.add(message)
+                //this.myMsgs.add(message)
             if (messages.size > i + 1) {
                 val nextMessage = messages[i + 1]
                 if (!DateFormatter.isSameDay(

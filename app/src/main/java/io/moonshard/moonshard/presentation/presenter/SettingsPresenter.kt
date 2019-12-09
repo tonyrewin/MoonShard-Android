@@ -26,8 +26,10 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
         val card = vm.loadVCard()
         val avatarBytes = card.avatar
-        val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-        viewState?.setAvatar(bitmap)
+        avatarBytes?.let {
+            val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+            viewState?.setAvatar(bitmap)
+        }
     }
 
     fun getName(){

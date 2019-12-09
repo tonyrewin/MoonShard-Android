@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
@@ -36,7 +37,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         presenter.getName()
         logOut?.setOnClickListener {
             presenter.logOut()
-            clearLoginCredentials()
+            MainApplication.resetLoginCredentials()
         }
 
         profileSettingsLayout?.setOnClickListener {
@@ -78,11 +79,6 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
-    private fun clearLoginCredentials() {
-        SecurePreferences.setValue("jid", "")
-        SecurePreferences.setValue("pass", "")
-        SecurePreferences.setValue("logged_in", false)
-    }
 
     override fun setAvatar(avatar: Bitmap?) {
         avatarIv?.setImageBitmap(avatar)

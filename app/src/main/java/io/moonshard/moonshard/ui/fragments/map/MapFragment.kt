@@ -21,15 +21,20 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.presentation.presenter.ListChatMapPresenter
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
-import kotlinx.android.synthetic.main.bottom_sheet_info.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.bottom_sheet_category.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -45,7 +50,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     @InjectPresenter
     lateinit var presenter: MapPresenter
 
-    //var sheetBehavior:BottomSheetBehavior<View>?=null
+    var sheetBehavior: BottomSheetBehavior<View>? = null
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -70,7 +75,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         myLocationBtn?.setOnClickListener {
             getMyLocation()
         }
-        presenter.getRooms("", "", "",null)
+        presenter.getRooms("", "", "", null)
     }
 
     override fun onCreateView(
@@ -92,19 +97,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             RoomsMap.rooms[i].latitude,
                             RoomsMap.rooms[i].longitude
                         ))
-
-                        locationValueTestTv?.text = distance
-                        groupNameInfoTv?.text = roomInfo.name
-                        valueMembersTv?.text =
-                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
-
-                        joinGroupBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                        }
-
-                        readGroupBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                        }
 
                         groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
@@ -138,18 +130,16 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
-    fun update(category:Category){
-        presenter.getRooms("","","",category)
+    fun update(category: Category) {
+        presenter.getRooms("", "", "", category)
     }
 
-    fun hideBottomSheet(){
-      //  MainApplication.getMainUIThread().post {
-      //      sheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
-      //      val kek = ""
-      //  }
+    //hide
+    fun collapsedBottomSheet() {
+        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    fun showBottomSheet(){
+    fun showBottomSheet() {
         defaultBottomSheet.visibility = View.VISIBLE
     }
 
@@ -297,6 +287,19 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
+    fun showCategoryBottomSheet(){
+        bottomSheetCategory.visibility = View.VISIBLE
+        bottomSheetFind.visibility = View.GONE
+        categoryFilterName.text = "Категория: "+RoomsMap.category?.categoryName
+        sheetBehavior?.setPeekHeight(convertDpToPixel(100F,context),false)
+    }
+
+    fun hideCategoryBottomSheet(){
+        bottomSheetCategory.visibility = View.GONE
+        bottomSheetFind.visibility = View.VISIBLE
+        sheetBehavior?.setPeekHeight(convertDpToPixel(85F,context),false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
@@ -306,11 +309,29 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val myBottom = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
-        val sheetBehavior = BottomSheetBehavior.from(myBottom)
+        val llBottomSheet = view.findViewById<LinearLayout>(R.id.defaultBottomSheet)
+        sheetBehavior = BottomSheetBehavior.from(llBottomSheet)
 
-        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        if(RoomsMap.isFilter){
+            showCategoryBottomSheet()
+        }else{
+            hideCategoryBottomSheet()
+        }
 
+        swipeBtn?.setOnClickListener {
+            if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        removeFilterBtn?.setOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("","","",null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+        }
 
         sheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -321,20 +342,28 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                     }
-                    BottomSheetBehavior.STATE_EXPANDED -> buttonsTop.visibility = View.GONE
-                    BottomSheetBehavior.STATE_COLLAPSED -> buttonsTop.visibility = View.VISIBLE
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        swipeBtn.setImageResource(R.drawable.ic_line_bottom_sheet)
+                        buttonsTop.visibility = View.GONE
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        swipeBtn.setImageResource(R.drawable.ic_bottom_sheet_up)
+                        buttonsTop.visibility = View.VISIBLE
+                    }
+
                 }
             }
         })
     }
 
     private fun getMyLocation() {
-        if(MainApplication.getCurrentLocation()!=null){
+        if (MainApplication.getCurrentLocation() != null) {
             val latLng = LatLng(
                 MainApplication.getCurrentLocation().latitude,
                 MainApplication.getCurrentLocation().longitude
             )
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+            val cameraUpdate =
+                CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
             mMap?.animateCamera(cameraUpdate)
         }
     }
@@ -363,4 +392,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
+
+    fun updateListRooms(){
+         val fragment = fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+        (fragment as? ListChatsMapFragment)?.updateChats()
+    }
 }
+//android:switcher:2131230813:0

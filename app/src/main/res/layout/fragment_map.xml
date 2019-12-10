@@ -60,7 +60,6 @@
 
     <include
             android:visibility="visible"
-            android:id="@+id/defaultBottomSheet"
             layout="@layout/fragment_bottom_sheet"/>
 
     <include

@@ -3,6 +3,7 @@ package io.moonshard.moonshard.presentation.presenter
 import android.annotation.SuppressLint
 import android.util.Log
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -28,8 +29,28 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
     }
 
     fun getChats() {
-        //this hard data - center Moscow
-        compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
+        if(RoomsMap.isFilter){
+            getRoomsByCategory("","","",RoomsMap.category!!)
+        }else{
+            //this hard data - center Moscow
+            compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { rooms, throwable ->
+                    if (throwable == null) {
+                        RoomsMap.clean()
+                        RoomsMap.rooms = rooms
+                        Log.d("rooms", rooms.size.toString())
+                        viewState?.setChats(rooms)
+                    } else {
+                        val error = ""
+                    }
+                })
+        }
+    }
+
+    private fun getRoomsByCategory(lat: String, lng: String, radius: String, category: Category){
+        compositeDisposable.add(useCase!!.getRoomsByCategory(category.id,"55.751244", "37.618423", 10000.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { rooms, throwable ->
@@ -39,7 +60,7 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                     Log.d("rooms", rooms.size.toString())
                     viewState?.setChats(rooms)
                 } else {
-                    val kek = ""
+                    val error = ""
                 }
             })
     }

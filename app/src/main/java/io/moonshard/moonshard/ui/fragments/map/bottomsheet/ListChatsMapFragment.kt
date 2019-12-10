@@ -45,8 +45,6 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     }
 
     private fun initAdapter() {
-        //val categories = initCategories()
-        // val rooms = RoomsMap.rooms
         groupsRv?.layoutManager = LinearLayoutManager(context)
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
             override fun clickChat(room: RoomPin) {
@@ -58,12 +56,15 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     override fun showChatScreens(chatId: String) {
         var fragment: Fragment? = null
         MainApplication.getMainUIThread().post {
+            /*
             for(i in fragmentManager!!.fragments.indices){
                 if(fragmentManager!!.fragments[i].tag == "MapScreen"){
                     fragment = (fragmentManager!!.fragments[i] as? MapFragment)
-                    (fragmentManager!!.fragments[i] as? MapFragment)?.hideBottomSheet()
+                    (fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
                 }
             }
+
+             */
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             val chatFragment = ChatFragment()
@@ -74,18 +75,8 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         }
     }
 
-    private fun initCategories(): ArrayList<Category> {
-        val categoryOne = Category(R.drawable.ic_star, "Тусовки")
-        val categoryTwo = Category(R.drawable.ic_case, "Бизнес ивенты")
-        val categoryThree = Category(R.drawable.ic_heart, "Кружок по интересам")
-        val categoryFour = Category(R.drawable.ic_culture_category, "Культурные мероприятия")
-
-        val categories = arrayListOf<Category>()
-        categories.add(categoryOne)
-        categories.add(categoryTwo)
-        categories.add(categoryThree)
-        categories.add(categoryFour)
-
-        return categories
+    fun updateChats(){
+        presenter.getChats()
     }
+
 }

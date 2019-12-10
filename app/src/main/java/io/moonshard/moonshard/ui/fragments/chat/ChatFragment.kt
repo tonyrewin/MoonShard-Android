@@ -115,7 +115,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         for(i in fragmentManager!!.fragments.indices){
             if(fragmentManager!!.fragments[i].tag == "MapScreen"){
-                (fragmentManager!!.fragments[i] as? MapFragment)?.showBottomSheet()
+            //    (fragmentManager!!.fragments[i] as? MapFragment)?.showBottomSheet()
             }
         }
     }

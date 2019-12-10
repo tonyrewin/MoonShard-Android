@@ -12,4 +12,9 @@ object RoomsMap {
     fun clean(){
         rooms.clear()
     }
+
+    fun clearFilters(){
+        isFilter=false
+        category=null
+    }
 }

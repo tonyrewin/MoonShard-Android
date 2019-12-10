@@ -11,6 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <ImageView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/swipeInfoBtn"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_line_bottom_sheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
     <RelativeLayout
             android:id="@+id/mainLayout"
             android:layout_width="wrap_content"

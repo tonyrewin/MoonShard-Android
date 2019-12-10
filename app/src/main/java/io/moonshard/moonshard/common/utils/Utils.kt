@@ -1,10 +1,13 @@
 package io.moonshard.moonshard.common.utils
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.DisplayMetrics
 
 object Utils {
     fun drawableToBitmap(drawable: Drawable): Bitmap {
@@ -30,5 +33,16 @@ object Utils {
 
     fun bytesToBitmap(bytes: ByteArray): Bitmap {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    fun convertDpToPixel(dp: Float, context: Context?): Int {
+        return if (context != null) {
+            val resources = context.resources
+            val metrics = resources.displayMetrics
+            (dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
+        } else {
+            val metrics = Resources.getSystem().displayMetrics
+            (dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
+        }
     }
 }

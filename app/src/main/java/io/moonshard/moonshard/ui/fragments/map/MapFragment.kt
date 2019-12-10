@@ -45,6 +45,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     @InjectPresenter
     lateinit var presenter: MapPresenter
 
+    //var sheetBehavior:BottomSheetBehavior<View>?=null
+
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         map?.isMyLocationEnabled = true
@@ -68,7 +70,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         myLocationBtn?.setOnClickListener {
             getMyLocation()
         }
-        presenter.getRooms("", "", "")
+        presenter.getRooms("", "", "",null)
     }
 
     override fun onCreateView(
@@ -137,11 +139,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun update(category:Category){
-        presenter.getRoomsByCategory("","","",category)
+        presenter.getRooms("","","",category)
     }
 
     fun hideBottomSheet(){
-        defaultBottomSheet.visibility = View.GONE
+      //  MainApplication.getMainUIThread().post {
+      //      sheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+      //      val kek = ""
+      //  }
     }
 
     fun showBottomSheet(){
@@ -301,10 +306,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
-        val sheetBehavior = BottomSheetBehavior.from(myBottoms)
+        val myBottom = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
+        val sheetBehavior = BottomSheetBehavior.from(myBottom)
 
-        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+
+        sheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
             }

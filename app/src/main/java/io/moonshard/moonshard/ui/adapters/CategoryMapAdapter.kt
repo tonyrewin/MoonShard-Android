@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 
 
 interface CategoryMapListener {
@@ -39,8 +41,9 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
         holder.categoryName?.text = categories[position].categoryName
         holder.categoryInfo?.text = categories[position].categoryName
 
-
         holder.itemView.setOnClickListener {
+            RoomsMap.isFilter = true
+            RoomsMap.category = categories[position]
             focusedItem = position
             notifyDataSetChanged()
             listener.clickChat(categories[position])

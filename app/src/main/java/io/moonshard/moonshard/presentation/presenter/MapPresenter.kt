@@ -33,21 +33,25 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         useCase = RoomsUseCase()
     }
 
-    fun getRooms(lat: String, lng: String, radius: String) {
-        //this hard data - center Moscow
-        compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { rooms, throwable ->
-                if (throwable == null) {
-                    RoomsMap.clean()
-                    RoomsMap.rooms = rooms
-                    Log.d("rooms", rooms.size.toString())
-                    viewState?.showRoomsOnMap(rooms)
-                } else {
-                    throwable.message?.let { viewState?.showError(it) }
-                }
-            })
+    fun getRooms(lat: String, lng: String, radius: String,category:Category?) {
+       if(RoomsMap.isFilter){
+           getRoomsByCategory(lat,lng,radius,RoomsMap.category!!)
+       }else{
+           //this hard data - center Moscow
+           compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribeOn(Schedulers.io())
+               .subscribe { rooms, throwable ->
+                   if (throwable == null) {
+                       RoomsMap.clean()
+                       RoomsMap.rooms = rooms
+                       Log.d("rooms", rooms.size.toString())
+                       viewState?.showRoomsOnMap(rooms)
+                   } else {
+                       throwable.message?.let { viewState?.showError(it) }
+                   }
+               })
+       }
     }
 
    fun getRoomsByCategory(lat: String, lng: String, radius: String,category:Category){

@@ -5,7 +5,6 @@ import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
 import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.models.dbEntities.MessageEntity_
-import io.moonshard.moonshard.repository.interfaces.IMessageRepository
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query
@@ -15,18 +14,19 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.jxmpp.jid.Jid
+import org.jxmpp.jid.impl.JidCreate
 
-object MessageRepository: IMessageRepository {
+object MessageRepository {
     private val messageBox: Box<MessageEntity> = ObjectBox.boxStore.boxFor()
 
-    override fun saveMessage(messageEntity: MessageEntity): Completable {
+    fun saveMessage(messageEntity: MessageEntity): Completable {
         return Completable.create {
             messageBox.put(messageEntity)
             it.onComplete()
         }
     }
 
-    override fun getMessagesByJid(jid: Jid): Observable<List<MessageEntity>> {
+    fun getMessagesByJid(jid: Jid): Observable<List<MessageEntity>> {
         return Observable.create {
             ChatListRepository.getChatByJid(jid).subscribe({ chat ->
                 it.onNext(chat.messages.toList())
@@ -36,7 +36,7 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun removeMessagesByJid(jid: Jid): Completable {
+    fun removeMessagesByJid(jid: Jid): Completable {
         return Completable.create {
             messageBox.query {
                 link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
@@ -45,7 +45,7 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun getMessageById(messageUid: String): Single<MessageEntity> {
+    fun getMessageById(messageUid: String): Single<MessageEntity> {
         return Single.create {
             val msg = messageBox.query {
                 equal(MessageEntity_.messageUid, messageUid)
@@ -54,7 +54,7 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun getLastMessage(jid: Jid): Observable<MessageEntity> {
+    fun getLastMessage(jid: Jid): Observable<MessageEntity> {
         return Observable.create {
             val msgQuery = messageBox.query {
                 order(MessageEntity_.timestamp, QueryBuilder.DESCENDING)
@@ -72,7 +72,11 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun getFirstMessage(jid: Jid): Observable<MessageEntity> {
+    /**
+     * Get first message in chat
+     * @param jid
+     */
+    fun getFirstMessage(jid: Jid): Observable<MessageEntity> {
         return Observable.create {
             val msgQuery = messageBox.query {
                 order(MessageEntity_.timestamp)
@@ -90,7 +94,15 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun getRealUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
+    /**
+     * Get first message in chat
+     * @param jid String representation of chat JID
+     */
+    fun getFirstMessage(jid: String): Observable<MessageEntity> {
+        return getFirstMessage(JidCreate.bareFrom(jid))
+    }
+
+    fun getRealUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
         return Observable.create {
             val msgQuery = messageBox.query {
                 equal(MessageEntity_.isCurrentUserSender, false)
@@ -110,7 +122,7 @@ object MessageRepository: IMessageRepository {
         }
     }
 
-    override fun updateRealUnreadMessagesCount(jid: Jid): Completable {
+    fun updateRealUnreadMessagesCount(jid: Jid): Completable {
         return Completable.create {
             val msgQuery = messageBox.query {
                 equal(MessageEntity_.isCurrentUserSender, false)
@@ -118,15 +130,26 @@ object MessageRepository: IMessageRepository {
                 link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
             }
 
-            RxQuery.observable(msgQuery).subscribe({ unreadMessages ->
+            RxQuery.single(msgQuery).subscribe({ unreadMessages ->
                 unreadMessages.forEach {
-                    it.isRead = false
+                    it.isRead = true
                 }
                 messageBox.put(unreadMessages)
                 it.onComplete()
             }, { e ->
                 it.onError(e)
             })
+        }
+    }
+
+    fun updateRealUnreadMessagesCount(jid: String): Completable {
+        return updateRealUnreadMessagesCount(JidCreate.bareFrom(jid))
+    }
+
+    fun clearMessages(): Completable {
+        return Completable.create {
+            messageBox.removeAll()
+            it.onComplete()
         }
     }
 }

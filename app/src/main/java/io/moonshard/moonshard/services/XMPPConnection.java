@@ -32,6 +32,7 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
+import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -95,6 +96,14 @@ public class XMPPConnection implements ConnectionListener {
             }
         }
         networkHandler = new NetworkHandler();
+    }
+
+    public LoginCredentials getLoginCredentials() {
+        return credentials;
+    }
+
+    public Jid getJid() throws XmppStringprepException {
+        return JidCreate.bareFrom(credentials.username + "@" + credentials.jabberHost);
     }
 
     public void connect() throws XMPPException, IOException, SmackException, EmptyLoginCredentialsException {
@@ -285,6 +294,7 @@ public class XMPPConnection implements ConnectionListener {
             if (!senderID.isEmpty()) {
                 if (MainApplication.avatarsCache.containsKey(senderID)) {
                     emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                    return;
                 }
                 if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
                     emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(senderID.charAt(0)))));

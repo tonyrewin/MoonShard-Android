@@ -1,8 +1,8 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ import java.util.*
 
 
 open class MessagesAdapter(
-    private var myMsgs: ArrayList<GenericMessage>, val layoutManager: LinearLayoutManager
+    private var myMsgs: MutableList<GenericMessage>, val layoutManager: LinearLayoutManager
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), RecyclerScrollMoreListener.OnLoadMoreListener {
 
@@ -110,11 +110,12 @@ open class MessagesAdapter(
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun setAvatar(jid: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid)
                 .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {
@@ -153,9 +154,16 @@ open class MessagesAdapter(
         myMsgs.add(0, element)
         //notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
         notifyItemRangeInserted(0,  1)
-        if (layoutManager != null && scroll) {
+        if (scroll) {
             layoutManager.scrollToPosition(0)
         }
+    }
+
+    fun setMessages(messages: List<GenericMessage>, reverse: Boolean) {
+        myMsgs = messages.toMutableList()
+        if (reverse) myMsgs.reverse()
+        notifyDataSetChanged()
+        layoutManager.scrollToPosition(0)
     }
 
     fun addToEnd(messages: List<GenericMessage>, reverse: Boolean) {

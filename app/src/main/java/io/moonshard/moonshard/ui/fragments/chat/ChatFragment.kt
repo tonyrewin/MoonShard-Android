@@ -41,9 +41,16 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
+    override fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
+        MainApplication.getMainUIThread().post {
+            (messagesRv?.adapter as MessagesAdapter).setMessages(msgs, reverse)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(
             io.moonshard.moonshard.R.layout.fragment_chat,
             container, false

@@ -1,15 +1,17 @@
 package io.moonshard.moonshard.presentation.presenter
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.instacart.library.truetime.TrueTime
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
+import io.moonshard.moonshard.models.dbEntities.ChatUser
 import io.moonshard.moonshard.models.dbEntities.MessageEntity
 import io.moonshard.moonshard.presentation.view.ChatView
 import io.moonshard.moonshard.repository.ChatListRepository
+import io.moonshard.moonshard.repository.ChatUserRepository
 import io.moonshard.moonshard.repository.MessageRepository
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -36,7 +38,6 @@ import trikita.log.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.ExecutionException
 import kotlin.collections.ArrayList
 
 @InjectViewState
@@ -49,16 +50,17 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
-        chatID = chatId // FIXME remove hardcode
+        chatID = chatId
         ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 chat = it
                 loadLocalMessages()
-                loadMoreMessages()
+                // loadMoreMessages() // FIXME
                 getDataInfo()
             }
+        MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
     }
 
     @SuppressLint("CheckResult")
@@ -200,7 +202,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
 
             override fun onNext(message: MessageEntity) {
-                ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
+                ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0).subscribe()
                 viewState?.addToStart(GenericMessage(message), true)
             }
 
@@ -210,47 +212,70 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         }
     }
 
-    /*
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public fun onNewMessage(event: NewMessageEvent) {
-        if(event.chatID.equals(chatEntity!!.jid)) {
-            val messageID = event.messageID
-            chatAdapter.addToStart(GenericMessage(LocalDBWrapper.getMessageByID(messageID)), true)
-            LocalDBWrapper.updateChatUnreadMessagesCount(chatEntity.jid, 0)
-        }
-    }
-     */
-
     @SuppressLint("CheckResult")
     fun loadMoreMessages() {
-        loadMessagesFromMAM().thenAccept { query ->
-            if (query != null) {
-                val adapterMessages = ArrayList<GenericMessage>()
-                StreamSupport.stream(query.page.forwarded)
-                    .forEach { forwardedMessage ->
-                        val message =
-                            Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
-                        if (message.body != null) {
-                            MessageRepository.getMessageById(message.stanzaId)
-                                .observeOn(Schedulers.io())
-                                .subscribeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    // FIXME
-                                }, {
-                                    // FIXME
-                                })
+        loadMessagesFromMAM()
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe({ query ->
+                if (query != null) {
+                    val adapterMessages = ArrayList<GenericMessage>()
+                    query.page.forwarded
+                        .forEach { forwardedMessage ->
+                            val message =
+                                Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
+                            if (message.body != null) {
+                                MessageRepository.getMessageById(message.stanzaId)
+                                    .observeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({}, {
+                                        if(it is NotFoundException) {
+                                            val senderJid = message.from.asBareJid().asUnescapedString()
+                                            ChatUserRepository.getUserAsSingle(message.from.asBareJid())
+                                                .observeOn(Schedulers.io())
+                                                .subscribeOn(AndroidSchedulers.mainThread())
+                                                .subscribe({ chatUser ->
+                                                    val messageEntity = MessageEntity(
+                                                        messageUid = message.stanzaId,
+                                                        timestamp = forwardedMessage.delayInformation.stamp.time,
+                                                        text = message.body,
+                                                        isSent = true,
+                                                        isRead = true,
+                                                        isCurrentUserSender = senderJid == MainApplication.getXmppConnection().jid.asUnescapedString()
+                                                    )
+                                                    messageEntity.chat.target = chat
+                                                    messageEntity.sender.target = chatUser
+                                                }, {
+                                                    val chatUser = ChatUser(
+                                                        jid = message.from.asBareJid().asUnescapedString(),
+                                                        name = message.from.asBareJid().asUnescapedString().split("@")[0]
+                                                    )
+                                                    ChatUserRepository.saveUser(chatUser).subscribe {
+                                                        val messageEntity = MessageEntity(
+                                                            messageUid = message.stanzaId,
+                                                            timestamp = forwardedMessage.delayInformation.stamp.time,
+                                                            text = message.body,
+                                                            isSent = true,
+                                                            isRead = true,
+                                                            isCurrentUserSender = senderJid == MainApplication.getXmppConnection().jid.asUnescapedString()
+                                                        )
+                                                        messageEntity.chat.target = chat
+                                                        messageEntity.sender.target = chatUser
+                                                    }
+                                                })
+
+                                        }
+                                    })
+                            }
                         }
+                    MainApplication.getMainUIThread().post {
+                        adapterMessages.sortWith(messageComparator)
+                        viewState?.addToEnd(adapterMessages, true)
                     }
-                MainApplication.getMainUIThread().post {
-                    adapterMessages.sortWith(messageComparator)
-                    viewState?.addToEnd(adapterMessages, true)
                 }
-                if (query.messageCount != 0) {
-                    /*chat!!.firstMessageUid = query.mamResultExtensions[0].id
-                    LocalDBWrapper.updateChatEntity(chat)*/
-                }
-            }
-        }
+            }, {
+                // FIXME
+            })
     }
 
     @SuppressLint("CheckResult")
@@ -263,7 +288,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 }
             }
             genericMessages.sortWith(messageComparator)
-            viewState.addToEnd(genericMessages, true)
+            viewState.setMessages(genericMessages, true)
         }
     }
 
@@ -271,6 +296,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         return MessageRepository.getMessagesByJid(JidCreate.bareFrom(chat.jid))
     }
 
+    // FIXME
     fun loadRecentPageMessages() {
         loadRecentPageMessages2().thenAccept { query ->
             if (query != null) {
@@ -330,58 +356,39 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         }
     }
 
-    fun loadMessagesFromMAM(): CompletableFuture<MamManager.MamQuery?> {
-        return CompletableFuture.supplyAsync {
-            /*if (MainApplication.getXmppConnection() != null) {
+    @SuppressLint("CheckResult")
+    fun loadMessagesFromMAM(): Single<MamManager.MamQuery> {
+        return Single.create {
+            if (MainApplication.getXmppConnection() != null) {
                 val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
                 if (mamManager != null) {
-                    val firstMessageUid = LocalDBWrapper.getChatByChatID(chatID).firstMessageUid
-                    if (firstMessageUid != "") {
-                        return@supplyAsync mamManager.queryArchive(
-                            MamManager.MamQueryArgs.builder()
-                                .beforeUid(firstMessageUid)
-                                .limitResultsToJid(JidCreate.from(chatID))
-                                .setResultPageSizeTo(50)
-                                .build()
-                        )
-                    } else {
-                        return@supplyAsync null
-                    }
+                    MessageRepository.getFirstMessage(chat.jid)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ msg ->
+                            it.onSuccess(
+                                mamManager.queryArchive(
+                                    MamManager.MamQueryArgs.builder()
+                                        .beforeUid(msg.messageUid)
+                                        .limitResultsToJid(JidCreate.from(chatID))
+                                        .setResultPageSizeTo(50)
+                                        .build()
+                                )
+                            )
+                        }, { ex ->
+                            it.onError(ex)
+                        })
                 } else {
-                    return@supplyAsync null
+                    it.onError(Exception())
                 }
             } else {
-                return@supplyAsync null
-            }*/
-            return@supplyAsync null
-        }
-    }
-/*
-    private fun getAvatar(jid: String): Bitmap? {
-        var avatarBytes: ByteArray? = ByteArray(0)
-        try {
-            val future =
-                MainApplication.getXmppConnection().network.loadAvatar(jid)
-
-            if (future != null) {
-                avatarBytes = future.get()
+                it.onError(Exception())
             }
-
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
+            it.onError(Exception())
         }
-
-        var avatar: Bitmap?=null
-        if (avatarBytes != null) {
-            avatar = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-        }
-        return avatar
     }
 
- */
-
+    @SuppressLint("CheckResult")
     private fun getAvatar(jid: String) {
             MainApplication.getXmppConnection().loadAvatar(jid)
                 .observeOn(Schedulers.io())

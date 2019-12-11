@@ -8,6 +8,7 @@ interface ChatView: MvpView {
     fun cleanMessage()
     fun addToEnd(msgs:ArrayList<GenericMessage>,reverse: Boolean)
     fun addToStart(message: GenericMessage, reverse: Boolean)
+    fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean)
     fun setData(
         name: String,
         valueOccupants: Int,

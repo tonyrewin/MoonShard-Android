@@ -1,6 +1,5 @@
-package io.moonshard.moonshard.ui.fragments.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create_group
 
-import android.Manifest
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -17,9 +16,7 @@ import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_choose_map.*
-import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.util.*
 

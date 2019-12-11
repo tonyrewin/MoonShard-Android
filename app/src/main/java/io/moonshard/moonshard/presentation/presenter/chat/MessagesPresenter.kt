@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.presenter
+package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
@@ -9,7 +9,7 @@ import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatUser
 import io.moonshard.moonshard.models.dbEntities.MessageEntity
-import io.moonshard.moonshard.presentation.view.ChatView
+import io.moonshard.moonshard.presentation.view.MessagesView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.ChatUserRepository
 import io.moonshard.moonshard.repository.MessageRepository
@@ -41,7 +41,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @InjectViewState
-class ChatPresenter : MvpPresenter<ChatView>() {
+class MessagesPresenter : MvpPresenter<MessagesView>() {
     private val messageComparator =
         Comparator<GenericMessage> { o1, o2 -> o1.createdAt.time.compareTo(o2.createdAt.time) }
     private lateinit var chatID: String
@@ -58,7 +58,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 chat = it
                 loadLocalMessages()
                 // loadMoreMessages() // FIXME
-                getDataInfo()
             }
         MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
     }
@@ -76,38 +75,6 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }, {
                 // TODO add error handling
             })
-    }
-
-    fun getDataInfo(){
-        try {
-            val groupId = JidCreate.entityBareFrom(chatID)
-            val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getMultiUserChat(groupId)
-            val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getRoomInfo(groupId)
-            val occupants = muc.occupants
-
-            val name = roomInfo.name
-            getAvatar(chatID)
-            val valueOccupants = roomInfo.occupantsCount
-            val valueOnlineMembers = getValueOnlineUsers(muc,occupants)
-            viewState?.setData(name,valueOccupants,valueOnlineMembers)
-        }catch (e:Exception){
-
-        }
-    }
-
-    private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {
-        var onlineValue = 0
-        for (i in members.indices) {
-            val userOccupantPresence = muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
-            if (userOccupantPresence.type == Presence.Type.available) {
-                onlineValue++
-            }
-        }
-        return onlineValue
     }
 
     fun join() {
@@ -396,7 +363,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 .subscribe({ bytes ->
                     if (bytes != null) {
                         val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        viewState?.setAvatar(avatar)
+                        //viewState?.setAvatar(avatar)
                     }
                 }, { throwable ->
                     Log.e(throwable.message)

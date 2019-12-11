@@ -7,9 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.ui.fragments.ChatsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         mainBottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.my_chats_bottom_nav_item -> {
-                    val fragment = ChatsFragment()
+                    val fragment = MyChatsFragment()
                     val fragmentTransaction = supportFragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.container, fragment).commit()
                 }

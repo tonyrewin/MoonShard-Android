@@ -1,11 +1,11 @@
-package io.moonshard.moonshard.ui.fragments.chat
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.presentation.presenter.chat.ManageChatPresenter
+import io.moonshard.moonshard.presentation.presenter.chat.info.ManageChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
 import kotlinx.android.synthetic.main.fragment_manage_chat.*
 import moxy.MvpAppCompatFragment

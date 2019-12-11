@@ -10,12 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.ui.fragments.chat.AdminsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.AdminsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smackx.muc.Occupant
 import trikita.log.Log
-import java.util.concurrent.ExecutionException
 
 
 interface AdminListener {

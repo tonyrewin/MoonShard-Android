@@ -1,7 +1,5 @@
-package io.moonshard.moonshard.ui.fragments.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create_group
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater

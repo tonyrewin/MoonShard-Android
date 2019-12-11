@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.presenter.chat
+package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.LatLng
@@ -39,7 +39,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             for (i in rooms.indices) {
                 if (roomInfo.room.asEntityBareJidString() == rooms[i].roomId) {
                     location = LatLng(rooms[i].latitude.toDouble(), rooms[i].longitude.toDouble())
-                    category = rooms[i].category.toString()
+                    category = rooms[i].category?.get(0)?.categoryName.toString()
                 }
             }
 

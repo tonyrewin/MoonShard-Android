@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.presenter.chat
+package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.AdminsView

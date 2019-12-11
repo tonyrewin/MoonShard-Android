@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments
+package io.moonshard.moonshard.ui.fragments.mychats
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +15,8 @@ import io.moonshard.moonshard.presentation.view.ChatsView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
 import io.moonshard.moonshard.ui.adapters.ChatListListener
-import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
-import io.moonshard.moonshard.ui.fragments.create_group.AddChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -49,16 +49,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
         presenter.setDialogs()
 
-        find?.setOnClickListener {
-        }
 
-        newChat?.setOnClickListener {
-            (activity as MainActivity).hideBottomNavigationBar()
-            val newFragment = AddChatFragment()
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment,"AddChatFragment")?.addToBackStack("AddChatFragment")
-                ?.commit()
-        }
     }
 
     override fun showChatScreen(chatId: String) {

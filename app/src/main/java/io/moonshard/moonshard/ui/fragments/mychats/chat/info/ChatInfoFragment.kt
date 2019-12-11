@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.chat
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info
 
 import android.graphics.Bitmap
 import android.location.Address
@@ -13,15 +13,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.presentation.presenter.chat.ChatInfoPresenter
+import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smackx.muc.Affiliate
-import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
@@ -75,7 +73,8 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     fun showManageChatScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        val manageChatFragment = ManageChatFragment()
+        val manageChatFragment =
+            ManageChatFragment()
         manageChatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.add(R.id.container, manageChatFragment, "manageChatFragment")?.hide(this)

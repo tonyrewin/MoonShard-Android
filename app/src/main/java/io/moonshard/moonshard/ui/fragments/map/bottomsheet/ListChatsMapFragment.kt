@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.models.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.ListChatMapPresenter
 import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.ui.adapters.ListChatMapAdapter
 import io.moonshard.moonshard.ui.adapters.ListChatMapListener
-import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import kotlinx.android.synthetic.main.fragment_list_chats_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter

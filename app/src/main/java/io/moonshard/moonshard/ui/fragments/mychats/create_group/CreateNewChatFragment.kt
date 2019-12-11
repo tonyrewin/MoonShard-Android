@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create_group
 
 import android.Manifest
 import android.os.Bundle

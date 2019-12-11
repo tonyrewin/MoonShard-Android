@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-    <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-    <RelativeLayout
-            android:id="@+id/zoomLayout"
-            android:layout_width="40dp"
-            android:layout_height="80dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="19dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/layout_zoom_bg">
-
-        <ImageView
-                android:id="@+id/zoomPlus"
+        <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_plus_zoom" />
+                android:layout_height="match_parent" />
 
-        <ImageView
-                android:id="@+id/zoomMinus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="13dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/ic_minus_zoom" />
+        <RelativeLayout
+                android:id="@+id/zoomLayout"
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="19dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/layout_zoom_bg">
+
+            <ImageView
+                    android:id="@+id/zoomPlus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_plus_zoom" />
+
+            <ImageView
+                    android:id="@+id/zoomMinus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="13dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:src="@drawable/ic_minus_zoom" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
         <ImageView
                 android:id="@+id/myLocationBtn"
@@ -59,13 +59,13 @@
     </RelativeLayout>
 
     <include
-            android:visibility="visible"
-            layout="@layout/fragment_bottom_sheet"/>
+            layout="@layout/fragment_bottom_sheet"
+            android:visibility="visible" />
 
     <include
-            android:visibility="gone"
             android:id="@+id/infoBottomSheet"
-            layout="@layout/fragment_bottom_sheet_info"/>
+            layout="@layout/fragment_bottom_sheet_info"
+            android:visibility="gone" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

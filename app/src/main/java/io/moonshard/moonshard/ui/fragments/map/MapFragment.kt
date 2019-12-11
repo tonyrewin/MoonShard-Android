@@ -24,12 +24,12 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
-import io.moonshard.moonshard.presentation.presenter.ListChatMapPresenter
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*

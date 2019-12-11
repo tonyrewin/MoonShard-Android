@@ -1,7 +1,6 @@
-package io.moonshard.moonshard.ui.fragments.chat
+package io.moonshard.moonshard.ui.fragments.mychats.chat
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +9,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
+import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.GenericMessage
-import io.moonshard.moonshard.presentation.presenter.ChatPresenter
-import io.moonshard.moonshard.presentation.view.ChatView
+import io.moonshard.moonshard.presentation.presenter.chat.MessagesPresenter
+import io.moonshard.moonshard.presentation.view.MessagesView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import kotlinx.android.synthetic.main.fragment_chat.*
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
+import kotlinx.android.synthetic.main.messages_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
 
-class ChatFragment : MvpAppCompatFragment(), ChatView {
+class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     @InjectPresenter
-    lateinit var presenter: ChatPresenter
+    lateinit var presenter: MessagesPresenter
 
     var idChat: String = ""
 
@@ -52,7 +52,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     ): View? {
 
         return inflater.inflate(
-            io.moonshard.moonshard.R.layout.fragment_chat,
+            R.layout.messages_chat,
             container, false
         )
     }
@@ -68,8 +68,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         setAdapter()
 
-        arguments?.let {
-            idChat = it.getString("chatId")
+        ChatRepository.idChatCurrent?.let {
+            idChat = it
             presenter.setChatId(idChat)
 
             if (idChat.contains("conference")) presenter.join()
@@ -89,31 +89,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
                 presenter.loadRecentPageMessages()
             }
         })
-
-        avatarChat?.setOnClickListener {
-            showChatInfo(idChat)
-        }
-
-        backBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
-        }
     }
 
-    override fun setData(
-        name: String,
-        valueOccupants: Int,
-        valueOnlineMembers: Int
-    ) {
-        nameChat?.text = name
-       // avatarChat?.setImageBitmap(avatar)
-        valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
-    }
-
-    override fun setAvatar(avatar: Bitmap?) {
-        MainApplication.getMainUIThread().post {
-            avatarChat?.setImageBitmap(avatar)
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

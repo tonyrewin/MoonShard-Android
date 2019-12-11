@@ -45,7 +45,11 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         return chats.size
     }
 
-    fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
+    fun getItemId(position: Int): Long {
+        return chats[position].id
+    }
+
+    fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int, listener: ChatListListener) {
         val chat = chats[position]
         if (bindedItems.indexOf(chat) == -1) {
             setAvatar(chat.jid,chat.chatName,holder.avatar)

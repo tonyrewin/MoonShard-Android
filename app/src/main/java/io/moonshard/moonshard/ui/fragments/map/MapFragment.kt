@@ -401,4 +401,3 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
 }
-//android:switcher:2131230813:0

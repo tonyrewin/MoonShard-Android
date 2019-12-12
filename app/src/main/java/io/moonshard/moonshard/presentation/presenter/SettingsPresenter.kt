@@ -3,13 +3,11 @@ package io.moonshard.moonshard.presentation.presenter
 
 import android.graphics.BitmapFactory
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.presentation.view.SettingsView
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.vcardtemp.VCardManager
-import org.jxmpp.jid.impl.JidCreate
-import java.lang.Exception
+import kotlin.Exception
 
 @InjectViewState
 class SettingsPresenter : MvpPresenter<SettingsView>() {
@@ -38,10 +36,14 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     }
 
     fun getName(){
-        val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-        val card = vm.loadVCard()
-        val nickName = card.nickName
-        val jidPart =  card.to.asBareJid().localpartOrNull.toString()
-        viewState?.setData(nickName,jidPart)
+        try {
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = card.nickName
+            val jidPart =  card.to.asBareJid().localpartOrNull.toString()
+            viewState?.setData(nickName,jidPart)
+        }catch (e:Exception){
+            e.message?.let { viewState?.showError(it) }
+        }
     }
 }

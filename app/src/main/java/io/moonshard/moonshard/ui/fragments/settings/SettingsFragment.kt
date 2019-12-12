@@ -74,11 +74,9 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
             ?.commit()
     }
 
-
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
-
 
     override fun setAvatar(avatar: Bitmap?) {
         avatarIv?.setImageBitmap(avatar)

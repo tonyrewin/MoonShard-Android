@@ -103,8 +103,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onAuthenticated() {
         runOnUiThread {
             hideLoader()
+            showContactsScreen()
         }
-        showContactsScreen()
     }
 
     override fun showToast(text: String) {

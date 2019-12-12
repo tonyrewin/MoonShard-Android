@@ -106,7 +106,6 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 })
         } catch (e: Exception) {
             com.orhanobut.logger.Logger.d(e.message)
-            // e.message?.let { viewState?.showError(it) }
         }
     }
 

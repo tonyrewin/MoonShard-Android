@@ -12,21 +12,29 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 class ProfilePresenter : MvpPresenter<ProfileView>() {
 
     fun getInfoProfile() {
-        val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-        val card = vm.loadVCard()
-        val nickName = card.nickName
+        try {
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = card.nickName
             // val description = card.getField("DESCRIPTION")
-        val description = card.middleName
-        viewState?.setData(nickName,description)
+            val description = card.middleName
+            viewState?.setData(nickName,description)
+        }catch (e:Exception){
+            e.message?.let { viewState?.showError(it) }
+        }
     }
 
     fun getAvatar() {
-        val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-        val card = vm.loadVCard()
-        val avatarBytes = card.avatar
-        avatarBytes?.let {
-            val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-            viewState?.setAvatar(bitmap)
+        try {
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val avatarBytes = card.avatar
+            avatarBytes?.let {
+                val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
+                viewState?.setAvatar(bitmap)
+            }
+        }catch (e:Exception){
+            e.message?.let { viewState?.showError(it) }
         }
     }
 }

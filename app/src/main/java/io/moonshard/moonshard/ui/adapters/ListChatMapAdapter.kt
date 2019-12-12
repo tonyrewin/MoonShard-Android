@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.RoomPin
@@ -64,12 +65,16 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
+            Logger.d(groupId.asUnescapedString())
+
             val info =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(muc.room)
             return info
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             val error = ""
+            Logger.d(e.message)
+            Logger.d(jid)
         }
         return null
     }

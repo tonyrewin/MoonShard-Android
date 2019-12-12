@@ -13,6 +13,7 @@ import io.moonshard.moonshard.presentation.presenter.ListChatMapPresenter
 import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.ui.adapters.ListChatMapAdapter
 import io.moonshard.moonshard.ui.adapters.ListChatMapListener
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import kotlinx.android.synthetic.main.fragment_list_chats_map.*
@@ -55,15 +56,13 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     override fun showChatScreens(chatId: String) {
         var fragment: Fragment? = null
         MainApplication.getMainUIThread().post {
-            /*
             for(i in fragmentManager!!.fragments.indices){
                 if(fragmentManager!!.fragments[i].tag == "MapScreen"){
                     fragment = (fragmentManager!!.fragments[i] as? MapFragment)
-                    (fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
+                  //  (fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
                 }
             }
 
-             */
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             val chatFragment = ChatFragment()

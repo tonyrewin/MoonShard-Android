@@ -366,7 +366,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 MainApplication.getCurrentLocation().longitude
             )
             val cameraUpdate =
-                CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+                CameraUpdateFactory.newLatLngZoom(latLng,8f)
             mMap?.animateCamera(cameraUpdate)
         }
     }

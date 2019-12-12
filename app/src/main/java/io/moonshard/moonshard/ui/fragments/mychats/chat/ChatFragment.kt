@@ -25,6 +25,7 @@ import moxy.presenter.InjectPresenter
 class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     var idChat: String = ""
+    var nameChat:String = ""
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -42,6 +43,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         arguments?.let {
             idChat = it.getString("chatId")
+                //nameChat = it.getString("chatName")
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
         }
@@ -69,7 +71,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun setData(
         name: String, valueOccupants: Int, valueOnlineMembers: Int) {
-        nameChat?.text = name
+        nameChatTv?.text = name
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
     }
 

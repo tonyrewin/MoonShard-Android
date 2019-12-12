@@ -112,17 +112,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         descriptionTv?.text = roomInfo.description
 
                         joinBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                         readBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
 
                         joinBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                         readBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                     }
                 }

@@ -40,8 +40,8 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
 
         if (ChooseChatRepository.address.isEmpty()) {
             address?.text = MainApplication.getAdress()
-            ChooseChatRepository.lat =  MainApplication.getCurrentLocation().latitude
-            ChooseChatRepository.lng =  MainApplication.getCurrentLocation().longitude
+            ChooseChatRepository.lat =  MainApplication.getCurrentLocation()?.latitude
+            ChooseChatRepository.lng =  MainApplication.getCurrentLocation()?.longitude
         } else {
             address?.text = ChooseChatRepository.address
         }

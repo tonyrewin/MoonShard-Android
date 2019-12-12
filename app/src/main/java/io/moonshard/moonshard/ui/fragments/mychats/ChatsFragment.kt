@@ -42,19 +42,18 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
         chatsRv?.adapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener{
             override fun clickChat(chat: ChatEntity) {
-                showChatScreen(chat.jid)
+                showChatScreen(chat.jid,chat.chatName)
             }
         })
         ItemTouchHelper((chatsRv.adapter as ChatListAdapter).SwipeToDeleteCallback()).attachToRecyclerView(chatsRv)
 
         presenter.setDialogs()
-
-
     }
 
-    override fun showChatScreen(chatId: String) {
+    override fun showChatScreen(chatId: String,chatName:String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
+        bundle.putSerializable("chatName",chatName)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()

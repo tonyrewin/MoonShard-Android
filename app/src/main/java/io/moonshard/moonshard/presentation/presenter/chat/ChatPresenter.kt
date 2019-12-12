@@ -19,13 +19,14 @@ import trikita.log.Log
 class ChatPresenter : MvpPresenter<ChatView>(){
 
     private lateinit var chatID: String
+    private lateinit var chatName:String
 
     fun setChatId(chatId: String) {
         chatID = chatId
         getDataInfo()
     }
 
-    private fun getDataInfo(){
+    fun getDataInfo(){
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =

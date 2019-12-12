@@ -106,47 +106,49 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     @SuppressLint("CheckResult")
-    fun joinChat(jid: String) {
-        try {
-            val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val entityBareJid = JidCreate.entityBareFrom(jid)
-            val muc = manager.getMultiUserChat(entityBareJid)
-            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+    fun joinChat(jid: String,nameRoom:String?) {
+        nameRoom?.let {
+            try {
+                val manager =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val entityBareJid = JidCreate.entityBareFrom(jid)
+                val muc = manager.getMultiUserChat(entityBareJid)
+                val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
 
-            if(!muc.isJoined){
-                muc.join(nickName)
+                if(!muc.isJoined){
+                    muc.join(nickName)
+                }
+
+                val chatEntity = ChatEntity(
+                    jid = jid,
+                    chatName = nameRoom,
+                    isGroupChat = true,
+                    unreadMessagesCount = 0
+                )
+
+                ChatListRepository.getChatByJid(JidCreate.from(jid))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        if (muc.isJoined) {
+                            viewState?.showChatScreens(jid)
+                        }
+                    },{
+                        ChatListRepository.addChat(chatEntity)
+                            .observeOn(Schedulers.io())
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe( {
+                                if (muc.isJoined) {
+                                    viewState?.showChatScreens(jid)
+                                }
+                            },{
+                                it.message?.let { it1 -> viewState?.showError(it1) }
+                            })
+                    })
+            } catch (e: Exception) {
+                e.message?.let { viewState?.showError(it) }
             }
-
-            val chatEntity = ChatEntity(
-                jid = jid,
-                chatName = jid.split("@")[0],
-                isGroupChat = true,
-                unreadMessagesCount = 0
-            )
-
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (muc.isJoined) {
-                        viewState?.showChatScreens(jid)
-                    }
-                },{
-                    ChatListRepository.addChat(chatEntity)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe( {
-                            if (muc.isJoined) {
-                                viewState?.showChatScreens(jid)
-                            }
-                        },{
-                            it.message?.let { it1 -> viewState?.showError(it1) }
-                        })
-                })
-        } catch (e: Exception) {
-            e.message?.let { viewState?.showError(it) }
-        }
+        }?:  viewState?.showError("Ошибка")
     }
 
 

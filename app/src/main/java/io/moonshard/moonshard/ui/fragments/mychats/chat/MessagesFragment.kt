@@ -91,7 +91,6 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         })
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()

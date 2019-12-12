@@ -31,6 +31,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
@@ -305,6 +306,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
+        (activity as? MainActivity)?.setMapActiveBottomBar()
+
         setupBottomSheet()
 
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)

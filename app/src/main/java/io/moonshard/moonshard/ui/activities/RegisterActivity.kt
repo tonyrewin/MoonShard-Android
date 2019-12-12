@@ -23,7 +23,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     lateinit var presenter: RegisterPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(io.moonshard.moonshard.R.style.AppTheme)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         startService()
@@ -96,7 +96,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
         if (logged) {
             showContactsScreen()
         } else {
-            setContentView(io.moonshard.moonshard.R.layout.activity_register)
+            setContentView(R.layout.activity_register)
         }
     }
 

@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 import io.moonshard.moonshard.models.api.Category
 
 
-data class ModelMapRequest (
+data class ModelMapRequest(
     @SerializedName("latitude")
-    private val latitude: Float?=null,
+    private val latitude: Double? =null,
     @SerializedName("longitude")
-    private val longitude: Float? = null,
+    private val longitude: Double? = null,
     @SerializedName("ttl")
     private val ttl: Int? = null,
     @SerializedName("roomId")

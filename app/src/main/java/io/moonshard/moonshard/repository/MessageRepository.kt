@@ -61,10 +61,12 @@ object MessageRepository {
                 link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
             }
             RxQuery.observable(msgQuery).subscribe({ message ->
-                if (message.isNotEmpty()) {
-                    it.onNext(message.first())
-                } else {
-                    it.onError(NotFoundException())
+                if(it.isDisposed){
+                    if (message.isNotEmpty()) {
+                        it.onNext(message.first())
+                    } else {
+                        it.onError(NotFoundException())
+                    }
                 }
             }, { e ->
                 it.onError(e)

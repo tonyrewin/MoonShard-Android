@@ -17,7 +17,6 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
-import kotlin.collections.ArrayList
 
 @InjectViewState
 class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
@@ -46,7 +45,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        username: String, latitude: Float?, longitude: Float?,
+        username: String, latitude: Double?, longitude: Double?,
         ttl: Int,
         category: Category?
     ) {
@@ -102,7 +101,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     }
 
     private fun createRoomOnServer(
-        latitude: Float, longitude: Float, ttl: Int, roomId: String,
+        latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         category: Category
     ) {
         val categories = arrayListOf<Category>()

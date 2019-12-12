@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         mainBottomNav?.selectedItemId = R.id.find_chats_map_bottom_nav_item
         MainApplication.setMainActivity(this)
 
-        mainBottomNav.setOnNavigationItemSelectedListener {
+        mainBottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.my_chats_bottom_nav_item -> {
                     val fragment = MyChatsFragment()
@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     fun hideBottomNavigationBar(){
         mainBottomNav?.visibility  = View.GONE
+    }
+
+    fun setMapActiveBottomBar(){
+        mainBottomNav?.menu?.getItem(1)?.isChecked = true
     }
 
     override fun onBackPressed() {

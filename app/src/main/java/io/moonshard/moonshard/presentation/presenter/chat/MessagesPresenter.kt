@@ -73,6 +73,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 //viewState?.addMessage(it)
                 viewState?.cleanMessage()
             }, {
+                val error = ""
                 // TODO add error handling
             })
     }

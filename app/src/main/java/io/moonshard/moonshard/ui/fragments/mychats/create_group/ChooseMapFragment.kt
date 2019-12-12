@@ -117,8 +117,8 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         latLng?.let {
             val address = getAddress(latLng)
             addressTv?.text = address
-            ChooseChatRepository.lat = latLng.latitude.toFloat()
-            ChooseChatRepository.lng = latLng.longitude.toFloat()
+            ChooseChatRepository.lat = latLng.latitude
+            ChooseChatRepository.lng = latLng.longitude
         }
 
         /*

@@ -17,6 +17,7 @@ import io.moonshard.moonshard.ui.adapters.ChatListAdapter
 import io.moonshard.moonshard.ui.adapters.ChatListListener
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -48,6 +49,17 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         ItemTouchHelper((chatsRv.adapter as ChatListAdapter).SwipeToDeleteCallback()).attachToRecyclerView(chatsRv)
 
         presenter.setDialogs()
+
+        find?.setOnClickListener {
+        }
+
+        newChat?.setOnClickListener {
+            (activity as MainActivity).hideBottomNavigationBar()
+            val newFragment = CreateGroupFragment()
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(R.id.container, newFragment,"CreateGroupFragment")?.addToBackStack("CreateGroupFragment")
+                ?.commit()
+        }
     }
 
     override fun showChatScreen(chatId: String,chatName:String) {

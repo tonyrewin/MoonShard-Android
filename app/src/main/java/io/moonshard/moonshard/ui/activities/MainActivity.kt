@@ -7,10 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         mainBottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.my_chats_bottom_nav_item -> {
-                    val fragment = MyChatsFragment()
+                    val fragment = ChatsFragment()
                     val fragmentTransaction = supportFragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.container, fragment).commit()
                 }
@@ -78,15 +77,15 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    fun  showBottomNavigationBar(){
-        mainBottomNav?.visibility  = View.VISIBLE
+    fun showBottomNavigationBar() {
+        mainBottomNav?.visibility = View.VISIBLE
     }
 
-    fun hideBottomNavigationBar(){
-        mainBottomNav?.visibility  = View.GONE
+    fun hideBottomNavigationBar() {
+        mainBottomNav?.visibility = View.GONE
     }
 
-    fun setMapActiveBottomBar(){
+    fun setMapActiveBottomBar() {
         mainBottomNav?.menu?.getItem(1)?.isChecked = true
     }
 
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             supportFragmentManager.popBackStack()
         }
 
-        if(supportFragmentManager.findFragmentByTag("AddChatFragment")!=null){
+        if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
             ChooseChatRepository.clean()
         }
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun showMapScreen() {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, newFragment,"MapScreen").commit()
+        ft.replace(R.id.container, newFragment, "MapScreen").commit()
     }
 
     override fun onDestroy() {

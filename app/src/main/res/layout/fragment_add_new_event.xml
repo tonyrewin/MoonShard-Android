@@ -8,7 +8,7 @@
 
 
     <ImageView
-            android:src="@drawable/ic_new_group_chat"
+            android:src="@drawable/ic_add_new_event"
             android:layout_marginTop="98dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="171dp"
@@ -25,11 +25,13 @@
             android:lineSpacingExtra="3sp"
             android:translationY="1.64sp"
             android:textSize="17sp"
-            android:text="Групповой чат"
+            android:text="Создать событие"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     <TextView
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="18dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="9dp"
             android:lineSpacingExtra="1sp"
@@ -37,7 +39,19 @@
             android:gravity="center_horizontal|bottom"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:text="Вы можете создавать чаты по категориям в любой локации. Любой пользователь сможет присоединиться к нему."
+            android:text="Организуйте концерт, конференцию или поэтический вечер. Пригласите друзей на день рождения, вечеринку или собрание"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_marginTop="13dp"
+            android:lineSpacingExtra="2sp"
+            android:translationY="0.8sp"
+            android:gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#9B9BB6"
+            android:textSize="14sp"
+            android:text="Ваше местоположение:: \n Улица Парковая, Одинцово, Россия"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

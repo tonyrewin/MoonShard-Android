@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create.event
 
 import android.location.Address
 import android.location.Geocoder

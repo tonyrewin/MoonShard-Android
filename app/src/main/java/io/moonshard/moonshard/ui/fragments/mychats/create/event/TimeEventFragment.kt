@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create.event
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,7 +14,7 @@ import io.moonshard.moonshard.ui.adapters.TimeGroupChatAdapter
 import kotlinx.android.synthetic.main.fragment_time_group_chat.*
 
 
-class TimeGroupChatFragment : Fragment() {
+class TimeEventFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

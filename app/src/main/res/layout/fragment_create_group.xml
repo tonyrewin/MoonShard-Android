@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.create.event.TimeEventFragment">
+        tools:context=".ui.fragments.mychats.MyChatsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Показывать на карте"
+                    android:text="Cоздать групповой чат"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -40,37 +40,15 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <LinearLayout
-            android:id="@+id/location"
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/layout_settings_bg"
-            android:orientation="vertical">
-
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/timesRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <TextView
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="22dp"
-            android:lineSpacingExtra="2sp"
-            android:translationY="-0.8sp"
-            android:gravity="center_horizontal|top"
-            android:textSize="14sp"
-            android:textColor="#535353"
-            android:text="Пин вашего чата будет виден на карте \n ограниченное время"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

@@ -11,7 +11,7 @@
             android:text="12 hours"
             android:layout_marginTop="14dp"
             android:layout_marginBottom="14dp"
-            android:id="@+id/timeTv"
+            android:id="@+id/dateTv"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

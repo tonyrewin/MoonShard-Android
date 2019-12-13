@@ -9,6 +9,8 @@ import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.RecommendationsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.EventsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.AddChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.AddNewEventFragment
 
 class MyChatsPagerAdapter(
     fragmentManager: FragmentManager, val context: Context,
@@ -20,7 +22,9 @@ class MyChatsPagerAdapter(
         CHATS(ChatsFragment::class.java, R.string.chats),
         RECOMMENDATIONS(RecommendationsFragment::class.java, R.string.recommendations),
         CHAT(MessagesFragment::class.java, R.string.chat),
-        EVENTS(EventsFragment::class.java, R.string.events);
+        EVENTS(EventsFragment::class.java, R.string.events),
+        CREATE_EVENT(AddNewEventFragment::class.java, R.string.create_event),
+        CREATE_CHAT(AddChatFragment::class.java,R.string.create_chat)
     }
 
     override fun getItem(position: Int): Fragment {

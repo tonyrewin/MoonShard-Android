@@ -41,6 +41,8 @@
     <string name="chats">Чаты</string>
     <string name="chat">Чат</string>
     <string name="events">Мероприятия</string>
+    <string name="create_chat">Создать чат</string>
+    <string name="create_event">Создать событие</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

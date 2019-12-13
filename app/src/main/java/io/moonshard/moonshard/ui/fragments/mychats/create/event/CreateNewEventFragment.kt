@@ -1,6 +1,7 @@
-package io.moonshard.moonshard.ui.fragments.mychats.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create.event
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,40 +9,59 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.models.Category
-import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
-import io.moonshard.moonshard.presentation.view.CreateNewChatView
+import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewEventPresenter
+import io.moonshard.moonshard.presentation.view.CreateNewEventView
 import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import kotlinx.android.synthetic.main.fragment_create_new_chat.*
+import kotlinx.android.synthetic.main.fragment_create_new_event.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.*
 
-class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
+
+class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
     @InjectPresenter
-    lateinit var presenter: CreateNewChatPresenter
+    lateinit var presenter: CreateNewEventPresenter
+
+    val dateAndTime = Calendar.getInstance()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_create_new_chat, container, false)
+        return inflater.inflate(
+            io.moonshard.moonshard.R.layout.fragment_create_new_event,
+            container,
+            false
+        )
     }
+
+
+    // установка обработчика выбора даты
+    var d: DatePickerDialog.OnDateSetListener =
+        DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            dateAndTime.set(Calendar.YEAR, year)
+            dateAndTime.set(Calendar.MONTH, monthOfYear)
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setDate(dayOfMonth, monthOfYear)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ChooseChatRepository.date = dateAndTime
+        setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
 
         initAdapter()
 
         if (ChooseChatRepository.address.isEmpty()) {
             address?.text = MainApplication.getAdress()
-            ChooseChatRepository.lat =  MainApplication.getCurrentLocation()?.latitude
-            ChooseChatRepository.lng =  MainApplication.getCurrentLocation()?.longitude
+            ChooseChatRepository.lat = MainApplication.getCurrentLocation()?.latitude
+            ChooseChatRepository.lng = MainApplication.getCurrentLocation()?.longitude
         } else {
             address?.text = ChooseChatRepository.address
         }
@@ -62,6 +82,16 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
             methodRequiresTwoPermission()
         }
 
+        dateLayout?.setOnClickListener {
+            DatePickerDialog(
+                activity!!, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH)
+            )
+                .show()
+        }
+
         nameTv?.setText(ChooseChatRepository.name)
 
         newChat?.setOnClickListener {
@@ -80,6 +110,57 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         presenter.getCategories()
+    }
+
+    fun setDate(dayOfMonth: Int, month: Int) {
+        when (month) {
+            0 -> {
+                dateTv.text = "$dayOfMonth января"
+            }
+            1 -> {
+                dateTv.text = "$dayOfMonth февраля"
+
+            }
+            2 -> {
+                dateTv.text = "$dayOfMonth марта"
+
+            }
+            3 -> {
+                dateTv.text = "$dayOfMonth апреля"
+
+            }
+            4 -> {
+                dateTv.text = "$dayOfMonth мая"
+
+            }
+            5 -> {
+                dateTv.text = "$dayOfMonth июня"
+
+            }
+            6 -> {
+                dateTv.text = "$dayOfMonth июля"
+
+            }
+            7 -> {
+                dateTv.text = "$dayOfMonth августа"
+
+            }
+            8 -> {
+                dateTv.text = "$dayOfMonth сенятбря"
+
+            }
+            9 -> {
+                dateTv.text = "$dayOfMonth октября"
+
+            }
+            10 -> {
+                dateTv.text = "$dayOfMonth ноября"
+            }
+            11 -> {
+                dateTv.text = "$dayOfMonth декабря"
+
+            }
+        }
     }
 
     private fun methodRequiresTwoPermission() {
@@ -113,9 +194,10 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
 
     fun showChooseMapScreen() {
         ChooseChatRepository.name = nameTv?.text.toString()
-        val chatFragment = ChooseMapFragment()
+        val chatFragment =
+            ChooseMapFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "ChooseMapFragment")
+        ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "ChooseMapFragment")
             ?.addToBackStack("ChooseMapFragment")
             ?.commit()
     }
@@ -133,25 +215,10 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         (categoriesRv?.adapter as? CategoriesAdapter)?.updateCategories(categories)
     }
 
-    private fun initCategories(): ArrayList<Category> {
-        val categoryOne = Category(R.drawable.ic_star, "Тусовки")
-        val categoryTwo = Category(R.drawable.ic_case, "Бизнес ивенты")
-        val categoryThree = Category(R.drawable.ic_heart, "Кружок по интересам")
-        val categoryFour = Category(R.drawable.ic_culture_category, "Культурные мероприятия")
-
-        val categories = arrayListOf<Category>()
-        categories.add(categoryOne)
-        categories.add(categoryTwo)
-        categories.add(categoryThree)
-        categories.add(categoryFour)
-
-        return categories
-    }
-
     override fun showMapScreen() {
         val mapFragment = MapFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, mapFragment, null)
+        ft?.replace(io.moonshard.moonshard.R.id.container, mapFragment, null)
             ?.addToBackStack(null)
             ?.commit()
     }
@@ -161,10 +228,11 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     }
 
     private fun showTimesScreen() {
-        val chatFragment = TimeGroupChatFragment()
+        val chatFragment =
+            TimeEventFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "TimeGroupChatFragment")
-            ?.addToBackStack("TimeGroupChatFragment")
+        ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "TimeEventFragment")
+            ?.addToBackStack("TimeEventFragment")
             ?.commit()
     }
 

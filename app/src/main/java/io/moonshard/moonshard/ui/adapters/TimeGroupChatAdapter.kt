@@ -49,7 +49,7 @@ class TimeGroupChatAdapter(
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var time: TextView? = view.findViewById(R.id.timeTv)
+        internal var time: TextView? = view.findViewById(R.id.dateTv)
         internal val checkIv: ImageView? = view.findViewById(R.id.checkIv)
         internal val lineView: View? = view.findViewById(R.id.lineView)
         internal val mainLayout: RelativeLayout? = view.findViewById(R.id.mainLayout)

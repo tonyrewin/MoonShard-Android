@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.db
 
 import io.moonshard.moonshard.models.api.Category
+import java.util.*
 
 object ChooseChatRepository {
     var lat:Double?=null
@@ -9,6 +10,8 @@ object ChooseChatRepository {
     var time:String = ""
     var category:Category? = null
     var name:String = ""
+    var date: Calendar?=null
+
 
     fun clean(){
         address=""
@@ -17,6 +20,7 @@ object ChooseChatRepository {
         name=""
         lat= null
         lng= null
+        date=null
     }
 
 

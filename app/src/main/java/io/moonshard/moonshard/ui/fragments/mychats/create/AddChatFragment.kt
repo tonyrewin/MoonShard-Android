@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.create_group
+package io.moonshard.moonshard.ui.fragments.mychats.create
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.create_group.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
 import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -19,12 +20,6 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
     @InjectPresenter
     lateinit var presenter: AddChatPresenter
 
-    override fun back() {
-        val newFragment = ChatsFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, newFragment)?.commit()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,10 +29,6 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        back?.setOnClickListener {
-            fragmentManager?.popBackStack()
-        }
 
         startLocalGroup?.setOnClickListener {
             showCreateNewChatScreen()
@@ -50,10 +41,17 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         } ?: Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
     }
 
-   override fun showCreateNewChatScreen(){
-        val chatFragment = CreateNewChatFragment()
+    override fun back() {
+        val newFragment = ChatsFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewChatFragment")?.addToBackStack("CreateNewChatFragment")
+        ft?.replace(R.id.container, newFragment)?.commit()
+    }
+
+   override fun showCreateNewChatScreen(){
+        val chatFragment =
+            CreateNewEventFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
             ?.commit()
     }
 }

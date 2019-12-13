@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
-import io.moonshard.moonshard.ui.fragments.mychats.create_group.AddChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.AddChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
 import kotlinx.android.synthetic.main.fragment_my_chats.*
 
 
@@ -31,9 +32,9 @@ class MyChatsFragment : Fragment() {
 
         newChat?.setOnClickListener {
             (activity as MainActivity).hideBottomNavigationBar()
-            val newFragment = AddChatFragment()
+            val newFragment = CreateGroupFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment,"AddChatFragment")?.addToBackStack("AddChatFragment")
+            ft?.replace(R.id.container, newFragment,"CreateGroupFragment")?.addToBackStack("CreateGroupFragment")
                 ?.commit()
         }
     }

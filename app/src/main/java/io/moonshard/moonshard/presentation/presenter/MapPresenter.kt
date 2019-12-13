@@ -22,6 +22,8 @@ import org.jivesoftware.smackx.muc.DiscussionHistory
 import org.jivesoftware.smackx.muc.MucEnterConfiguration
 import com.instacart.library.truetime.TrueTime.build
 import io.moonshard.moonshard.models.api.Category
+import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jxmpp.jid.Jid
 
 
 @InjectViewState
@@ -34,7 +36,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     fun getRooms(lat: String, lng: String, radius: String,category:Category?) {
-       if(RoomsMap.isFilter){
+        if(RoomsMap.isFilter){
            getRoomsByCategory(lat,lng,radius,RoomsMap.category!!)
        }else{
            //this hard data - center Moscow

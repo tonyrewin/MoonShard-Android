@@ -13,6 +13,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
+import io.moonshard.moonshard.ui.activities.onboard.MainIntroActivity
 import kotlinx.android.synthetic.main.activity_register.*
 import moxy.presenter.InjectPresenter
 
@@ -25,34 +26,48 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-        startService()
-        auth()
-        alreadyHaveText?.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
 
-        registerBtn?.setOnClickListener {
-            presenter.register(editEmail.text.toString(), editPassword.text.toString())
-        }
+        if(checkFirstStart()){
+            startIntro()
+        }else{
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+            startService()
+            auth()
+            alreadyHaveText?.setOnClickListener {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
 
-        val content = SpannableString("Уже есть аккаунт? Войти")
-        content.setSpan(UnderlineSpan(), 18, content.length, 0)
-        alreadyHaveText?.text = content
+            registerBtn?.setOnClickListener {
+                presenter.register(editEmail.text.toString(), editPassword.text.toString())
+            }
 
-        var isSecurity = true
-        visiblePassBtn?.setOnClickListener {
-            if (isSecurity) {
-                editPassword?.transformationMethod = null
-                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
-                isSecurity = false
-            } else {
-                editPassword?.transformationMethod = PasswordTransformationMethod()
-                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
-                isSecurity = true
+            val content = SpannableString("Уже есть аккаунт? Войти")
+            content.setSpan(UnderlineSpan(), 18, content.length, 0)
+            alreadyHaveText?.text = content
+
+            var isSecurity = true
+            visiblePassBtn?.setOnClickListener {
+                if (isSecurity) {
+                    editPassword?.transformationMethod = null
+                    visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                    isSecurity = false
+                } else {
+                    editPassword?.transformationMethod = PasswordTransformationMethod()
+                    visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                    isSecurity = true
+                }
             }
         }
+    }
+
+    private fun checkFirstStart(): Boolean {
+        return SecurePreferences.getBooleanValue("first_start", true)
+    }
+
+    fun startIntro(){
+        val intent = Intent(this,MainIntroActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onSuccess() {

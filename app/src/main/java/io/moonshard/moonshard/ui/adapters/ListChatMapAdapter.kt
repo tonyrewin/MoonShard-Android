@@ -98,27 +98,30 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         return onlineValue
     }
 
-    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
-        MainApplication.getCurrentLocation()?.let {
-            val myLat = MainApplication.getCurrentLocation().latitude
-            val myLng = MainApplication.getCurrentLocation().longitude
+    private fun calculationByDistance(latRoom: String?, lngRoom: String?): String {
+        if(latRoom!=null && lngRoom!=null) {
 
-            val km = SphericalUtil.computeDistanceBetween(
-                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                LatLng(myLat, myLng)
-            ).toInt() / 1000
-            return if (km < 1) {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(
-                        latRoom.toDouble(),
-                        lngRoom.toDouble()
-                    ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
-            } else {
-                (SphericalUtil.computeDistanceBetween(
+            MainApplication.getCurrentLocation()?.let {
+                val myLat = MainApplication.getCurrentLocation().latitude
+                val myLng = MainApplication.getCurrentLocation().longitude
+
+                val km = SphericalUtil.computeDistanceBetween(
                     LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
+                ).toInt() / 1000
+                return if (km < 1) {
+                    (SphericalUtil.computeDistanceBetween(
+                        LatLng(
+                            latRoom.toDouble(),
+                            lngRoom.toDouble()
+                        ), LatLng(myLat, myLng)
+                    ).toInt()).toString() + " метрах"
+                } else {
+                    (SphericalUtil.computeDistanceBetween(
+                        LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                        LatLng(myLat, myLng)
+                    ).toInt() / 1000).toString() + " км"
+                }
             }
         }
         return ""

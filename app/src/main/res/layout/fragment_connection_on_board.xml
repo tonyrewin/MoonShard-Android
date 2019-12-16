@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        tools:context=".ui.fragments.onboard.AcquaintanceFragment">
+
+    <TextView
+            android:id="@+id/skipBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="14dp"
+            android:paddingEnd="15dp"
+            android:text="Skip"
+            android:textColor="#0075FF"
+            android:textSize="16sp" />
+
+    <ImageView
+            android:id="@+id/image"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_connection_onboarding" />
+
+    <TextView
+            android:id="@+id/textViewBold"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/image"
+            android:textSize="20sp"
+            android:text="Всегда оставайся на связи"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/textView"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="1sp"
+            android:translationY="-0.62sp"
+            android:gravity="center_horizontal|top"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textViewBold"
+            android:textSize="16sp"
+            android:text="Даже если нет интернета, будь в курсе последних новостей и событий"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    <Button
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="23dp"
+            android:id="@+id/nextBtn"
+            style="@style/Theme.MaterialComponents.Light"
+            android:layout_width="104dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:text="ДАЛЕЕ"
+            android:textColor="@android:color/background_light"
+            android:textSize="7pt" />
+
+</RelativeLayout>

@@ -9,7 +9,7 @@
 
     <ImageView
             android:src="@drawable/ic_add_new_event"
-            android:layout_marginTop="98dp"
+            android:layout_marginTop="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="171dp"
             android:layout_height="171dp"

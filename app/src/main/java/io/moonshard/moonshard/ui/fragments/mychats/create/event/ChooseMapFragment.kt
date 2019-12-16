@@ -125,7 +125,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
     latLng?.let {
         latLngInterestPoint = null
         if(latLngInterestPoint?.latLng == latLng){
-            var kek = ""
+            var nextSlide = ""
         }else{
             val adress = getAddress(latLng)
             Toast.makeText(context, adress, Toast.LENGTH_SHORT).show()

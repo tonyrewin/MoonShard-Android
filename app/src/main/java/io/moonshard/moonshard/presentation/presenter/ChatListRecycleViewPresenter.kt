@@ -25,10 +25,14 @@ import java.util.*
 @InjectViewState
 class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     private var chats = emptyList<ChatEntity>().toMutableList()
+    private var fullChats = emptyList<ChatEntity>().toMutableList()
+
     private var recentlyDeletedItem: ChatEntity? = null
 
     private val bindedItems = emptyList<ChatEntity>().toMutableList()
     private val disposables = emptyList<Disposable>().toMutableList()
+
+
 
     init {
         disposables.add(ChatListRepository.getChats()
@@ -36,6 +40,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             .subscribeOn(Schedulers.io())
             .subscribe { newChats ->
                 chats = newChats.toMutableList()
+                fullChats = newChats.toMutableList()
                 sortChatsByRecentlyUpdatedDate()
                 viewState.onDataChange()
         })
@@ -160,6 +165,16 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             .subscribeOn(Schedulers.io())
             .subscribe()
         recentlyDeletedItem = null
+    }
+
+
+    fun setFilter(filter: String) {
+        val list = fullChats.filter {
+            it.chatName.contains(filter, true)
+        }
+        chats.clear()
+        chats.addAll(list)
+        viewState.onDataChange()
     }
 
     override fun onDestroy() {

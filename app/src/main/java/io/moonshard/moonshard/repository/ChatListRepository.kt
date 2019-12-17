@@ -52,6 +52,19 @@ object ChatListRepository {
         }
     }
 
+    fun getChatsByName(name:String):Observable<ChatEntity>{
+        return Observable.create {
+            val query = chatBox.query().contains(ChatEntity_.chatName, name).build()
+            RxQuery.observable(query).subscribe { chat ->
+                if (chat.isEmpty()) {
+                    it.onError(NotFoundException())
+                    return@subscribe
+                }
+                it.onNext(chat.first())
+            }
+        }
+    }
+
     fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
         return Completable.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()

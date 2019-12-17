@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.Utils.hideKeyboard
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
@@ -16,14 +18,18 @@ import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
 import io.moonshard.moonshard.ui.adapters.ChatListListener
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
+
+    private var disposible: Disposable? = null
+
 
     override fun addNewChat(chat: GenericDialog) {
 
@@ -41,31 +47,66 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         (activity as MainActivity).showBottomNavigationBar()
 
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
-        chatsRv?.adapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener{
+        chatsRv?.adapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener {
             override fun clickChat(chat: ChatEntity) {
-                showChatScreen(chat.jid,chat.chatName)
+                showChatScreen(chat.jid, chat.chatName)
             }
         })
-        ItemTouchHelper((chatsRv.adapter as ChatListAdapter).SwipeToDeleteCallback()).attachToRecyclerView(chatsRv)
+        ItemTouchHelper((chatsRv.adapter as ChatListAdapter).SwipeToDeleteCallback()).attachToRecyclerView(
+            chatsRv
+        )
 
         presenter.setDialogs()
 
+
+        disposible = findEd.afterTextChangeEvents()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(
+                    it.editable?.toString() ?: ""
+                )
+            }
+
         find?.setOnClickListener {
+            if (searchLayoutToolbar?.visibility == View.GONE) {
+                showSearch()
+            } else {
+                hideSearch()
+            }
+        }
+
+        cancelBtn?.setOnClickListener {
+            hideSearch()
         }
 
         newChat?.setOnClickListener {
             (activity as MainActivity).hideBottomNavigationBar()
             val newFragment = CreateGroupFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment,"CreateGroupFragment")?.addToBackStack("CreateGroupFragment")
+            ft?.replace(R.id.container, newFragment, "CreateGroupFragment")
+                ?.addToBackStack("CreateGroupFragment")
                 ?.commit()
         }
     }
 
-    override fun showChatScreen(chatId: String,chatName:String) {
+    private fun showSearch() {
+        searchLayoutToolbar?.visibility = View.VISIBLE
+        defaultToolbar?.visibility = View.GONE
+        (activity as? MainActivity)?.hideBottomNavigationBar()
+    }
+
+    private fun hideSearch() {
+        hideKeyboard(activity!!)
+        (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter("")
+        searchLayoutToolbar?.visibility = View.GONE
+        defaultToolbar?.visibility = View.VISIBLE
+        (activity as? MainActivity)?.showBottomNavigationBar()
+    }
+
+    override fun showChatScreen(chatId: String, chatName: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
-        bundle.putSerializable("chatName",chatName)
+        bundle.putSerializable("chatName", chatName)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()

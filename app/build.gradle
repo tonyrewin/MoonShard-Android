@@ -175,6 +175,9 @@ dependencies {
     implementation 'com.github.AppIntro:AppIntro:5.1.0'
 
     implementation "cat.ereza:customactivityoncrash:2.2.0"
+
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
+
 }
 
 configurations {

@@ -41,7 +41,6 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         )
     }
 
-
     // установка обработчика выбора даты
     var d: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->

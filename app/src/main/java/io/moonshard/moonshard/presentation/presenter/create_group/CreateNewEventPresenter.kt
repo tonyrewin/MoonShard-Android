@@ -76,8 +76,6 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
                 muc.sendConfigurationForm(answerForm)
 
-                //need  LocalDBWrapper.createChatEntry(actualUserName, actualUserName.split("@")[0], ArrayList<GenericUser>(), true)
-
                 val chatEntity = ChatEntity(
                     0,
                     jidRoomString,

@@ -18,7 +18,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 import java.util.*
 
@@ -56,6 +58,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
 
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int, listener: ChatListListener) {
         val chat = chats[position]
+        joinChat(chat.jid)
         if (bindedItems.indexOf(chat) == -1) {
             setAvatar(chat.jid,chat.chatName,holder.avatar)
             holder.chatName.visibility = View.VISIBLE
@@ -121,8 +124,8 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
     private fun setAvatar(jid: String,nameChat:String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {
@@ -132,6 +135,22 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                         }
                     }
                 }, { throwable -> Log.e(throwable.message) })
+        }
+    }
+
+    fun joinChat(jid:String){
+        try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            if (!muc.isJoined) {
+                muc.join(nickName)
+            }
+        }catch (e:Exception){
+            Log.d(e.message)
         }
     }
 

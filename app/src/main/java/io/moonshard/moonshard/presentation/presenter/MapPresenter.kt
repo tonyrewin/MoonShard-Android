@@ -152,18 +152,4 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             }
         }?:  viewState?.showError("Ошибка")
     }
-
-
-    /*
-    fun getValueOnlineUsers(muc:MultiUserChat,usersInGroup:List<EntityFullJid>){
-        var onlineValue = 0
-        for(i in usersInGroup.indices){
-            val user =  muc.getOccupantPresence(usersInGroup[i])
-            if(user.type == Presence.Type.available){
-                onlineValue++
-            }
-        }
-        return onlineValue
-    }
-     */
 }

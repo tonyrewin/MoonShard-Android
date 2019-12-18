@@ -3,19 +3,21 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         tools:context=".ui.fragments.mychats.chat.ChatFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+            android:orientation="vertical"
+            android:elevation="6dp"
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@android:color/white"
-            android:elevation="6dp">
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="56dp"
                 android:layout_margin="0dp"
                 android:padding="0dp">
 
@@ -57,12 +59,16 @@
                     android:layout_height="wrap_content"/>
 
         </RelativeLayout>
+
+        <com.google.android.material.tabs.TabLayout
+                app:tabIndicatorColor="#000000"
+                android:background="#FFFFFF"
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

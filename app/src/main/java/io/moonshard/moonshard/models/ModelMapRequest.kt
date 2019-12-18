@@ -6,7 +6,7 @@ import io.moonshard.moonshard.models.api.Category
 
 data class ModelMapRequest(
     @SerializedName("latitude")
-    private val latitude: Double? =null,
+    private val latitude: Double? = null,
     @SerializedName("longitude")
     private val longitude: Double? = null,
     @SerializedName("ttl")
@@ -14,4 +14,7 @@ data class ModelMapRequest(
     @SerializedName("roomId")
     private val roomId: String? = null,
     @SerializedName("categories")
-    private val category: ArrayList<Category>? = null)
+    private val category: ArrayList<Category>? = null,
+    @SerializedName("eventId")
+    private val groupdId: String? = null
+)

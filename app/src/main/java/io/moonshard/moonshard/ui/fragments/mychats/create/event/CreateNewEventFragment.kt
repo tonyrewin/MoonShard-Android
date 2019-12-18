@@ -10,16 +10,20 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewEventPresenter
 import io.moonshard.moonshard.presentation.view.CreateNewEventView
 import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
+import io.moonshard.moonshard.ui.adapters.create.GroupsAdapter
+import io.moonshard.moonshard.ui.adapters.create.GroupsListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import kotlinx.android.synthetic.main.fragment_create_new_event.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
@@ -99,7 +103,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 ChooseChatRepository.lat,
                 ChooseChatRepository.lng,
                 ChooseChatRepository.getTimeSec(),
-                ChooseChatRepository.category
+                ChooseChatRepository.category,ChooseChatRepository.group
             )
         }
 
@@ -109,6 +113,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         }
 
         presenter.getCategories()
+
+        presenter.getGroups()
     }
 
     fun setDate(dayOfMonth: Int, month: Int) {
@@ -208,10 +214,22 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 ChooseChatRepository.category = categoryName
             }
         }, arrayListOf())
+
+
+        groupsRv?.layoutManager = LinearLayoutManager(context)
+        groupsRv?.adapter = GroupsAdapter(object:GroupsListener{
+            override fun clickChat(categoryName: ChatEntity) {
+                ChooseChatRepository.group = categoryName
+            }
+        }, arrayListOf())
     }
 
     override fun showCategories(categories: ArrayList<io.moonshard.moonshard.models.api.Category>) {
         (categoriesRv?.adapter as? CategoriesAdapter)?.updateCategories(categories)
+    }
+
+    override fun showAdminChats(chats: ArrayList<ChatEntity>) {
+        ( groupsRv?.adapter as? GroupsAdapter)?.updateGroups(chats)
     }
 
     override fun showMapScreen() {

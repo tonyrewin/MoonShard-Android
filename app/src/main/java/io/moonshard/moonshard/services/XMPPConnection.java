@@ -351,7 +351,7 @@ public class XMPPConnection implements ConnectionListener {
             }
         });
     }
-    
+
     private byte[] createTextAvatar(String firstLetter) {
         Drawable avatarText = TextDrawable.builder()
             .beginConfig()

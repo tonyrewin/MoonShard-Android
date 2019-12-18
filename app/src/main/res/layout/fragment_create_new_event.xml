@@ -65,33 +65,38 @@
             <LinearLayout
                     android:id="@+id/profileSettingsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="82dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/layout_settings_bg"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/avatar"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="12dp"
-                        android:src="@drawable/ic_add_photo" />
+                <TextView
+                        android:textSize="14sp"
+                        android:textColor="#9B9BB6"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="11dp"
+                        android:text="Название"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                 <EditText
+                        android:textColorHint="#DDDDDD"
+                        android:textSize="16sp"
+                        android:hint="Введите название"
+                        android:layout_marginBottom="20dp"
                         android:id="@+id/nameTv"
                         android:layout_width="249dp"
                         android:layout_height="40dp"
                         android:layout_marginStart="11dp"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="7dp"
                         android:background="@drawable/rounded_edittext"
                         android:inputType="text"
                         android:maxLength="255"
                         android:maxLines="1"
-                        android:paddingStart="5dp"
+                        android:paddingStart="10dp"
                         android:paddingEnd="5dp" />
 
             </LinearLayout>

@@ -23,7 +23,6 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     fun createGroupChat(
         username: String
     ) {
-
         if (username.isNotBlank()) {
             val actualUserName: String
             val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"

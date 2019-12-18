@@ -1,15 +1,13 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.EventsPresenter
 import io.moonshard.moonshard.presentation.view.chat.EventsView
 import io.moonshard.moonshard.ui.adapters.chat.EventAdapter
@@ -36,14 +34,23 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
+        presenter.getRooms()
     }
 
-    fun initAdapter(){
+    private fun initAdapter() {
         eventsRv?.layoutManager = LinearLayoutManager(context)
         eventsRv?.adapter = EventAdapter(object : EventListener {
             override fun eventClick(categoryName: String) {
 
             }
         }, arrayListOf())
+    }
+
+    override fun setEvents(events: ArrayList<RoomPin>) {
+        (eventsRv?.adapter as? EventAdapter)?.update(events)
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 }

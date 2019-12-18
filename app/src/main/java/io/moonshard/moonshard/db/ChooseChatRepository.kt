@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.db
 
 import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import java.util.*
 
 object ChooseChatRepository {
@@ -11,6 +12,8 @@ object ChooseChatRepository {
     var category:Category? = null
     var name:String = ""
     var date: Calendar?=null
+    var group: ChatEntity?=null
+
 
 
     fun clean(){
@@ -21,17 +24,20 @@ object ChooseChatRepository {
         lat= null
         lng= null
         date=null
+        group = null
     }
 
 
     fun getTimeSec():Int{
-        var ttl = 60*60*6
+        var ttl = 60*60*24
         when (time) {
-            "6 часов" -> ttl = 60*60*6
-            "12 часов" -> ttl = 60*60*12
-            "24 часа" -> ttl = 60*60*24
+            "1 день" -> ttl = 60*60*24
+            "2 дня" -> ttl = 60*60*48
             "3 дня" -> ttl = 60*60*(24*3)
-            "1 неделю" -> ttl = 60*60*(24*7)
+            "4 дня" -> ttl = 60*60*(24*4)
+            "5 дней" -> ttl = 60*60*(24*5)
+            "6 дней" -> ttl = 60*60*(24*6)
+            "Неделя" -> ttl = 60*60*(24*7)
         }
         return ttl
     }

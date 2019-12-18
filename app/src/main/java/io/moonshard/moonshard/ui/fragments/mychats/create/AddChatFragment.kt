@@ -9,6 +9,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.create_group.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
 import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.chat.CreateNewChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_add_chat.*
 import moxy.MvpAppCompatFragment
@@ -49,7 +50,7 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
 
    override fun showCreateNewChatScreen(){
         val chatFragment =
-            CreateNewEventFragment()
+            CreateNewChatFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
             ?.commit()

@@ -30,21 +30,21 @@ class ConnectionOnBoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         skipBtn?.setOnClickListener {
-            SecurePreferences.setValue("first_start", false)
-            val intent = Intent(activity,RegisterActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-            startActivity(intent)
+            showRegistrationScreen()
         }
 
         nextBtn?.setOnClickListener {
-            SecurePreferences.setValue("first_start", false)
-            val intent = Intent(activity,RegisterActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-            startActivity(intent)
+            showRegistrationScreen()
         }
+    }
 
+
+    private fun showRegistrationScreen() {
+        SecurePreferences.setValue("first_start", false)
+        val intent = Intent(activity, RegisterActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+        startActivity(intent)
     }
 
 

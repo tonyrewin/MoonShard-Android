@@ -38,6 +38,7 @@ import trikita.log.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
+import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 @InjectViewState
@@ -54,11 +55,13 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe ({
                 chat = it
                 loadLocalMessages()
                 // loadMoreMessages() // FIXME
-            }
+            },{
+                com.orhanobut.logger.Logger.d(it.message)
+            })
         MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
     }
 
@@ -248,7 +251,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun loadLocalMessages() {
-        loadLocalMessagesLogic().subscribe { messages ->
+        loadLocalMessagesLogic().subscribe ({ messages ->
             val genericMessages = ArrayList<GenericMessage>()
             if (messages.isNotEmpty()) {
                 messages.forEach {
@@ -257,7 +260,9 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
             genericMessages.sortWith(messageComparator)
             viewState.setMessages(genericMessages, true)
-        }
+        },{
+            com.orhanobut.logger.Logger.d(it.message)
+        })
     }
 
     private fun loadLocalMessagesLogic(): Observable<List<MessageEntity>> {

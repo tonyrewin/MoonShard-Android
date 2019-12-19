@@ -39,6 +39,10 @@ class ProfileUserFragment : MvpAppCompatFragment(),ProfileUserView {
             presenter.getInfoProfile(userJid)
             presenter.getAvatar(userJid)
         }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 
     override fun setData(nickName: String?, description: String?) {

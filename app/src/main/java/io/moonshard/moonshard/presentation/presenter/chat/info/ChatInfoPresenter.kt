@@ -4,8 +4,10 @@ import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
+import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap.rooms
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -77,7 +79,8 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
     private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {
         var onlineValue = 0
         for (i in members.indices) {
-            val userOccupantPresence = muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+            val userOccupantPresence =
+                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
             if (userOccupantPresence.type == Presence.Type.available) {
                 onlineValue++
             }
@@ -92,8 +95,29 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
             muc.leave()
+            removeChatFromBd(jid)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
+    }
+
+    private fun removeChatFromBd(jid: String) {
+       ChatListRepository.getChatByJid(JidCreate.from(jid))
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ chat ->
+                ChatListRepository.removeChat(chat)
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        viewState?.showChatsScreen()
+                    }, { throwable ->
+                        throwable.message?.let { it1 -> viewState?.showError(it1) }
+                    })
+            }, { error ->
+                var kek = ""
+            })
+
+
     }
 }

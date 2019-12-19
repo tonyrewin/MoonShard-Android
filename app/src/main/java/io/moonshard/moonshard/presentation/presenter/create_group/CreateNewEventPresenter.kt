@@ -89,8 +89,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 )
 
                 ChatListRepository.addChat(chatEntity)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         createRoomOnServer(latitude, longitude, ttl, jidRoomString, category, group)
                     }

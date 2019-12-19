@@ -130,8 +130,8 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     private fun setAvatar(jid: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {

@@ -19,7 +19,12 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
             val jidUser = JidCreate.entityBareFrom(jid)
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard(jidUser)
-            val nickName = card.nickName
+            var nickName=""
+            nickName = if(card.nickName.isNullOrBlank()){
+                card.to.asBareJid().localpartOrNull.toString()
+            }else{
+                card.nickName
+            }
             // val description = card.getField("DESCRIPTION")
             val description = card.middleName
             viewState?.setData(nickName,description)

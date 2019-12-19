@@ -14,7 +14,7 @@ import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
-import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
+import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_chat_info.*
@@ -25,7 +25,8 @@ import java.io.IOException
 import java.util.*
 
 
-class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
+class ChatInfoFragment : MvpAppCompatFragment(),
+    ChatInfoView {
 
     override fun showChatsScreen() {
         fragmentManager?.popBackStack()
@@ -82,6 +83,19 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             ?.commit()
     }
 
+    //todo maybe replace
+    fun showProfileUser(jid:String){
+        val bundle = Bundle()
+        bundle.putString("userJid", jid)
+        val fragment = ProfileUserFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.
+            hide(this)
+            ?.addToBackStack("ProfileUserFragment")
+            ?.commit()
+    }
+
     override fun showMembers(members: List<EntityFullJid>) {
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
@@ -89,7 +103,11 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     private fun initAdapter() {
         membersInfoRv?.layoutManager = LinearLayoutManager(context)
         membersInfoRv?.adapter = MembersAdapter(object : MemberListener {
-            override fun remove(categoryName: String) {
+            override fun clickMember(jid: String) {
+                showProfileUser(jid)
+            }
+
+            override fun remove(member: EntityFullJid) {
 
             }
         }, arrayListOf())

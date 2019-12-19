@@ -3,7 +3,7 @@ package io.moonshard.moonshard.presentation.presenter.chat.info
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.LatLng
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.presentation.view.chat.ChatInfoView
+import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap.rooms
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

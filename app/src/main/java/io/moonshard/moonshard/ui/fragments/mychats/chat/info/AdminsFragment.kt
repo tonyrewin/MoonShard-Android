@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.chat.info.AdminsPresenter
-import io.moonshard.moonshard.presentation.view.chat.AdminsView
+import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import io.moonshard.moonshard.ui.adapters.chat.AdminListener
 import io.moonshard.moonshard.ui.adapters.chat.AdminsAdapter
 import kotlinx.android.synthetic.main.fragment_admins.*
@@ -17,7 +17,8 @@ import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Occupant
 
 
-class AdminsFragment : MvpAppCompatFragment(), AdminsView {
+class AdminsFragment : MvpAppCompatFragment(),
+    AdminsView {
 
     @InjectPresenter
     lateinit var presenter: AdminsPresenter

@@ -45,17 +45,35 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
     }
 
     override fun showError(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity!!, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun showMembers(members:List<EntityFullJid>) {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 
+
+    //todo maybe replace
+    fun showProfileUser(jid:String){
+        val bundle = Bundle()
+        bundle.putString("userJid", jid)
+        val fragment = ProfileUserFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.
+            hide(this)
+            ?.addToBackStack("ProfileUserFragment")
+            ?.commit()
+    }
+
     private fun initAdapter(){
         membersRv?.layoutManager = LinearLayoutManager(context)
         membersRv?.adapter = MembersAdapter( object : MemberListener {
-            override fun remove(categoryName: String) {
+            override fun clickMember(member: String) {
+                showProfileUser(member)
+            }
+
+            override fun remove(member: EntityFullJid) {
 
             }
         }, arrayListOf())

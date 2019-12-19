@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.view.chat
+package io.moonshard.moonshard.presentation.view.chat.info
 
 import moxy.MvpView
 import org.jivesoftware.smackx.muc.Affiliate

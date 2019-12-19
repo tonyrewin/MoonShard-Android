@@ -1,7 +1,7 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.presentation.view.chat.AdminsView
+import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager

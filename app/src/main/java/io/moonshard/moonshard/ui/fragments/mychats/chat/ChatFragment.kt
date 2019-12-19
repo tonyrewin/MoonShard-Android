@@ -52,6 +52,14 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             showChatInfo(idChat)
         }
 
+        valueMembersChatTv?.setOnClickListener {
+            showChatInfo(idChat)
+        }
+
+        nameChatTv?.setOnClickListener {
+            showChatInfo(idChat)
+        }
+
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
             ChatRepository.clean()

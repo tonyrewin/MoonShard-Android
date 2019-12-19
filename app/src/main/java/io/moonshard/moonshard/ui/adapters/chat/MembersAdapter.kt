@@ -17,7 +17,8 @@ import trikita.log.Log
 
 
 interface MemberListener {
-    fun remove(categoryName: String)
+    fun remove(member: EntityFullJid)
+    fun clickMember(member: String)
 }
 
 class MembersAdapter(
@@ -38,6 +39,11 @@ class MembersAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.itemView.setOnClickListener {
+            listener.clickMember(members[position].resourceOrEmpty.toString() + "@moonshard.tech")
+        }
+
         holder.nameTv?.text = members[position].resourceOrEmpty
         //holder.statusTv?.text = members[position].affiliation.
         setAvatar(

@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.view.chat
+package io.moonshard.moonshard.presentation.view.chat.info
 
 import android.graphics.Bitmap
 import com.google.android.gms.maps.model.LatLng

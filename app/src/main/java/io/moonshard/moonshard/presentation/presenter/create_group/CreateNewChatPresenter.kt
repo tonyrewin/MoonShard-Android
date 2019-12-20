@@ -65,7 +65,6 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                         viewState?.showMapScreen()
                     }, {
                         it.message?.let { viewState?.showToast(it) }
-
                     })
             } catch (e: Exception) {
                 e.message?.let { viewState?.showToast(it) }

@@ -163,6 +163,7 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager.addInvitationListener(networkHandler);
 
         setStatus(true,"ONLINE");
+
     }
 
     public void disconnect() {

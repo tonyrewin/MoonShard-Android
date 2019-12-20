@@ -82,6 +82,7 @@ class ChatInfoFragment : MvpAppCompatFragment(),
             InviteUserFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
+
         ft?.add(R.id.container, fragment, "InviteUserFragment")?.hide(this)
             ?.addToBackStack("InviteUserFragment")
             ?.commit()

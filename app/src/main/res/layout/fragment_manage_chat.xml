@@ -67,7 +67,7 @@
             android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatar"
+                android:id="@+id/avatarIv"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="8dp"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="13dp"
                 android:id="@+id/nameTv"
-                android:layout_toRightOf="@+id/avatar"
+                android:layout_toRightOf="@+id/avatarIv"
                 android:text="Название"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

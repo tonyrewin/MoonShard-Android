@@ -20,7 +20,7 @@ import trikita.log.Log
 
 
 interface EventListener {
-    fun eventClick(categoryName: String)
+    fun eventClick(event: RoomPin)
 }
 
 class EventAdapter(
@@ -37,6 +37,10 @@ class EventAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.showGroupBtn?.setOnClickListener {
+            listener.eventClick(events[position])
+        }
         try {
             val jid = JidCreate.entityBareFrom(events[position].roomId)
             val muc =
@@ -50,6 +54,7 @@ class EventAdapter(
             holder.nameEvent?.text = roomInfo.name ?: "Информация отсутствует"
             holder.descriptionTv?.text = roomInfo.description ?: "Информация отсутствует"
             setAvatar(events[position].groupId, roomInfo.name, holder.avatarEvent)
+
         } catch (e: Exception) {
             Log.d(e.message)
         }

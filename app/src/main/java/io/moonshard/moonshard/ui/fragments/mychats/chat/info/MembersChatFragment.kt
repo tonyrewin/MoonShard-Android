@@ -23,6 +23,8 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
     @InjectPresenter
     lateinit var presenter: MembersChatPresenter
 
+    var idChat = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,12 +37,16 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         initAdapter()
 
         arguments?.let {
-            val idChat = it.getString("chatId")
-            presenter.getMembers(idChat!!)
+            idChat = it.getString("chatId")
+            presenter.getMembers(idChat)
         }
 
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        addMemberBtn?.setOnClickListener {
+            showInvitewNewUserScreen(idChat)
         }
     }
 
@@ -62,6 +68,18 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         ft?.add(R.id.container, fragment, "ProfileUserFragment")?.
             hide(this)
             ?.addToBackStack("ProfileUserFragment")
+            ?.commit()
+    }
+
+    private fun showInvitewNewUserScreen(idChat: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment =
+            InviteUserFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, fragment, "InviteUserFragment")?.hide(this)
+            ?.addToBackStack("InviteUserFragment")
             ?.commit()
     }
 

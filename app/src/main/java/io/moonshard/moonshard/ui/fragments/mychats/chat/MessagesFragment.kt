@@ -68,15 +68,24 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
         setAdapter()
 
-        ChatRepository.idChatCurrent?.let {
-            idChat = it
+
+        if(ChatRepository.idChatCurrent!=null){
+            idChat = ChatRepository.idChatCurrent!!
             presenter.setChatId(idChat)
 
             if (idChat.contains("conference")) presenter.join()
 
-            sendMessage.setOnClickListener {
-                presenter.sendMessage(editText.text.toString())
+        }else{
+            arguments?.let {
+                idChat = it.getString("chatId")
+                presenter.setChatId(idChat)
+                if (idChat.contains("conference")) presenter.join()
+
             }
+        }
+
+        sendMessage.setOnClickListener {
+            presenter.sendMessage(editText.text.toString())
         }
 
         addAttachment?.setOnClickListener {

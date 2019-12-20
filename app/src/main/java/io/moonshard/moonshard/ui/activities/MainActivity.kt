@@ -91,9 +91,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
-            supportFragmentManager.popBackStack()
-        }
+            //  if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
+         //   supportFragmentManager.popBackStack()
+        //}
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
@@ -110,5 +110,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     override fun onDestroy() {
         super.onDestroy()
         MainApplication.setMainActivity(null)
+        MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
     }
 }

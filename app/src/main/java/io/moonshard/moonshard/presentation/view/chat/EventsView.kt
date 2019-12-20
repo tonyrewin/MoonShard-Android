@@ -6,4 +6,6 @@ import moxy.MvpView
 interface EventsView: MvpView {
     fun showError(error: String)
     fun setEvents(events:ArrayList<RoomPin>)
+    fun isShowCreateEventLayout(isShow:Boolean,isAdmin:Boolean)
+    fun showChatScreens(jid:String)
 }

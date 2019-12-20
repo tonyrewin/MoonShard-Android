@@ -13,4 +13,6 @@ interface ChatView: MvpView {
     fun setAvatar(avatar: Bitmap?)
 
     fun showError(error:String)
+    fun initViewPager()
+    fun initViewPagerFromEvent()
 }

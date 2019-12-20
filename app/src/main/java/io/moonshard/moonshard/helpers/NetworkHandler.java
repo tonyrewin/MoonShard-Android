@@ -314,11 +314,13 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
 
     void addChat(ChatEntity chatEntity) {
         ChatListRepository.INSTANCE.addChat(chatEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     String sucess = "";
                     //  onIncomingMessageInternal(chatEntity, message,  room.getRoom().asEntityBareJidString(), inviter.asEntityBareJidString());
+                },e->{
+                    Logger.d(e);
                 });
     }
 }

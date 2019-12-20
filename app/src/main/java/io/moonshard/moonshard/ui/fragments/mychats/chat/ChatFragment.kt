@@ -42,6 +42,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         arguments?.let {
 
+
+            /*
             val fromEvent = it.getBoolean("fromEvent")
             if(fromEvent){
                 initViewPagerFromEvent()
@@ -49,10 +51,13 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
                 initViewPager()
             }
 
+             */
+
             idChat = it.getString("chatId")
                 //nameChat = it.getString("chatName")
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
+            presenter.isEvent()
         }
 
         avatarChat?.setOnClickListener {
@@ -96,7 +101,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
-    private fun initViewPager(){
+    override fun initViewPager(){
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,
@@ -106,7 +111,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         viewPager?.adapter = sectionsPagerAdapter
     }
 
-    private fun initViewPagerFromEvent(){
+    override fun initViewPagerFromEvent(){
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,

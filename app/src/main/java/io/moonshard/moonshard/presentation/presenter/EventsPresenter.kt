@@ -30,6 +30,8 @@ class EventsPresenter : MvpPresenter<EventsView>() {
     }
 
 
+
+
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())

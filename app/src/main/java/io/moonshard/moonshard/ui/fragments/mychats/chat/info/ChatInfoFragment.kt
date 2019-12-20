@@ -17,7 +17,6 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
-import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -69,6 +68,23 @@ class ChatInfoFragment : MvpAppCompatFragment(),
         leaveLayout?.setOnClickListener {
             presenter.leaveGroup(idChat)
         }
+
+
+        addNewMember?.setOnClickListener {
+            showInvitewNewUserScreen(idChat)
+        }
+    }
+
+    private fun showInvitewNewUserScreen(idChat: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment =
+            InviteUserFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, fragment, "InviteUserFragment")?.hide(this)
+            ?.addToBackStack("InviteUserFragment")
+            ?.commit()
     }
 
     fun showManageChatScreen(idChat: String) {

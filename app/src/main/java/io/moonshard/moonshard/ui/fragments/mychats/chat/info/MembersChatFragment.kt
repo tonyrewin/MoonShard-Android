@@ -52,7 +52,6 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 
-
     //todo maybe replace
     fun showProfileUser(jid:String){
         val bundle = Bundle()

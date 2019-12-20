@@ -11,24 +11,34 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.instacart.library.truetime.TrueTime;
+import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
+import org.jivesoftware.smackx.muc.InvitationListener;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.muc.RoomInfo;
+import org.jivesoftware.smackx.muc.packet.MUCUser;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.Random;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.R;
+import io.moonshard.moonshard.common.NotFoundException;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.models.dbEntities.ChatUser;
@@ -42,7 +52,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import trikita.log.Log;
 
-public class NetworkHandler implements IncomingChatMessageListener, PresenceEventListener, MessageListener {
+public class NetworkHandler implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
     private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
@@ -266,4 +276,49 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
         }
     }
 
+    @Override
+    public void invitationReceived(XMPPConnection conn, MultiUserChat room, EntityJid inviter, String reason, String password, Message message, MUCUser.Invite invitation) {
+
+        ChatListRepository.INSTANCE.getChatByJid(room.getRoom())
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(chatEntity -> {
+                    //onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
+                }, e -> {
+                   if(e.getClass() == NotFoundException.class){
+
+                       try {
+                           Resourcepart nickname;
+                           nickname = Resourcepart.from(MainApplication.getJid());
+
+                           room.join(nickname); //while get invitation you need to join that room
+
+                           RoomInfo info =
+                                   MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                                           .getRoomInfo(room.getRoom());
+
+                           ChatEntity chatEntity = new ChatEntity(
+                                   0,
+                                   room.getRoom().asEntityBareJidString(),
+                                   info.getName(),
+                                   false,
+                                   0
+                           );
+                           addChat(chatEntity);
+                       } catch (Exception error) {
+                           Logger.d(error);
+                       }
+                }
+                });
+    }
+
+    void addChat(ChatEntity chatEntity) {
+        ChatListRepository.INSTANCE.addChat(chatEntity)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    String sucess = "";
+                    //  onIncomingMessageInternal(chatEntity, message,  room.getRoom().asEntityBareJidString(), inviter.asEntityBareJidString());
+                });
+    }
 }

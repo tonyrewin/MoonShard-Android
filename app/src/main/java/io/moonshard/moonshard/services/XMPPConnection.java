@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -163,8 +164,6 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
-        setStatus(true,"ONLINE");
-
     }
 
     public void disconnect() {
@@ -201,6 +200,11 @@ public class XMPPConnection implements ConnectionListener {
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
+        try {
+            setStatus(true,"ONLINE");
+        }catch (Exception e){
+            Logger.e(e.getMessage());
+        }
 
         BaseActivity baseActivity = getLoginActivity();
         if (baseActivity != null) {

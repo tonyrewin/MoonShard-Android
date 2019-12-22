@@ -58,6 +58,7 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
 
     fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int, listener: ChatListListener) {
         val chat = chats[position]
+        MainApplication.getXmppConnection().addChatStatusListener(chat.jid)
         joinChat(chat.jid)
         if (bindedItems.indexOf(chat) == -1) {
             setAvatar(chat.jid,chat.chatName,holder.avatar)

@@ -26,6 +26,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.ping.PingManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
@@ -560,4 +561,20 @@ public class XMPPConnection implements ConnectionListener {
         }
         return null;
     }
+
+   public void addChatStatusListener(String jid){
+        try {
+            EntityBareJid groupId = JidCreate.entityBareFrom(jid);
+            MultiUserChat muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                            .getMultiUserChat(groupId);
+
+            muc.addParticipantStatusListener(networkHandler);
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

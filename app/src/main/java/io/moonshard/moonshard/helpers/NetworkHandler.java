@@ -20,6 +20,7 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
+import org.jivesoftware.smackx.muc.DefaultParticipantStatusListener;
 import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
@@ -27,6 +28,7 @@ import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.packet.MUCUser;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
@@ -52,7 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import trikita.log.Log;
 
-public class NetworkHandler implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener {
+public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
     private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
@@ -323,4 +325,15 @@ public class NetworkHandler implements IncomingChatMessageListener, PresenceEven
                     Logger.d(e);
                 });
     }
+
+    @Override
+    public void joined(EntityFullJid participant) {
+        super.joined(participant);
+    }
+
+    @Override
+    public void left(EntityFullJid participant) {
+        super.left(participant);
+    }
+
 }

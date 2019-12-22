@@ -49,7 +49,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             val occupants = muc.occupants
 
             val name = roomInfo.name
-            getAvatar(chatID)
+            getAvatar(chatID,name)
             val valueOccupants = roomInfo.occupantsCount
             val valueOnlineMembers = getValueOnlineUsers(muc, occupants)
             viewState?.setData(name, valueOccupants, valueOnlineMembers)
@@ -70,10 +70,10 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         return onlineValue
     }
 
-    private fun getAvatar(jid: String) {
-        MainApplication.getXmppConnection().loadAvatar(jid)
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+    private fun getAvatar(jid: String,name:String) {
+        MainApplication.getXmppConnection().loadAvatar(jid,name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ bytes ->
                 if (bytes != null) {
                     val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

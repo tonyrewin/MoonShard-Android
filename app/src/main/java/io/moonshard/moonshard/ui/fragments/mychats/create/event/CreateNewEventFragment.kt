@@ -70,8 +70,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         }
 
         if (ChooseChatRepository.time.isEmpty()) {
-            timeTv?.text = "6 часов"
-            ChooseChatRepository.time = "6 часов"
+            timeTv?.text = "1 день"
+            ChooseChatRepository.time = "1 день"
         } else {
             timeTv?.text = ChooseChatRepository.time
         }

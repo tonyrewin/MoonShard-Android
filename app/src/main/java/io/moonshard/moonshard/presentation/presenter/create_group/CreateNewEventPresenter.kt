@@ -53,7 +53,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         group: ChatEntity?
     ) {
 
-        if (latitude != null && longitude != null && category != null && group != null) {
+        if (latitude != null && longitude != null && category != null) {
             val actualUserName: String
             val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
 
@@ -151,11 +151,11 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     private fun createRoomOnServer(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
-        category: Category, group: ChatEntity
+        category: Category, group: ChatEntity?
     ) {
         val categories = arrayListOf<Category>()
         categories.add(category)
-        compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, categories,group.jid)
+        compositeDisposable.add(useCase!!.putRoom(latitude, longitude, ttl, roomId, categories,group?.jid)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { _, throwable ->

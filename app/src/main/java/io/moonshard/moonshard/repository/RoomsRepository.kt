@@ -20,7 +20,7 @@ class RoomsRepository {
     fun putRoom(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         categories: ArrayList<Category>,
-        idGroup: String
+        idGroup: String?
     ): Single<RoomPin> {
         val request = ModelMapRequest(latitude,longitude,ttl,roomId,categories,idGroup)
         return api.putRoom(request)

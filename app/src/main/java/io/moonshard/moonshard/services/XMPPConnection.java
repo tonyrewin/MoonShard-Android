@@ -109,9 +109,9 @@ public class XMPPConnection implements ConnectionListener {
 
     public void connect() throws XMPPException, IOException, SmackException, EmptyLoginCredentialsException {
 
-        if (credentials.isEmpty()) {
-            throw new EmptyLoginCredentialsException();
-        }
+     //   if (credentials.isEmpty()) {
+     //       throw new EmptyLoginCredentialsException();
+     //   }
 
         XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
                 .setXmppDomain(credentials.jabberHost)

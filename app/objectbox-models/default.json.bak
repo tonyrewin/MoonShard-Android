@@ -49,7 +49,7 @@
     },
     {
       "id": "2:6800849399877525902",
-      "lastPropertyId": "10:4002800396543773766",
+      "lastPropertyId": "11:281949629575498001",
       "name": "MessageEntity",
       "properties": [
         {
@@ -107,6 +107,12 @@
         {
           "id": "10:4002800396543773766",
           "name": "isCurrentUserSender",
+          "type": 1,
+          "flags": 4
+        },
+        {
+          "id": "11:281949629575498001",
+          "name": "isSystemMessage",
           "type": 1,
           "flags": 4
         }

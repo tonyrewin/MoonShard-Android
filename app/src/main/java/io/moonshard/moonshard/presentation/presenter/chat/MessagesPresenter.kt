@@ -23,13 +23,9 @@ import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
-import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.EntityBareJid
-import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
@@ -38,7 +34,6 @@ import trikita.log.Log
 import java.io.File
 import java.io.IOException
 import java.util.*
-import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 @InjectViewState
@@ -55,11 +50,11 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe ({
+            .subscribe({
                 chat = it
                 loadLocalMessages()
                 // loadMoreMessages() // FIXME
-            },{
+            }, {
                 com.orhanobut.logger.Logger.d(it.message)
             })
         MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
@@ -85,14 +80,15 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         try {
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             val jid = JidCreate.entityBareFrom(chatID)
-            val muc = MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
+            val muc =
+                MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
             val mec = muc?.getEnterConfigurationBuilder(nickName)
 
             mec?.requestNoHistory()
             val mucEnterConfig = mec?.build()
             muc?.join(mucEnterConfig)
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
-        }catch (e:java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             //will add toast
             var error = ""
         }
@@ -108,8 +104,12 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 return@create
             }
 
-            val messageUid = if (chat.isGroupChat) MainApplication.getXmppConnection().sendMessageGroupChat(jid, text)
-                                    else MainApplication.getXmppConnection().sendMessage(jid, text)
+            val messageUid =
+                if (chat.isGroupChat) MainApplication.getXmppConnection().sendMessageGroupChat(
+                    jid,
+                    text
+                )
+                else MainApplication.getXmppConnection().sendMessage(jid, text)
 
             while (!TrueTime.isInitialized()) {
                 Thread {
@@ -129,7 +129,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
 
             val message = MessageEntity(
-                messageUid = messageUid,
+                messageUid = UUID.randomUUID().toString(),
+                stanzaId = messageUid,
                 timestamp = timestamp,
                 text = text,
                 isSent = false,
@@ -149,7 +150,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             val jid: FullJid?
             try {
                 jid = JidCreate.entityFullFrom("$chatID/Smack")
-                MainApplication.getXmppConnection().sendFile(jid,path)
+                MainApplication.getXmppConnection().sendFile(jid, path)
             } catch (e: XmppStringprepException) {
 
             }
@@ -173,7 +174,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
 
             override fun onNext(message: MessageEntity) {
-                ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0).subscribe()
+                ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
+                    .subscribe()
                 viewState?.addToStart(GenericMessage(message), true)
             }
 
@@ -200,14 +202,16 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                     .observeOn(Schedulers.io())
                                     .subscribeOn(AndroidSchedulers.mainThread())
                                     .subscribe({}, {
-                                        if(it is NotFoundException) {
-                                            val senderJid = message.from.asBareJid().asUnescapedString()
+                                        if (it is NotFoundException) {
+                                            val senderJid =
+                                                message.from.asBareJid().asUnescapedString()
                                             ChatUserRepository.getUserAsSingle(message.from.asBareJid())
                                                 .observeOn(Schedulers.io())
                                                 .subscribeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({ chatUser ->
                                                     val messageEntity = MessageEntity(
-                                                        messageUid = message.stanzaId,
+                                                        messageUid = UUID.randomUUID().toString(),
+                                                        stanzaId = message.stanzaId,
                                                         timestamp = forwardedMessage.delayInformation.stamp.time,
                                                         text = message.body,
                                                         isSent = true,
@@ -219,20 +223,24 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                 }, {
                                                     val chatUser = ChatUser(
                                                         jid = message.from.asBareJid().asUnescapedString(),
-                                                        name = message.from.asBareJid().asUnescapedString().split("@")[0]
+                                                        name = message.from.asBareJid().asUnescapedString().split(
+                                                            "@"
+                                                        )[0]
                                                     )
-                                                    ChatUserRepository.saveUser(chatUser).subscribe {
-                                                        val messageEntity = MessageEntity(
-                                                            messageUid = message.stanzaId,
-                                                            timestamp = forwardedMessage.delayInformation.stamp.time,
-                                                            text = message.body,
-                                                            isSent = true,
-                                                            isRead = true,
-                                                            isCurrentUserSender = senderJid == MainApplication.getXmppConnection().jid.asUnescapedString()
-                                                        )
-                                                        messageEntity.chat.target = chat
-                                                        messageEntity.sender.target = chatUser
-                                                    }
+                                                    ChatUserRepository.saveUser(chatUser)
+                                                        .subscribe {
+                                                            val messageEntity = MessageEntity(
+                                                                messageUid = UUID.randomUUID().toString(),
+                                                                stanzaId = message.stanzaId,
+                                                                timestamp = forwardedMessage.delayInformation.stamp.time,
+                                                                text = message.body,
+                                                                isSent = true,
+                                                                isRead = true,
+                                                                isCurrentUserSender = senderJid == MainApplication.getXmppConnection().jid.asUnescapedString()
+                                                            )
+                                                            messageEntity.chat.target = chat
+                                                            messageEntity.sender.target = chatUser
+                                                        }
                                                 })
 
                                         }
@@ -251,7 +259,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun loadLocalMessages() {
-        loadLocalMessagesLogic().subscribe ({ messages ->
+        loadLocalMessagesLogic().subscribe({ messages ->
             val genericMessages = ArrayList<GenericMessage>()
             if (messages.isNotEmpty()) {
                 messages.forEach {
@@ -260,7 +268,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
             genericMessages.sortWith(messageComparator)
             viewState.setMessages(genericMessages, true)
-        },{
+        }, {
             com.orhanobut.logger.Logger.d(it.message)
         })
     }
@@ -363,17 +371,17 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     private fun getAvatar(jid: String) {
-            MainApplication.getXmppConnection().loadAvatar(jid)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bytes ->
-                    if (bytes != null) {
-                        val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        //viewState?.setAvatar(avatar)
-                    }
-                }, { throwable ->
-                    Log.e(throwable.message)
-                })
+        MainApplication.getXmppConnection().loadAvatar(jid)
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe({ bytes ->
+                if (bytes != null) {
+                    val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    //viewState?.setAvatar(avatar)
+                }
+            }, { throwable ->
+                Log.e(throwable.message)
+            })
     }
 
 

@@ -138,7 +138,6 @@ public class MainApplication extends Application {
         }, 2000);
 
 
-
         instance = this;
         ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());

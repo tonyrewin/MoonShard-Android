@@ -80,22 +80,26 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     }
 
     fun getValueOnlineUsers(jid: String): Int {
-        val groupId = JidCreate.entityBareFrom(jid)
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
 
-        val muc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                .getMultiUserChat(groupId)
-        val members = muc.occupants
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val members = muc.occupants
 
-        var onlineValue = 0
-        for (i in members.indices) {
-            val userOccupantPresence =
-                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
-            if (userOccupantPresence.type == Presence.Type.available) {
-                onlineValue++
+            var onlineValue = 0
+            for (i in members.indices) {
+                val userOccupantPresence =
+                    muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+                if (userOccupantPresence.type == Presence.Type.available) {
+                    onlineValue++
+                }
             }
+            return onlineValue
+        }catch (e:Exception){
+            return 0
         }
-        return onlineValue
     }
 
     private fun calculationByDistance(latRoom: String?, lngRoom: String?): String {

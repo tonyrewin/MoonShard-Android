@@ -37,6 +37,7 @@ import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.Random;
+import java.util.UUID;
 
 import io.moonshard.moonshard.MainApplication;
 import io.moonshard.moonshard.R;
@@ -94,10 +95,12 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
         MessageEntity messageEntity = new MessageEntity(
                 0,
+                UUID.randomUUID().toString(),
                 message.getStanzaId(),
                 TrueTime.now().getTime(),
                 message.getBody(),
                 true,
+                false,
                 false,
                 false
         );
@@ -287,30 +290,30 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .subscribe(chatEntity -> {
                     //onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
-                   if(e.getClass() == NotFoundException.class){
+                    if (e.getClass() == NotFoundException.class) {
 
-                       try {
-                           Resourcepart nickname;
-                           nickname = Resourcepart.from(MainApplication.getJid());
+                        try {
+                            Resourcepart nickname;
+                            nickname = Resourcepart.from(MainApplication.getJid());
 
-                           room.join(nickname); //while get invitation you need to join that room
+                            room.join(nickname); //while get invitation you need to join that room
 
-                           RoomInfo info =
-                                   MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
-                                           .getRoomInfo(room.getRoom());
+                            RoomInfo info =
+                                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                                            .getRoomInfo(room.getRoom());
 
-                           ChatEntity chatEntity = new ChatEntity(
-                                   0,
-                                   room.getRoom().asEntityBareJidString(),
-                                   info.getName(),
-                                   false,
-                                   0
-                           );
-                           addChat(chatEntity);
-                       } catch (Exception error) {
-                           Logger.d(error);
-                       }
-                }
+                            ChatEntity chatEntity = new ChatEntity(
+                                    0,
+                                    room.getRoom().asEntityBareJidString(),
+                                    info.getName(),
+                                    false,
+                                    0
+                            );
+                            addChat(chatEntity);
+                        } catch (Exception error) {
+                            Logger.d(error);
+                        }
+                    }
                 });
     }
 
@@ -321,7 +324,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .subscribe(() -> {
                     String sucess = "";
                     //  onIncomingMessageInternal(chatEntity, message,  room.getRoom().asEntityBareJidString(), inviter.asEntityBareJidString());
-                },e->{
+                }, e -> {
                     Logger.d(e);
                 });
     }
@@ -329,6 +332,93 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void joined(EntityFullJid participant) {
         super.joined(participant);
+
+        try {
+            String chatJid = participant.asUnescapedString().split("/")[0];
+            String jidAuthor = participant.asUnescapedString().split("/")[1];
+
+            ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(chatJid))
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(chatEntity -> {
+                        ChatUserRepository.INSTANCE.getUserAsSingle(JidCreate.from(participant))
+                                .observeOn(Schedulers.io())
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribe(user -> {
+                                            return;
+                                        }, throwable -> {
+                                            Logger.d(throwable);
+                                            ChatUser user = new ChatUser(0, participant.asUnescapedString(), jidAuthor, -1, false);
+                                            chatEntity.users.add(user);
+                                            ChatUserRepository.INSTANCE.saveUser(user);
+                                            onIncomingMessageJoin(chatEntity, chatJid, participant.asUnescapedString(), user);
+                                        }
+                                );
+                    }, e -> {
+                        Logger.d(e);
+                    });
+        } catch (Exception e) {
+            Logger.d(e);
+        }
+    }
+
+
+    @SuppressLint("CheckResult")
+    private void onIncomingMessageJoin(ChatEntity chatEntity, String chatJid, String fromJid, ChatUser chatUser) {
+        String author = fromJid.split("/")[1];
+        String messageText = author + " присоединился к чату";
+
+        MessageEntity messageEntity = new MessageEntity(
+                0,
+                UUID.randomUUID().toString(),
+                null,
+                TrueTime.now().getTime(),
+                messageText,
+                true,
+                false,
+                false,
+                false
+        );
+        messageEntity.chat.setTarget(chatEntity);
+        messageEntity.sender.setTarget(chatUser);
+        saveMessageJoin(messageEntity, chatJid, chatEntity);
+
+    }
+
+    void saveMessageJoin(MessageEntity messageEntity, String chatJid, ChatEntity chatEntity) {
+        MessageRepository.INSTANCE.saveMessage(messageEntity)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    messagePubsub.onNext(messageEntity);
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
+                        createNotificationJoin(chatJid, messageEntity.getText());
+                    }
+                }, throwable -> {
+                    Log.e(throwable.getMessage());
+                });
+    }
+
+    private void createNotificationJoin(String chatJid, String message) {
+        MainApplication.getXmppConnection().loadAvatar(chatJid)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(bytes -> {
+                    Bitmap avatar = null;
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    }
+                    NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                            .setSmallIcon(R.drawable.amu_bubble_mask)
+                            .setContentTitle(chatJid)
+                            .setContentText(message)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    if (avatar != null) {
+                        notification.setLargeIcon(avatar);
+                    }
+                    notificationManager.notify(new Random().nextInt(), notification.build());
+                }, throwable -> Log.e(throwable.getMessage()));
     }
 
     @Override

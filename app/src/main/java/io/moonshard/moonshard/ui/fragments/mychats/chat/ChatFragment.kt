@@ -1,16 +1,12 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.MainApplication
-
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
@@ -25,7 +21,6 @@ import moxy.presenter.InjectPresenter
 class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     var idChat: String = ""
-    var nameChat:String = ""
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -41,20 +36,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-
-
-            /*
-            val fromEvent = it.getBoolean("fromEvent")
-            if(fromEvent){
-                initViewPagerFromEvent()
-            }else{
-                initViewPager()
-            }
-
-             */
-
             idChat = it.getString("chatId")
-                //nameChat = it.getString("chatName")
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
             presenter.isEvent()
@@ -90,7 +72,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     override fun setData(
-        name: String, valueOccupants: Int, valueOnlineMembers: Int) {
+        name: String, valueOccupants: Int, valueOnlineMembers: Int
+    ) {
         nameChatTv?.text = name
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
     }
@@ -101,17 +84,17 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
     }
 
-    override fun initViewPager(){
+    override fun initViewPager() {
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,
             context!!,
-            arrayOf(MyChatsPagerAdapter.TabItem.CHAT,MyChatsPagerAdapter.TabItem.EVENTS)
+            arrayOf(MyChatsPagerAdapter.TabItem.CHAT, MyChatsPagerAdapter.TabItem.EVENTS)
         )
         viewPager?.adapter = sectionsPagerAdapter
     }
 
-    override fun initViewPagerFromEvent(){
+    override fun initViewPagerFromEvent() {
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,

@@ -11,6 +11,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
+import io.moonshard.moonshard.ui.activities.auth.LoginActivity
 import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_settings_new.*
 import moxy.MvpAppCompatFragment
@@ -35,8 +36,9 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         presenter.getAvatar()
         presenter.getName()
         logOut?.setOnClickListener {
-            presenter.logOut()
             MainApplication.resetLoginCredentials()
+            MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
+            presenter.logOut()
         }
 
         profileSettingsLayout?.setOnClickListener {
@@ -54,7 +56,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
     }
 
     override fun showRegistrationScreen() {
-        val intentRegistration = Intent(activity, RegisterActivity::class.java)
+        val intentRegistration = Intent(activity, LoginActivity::class.java)
         intentRegistration.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
         startActivity(intentRegistration)
     }

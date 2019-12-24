@@ -36,7 +36,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
             startIntro()
         } else {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-            startService()
+
+            startService() // if we want open this screen when logout we must use handle 5 sec
             auth()
             alreadyHaveText?.setOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))

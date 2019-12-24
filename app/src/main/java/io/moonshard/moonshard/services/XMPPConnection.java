@@ -174,16 +174,22 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+
+    public void disconnectMain() {
+        if (connection != null) {
+            connection.disconnect();
+            connection = null;
+        }
+    }
+
     public void setStatus(boolean available, String status) throws XMPPException {
         Presence.Type type = available? Presence.Type.available: Presence.Type.unavailable;
         Presence presence = new Presence(type);
         presence.setStatus(status);
         try {
             connection.sendStanza(presence);
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Logger.d(e);
         }
     }
 

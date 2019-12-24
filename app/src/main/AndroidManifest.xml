@@ -19,7 +19,8 @@
             android:roundIcon="@mipmap/ic_logo_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.onboardregistration.StartProfileActivity"></activity>
+        <activity android:name=".ui.activities.auth.PasswordRecoveryActivity"></activity>
+        <activity android:name=".ui.activities.onboardregistration.StartProfileActivity" />
         <activity android:name=".ui.activities.onboard.MainIntroActivity" />
 
         <service
@@ -28,9 +29,9 @@
                 android:exported="true" />
 
         <activity android:name=".ui.activities.MainActivity" />
-        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.auth.LoginActivity" />
         <activity
-                android:name=".ui.activities.RegisterActivity"
+                android:name=".ui.activities.auth.RegisterActivity"
                 android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

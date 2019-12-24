@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.activities
+package io.moonshard.moonshard.ui.activities.auth
 
 
 import android.content.Intent
@@ -15,13 +15,12 @@ import moxy.presenter.InjectPresenter
 import android.text.style.UnderlineSpan
 import android.text.SpannableString
 import android.text.method.PasswordTransformationMethod
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.ui.activities.BaseActivity
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_login.editEmail
 import kotlinx.android.synthetic.main.activity_login.editPassword
 import kotlinx.android.synthetic.main.activity_login.visiblePassBtn
-import kotlinx.android.synthetic.main.activity_register.*
 
 
 class LoginActivity : BaseActivity(), LoginView {

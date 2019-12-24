@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.ISlidePolicy
 import de.adorsys.android.securestoragelibrary.SecurePreferences
-import io.moonshard.moonshard.ui.activities.RegisterActivity
+import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_acquaintance.*
 
 

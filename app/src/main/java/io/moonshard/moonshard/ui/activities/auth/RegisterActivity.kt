@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.activities
+package io.moonshard.moonshard.ui.activities.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +13,8 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
+import io.moonshard.moonshard.ui.activities.BaseActivity
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.onboard.MainIntroActivity
 import io.moonshard.moonshard.ui.activities.onboardregistration.StartProfileActivity
 import kotlinx.android.synthetic.main.activity_register.*

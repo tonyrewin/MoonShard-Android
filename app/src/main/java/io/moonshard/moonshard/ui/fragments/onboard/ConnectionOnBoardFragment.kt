@@ -1,18 +1,15 @@
 package io.moonshard.moonshard.ui.fragments.onboard
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.heinrichreimersoftware.materialintro.app.SlideFragment
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.ui.activities.RegisterActivity
+import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_connection_on_board.*
 
 

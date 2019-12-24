@@ -22,7 +22,7 @@ import io.moonshard.moonshard.common.TopicStorage
 import io.moonshard.moonshard.models.LocalChat
 import io.moonshard.moonshard.models.MatchModel
 import io.moonshard.moonshard.models.MessageModel
-import io.moonshard.moonshard.ui.activities.RegisterActivity
+import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import p2mobile.P2mobile
 import p2mobile.P2mobile.start
 import java.util.*

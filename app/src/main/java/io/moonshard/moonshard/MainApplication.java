@@ -75,7 +75,6 @@ public class MainApplication extends Application {
                 && !currentActivity.isFinishing());
     }
 
-
     public static BaseActivity getLoginActivity() {
         return currentActivity;
     }
@@ -188,17 +187,21 @@ public class MainApplication extends Application {
     }
 
     public static void loadLoginCredentials() {
-        currentLoginCredentials = new LoginCredentials();
-        String jid = SecurePreferences.getStringValue("jid", null);
-        String password = SecurePreferences.getStringValue("pass", null);
-        if(jid != null && password != null) {
-            String username = jid.split("@")[0];
-            String jabberHost = jid.split("@")[1];
-            currentLoginCredentials.username = username;
-            currentLoginCredentials.jabberHost = jabberHost;
-            currentLoginCredentials.password = password;
+        try {
+            currentLoginCredentials = new LoginCredentials();
+            String jid = SecurePreferences.getStringValue("jid", null);
+            String password = SecurePreferences.getStringValue("pass", null);
+            if(jid != null && password != null) {
+                String username = jid.split("@")[0];
+                String jabberHost = jid.split("@")[1];
+                currentLoginCredentials.username = username;
+                currentLoginCredentials.jabberHost = jabberHost;
+                currentLoginCredentials.password = password;
+            }
+            MainApplication.setJid(currentLoginCredentials.username + "@" + currentLoginCredentials.jabberHost);
+        }catch (Exception e){
+            Logger.d(e);
         }
-        MainApplication.setJid(currentLoginCredentials.username + "@" + currentLoginCredentials.jabberHost);
     }
 
     public static void resetLoginCredentials() {

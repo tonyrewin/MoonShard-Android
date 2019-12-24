@@ -8,5 +8,5 @@ interface RegisterView : MvpView {
     fun showToast(text:String)
     fun showContactsScreen()
     fun showError(error: String)
-
+    fun showStartProfileScreen()
 }

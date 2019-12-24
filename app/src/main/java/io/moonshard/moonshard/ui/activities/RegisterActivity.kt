@@ -14,6 +14,7 @@ import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
 import io.moonshard.moonshard.ui.activities.onboard.MainIntroActivity
+import io.moonshard.moonshard.ui.activities.onboardregistration.StartProfileActivity
 import kotlinx.android.synthetic.main.activity_register.*
 import moxy.presenter.InjectPresenter
 
@@ -23,13 +24,15 @@ class RegisterActivity : BaseActivity(), RegisterView {
     @InjectPresenter
     lateinit var presenter: RegisterPresenter
 
+    var isRegistration = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
-        if(checkFirstStart()){
+        if (checkFirstStart()) {
             startIntro()
-        }else{
+        } else {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
             startService()
             auth()
@@ -65,12 +68,13 @@ class RegisterActivity : BaseActivity(), RegisterView {
         return SecurePreferences.getBooleanValue("first_start", true)
     }
 
-    fun startIntro(){
-        val intent = Intent(this,MainIntroActivity::class.java)
+    fun startIntro() {
+        val intent = Intent(this, MainIntroActivity::class.java)
         startActivity(intent)
     }
 
     override fun onSuccess() {
+        isRegistration = true
         saveLoginCredentials(
             editEmail.text.toString() + "@moonshard.tech",
             editPassword.text.toString()
@@ -106,6 +110,11 @@ class RegisterActivity : BaseActivity(), RegisterView {
         startActivity(intentContactsActivity)
     }
 
+    override fun showStartProfileScreen() {
+        val intentStartProfileActivity = Intent(this, StartProfileActivity::class.java)
+        startActivity(intentStartProfileActivity)
+    }
+
     private fun auth() {
         val logged = SecurePreferences.getBooleanValue("logged_in", false)
         if (logged) {
@@ -118,7 +127,11 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onAuthenticated() {
         runOnUiThread {
             hideLoader()
-            showContactsScreen()
+            if (isRegistration) {
+                showStartProfileScreen()
+            } else {
+                showContactsScreen()
+            }
         }
     }
 

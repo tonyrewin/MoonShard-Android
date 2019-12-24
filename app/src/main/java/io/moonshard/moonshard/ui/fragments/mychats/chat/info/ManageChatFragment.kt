@@ -22,13 +22,11 @@ import java.net.URLConnection
 
 class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
-
     @InjectPresenter
     lateinit var presenter: ManageChatPresenter
     var idChat = ""
     var bytes: ByteArray? = null
     var mimeType: String? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

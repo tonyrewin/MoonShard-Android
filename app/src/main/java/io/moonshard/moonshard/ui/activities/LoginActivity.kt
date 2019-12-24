@@ -67,6 +67,10 @@ class LoginActivity : BaseActivity(), LoginView {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
+
+        forgotPassTv?.setOnClickListener {
+
+        }
     }
 
     private fun startService() {

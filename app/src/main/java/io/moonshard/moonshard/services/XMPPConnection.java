@@ -210,6 +210,10 @@ public class XMPPConnection implements ConnectionListener {
         if (baseActivity != null) {
             baseActivity.onAuthenticated();
         }
+
+        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+        ReconnectionManager.setEnabledPerDefault(true);
+        reconnectionManager.enableAutomaticReconnection();
     }
 
     @Override

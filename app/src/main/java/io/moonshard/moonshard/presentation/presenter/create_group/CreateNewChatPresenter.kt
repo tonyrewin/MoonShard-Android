@@ -62,7 +62,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                     .observeOn(Schedulers.io())
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        viewState?.showMapScreen()
+                        viewState?.showChatsScreen()
                     }, {
                         it.message?.let { viewState?.showToast(it) }
                     })

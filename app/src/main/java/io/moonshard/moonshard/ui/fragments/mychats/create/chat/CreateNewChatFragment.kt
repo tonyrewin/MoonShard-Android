@@ -9,6 +9,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import kotlinx.android.synthetic.main.fragment_create_new_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -34,10 +35,10 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
     }
 
-    override fun showMapScreen() {
-        val mapFragment = MapFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, mapFragment, null)
+    override fun showChatsScreen() {
+        val fragment = ChatsFragment()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.container, fragment, null)
             ?.addToBackStack(null)
             ?.commit()
     }

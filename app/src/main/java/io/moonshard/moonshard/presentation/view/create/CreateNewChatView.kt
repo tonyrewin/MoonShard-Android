@@ -3,6 +3,6 @@ package io.moonshard.moonshard.presentation.view.create
 import moxy.MvpView
 
 interface CreateNewChatView: MvpView {
-    fun showMapScreen()
+    fun showChatsScreen()
     fun showToast(text: String)
 }

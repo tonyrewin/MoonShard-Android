@@ -135,13 +135,13 @@ class ChatInfoFragment : MvpAppCompatFragment(),
         onlineMembersValue: Int, latLngLocation: LatLng?,
         category: String, description: String
     ) {
-        val location = getAddress(latLngLocation)
+        //val location = getAddress(latLngLocation)
         val distance = calculationByDistance(latLngLocation)
 
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance
-        address?.text = location
+       // address?.text = location
         categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
     }

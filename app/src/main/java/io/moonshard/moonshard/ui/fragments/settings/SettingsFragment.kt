@@ -42,7 +42,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         }
 
         profileSettingsLayout?.setOnClickListener {
-            showProfileScreen()
+            showChangeProfileScreen()
         }
 
         securityLayout?.setOnClickListener {
@@ -66,6 +66,14 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(R.id.container, fragment, "ProfileFragment")?.addToBackStack("ProfileFragment")
                 ?.commit()
+    }
+
+    private fun showChangeProfileScreen() {
+        val fragment = ChangeProfileFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, fragment, "ChangeProfileFragment")
+            ?.addToBackStack("ChangeProfileFragment")
+            ?.commit()
     }
 
     private fun showSecurityScreen(){

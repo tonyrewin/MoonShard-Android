@@ -103,7 +103,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 ChooseChatRepository.lat,
                 ChooseChatRepository.lng,
                 ChooseChatRepository.getTimeSec(),
-                ChooseChatRepository.category,ChooseChatRepository.group
+                ChooseChatRepository.category,ChooseChatRepository.group,
+                ChooseChatRepository.getEventStartDate()
             )
         }
 
@@ -114,7 +115,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
         presenter.getCategories()
 
-        presenter.getGroups()
+        presenter.getRooms()
     }
 
     fun setDate(dayOfMonth: Int, month: Int) {

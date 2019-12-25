@@ -15,6 +15,8 @@ data class ModelMapRequest(
     private val roomId: String? = null,
     @SerializedName("categories")
     private val category: ArrayList<Category>? = null,
-    @SerializedName("eventId")
-    private val groupdId: String? = null
+    @SerializedName("parentGroupId")
+    private val groupdId: String? = null,
+    @SerializedName("eventStartDate")
+    var eventStartDate:Long?=null
 )

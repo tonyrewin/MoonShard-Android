@@ -19,9 +19,10 @@ class RoomsUseCase {
     fun putRoom(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         categories: ArrayList<Category>,
-        idGroup: String?
+        idGroup: String?,
+        eventStartDate: Long
     ): Single<RoomPin> {
-        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup)
+        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate)
     }
 
     fun getRooms(

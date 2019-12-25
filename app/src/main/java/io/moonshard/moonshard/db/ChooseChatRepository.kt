@@ -15,7 +15,6 @@ object ChooseChatRepository {
     var group: ChatEntity?=null
 
 
-
     fun clean(){
         address=""
         time = ""
@@ -27,6 +26,10 @@ object ChooseChatRepository {
         group = null
     }
 
+
+    fun getEventStartDate(): Long {
+       return date!!.timeInMillis / 1000
+    }
 
     fun getTimeSec():Int{
         var ttl = 60*60*24

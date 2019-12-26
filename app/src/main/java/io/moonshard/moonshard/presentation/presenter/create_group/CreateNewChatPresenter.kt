@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
@@ -62,7 +63,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                     .observeOn(Schedulers.io())
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        viewState?.showChatsScreen()
+                        joinChat(jidRoomString)
                     }, {
                         it.message?.let { viewState?.showToast(it) }
                     })
@@ -71,6 +72,20 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             }
         } else {
             viewState?.showToast("Заполните поле")
+        }
+    }
+
+    fun joinChat(jid: String) {
+        try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+            muc.join(nickName)
+            viewState?.showChatScreen(jid)
+        } catch (e: Exception) {
+            Logger.d(e.message)
         }
     }
 }

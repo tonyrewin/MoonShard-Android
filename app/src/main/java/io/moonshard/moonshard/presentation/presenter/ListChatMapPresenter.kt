@@ -114,5 +114,4 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 Logger.d(e.message)
             }
     }
-
 }

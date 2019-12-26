@@ -36,7 +36,6 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(

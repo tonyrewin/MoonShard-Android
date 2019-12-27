@@ -17,6 +17,7 @@ import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
+import org.jivesoftware.smack.chat2.OutgoingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
@@ -55,7 +56,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import trikita.log.Log;
 
-public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener {
+public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, OutgoingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
     private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
@@ -75,19 +76,22 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .subscribe(chatEntity -> {
                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
-                    ChatEntity chatEntity = new ChatEntity(
-                            0,
-                            from.asEntityBareJidString(),
-                            from.asEntityBareJidString().split("@")[0],
-                            false,
-                            0
-                    );
-                    ChatListRepository.INSTANCE.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> {
-                                onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
-                            });
+                    if (e.getClass() == NotFoundException.class) {
+
+                        ChatEntity chatEntity = new ChatEntity(
+                                0,
+                                from.asEntityBareJidString(),
+                                from.asEntityBareJidString().split("@")[0],
+                                false,
+                                0
+                        );
+                        ChatListRepository.INSTANCE.addChat(chatEntity)
+                                .observeOn(Schedulers.io())
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {
+                                    onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
+                                });
+                    }
                 });
     }
 
@@ -105,7 +109,13 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 false
         );
         messageEntity.chat.setTarget(chatEntity);
-        String messageAuthorNickname = fromJid.split("/")[1];
+        String messageAuthorNickname;
+
+        if (fromJid.contains("conference")) {
+            messageAuthorNickname = fromJid.split("/")[1];
+        } else {
+            messageAuthorNickname = fromJid.split("@")[0];
+        }
 
         try {
             Jid jidFrom = JidCreate.from(fromJid);
@@ -235,19 +245,22 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                         .subscribe(chatEntity -> {
                             onIncomingMessageInternal(chatEntity, message, roomJid, message.getFrom().asUnescapedString());
                         }, e -> {
-                            ChatEntity chatEntity = new ChatEntity(
-                                    0,
-                                    roomName,
-                                    roomJid,
-                                    false,
-                                    0
-                            );
-                            ChatListRepository.INSTANCE.addChat(chatEntity)
-                                    .observeOn(Schedulers.io())
-                                    .subscribeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(() -> {
-                                        onIncomingMessageInternal(chatEntity, message, roomJid, message.getFrom().asUnescapedString());
-                                    });
+                            if (e.getClass() == NotFoundException.class) {
+
+                                ChatEntity chatEntity = new ChatEntity(
+                                        0,
+                                        roomName,
+                                        roomJid,
+                                        false,
+                                        0
+                                );
+                                ChatListRepository.INSTANCE.addChat(chatEntity)
+                                        .observeOn(Schedulers.io())
+                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(() -> {
+                                            onIncomingMessageInternal(chatEntity, message, roomJid, message.getFrom().asUnescapedString());
+                                        });
+                            }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -362,7 +375,6 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         }
     }
 
-
     @SuppressLint("CheckResult")
     private void onIncomingMessageJoin(ChatEntity chatEntity, String chatJid, String fromJid, ChatUser chatUser) {
         String author = fromJid.split("/")[1];
@@ -419,6 +431,12 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     }
                     notificationManager.notify(new Random().nextInt(), notification.build());
                 }, throwable -> Log.e(throwable.getMessage()));
+    }
+
+    @Override
+    public void newOutgoingMessage(EntityBareJid to, Message message, Chat chat) {
+        String kek = "";
+
     }
 
     @Override

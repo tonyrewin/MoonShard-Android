@@ -13,6 +13,7 @@ import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
@@ -31,13 +32,35 @@ class ChatPresenter : MvpPresenter<ChatView>() {
         useCase = RoomsUseCase()
     }
 
-
     fun setChatId(chatId: String) {
         chatID = chatId
-        getDataInfo()
+        if(chatId.contains("conference")){
+            getDataInfoMuc()
+        }else{
+            getDataInfoUser()
+        }
     }
 
-    fun getDataInfo() {
+    private fun getDataInfoUser() {
+        try {
+            val jidUser = JidCreate.entityBareFrom(chatID)
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard(jidUser)
+            val nickName: String
+            nickName = if (card.nickName.isNullOrBlank()) {
+                card.to.asBareJid().localpartOrNull.toString()
+            } else {
+                card.nickName
+            }
+            getAvatar(chatID,nickName)
+            viewState?.setNameUser(nickName)
+        }catch (e:Exception){
+            e.message?.let { viewState?.showError(it) }
+        }
+    }
+
+
+        fun getDataInfoMuc() {
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =
@@ -52,7 +75,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             getAvatar(chatID,name)
             val valueOccupants = roomInfo.occupantsCount
             val valueOnlineMembers = getValueOnlineUsers(muc, occupants)
-            viewState?.setData(name, valueOccupants, valueOnlineMembers)
+            viewState?.setDataMuc(name, valueOccupants, valueOnlineMembers)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -84,13 +107,15 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             })
     }
 
-
     fun isEvent() {
-        getRooms()
+        if(chatID.contains("conference")){
+            getRooms()
+        }else{
+            viewState?.initViewPagerFromEvent()
+        }
     }
 
     fun getRooms() {
-
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
             .observeOn(AndroidSchedulers.mainThread())

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.NotFoundException
+import io.moonshard.moonshard.common.NotFoundException2
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ListChatMapView
@@ -99,17 +101,20 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                             viewState?.showChatScreens(jid)
                         }
                     },{
-                        ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe( {
-                                if (muc.isJoined) {
-                                    viewState?.showChatScreens(jid)
-                                }
-                            },{
-                                Logger.d(it.message)
-                            })
+                        if(it is NotFoundException) {
+                            ChatListRepository.addChat(chatEntity)
+                                .observeOn(Schedulers.io())
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    if (muc.isJoined) {
+                                        viewState?.showChatScreens(jid)
+                                    }
+                                }, { throwable ->
+                                    Logger.d(throwable.message)
+                                })
+                        }
                     })
+
             } catch (e: Exception) {
                 Logger.d(e.message)
             }

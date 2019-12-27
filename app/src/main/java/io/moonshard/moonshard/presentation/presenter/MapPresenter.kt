@@ -3,6 +3,8 @@ package io.moonshard.moonshard.presentation.presenter
 import android.annotation.SuppressLint
 import android.util.Log
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.NotFoundException
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -18,12 +20,6 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
-import org.jivesoftware.smackx.muc.DiscussionHistory
-import org.jivesoftware.smackx.muc.MucEnterConfiguration
-import com.instacart.library.truetime.TrueTime.build
-import io.moonshard.moonshard.models.api.Category
-import org.jivesoftware.smackx.vcardtemp.VCardManager
-import org.jxmpp.jid.Jid
 
 
 @InjectViewState
@@ -35,42 +31,47 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         useCase = RoomsUseCase()
     }
 
-    fun getRooms(lat: String, lng: String, radius: String,category:Category?) {
-        if(RoomsMap.isFilter){
-           getRoomsByCategory(lat,lng,radius,RoomsMap.category!!)
-       }else{
-           //this hard data - center Moscow
-           compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribeOn(Schedulers.io())
-               .subscribe { rooms, throwable ->
-                   if (throwable == null) {
-                       RoomsMap.clean()
-                       RoomsMap.rooms = rooms
-                       Log.d("rooms", rooms.size.toString())
-                       viewState?.showRoomsOnMap(rooms)
-                   } else {
-                       throwable.message?.let { viewState?.showError(it) }
-                   }
-               })
-       }
+    fun getRooms(lat: String, lng: String, radius: String, category: Category?) {
+        if (RoomsMap.isFilter) {
+            getRoomsByCategory(lat, lng, radius, RoomsMap.category!!)
+        } else {
+            //this hard data - center Moscow
+            compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { rooms, throwable ->
+                    if (throwable == null) {
+                        RoomsMap.clean()
+                        RoomsMap.rooms = rooms
+                        Log.d("rooms", rooms.size.toString())
+                        viewState?.showRoomsOnMap(rooms)
+                    } else {
+                        throwable.message?.let { viewState?.showError(it) }
+                    }
+                })
+        }
     }
 
-   fun getRoomsByCategory(lat: String, lng: String, radius: String,category:Category){
-       compositeDisposable.add(useCase!!.getRoomsByCategory(category.id,"55.751244", "37.618423", 10000.toString())
-           .observeOn(AndroidSchedulers.mainThread())
-           .subscribeOn(Schedulers.io())
-           .subscribe { rooms, throwable ->
-               if (throwable == null) {
-                   RoomsMap.clean()
-                   RoomsMap.rooms = rooms
-                   Log.d("rooms", rooms.size.toString())
-                   viewState?.showRoomsOnMap(rooms)
-               } else {
-                   throwable.message?.let { viewState?.showError(it) }
-               }
-           })
-   }
+    fun getRoomsByCategory(lat: String, lng: String, radius: String, category: Category) {
+        compositeDisposable.add(useCase!!.getRoomsByCategory(
+            category.id,
+            "55.751244",
+            "37.618423",
+            10000.toString()
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { rooms, throwable ->
+                if (throwable == null) {
+                    RoomsMap.clean()
+                    RoomsMap.rooms = rooms
+                    Log.d("rooms", rooms.size.toString())
+                    viewState?.showRoomsOnMap(rooms)
+                } else {
+                    throwable.message?.let { viewState?.showError(it) }
+                }
+            })
+    }
 
     fun getValueOnlineUsers(jid: String): Int {
         val groupId = JidCreate.entityBareFrom(jid)
@@ -108,16 +109,17 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     @SuppressLint("CheckResult")
-    fun joinChat(jid: String,nameRoom:String?) {
+    fun joinChat(jid: String, nameRoom: String?) {
         nameRoom?.let {
             try {
                 val manager =
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
-                val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+                val nickName =
+                    Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
 
-                if(!muc.isJoined){
+                if (!muc.isJoined) {
                     muc.join(nickName)
                 }
 
@@ -135,21 +137,23 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                         if (muc.isJoined) {
                             viewState?.showChatScreens(jid)
                         }
-                    },{
-                        ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe( {
-                                if (muc.isJoined) {
-                                    viewState?.showChatScreens(jid)
-                                }
-                            },{
-                                it.message?.let { it1 -> viewState?.showError(it1) }
-                            })
+                    }, {
+                        if (it is NotFoundException) {
+                            ChatListRepository.addChat(chatEntity)
+                                .observeOn(Schedulers.io())
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    if (muc.isJoined) {
+                                        viewState?.showChatScreens(jid)
+                                    }
+                                }, { throwable ->
+                                    throwable.message?.let { it1 -> viewState?.showError(it1) }
+                                })
+                        }
                     })
             } catch (e: Exception) {
                 e.message?.let { viewState?.showError(it) }
             }
-        }?:  viewState?.showError("Ошибка")
+        } ?: viewState?.showError("Ошибка")
     }
 }

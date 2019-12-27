@@ -4,11 +4,13 @@ import android.graphics.Bitmap
 import moxy.MvpView
 
 interface ChatView: MvpView {
-    fun setData(
+    fun setDataMuc(
         name: String,
         valueOccupants: Int,
         valueOnlineMembers: Int
     )
+
+    fun setNameUser(name:String)
 
     fun setAvatar(avatar: Bitmap?)
 

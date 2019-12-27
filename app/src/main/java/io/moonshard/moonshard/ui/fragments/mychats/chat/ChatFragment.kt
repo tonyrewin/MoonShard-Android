@@ -16,6 +16,8 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smack.chat2.ChatManager
+import org.jivesoftware.smack.chat2.IncomingChatMessageListener
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
@@ -34,7 +36,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.setChatId(idChat)
@@ -71,11 +72,15 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             ?.commit()
     }
 
-    override fun setData(
+    override fun setDataMuc(
         name: String, valueOccupants: Int, valueOnlineMembers: Int
     ) {
         nameChatTv?.text = name
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+    }
+
+    override fun setNameUser(name: String) {
+        nameChatTv?.text = name
     }
 
     override fun setAvatar(avatar: Bitmap?) {

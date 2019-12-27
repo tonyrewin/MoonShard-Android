@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -30,8 +31,6 @@ class EventsPresenter : MvpPresenter<EventsView>() {
     }
 
 
-
-
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
@@ -39,7 +38,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
             .subscribeOn(Schedulers.io())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
-                    getEvents(ChatRepository.idChatCurrent!!,rooms)
+                    getEvents(ChatRepository.idChatCurrent!!, rooms)
                 } else {
                     throwable.message?.let { viewState?.showError(it) }
                 }
@@ -54,10 +53,10 @@ class EventsPresenter : MvpPresenter<EventsView>() {
             }
         }
 
-        if(myEvents.isEmpty()){
+        if (myEvents.isEmpty()) {
             viewState?.isShowCreateEventLayout(isShow = true, isAdmin = isAdminInChat(jidChat))
-        }else{
-            viewState?.isShowCreateEventLayout(false,isAdminInChat(jidChat))
+        } else {
+            viewState?.isShowCreateEventLayout(false, isAdminInChat(jidChat))
             viewState?.setEvents(myEvents)
         }
     }
@@ -75,7 +74,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                     .getRoomInfo(muc.room)
             val roomName = info.name
 
-            if(!muc.isJoined){
+            if (!muc.isJoined) {
                 muc.join(nickName)
             }
 
@@ -93,17 +92,19 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                     if (muc.isJoined) {
                         viewState?.showChatScreens(jid)
                     }
-                },{
-                    ChatListRepository.addChat(chatEntity)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe( {
-                            if (muc.isJoined) {
-                                viewState?.showChatScreens(jid)
-                            }
-                        },{
-                            Logger.d(it.message)
-                        })
+                }, {
+                    if (it is NotFoundException) {
+                        ChatListRepository.addChat(chatEntity)
+                            .observeOn(Schedulers.io())
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                if (muc.isJoined) {
+                                    viewState?.showChatScreens(jid)
+                                }
+                            }, { throwable ->
+                                Logger.d(throwable.message)
+                            })
+                    }
                 })
         } catch (e: Exception) {
             Logger.d(e.message)

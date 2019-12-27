@@ -38,14 +38,12 @@ import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.stringprep.XmppStringprepException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 import java.util.UUID;
-
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
@@ -69,6 +67,7 @@ public class XMPPConnection implements ConnectionListener {
     private Roster roster;
     private MamManager mamManager;
     public MultiUserChatManager multiUserChatManager = null;
+    public ChatManager chatManager = null;
 
     public enum ConnectionState {
         CONNECTED,
@@ -148,7 +147,9 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
 
-        ChatManager.getInstanceFor(connection).addIncomingListener(networkHandler);
+        chatManager = ChatManager.getInstanceFor(connection);
+        chatManager.addIncomingListener(networkHandler);
+        chatManager.addOutgoingListener(networkHandler);
         ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
         ReconnectionManager.setEnabledPerDefault(true);
         reconnectionManager.enableAutomaticReconnection();
@@ -164,6 +165,8 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
+        setStatus(true,"ONLINE");
+
     }
 
     public void disconnect() {
@@ -173,7 +176,6 @@ public class XMPPConnection implements ConnectionListener {
             connection = null;
         }
     }
-
 
     public void disconnectMain() {
         if (connection != null) {
@@ -207,7 +209,7 @@ public class XMPPConnection implements ConnectionListener {
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
         try {
-            setStatus(true,"ONLINE");
+           // setStatus(true,"ONLINE");
         }catch (Exception e){
             Logger.e(e.getMessage());
         }
@@ -239,7 +241,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public String sendMessage(EntityBareJid recipientJid, String messageText) {
-        Chat chat = ChatManager.getInstanceFor(connection).chatWith(recipientJid);
+        Chat chat = chatManager.chatWith(recipientJid);
         try {
             Message message = new Message(recipientJid, Message.Type.chat);
             message.setBody(messageText);
@@ -471,21 +473,25 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public byte[] getAvatar(EntityBareJid jid) {
-        if (isConnectionReady()) {
-            VCardManager manager = VCardManager.getInstanceFor(connection);
-            byte[] avatar = null;
-            try {
-                avatar = manager.loadVCard(jid).getAvatar();
-            } catch (SmackException.NoResponseException e) {
-                e.printStackTrace();
-            } catch (XMPPException.XMPPErrorException e) {
-                e.printStackTrace();
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            if (isConnectionReady()) {
+                VCardManager manager = VCardManager.getInstanceFor(connection);
+                byte[] avatar = null;
+                try {
+                    avatar = manager.loadVCard(jid).getAvatar();
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (XMPPException.XMPPErrorException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return avatar;
             }
-            return avatar;
+        }catch (Exception e){
+            return null;
         }
         return null;
     }
@@ -547,12 +553,9 @@ public class XMPPConnection implements ConnectionListener {
                     }
                 }
             }
-
         } catch (XmppStringprepException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void sendUserPresence(Presence presence) {
@@ -587,8 +590,5 @@ public class XMPPConnection implements ConnectionListener {
         } catch (XmppStringprepException e) {
             e.printStackTrace();
         }
-
     }
-
-
 }

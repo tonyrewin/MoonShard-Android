@@ -54,7 +54,6 @@
                     android:id="@+id/valueMembersChatTv"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/nameChatTv"
-                    android:text="666 людей, 32 онлайн"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

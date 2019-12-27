@@ -55,4 +55,6 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
             ?.commit()
     }
+
+
 }

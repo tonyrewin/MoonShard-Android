@@ -43,7 +43,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     override fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
         MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as MessagesAdapter).setMessages(msgs, reverse)
+            (messagesRv?.adapter as? MessagesAdapter)?.setMessages(msgs, reverse)
         }
     }
 
@@ -68,21 +68,15 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
         setAdapter()
 
-
         if(ChatRepository.idChatCurrent!=null){
             idChat = ChatRepository.idChatCurrent!!
-            presenter.setChatId(idChat)
-
-            if (idChat.contains("conference")) presenter.join()
-
         }else{
             arguments?.let {
                 idChat = it.getString("chatId")
-                presenter.setChatId(idChat)
-                if (idChat.contains("conference")) presenter.join()
-
             }
         }
+        presenter.setChatId(idChat)
+        if (idChat.contains("conference")) presenter.join()
 
         sendMessage.setOnClickListener {
             presenter.sendMessage(editText.text.toString())

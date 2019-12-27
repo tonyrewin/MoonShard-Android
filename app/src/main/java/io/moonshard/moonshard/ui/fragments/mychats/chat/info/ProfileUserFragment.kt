@@ -1,27 +1,25 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.chat.info.ProfileUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ProfileUserView
+import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import kotlinx.android.synthetic.main.fragment_profile_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
 
-class ProfileUserFragment : MvpAppCompatFragment(),ProfileUserView {
+class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
 
     @InjectPresenter
     lateinit var presenter: ProfileUserPresenter
+    private var userJid = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,13 +33,17 @@ class ProfileUserFragment : MvpAppCompatFragment(),ProfileUserView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            val userJid = it.getString("userJid")
+            userJid = it.getString("userJid")
             presenter.getInfoProfile(userJid)
             presenter.getAvatar(userJid)
         }
 
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        sendMsgBtn?.setOnClickListener {
+            presenter.startChatWithUser(userJid)
         }
     }
 
@@ -65,5 +67,15 @@ class ProfileUserFragment : MvpAppCompatFragment(),ProfileUserView {
 
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showChatScreen(chatId: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", chatId)
+        val chatFragment = ChatFragment()
+        chatFragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack("chatScreen")
+            ?.commit()
     }
 }

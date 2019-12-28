@@ -97,7 +97,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
-        (activity as MainActivity).showBottomNavigationBar()
+        //(activity as MainActivity).showBottomNavigationBar()
 
         for(i in fragmentManager!!.fragments.indices){
             if(fragmentManager!!.fragments[i].tag == "MapScreen"){

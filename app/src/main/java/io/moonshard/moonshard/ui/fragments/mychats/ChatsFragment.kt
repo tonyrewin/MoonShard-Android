@@ -75,6 +75,11 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(text)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).hideBottomNavigationBar()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {

@@ -94,7 +94,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             ?.commit()
     }
 
-
     override fun setDataMuc(
         name: String, valueOccupants: Int, valueOnlineMembers: Int
     ) {

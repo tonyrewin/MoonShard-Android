@@ -57,50 +57,6 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         )
 
         presenter.setDialogs()
-
-
-        disposible = findEd.afterTextChangeEvents()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(
-                    it.editable?.toString() ?: ""
-                )
-            }
-
-        find?.setOnClickListener {
-            if (searchLayoutToolbar?.visibility == View.GONE) {
-                showSearch()
-            } else {
-                hideSearch()
-            }
-        }
-
-        cancelBtn?.setOnClickListener {
-            hideSearch()
-        }
-
-        newChat?.setOnClickListener {
-            (activity as MainActivity).hideBottomNavigationBar()
-            val newFragment = CreateGroupFragment()
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment, "CreateGroupFragment")
-                ?.addToBackStack("CreateGroupFragment")
-                ?.commit()
-        }
-    }
-
-    private fun showSearch() {
-        searchLayoutToolbar?.visibility = View.VISIBLE
-        defaultToolbar?.visibility = View.GONE
-        (activity as? MainActivity)?.hideBottomNavigationBar()
-    }
-
-    private fun hideSearch() {
-        hideKeyboard(activity!!)
-        (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter("")
-        searchLayoutToolbar?.visibility = View.GONE
-        defaultToolbar?.visibility = View.VISIBLE
-        (activity as? MainActivity)?.showBottomNavigationBar()
     }
 
     override fun showChatScreen(chatId: String, chatName: String) {
@@ -112,6 +68,11 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack("chatScreen")
             ?.commit()
+    }
+
+
+    fun setFilter(text:String){
+        (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(text)
     }
 
     override fun onCreateView(

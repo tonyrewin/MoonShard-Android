@@ -75,7 +75,10 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack("chatScreen")
+        ft?.add(R.id.container, chatFragment, "chatScreen")?.hide(this)
+            ?.addToBackStack("chatScreen")
             ?.commit()
     }
+
+
 }

@@ -13,11 +13,10 @@ import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ProfileUserFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smack.chat2.ChatManager
-import org.jivesoftware.smack.chat2.IncomingChatMessageListener
 
 
 class ChatFragment : MvpAppCompatFragment(), ChatView {
@@ -44,15 +43,27 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
 
         avatarChat?.setOnClickListener {
-            showChatInfo(idChat)
+            if (idChat.contains("conference")) {
+                showChatInfo(idChat)
+            } else {
+                showProfileUser(idChat)
+            }
         }
 
         valueMembersChatTv?.setOnClickListener {
-            showChatInfo(idChat)
+            if (idChat.contains("conference")) {
+                showChatInfo(idChat)
+            } else {
+                showProfileUser(idChat)
+            }
         }
 
         nameChatTv?.setOnClickListener {
-            showChatInfo(idChat)
+            if (idChat.contains("conference")) {
+                showChatInfo(idChat)
+            } else {
+                showProfileUser(idChat)
+            }
         }
 
         backBtn?.setOnClickListener {
@@ -71,6 +82,18 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             ?.addToBackStack("ChatInfoFragment")
             ?.commit()
     }
+
+    fun showProfileUser(jid: String) {
+        val bundle = Bundle()
+        bundle.putString("userJid", jid)
+        val fragment = ProfileUserFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
+            ?.addToBackStack("ProfileUserFragment")
+            ?.commit()
+    }
+
 
     override fun setDataMuc(
         name: String, valueOccupants: Int, valueOnlineMembers: Int

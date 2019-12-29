@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,6 +40,11 @@ class MembersAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+
+        if(members[position].asUnescapedString() == myJid){
+            return
+        }
 
         holder.itemView.setOnClickListener {
             listener.clickMember(members[position].resourceOrEmpty.toString() + "@moonshard.tech")
@@ -61,9 +67,10 @@ class MembersAdapter(
                     val avatar: Bitmap?
                     if (bytes != null) {
                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        MainApplication.getMainUIThread().post{
+                        MainApplication.getMainUIThread().post {
                             imageView.setImageBitmap(avatar)
-                        }                    }
+                        }
+                    }
                 }, { throwable -> Log.e(throwable.message) })
         }
     }

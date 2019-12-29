@@ -2,18 +2,19 @@ package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.LatLng
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap.rooms
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
@@ -54,7 +55,19 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 category,
                 roomInfo.description
             )
-            viewState?.showMembers(members)
+
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val myNickName = card.nickName
+
+            for(i in members.indices){
+                if(members[i].asUnescapedString().contains(myNickName)){
+                    members.remove(members[i])
+                    viewState?.showMembers(members)
+                    return
+                }
+            }
+            val kek = ""
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -102,7 +115,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
     }
 
     private fun removeChatFromBd(jid: String) {
-       ChatListRepository.getChatByJid(JidCreate.from(jid))
+        ChatListRepository.getChatByJid(JidCreate.from(jid))
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chat ->
@@ -117,7 +130,5 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             }, { error ->
                 var kek = ""
             })
-
-
     }
 }

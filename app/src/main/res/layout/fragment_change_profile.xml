@@ -71,7 +71,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_marginBottom="17dp"
                 android:id="@+id/avatarIv"
-                android:src="@color/blue"
+                android:src="@drawable/ic_add_photo"
                 android:layout_width="56dp"
                 android:layout_height="56dp"/>
 

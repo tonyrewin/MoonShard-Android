@@ -6,13 +6,17 @@ data class RoomPin(@SerializedName("id")
                    var id: String,
                    @SerializedName("latitude")
                    var latitude: String,
-                   @SerializedName("longtitude")
-                   var longtitude: String,
+                   @SerializedName("longitude")
+                   var longitude: String,
                    @SerializedName("created_at")
                    var createdAt: Boolean,
                    @SerializedName("ttl")
                    var ttl: String?,
-                   @SerializedName("category")
-                   var category: String?,
+                   @SerializedName("categories")
+                   var category: ArrayList<Category>?,
                    @SerializedName("roomId")
-                   var roomId: String?)
+                   var roomId: String?,
+                   @SerializedName("parentGroupId")
+                   var groupId: String?,
+                   @SerializedName("eventStartDate")
+                   var eventStartDate:String?)

@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/mainLayout"
         android:orientation="horizontal">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
             android:id="@+id/iconCategory"
             android:layout_width="28dp"
             android:layout_height="28dp"

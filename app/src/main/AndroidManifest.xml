@@ -14,20 +14,24 @@
     <application
             android:name=".MainApplication"
             android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_logo"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/ic_logo_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".ui.activities.auth.PasswordRecoveryActivity"></activity>
+        <activity android:name=".ui.activities.onboardregistration.StartProfileActivity" />
+        <activity android:name=".ui.activities.onboard.MainIntroActivity" />
+
         <service
                 android:name=".services.XMPPConnectionService"
                 android:enabled="true"
                 android:exported="true" />
 
         <activity android:name=".ui.activities.MainActivity" />
-        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.auth.LoginActivity" />
         <activity
-                android:name=".ui.activities.RegisterActivity"
+                android:name=".ui.activities.auth.RegisterActivity"
                 android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,9 +1,9 @@
 package io.moonshard.moonshard.repository
 
 import io.moonshard.moonshard.ObjectBox
+import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
-import io.moonshard.moonshard.repository.interfaces.IChatListRepository
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.rx.RxQuery
@@ -12,25 +12,25 @@ import io.reactivex.Observable
 import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 
-object ChatListRepository: IChatListRepository {
+object ChatListRepository {
     private val chatBox: Box<ChatEntity> = ObjectBox.boxStore.boxFor()
 
-    override fun getChats(): Observable<List<ChatEntity>> {
+    fun getChats(): Observable<List<ChatEntity>> {
         val query = chatBox.query().build()
         return RxQuery.observable(query)
     }
 
-    override fun addChat(chatEntity: ChatEntity): Completable {
+    fun addChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
             chatBox.put(chatEntity)
             it.onComplete()
         }
     }
 
-    override fun removeChat(chatEntity: ChatEntity): Completable {
+    fun removeChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
             if (!chatBox.remove(chatEntity)) {
-                it.onError(Exception("Chat ${chatEntity.jid} doesn't exist"))
+                it.onError(NotFoundException())
                 return@create
             }
             MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
@@ -39,12 +39,27 @@ object ChatListRepository: IChatListRepository {
         }
     }
 
-    override fun getChatByJid(jid: Jid): Observable<ChatEntity> {
+    fun getChatByJid(jid: Jid): Observable<ChatEntity> {
         return Observable.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.observable(query).subscribe { chat ->
+                if (!it.isDisposed) {
+                    if (chat.isEmpty()) {
+                        it.onError(NotFoundException())
+                        return@subscribe
+                    }
+                    it.onNext(chat.first())
+                }
+            }
+        }
+    }
+
+    fun getChatsByName(name:String):Observable<ChatEntity>{
+        return Observable.create {
+            val query = chatBox.query().contains(ChatEntity_.chatName, name).build()
+            RxQuery.observable(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 it.onNext(chat.first())
@@ -52,26 +67,32 @@ object ChatListRepository: IChatListRepository {
         }
     }
 
-    override fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
+    fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
         return Completable.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
-            RxQuery.observable(query).subscribe { chat ->
+            RxQuery.single(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 chat.first().unreadMessagesCount = newCountValue
-                it.onComplete()
+                addChat(chat.first()).subscribe {
+                    it.onComplete()
+                }
             }
         }
     }
 
-    override fun getUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
+    fun updateUnreadMessagesCountByJid(jid: String, newCountValue: Int): Completable {
+        return updateUnreadMessagesCountByJid(JidCreate.bareFrom(jid), newCountValue)
+    }
+
+    fun getUnreadMessagesCountByJid(jid: Jid): Observable<Int> {
         return Observable.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.observable(query).subscribe { chat ->
                 if (chat.isEmpty()) {
-                    it.onError(Exception("Chat ${jid.asUnescapedString()} doesn't exist"))
+                    it.onError(NotFoundException())
                     return@subscribe
                 }
                 it.onNext(chat.first().unreadMessagesCount)

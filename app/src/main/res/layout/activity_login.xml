@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:background="#EEF6FF"
         android:orientation="vertical"
-        tools:context=".ui.activities.LoginActivity">
+        tools:context=".ui.activities.auth.LoginActivity">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -112,12 +112,13 @@
             android:textSize="7pt" />
 
     <TextView
+            android:id="@+id/forgotPassTv"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:text="Forgot password?" />
+            android:text="Забыли пароль?" />
 
     <TextView
             android:id="@+id/dontHaveText"

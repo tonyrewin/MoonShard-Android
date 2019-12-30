@@ -8,14 +8,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.models.Category
+import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 
 
 interface CategoryMapListener {
-    fun clickChat(categoryName: String)
+    fun clickChat(category: Category)
 }
 
-class CategoryMapAdapter(val listener: CategoryMapListener, private var chats: List<Category>) :
+class CategoryMapAdapter(val listener: CategoryMapListener, private var categories: ArrayList<Category>) :
     RecyclerView.Adapter<CategoryMapAdapter.ViewHolder>() {
 
     var focusedItem = -1
@@ -31,19 +33,50 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var chats: L
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.iconCategory?.setImageResource(chats[position].drawable)
-        holder.categoryName?.text = chats[position].name
-        holder.categoryInfo?.text = chats[position].name
 
+        holder.iconCategory?.let {
+            setDrawable(it,categories[position])
+        }
+
+        holder.categoryName?.text = categories[position].categoryName
+        holder.categoryInfo?.text = categories[position].categoryName
 
         holder.itemView.setOnClickListener {
+            RoomsMap.isFilter = true
+            RoomsMap.category = categories[position]
             focusedItem = position
             notifyDataSetChanged()
-            listener.clickChat(chats[position].name)
+            listener.clickChat(categories[position])
         }
     }
 
-    override fun getItemCount(): Int = chats.size
+    private fun setDrawable(imageView:ImageView, category:Category){
+        when {
+            category.categoryName=="Тусовки" -> {
+                imageView.setImageResource(R.drawable.ic_star)
+            }
+            category.categoryName=="Бизнес ивенты" -> {
+                imageView.setImageResource(R.drawable.ic_case)
+
+            }
+            category.categoryName=="Кружок по интересам" -> {
+                imageView.setImageResource(R.drawable.ic_heart)
+
+            }
+            category.categoryName=="Культурные мероприятия" -> {
+                imageView.setImageResource(R.drawable.ic_culture_category)
+            }
+        }
+    }
+
+    fun updateCategories(categories:ArrayList<Category>){
+        this.categories.clear()
+        this.categories.addAll(categories)
+        notifyDataSetChanged()
+    }
+
+
+    override fun getItemCount(): Int = categories.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var categoryName: TextView? = view.findViewById(R.id.nameCategoryTv)

@@ -15,7 +15,4 @@ class TestUseCase {
         MainApplication.getComponent().inject(this)
     }
 
-    fun getTest(): Single<ResponseBody> {
-        return networkRepository.getTest()
-    }
 }

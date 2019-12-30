@@ -3,53 +3,17 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.create_group.AddChatFragment"
+        tools:context=".ui.fragments.mychats.create.AddChatFragment"
         android:orientation="vertical">
 
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@android:color/white"
-            android:elevation="6dp">
-
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="0dp"
-                android:padding="0dp">
-
-            <ImageView
-                    android:id="@+id/back"
-                    android:layout_alignParentStart="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/ic_arrow_back" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Create a group chat"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-        </RelativeLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-
     <ImageView
-            android:src="@drawable/ic_gps_fixed"
-            android:layout_marginTop="98dp"
+            android:src="@drawable/ic_new_group_chat"
+            android:layout_marginTop="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="171dp"
             android:layout_height="171dp"
-            android:text="conference.moonshard.tech" />
+            />
 
 
     <TextView
@@ -77,25 +41,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <TextView
-            android:layout_marginTop="13dp"
-            android:lineSpacingExtra="2sp"
-            android:translationY="0.8sp"
-            android:gravity="center_horizontal|bottom"
-            android:layout_gravity="center_horizontal"
-            android:textColor="#9B9BB6"
-            android:textSize="14sp"
-            android:text="Ваше местоположение:: \n Улица Парковая, Одинцово, Россия"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
     <Button
             android:id="@+id/startLocalGroup"
             android:layout_marginTop="22dp"
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#0075FF"
             android:textColor="@android:color/white"
-            android:text="start local group"
+            android:text="Создать"
             android:layout_width="190dp"
             android:layout_height="wrap_content"/>
 

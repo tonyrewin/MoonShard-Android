@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,12 +18,13 @@ import trikita.log.Log
 
 
 interface MemberListener {
-    fun remove(categoryName: String)
+    fun remove(member: EntityFullJid)
+    fun clickMember(member: String)
 }
 
 class MembersAdapter(
     val listener: MemberListener,
-    private var members: List<EntityFullJid>
+    private var members: ArrayList<EntityFullJid>, var isRemove: Boolean
 ) :
     RecyclerView.Adapter<MembersAdapter.ViewHolder>() {
 
@@ -38,6 +40,27 @@ class MembersAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+
+        if (members[position].asUnescapedString() == myJid) {
+            return
+        }
+
+        if (isRemove) {
+            holder.removeBtn?.visibility = View.VISIBLE
+        } else {
+            holder.removeBtn?.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            listener.clickMember(members[position].resourceOrEmpty.toString() + "@moonshard.tech")
+        }
+
+        holder.removeBtn?.setOnClickListener {
+            listener.remove(members[position])
+        }
+
+
         holder.nameTv?.text = members[position].resourceOrEmpty
         //holder.statusTv?.text = members[position].affiliation.
         setAvatar(
@@ -55,15 +78,22 @@ class MembersAdapter(
                     val avatar: Bitmap?
                     if (bytes != null) {
                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        MainApplication.getMainUIThread().post{
+                        MainApplication.getMainUIThread().post {
                             imageView.setImageBitmap(avatar)
-                        }                    }
+                        }
+                    }
                 }, { throwable -> Log.e(throwable.message) })
         }
     }
 
     fun setMembers(members: List<EntityFullJid>) {
-        this.members = members
+        this.members.clear()
+        this.members.addAll(members)
+        notifyDataSetChanged()
+    }
+
+    fun removeMember(member: EntityFullJid){
+        this.members.remove(member)
         notifyDataSetChanged()
     }
 
@@ -71,5 +101,6 @@ class MembersAdapter(
         var nameTv: TextView? = view.findViewById(R.id.nameMemberTv)
         var statusTv: TextView? = view.findViewById(R.id.statusMemberTv)
         var userAvatar: ImageView? = view.findViewById(R.id.userMemberAvatar)
+        var removeBtn: ImageView? = view.findViewById(R.id.removeBtn)
     }
 }

@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.settings.ProfileView
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smackx.iqregister.AccountManager
 
 
 class ProfileFragment : MvpAppCompatFragment(), ProfileView {
@@ -68,5 +68,9 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
 
     override fun setAvatar(avatar: Bitmap?) {
         avatarIv?.setImageBitmap(avatar)
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 }

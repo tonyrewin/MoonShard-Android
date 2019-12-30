@@ -26,6 +26,10 @@ interface ChatListListener {
 class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: ChatListListener):
     MvpBaseAdapter<ChatListAdapter.ChatListViewHolder>(parentDelegate, 0.toString()), ChatListRecyclerView {
 
+    init {
+        setHasStableIds(true)
+    }
+
     @InjectPresenter
     lateinit var presenter: ChatListRecycleViewPresenter
 
@@ -61,6 +65,10 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
         MainApplication.getMainUIThread().post {
             notifyItemRemoved(position)
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return presenter.getItemId(position)
     }
 
     inner class SwipeToDeleteCallback: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

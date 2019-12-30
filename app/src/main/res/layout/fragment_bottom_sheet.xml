@@ -3,9 +3,9 @@
         android:layout_width="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:id="@+id/myBottomSheet"
+        android:id="@+id/defaultBottomSheet"
         android:layout_marginBottom="20dp"
-        app:behavior_hideable="true"
+        app:behavior_hideable="false"
         app:behavior_peekHeight="85dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_height="match_parent">
@@ -14,6 +14,9 @@
     <include
             layout="@layout/bottom_sheet" />
 
+
+    <include
+        layout="@layout/bottom_sheet_category"/>
 
     <!-- include main content -->
     <include layout="@layout/activity_bottom_sheet_content" />

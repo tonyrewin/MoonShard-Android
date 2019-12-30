@@ -1,8 +1,8 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ import java.util.*
 
 
 open class MessagesAdapter(
-    private var myMsgs: ArrayList<GenericMessage>, val layoutManager: LinearLayoutManager
+    private var myMsgs: MutableList<GenericMessage>, val layoutManager: LinearLayoutManager
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), RecyclerScrollMoreListener.OnLoadMoreListener {
 
@@ -66,6 +66,15 @@ open class MessagesAdapter(
                     )
                 )
             }
+            2->{
+                return ViewHolderDifferentMessage(
+                        LayoutInflater.from(parent.context).inflate(
+                            R.layout.system_message,
+                            parent,
+                            false
+                        )
+                        )
+            }
             else -> {
                 return ViewHolderMyMessage(
                     LayoutInflater.from(parent.context).inflate(
@@ -79,13 +88,16 @@ open class MessagesAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (myMsgs[position].isBelongsToCurrentUser) {
-            return 0
-        } else {
-            return 1
+        return if(myMsgs[position].isSystemMessage){
+            2
+        }else{
+            if (myMsgs[position].isBelongsToCurrentUser) {
+                0
+            } else {
+                1
+            }
         }
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
@@ -104,16 +116,36 @@ open class MessagesAdapter(
 
                 (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
                 holder.name?.text = name
-                setAvatar( myMsgs[position].user.jid,holder.avatar!!)
+
+
+                setAvatar( myMsgs[position].user.name+"@moonshard.tech",holder.avatar!!)
+            }
+            2->{
+                val nameInGroups = myMsgs[position].user.name.split("/")
+                var name = ""
+
+                name = if (nameInGroups.size > 1) {
+                    nameInGroups[1]
+                } else {
+                    myMsgs[position].user.name.split("@")[0]
+                }
+
+                (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
+                //holder.name?.text = name + "присоединился к чату"
+                holder.name?.text =  myMsgs[position].text
+
+
+                setAvatar( myMsgs[position].user.name+"@moonshard.tech",holder.avatar!!)
             }
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun setAvatar(jid: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid)
                 .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {
@@ -152,9 +184,16 @@ open class MessagesAdapter(
         myMsgs.add(0, element)
         //notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
         notifyItemRangeInserted(0,  1)
-        if (layoutManager != null && scroll) {
+        if (scroll) {
             layoutManager.scrollToPosition(0)
         }
+    }
+
+    fun setMessages(messages: List<GenericMessage>, reverse: Boolean) {
+        myMsgs = messages.toMutableList()
+        if (reverse) myMsgs.reverse()
+        notifyDataSetChanged()
+        layoutManager.scrollToPosition(0)
     }
 
     fun addToEnd(messages: List<GenericMessage>, reverse: Boolean) {
@@ -194,7 +233,7 @@ open class MessagesAdapter(
     fun generateDateHeaders(messages: List<GenericMessage>) {
         for (i in messages.indices) {
             val message = messages[i]
-            this.myMsgs.add(message)
+                //this.myMsgs.add(message)
             if (messages.size > i + 1) {
                 val nextMessage = messages[i + 1]
                 if (!DateFormatter.isSameDay(

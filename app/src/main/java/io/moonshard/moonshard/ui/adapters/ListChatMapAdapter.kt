@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.RoomPin
@@ -51,7 +52,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         holder.groupNameTv?.text = roomInfo?.name.toString()
         holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
         holder.locationValueTv?.text =
-            calculationByDistance(chats[position].latitude, chats[position].longtitude)
+            calculationByDistance(chats[position].latitude, chats[position].longitude)
 
         holder.itemView.setOnClickListener {
             listener.clickChat(chats[position])
@@ -64,56 +65,67 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
+            Logger.d(groupId.asUnescapedString())
+
             val info =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(muc.room)
             return info
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             val error = ""
+            Logger.d(e.message)
+            Logger.d(jid)
         }
         return null
     }
 
     fun getValueOnlineUsers(jid: String): Int {
-        val groupId = JidCreate.entityBareFrom(jid)
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
 
-        val muc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                .getMultiUserChat(groupId)
-        val members = muc.occupants
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val members = muc.occupants
 
-        var onlineValue = 0
-        for (i in members.indices) {
-            val userOccupantPresence =
-                muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
-            if (userOccupantPresence.type == Presence.Type.available) {
-                onlineValue++
+            var onlineValue = 0
+            for (i in members.indices) {
+                val userOccupantPresence =
+                    muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+                if (userOccupantPresence.type == Presence.Type.available) {
+                    onlineValue++
+                }
             }
+            return onlineValue
+        }catch (e:Exception){
+            return 0
         }
-        return onlineValue
     }
 
-    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
-        MainApplication.getCurrentLocation()?.let {
-            val myLat = MainApplication.getCurrentLocation().latitude
-            val myLng = MainApplication.getCurrentLocation().longitude
+    private fun calculationByDistance(latRoom: String?, lngRoom: String?): String {
+        if(latRoom!=null && lngRoom!=null) {
 
-            val km = SphericalUtil.computeDistanceBetween(
-                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                LatLng(myLat, myLng)
-            ).toInt() / 1000
-            return if (km < 1) {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(
-                        latRoom.toDouble(),
-                        lngRoom.toDouble()
-                    ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
-            } else {
-                (SphericalUtil.computeDistanceBetween(
+            MainApplication.getCurrentLocation()?.let {
+                val myLat = MainApplication.getCurrentLocation().latitude
+                val myLng = MainApplication.getCurrentLocation().longitude
+
+                val km = SphericalUtil.computeDistanceBetween(
                     LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
+                ).toInt() / 1000
+                return if (km < 1) {
+                    (SphericalUtil.computeDistanceBetween(
+                        LatLng(
+                            latRoom.toDouble(),
+                            lngRoom.toDouble()
+                        ), LatLng(myLat, myLng)
+                    ).toInt()).toString() + " метрах"
+                } else {
+                    (SphericalUtil.computeDistanceBetween(
+                        LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                        LatLng(myLat, myLng)
+                    ).toInt() / 1000).toString() + " км"
+                }
             }
         }
         return ""
@@ -122,8 +134,8 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     private fun setAvatar(jid: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {

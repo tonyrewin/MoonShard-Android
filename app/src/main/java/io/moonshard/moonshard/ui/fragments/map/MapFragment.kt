@@ -21,14 +21,21 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.fragments.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
+import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
-import kotlinx.android.synthetic.main.bottom_sheet_info.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.bottom_sheet_category.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
+import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -43,6 +50,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     @InjectPresenter
     lateinit var presenter: MapPresenter
+
+    var sheetBehavior: BottomSheetBehavior<View>? = null
+    var sheetInfoBehavior: BottomSheetBehavior<View>? = null
+
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -67,7 +78,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         myLocationBtn?.setOnClickListener {
             getMyLocation()
         }
-        presenter.getRooms("", "", "")
+
+        presenter.getRooms("", "", "", null)
     }
 
     override fun onCreateView(
@@ -87,21 +99,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     roomInfo?.let {
                         val distance = (calculationByDistance(
                             RoomsMap.rooms[i].latitude,
-                            RoomsMap.rooms[i].longtitude
+                            RoomsMap.rooms[i].longitude
                         ))
-
-                        locationValueTestTv?.text = distance
-                        groupNameInfoTv?.text = roomInfo.name
-                        valueMembersTv?.text =
-                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
-
-                        joinGroupBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                        }
-
-                        readGroupBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
-                        }
 
                         groupNameInfoContentTv?.text = roomInfo.name
                         valueMembersInfoTv?.text =
@@ -110,23 +109,23 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         locationInfoTv?.text = getAddress(
                             LatLng(
                                 RoomsMap.rooms[i].latitude.toDouble(),
-                                RoomsMap.rooms[i].longtitude.toDouble()
+                                RoomsMap.rooms[i].longitude.toDouble()
                             )
                         )
                         descriptionTv?.text = roomInfo.description
 
                         joinBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                         readBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
 
                         joinBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                         readBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
                         }
                     }
                 }
@@ -135,11 +134,16 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
-    fun hideBottomSheet(){
-        defaultBottomSheet.visibility = View.GONE
+    fun update(category: Category) {
+        presenter.getRooms("", "", "", category)
     }
 
-    fun showBottomSheet(){
+    //hide
+    fun collapsedBottomSheet() {
+        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    fun showBottomSheet() {
         defaultBottomSheet.visibility = View.VISIBLE
     }
 
@@ -147,6 +151,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
+            bundle.putBoolean("fromMap", true)
             val chatFragment = ChatFragment()
             chatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
@@ -208,50 +213,51 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
+        mMap?.clear()
         for (i in rooms.indices) {
             when {
-                rooms[i].category == "Тусовки" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
                         )
                 )
-                rooms[i].category == "Бизнес ивенты" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Бизнес ивенты" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
                         )
                 )
-                rooms[i].category == "Кружок по интересам" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Кружок по интересам" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-                rooms[i].category == "Культурные мероприятия" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.categoryName.toString() == "Культурные мероприятия" -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
                                 rooms[i].latitude.toDouble(),
-                                rooms[i].longtitude.toDouble()
+                                rooms[i].longitude.toDouble()
                             )
                         )
                         .icon(
@@ -286,19 +292,66 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
+    fun showCategoryBottomSheet(){
+        bottomSheetCategory.visibility = View.VISIBLE
+        bottomSheetFind.visibility = View.GONE
+        categoryFilterName.text = "Категория: "+RoomsMap.category?.categoryName
+        sheetBehavior?.setPeekHeight(convertDpToPixel(100F,context),false)
+    }
+
+    fun hideCategoryBottomSheet(){
+        bottomSheetCategory.visibility = View.GONE
+        bottomSheetFind.visibility = View.VISIBLE
+        sheetBehavior?.setPeekHeight(convertDpToPixel(85F,context),false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
+        (activity as? MainActivity)?.setMapActiveBottomBar()
+
         setupBottomSheet()
 
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val myBottoms = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
-        val sheetBehavior = BottomSheetBehavior.from(myBottoms)
+        val llBottomSheet = view.findViewById<LinearLayout>(R.id.defaultBottomSheet)
+        sheetBehavior = BottomSheetBehavior.from(llBottomSheet)
 
-        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        val llInfoBottomSheet = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
+        sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
+
+        if(RoomsMap.isFilter){
+            showCategoryBottomSheet()
+        }else{
+            hideCategoryBottomSheet()
+        }
+
+        swipeInfoBtn?.setOnClickListener {
+            if (sheetInfoBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        swipeBtn?.setOnClickListener {
+            if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        removeFilterBtn?.setOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("","","",null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+        }
+
+        sheetInfoBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
             }
@@ -307,20 +360,47 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                     }
-                    BottomSheetBehavior.STATE_EXPANDED -> buttonsTop.visibility = View.GONE
-                    BottomSheetBehavior.STATE_COLLAPSED -> buttonsTop.visibility = View.VISIBLE
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        buttonsTop.visibility = View.GONE
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        buttonsTop.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
+
+        sheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        swipeBtn.setImageResource(R.drawable.ic_line_bottom_sheet)
+                        buttonsTop.visibility = View.GONE
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        swipeBtn.setImageResource(R.drawable.ic_bottom_sheet_up)
+                        buttonsTop.visibility = View.VISIBLE
+                    }
+
                 }
             }
         })
     }
 
     private fun getMyLocation() {
-        if(MainApplication.getCurrentLocation()!=null){
+        if (MainApplication.getCurrentLocation() != null) {
             val latLng = LatLng(
                 MainApplication.getCurrentLocation().latitude,
                 MainApplication.getCurrentLocation().longitude
             )
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+            val cameraUpdate =
+                CameraUpdateFactory.newLatLngZoom(latLng,8f)
             mMap?.animateCamera(cameraUpdate)
         }
     }
@@ -349,4 +429,11 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
+
+    fun updateListRooms(){
+         val fragment = fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+        (fragment as? ListChatsMapFragment)?.updateChats()
+    }
+
+
 }

@@ -59,7 +59,7 @@
                         android:layout_height="48dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="14dp"
-                        android:src="@color/colorPrimary" />
+                        android:src="@drawable/ic_add_photo" />
 
                 <TextView
                         android:id="@+id/nameTv"

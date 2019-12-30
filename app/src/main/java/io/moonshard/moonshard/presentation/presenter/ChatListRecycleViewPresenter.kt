@@ -18,13 +18,18 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 import java.util.*
+import java.util.logging.Logger
 
 @InjectViewState
-class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
+class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
     private var chats = emptyList<ChatEntity>().toMutableList()
+    private var fullChats = emptyList<ChatEntity>().toMutableList()
+
     private var recentlyDeletedItem: ChatEntity? = null
 
     private val bindedItems = emptyList<ChatEntity>().toMutableList()
@@ -36,26 +41,45 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             .subscribeOn(Schedulers.io())
             .subscribe { newChats ->
                 chats = newChats.toMutableList()
+                fullChats = newChats.toMutableList()
                 sortChatsByRecentlyUpdatedDate()
                 viewState.onDataChange()
-        })
+            })
     }
 
     fun getChatListSize(): Int {
         return chats.size
     }
 
-    fun onBindViewHolder(holder: ChatListAdapter.ChatListViewHolder, position: Int,listener: ChatListListener) {
+    fun getItemId(position: Int): Long {
+        return chats[position].id
+    }
+
+    fun onBindViewHolder(
+        holder: ChatListAdapter.ChatListViewHolder,
+        position: Int,
+        listener: ChatListListener
+    ) {
         val chat = chats[position]
+        MainApplication.getXmppConnection().addChatStatusListener(chat.jid)
+        if (chat.isGroupChat) {
+            joinChat(chat.jid)
+        } else {
+            MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chat.jid))
+        }
         if (bindedItems.indexOf(chat) == -1) {
-            setAvatar(chat.jid,chat.chatName,holder.avatar)
+            setAvatar(chat.jid, chat.chatName, holder.avatar)
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
 
-            disposables.add(MessageRepository.getRealUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid))
+            disposables.add(MessageRepository.getRealUnreadMessagesCountByJid(
+                JidCreate.bareFrom(
+                    chat.jid
+                )
+            )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribe ({
                     if (it > 0) {
                         holder.unreadMessageCount.visibility = View.VISIBLE
                         holder.unreadMessageCount.text = it.toString()
@@ -64,7 +88,9 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                         holder.unreadMessageCount.visibility = View.INVISIBLE
                         viewState.onItemChange(position)
                     }
-                })
+                },{
+                    com.orhanobut.logger.Logger.d(it)
+                }))
             disposables.add(MessageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -77,18 +103,31 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
 
                     val currentDate = DateHolder(System.currentTimeMillis())
                     val messageDate = DateHolder(message.timestamp)
-                    val lastMessageDateText = if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
-                        && messageDate.dayOfMonth == currentDate.dayOfMonth) {
-                        String.format("%d:%d", messageDate.hour, messageDate.minute)
-                    } else if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
-                        && messageDate.weekOfMonth == currentDate.weekOfMonth) {
-                        String.format("%ta", messageDate.calendar)
-                    } else if ((messageDate.year == currentDate.year && messageDate.month == currentDate.month)
-                        || messageDate.year == currentDate.year) {
-                        String.format("%d %tB", messageDate.dayOfMonth, messageDate.calendar)
-                    } else {
-                        String.format("%d.%d.%d", messageDate.dayOfMonth, messageDate.month, messageDate.year)
-                    }
+                    val lastMessageDateText =
+                        if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
+                            && messageDate.dayOfMonth == currentDate.dayOfMonth
+                        ) {
+                            String.format("%d:%d", messageDate.hour, messageDate.minute)
+                        } else if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
+                            && messageDate.weekOfMonth == currentDate.weekOfMonth
+                        ) {
+                            String.format("%ta", messageDate.calendar)
+                        } else if ((messageDate.year == currentDate.year && messageDate.month == currentDate.month)
+                            || messageDate.year == currentDate.year
+                        ) {
+                            String.format(
+                                "%d %tB",
+                                messageDate.dayOfMonth,
+                                messageDate.calendar
+                            )
+                        } else {
+                            String.format(
+                                "%d.%d.%d",
+                                messageDate.dayOfMonth,
+                                messageDate.month,
+                                messageDate.year
+                            )
+                        }
                     holder.lastMessageReadState.visibility = View.VISIBLE
                     holder.lastMessageReadState.setImageResource(if (message.isSent && message.isRead) R.drawable.ic_checked_message_state else R.drawable.ic_sent_message_state)
                     holder.lastMessageDate.text = lastMessageDateText
@@ -98,7 +137,8 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
                     holder.lastMessageDate.visibility = View.INVISIBLE
                     holder.lastMessageReadState.visibility = View.INVISIBLE
                     viewState.onItemChange(position)
-                }))
+                })
+            )
             viewState.onItemChange(position)
 
             holder.itemView.setOnClickListener {
@@ -109,11 +149,11 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         }
     }
 
-    private fun setAvatar(jid: String,nameChat:String, imageView: ImageView) {
+    private fun setAvatar(jid: String, nameChat: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+            MainApplication.getXmppConnection().loadAvatar(jid, nameChat)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {
@@ -126,10 +166,28 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
         }
     }
 
+    fun joinChat(jid: String) {
+        try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            if (!muc.isJoined) {
+                muc.join(nickName)
+            }
+        } catch (e: Exception) {
+            Log.d(e.message)
+        }
+    }
+
     private fun sortChatsByRecentlyUpdatedDate() {
         chats = chats.sortedWith(Comparator { o1, o2 ->
-            val timestamp1 = if (o1.messages.isNotEmpty()) o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
-            val timestamp2 = if (o2.messages.isNotEmpty()) o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
+            val timestamp1 =
+                if (o1.messages.isNotEmpty()) o1.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
+            val timestamp2 =
+                if (o2.messages.isNotEmpty()) o2.messages.sortedWith(compareByDescending { it.timestamp }).first().timestamp else -1
             timestamp2.compareTo(timestamp1)
         }).toMutableList()
     }
@@ -156,6 +214,16 @@ class ChatListRecycleViewPresenter: MvpPresenter<ChatListRecyclerView>() {
             .subscribeOn(Schedulers.io())
             .subscribe()
         recentlyDeletedItem = null
+    }
+
+
+    fun setFilter(filter: String) {
+        val list = fullChats.filter {
+            it.chatName.contains(filter, true)
+        }
+        chats.clear()
+        chats.addAll(list)
+        viewState.onDataChange()
     }
 
     override fun onDestroy() {

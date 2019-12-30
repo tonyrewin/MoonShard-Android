@@ -2,17 +2,15 @@ package io.moonshard.moonshard.models;
 
 import java.util.Date;
 
-import io.moonshard.moonshard.MainApplication;
-import io.moonshard.moonshard.models.dbEntities.ChatUser;
-import io.moonshard.moonshard.models.jabber.GenericUser;
 import io.moonshard.moonshard.models.dbEntities.MessageEntity;
+import io.moonshard.moonshard.models.jabber.GenericUser;
 
 public class GenericMessage {
-private MessageEntity messageEntity;
+    private MessageEntity messageEntity;
 
     public GenericMessage(MessageEntity messageEntity) {
         this.messageEntity = messageEntity;
-     //   messageEntity.sender.setTarget(new ChatUser());
+        //   messageEntity.sender.setTarget(new ChatUser());
     }
 
     public String getId() {
@@ -37,5 +35,9 @@ private MessageEntity messageEntity;
 
     public boolean isBelongsToCurrentUser() {
         return messageEntity.isCurrentUserSender();
+    }
+
+    public boolean isSystemMessage() {
+        return messageEntity.isSystemMessage();
     }
 }

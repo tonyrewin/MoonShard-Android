@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.fragments.chat.ChatInfoFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ChatInfoFragment">
 
     <LinearLayout
             android:orientation="vertical"
@@ -61,7 +61,7 @@
 
     <RelativeLayout
             android:id="@+id/mainLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="83dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
@@ -122,11 +122,6 @@
                 android:text="130 m away" />
 
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="#F9F9F9" />
 
     </RelativeLayout>
 
@@ -155,6 +150,7 @@
 
 
         <TextView
+                android:visibility="gone"
                 android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,6 +160,7 @@
                 android:textSize="14sp" />
 
         <TextView
+                android:visibility="gone"
                 android:layout_marginBottom="16dp"
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
@@ -174,6 +171,7 @@
 
 
         <View
+                android:visibility="gone"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
                 android:layout_width="match_parent"
@@ -274,6 +272,7 @@
             tools:ignore="RtlSymmetry">
 
         <LinearLayout
+                android:id="@+id/addNewMember"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -315,7 +314,7 @@
 
 
     <RelativeLayout
-            android:id="@+id/removeLayout"
+            android:id="@+id/leaveLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"

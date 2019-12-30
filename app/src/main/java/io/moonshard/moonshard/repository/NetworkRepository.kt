@@ -15,8 +15,5 @@ class NetworkRepository  {
         MainApplication.getComponent().inject(this)
     }
 
-    // FIXME remove this placeholder
-    fun getTest(): Single<ResponseBody> {
-        return api.test()
-    }
+
 }

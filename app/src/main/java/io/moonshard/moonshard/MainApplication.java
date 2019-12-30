@@ -75,7 +75,6 @@ public class MainApplication extends Application {
                 && !currentActivity.isFinishing());
     }
 
-
     public static BaseActivity getLoginActivity() {
         return currentActivity;
     }
@@ -136,7 +135,6 @@ public class MainApplication extends Application {
 
             getApplicationContext().bindService(new Intent(getApplicationContext(), P2ChatService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         }, 2000);
-
 
 
         instance = this;

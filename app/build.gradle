@@ -168,7 +168,15 @@ dependencies {
     implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
     implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
 
+    implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
+
+
+    implementation 'com.github.AppIntro:AppIntro:5.1.0'
+
     implementation "cat.ereza:customactivityoncrash:2.2.0"
+
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
+
 }
 
 configurations {

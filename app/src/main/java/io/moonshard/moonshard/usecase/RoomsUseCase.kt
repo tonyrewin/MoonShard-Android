@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.usecase
 
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.repository.RoomsRepository
 import io.reactivex.Single
@@ -15,18 +16,26 @@ class RoomsUseCase {
         MainApplication.getComponent().inject(this)
     }
 
-    fun putRoom(latitude: Float, longitude: Float, ttl: Int, roomId: String,
-        category: String
+    fun putRoom(
+        latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
+        categories: ArrayList<Category>,
+        idGroup: String?,
+        eventStartDate: Long
     ): Single<RoomPin> {
-        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, category)
+        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate)
     }
 
-    fun getRooms(lat: String, lng: String, radius: String
+    fun getRooms(
+        lat: String, lng: String, radius: String
     ): Single<ArrayList<RoomPin>> {
-        return roomsRepository.getRooms(lat,lng,radius)
+        return roomsRepository.getRooms(lat, lng, radius)
     }
 
-    // fun getTest(): Single<ResponseBody> {
-    //      return networkRepository.getTest()
-    //  }
+    fun getCategories(): Single<ArrayList<Category>> {
+        return roomsRepository.getCategories()
+    }
+
+    fun getRoomsByCategory(categoryId: Int,lat: String, lng: String, radius: String):Single<ArrayList<RoomPin>>{
+        return roomsRepository.getRoomsByCategory(categoryId,lat, lng,radius)
+    }
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:focusableInTouchMode="true">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+            app:stackFromEnd="true"
+            app:reverseLayout="true"
+            android:layout_width="match_parent"
+            android:id="@+id/messagesRv"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:divider="#fff"
+            android:layout_height="wrap_content"
+            />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="#fff"
+            android:orientation="horizontal">
+
+        <ImageButton
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp"
+                android:id="@+id/addAttachment"
+                android:background="@drawable/ic_attachment_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edit_text_chat"
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="Write a message"
+                android:inputType="text"
+                android:paddingHorizontal="10dp"
+                android:text="" />
+
+        <ImageButton
+                android:layout_marginRight="16dp"
+                android:id="@+id/sendMessage"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:padding="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/ic_send"/>
+    </LinearLayout>
+</LinearLayout>

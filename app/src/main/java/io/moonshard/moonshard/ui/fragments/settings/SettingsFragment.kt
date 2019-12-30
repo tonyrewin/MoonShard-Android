@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
-import io.moonshard.moonshard.ui.activities.RegisterActivity
+import io.moonshard.moonshard.ui.activities.auth.LoginActivity
+import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_settings_new.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -35,12 +36,13 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         presenter.getAvatar()
         presenter.getName()
         logOut?.setOnClickListener {
+            MainApplication.resetLoginCredentials()
+            MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
             presenter.logOut()
-            clearLoginCredentials()
         }
 
         profileSettingsLayout?.setOnClickListener {
-            showProfileScreen()
+            showChangeProfileScreen()
         }
 
         securityLayout?.setOnClickListener {
@@ -54,7 +56,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
     }
 
     override fun showRegistrationScreen() {
-        val intentRegistration = Intent(activity, RegisterActivity::class.java)
+        val intentRegistration = Intent(activity, LoginActivity::class.java)
         intentRegistration.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
         startActivity(intentRegistration)
     }
@@ -66,6 +68,14 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
                 ?.commit()
     }
 
+    private fun showChangeProfileScreen() {
+        val fragment = ChangeProfileFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.container, fragment, "ChangeProfileFragment")
+            ?.addToBackStack("ChangeProfileFragment")
+            ?.commit()
+    }
+
     private fun showSecurityScreen(){
         val fragment = SecurityFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
@@ -73,15 +83,8 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
             ?.commit()
     }
 
-
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun clearLoginCredentials() {
-        SecurePreferences.setValue("jid", "")
-        SecurePreferences.setValue("pass", "")
-        SecurePreferences.setValue("logged_in", false)
     }
 
     override fun setAvatar(avatar: Bitmap?) {

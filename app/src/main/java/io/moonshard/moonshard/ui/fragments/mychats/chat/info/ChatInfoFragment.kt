@@ -123,7 +123,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             override fun remove(member: EntityFullJid) {
 
             }
-        }, arrayListOf())
+        }, arrayListOf(),false)
     }
 
     override fun showError(error: String) {

@@ -66,6 +66,11 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         createNotificationChannel();
     }
 
+    @Override
+    public void kicked(EntityFullJid participant, Jid actor, String reason) {
+        super.kicked(participant, actor, reason);
+    }
+
     @SuppressLint("CheckResult")
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
@@ -319,7 +324,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                     0,
                                     room.getRoom().asEntityBareJidString(),
                                     info.getName(),
-                                    false,
+                                    true,
                                     0
                             );
                             addChat(chatEntity);

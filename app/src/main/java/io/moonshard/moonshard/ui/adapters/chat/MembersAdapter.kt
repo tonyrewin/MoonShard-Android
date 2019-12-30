@@ -24,7 +24,7 @@ interface MemberListener {
 
 class MembersAdapter(
     val listener: MemberListener,
-    private var members: List<EntityFullJid>
+    private var members: ArrayList<EntityFullJid>, var isRemove: Boolean
 ) :
     RecyclerView.Adapter<MembersAdapter.ViewHolder>() {
 
@@ -42,13 +42,24 @@ class MembersAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val myJid = SecurePreferences.getStringValue("jid", null)
 
-        if(members[position].asUnescapedString() == myJid){
+        if (members[position].asUnescapedString() == myJid) {
             return
+        }
+
+        if (isRemove) {
+            holder.removeBtn?.visibility = View.VISIBLE
+        } else {
+            holder.removeBtn?.visibility = View.GONE
         }
 
         holder.itemView.setOnClickListener {
             listener.clickMember(members[position].resourceOrEmpty.toString() + "@moonshard.tech")
         }
+
+        holder.removeBtn?.setOnClickListener {
+            listener.remove(members[position])
+        }
+
 
         holder.nameTv?.text = members[position].resourceOrEmpty
         //holder.statusTv?.text = members[position].affiliation.
@@ -76,7 +87,13 @@ class MembersAdapter(
     }
 
     fun setMembers(members: List<EntityFullJid>) {
-        this.members = members
+        this.members.clear()
+        this.members.addAll(members)
+        notifyDataSetChanged()
+    }
+
+    fun removeMember(member: EntityFullJid){
+        this.members.remove(member)
         notifyDataSetChanged()
     }
 
@@ -84,5 +101,6 @@ class MembersAdapter(
         var nameTv: TextView? = view.findViewById(R.id.nameMemberTv)
         var statusTv: TextView? = view.findViewById(R.id.statusMemberTv)
         var userAvatar: ImageView? = view.findViewById(R.id.userMemberAvatar)
+        var removeBtn: ImageView? = view.findViewById(R.id.removeBtn)
     }
 }

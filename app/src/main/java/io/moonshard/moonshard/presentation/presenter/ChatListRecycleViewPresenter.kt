@@ -23,6 +23,7 @@ import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 import java.util.*
+import java.util.logging.Logger
 
 @InjectViewState
 class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
@@ -78,7 +79,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
             )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribe ({
                     if (it > 0) {
                         holder.unreadMessageCount.visibility = View.VISIBLE
                         holder.unreadMessageCount.text = it.toString()
@@ -87,7 +88,9 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
                         holder.unreadMessageCount.visibility = View.INVISIBLE
                         viewState.onItemChange(position)
                     }
-                })
+                },{
+                    com.orhanobut.logger.Logger.d(it)
+                }))
             disposables.add(MessageRepository.getLastMessage(JidCreate.bareFrom(chat.jid))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

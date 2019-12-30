@@ -31,13 +31,13 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     override fun addToStart(message: GenericMessage, reverse: Boolean) {
         MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as MessagesAdapter).addToStart(message, reverse)
+            (messagesRv?.adapter as? MessagesAdapter)?.addToStart(message, reverse)
         }
     }
 
     override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
         MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as MessagesAdapter).addToEnd(msgs, reverse)
+            (messagesRv?.adapter as? MessagesAdapter)?.addToEnd(msgs, reverse)
         }
     }
 

@@ -18,7 +18,7 @@ import moxy.presenter.InjectPresenter
 import org.jxmpp.jid.EntityFullJid
 
 
-class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
+class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
 
     @InjectPresenter
     lateinit var presenter: MembersChatPresenter
@@ -54,19 +54,18 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
         Toast.makeText(activity!!, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showMembers(members:List<EntityFullJid>) {
+    override fun showMembers(members: List<EntityFullJid>) {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 
     //todo maybe replace
-    fun showProfileUser(jid:String){
+    fun showProfileUser(jid: String) {
         val bundle = Bundle()
         bundle.putString("userJid", jid)
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.
-            hide(this)
+        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
     }
@@ -83,16 +82,20 @@ class MembersChatFragment : MvpAppCompatFragment(),MembersChatView {
             ?.commit()
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         membersRv?.layoutManager = LinearLayoutManager(context)
-        membersRv?.adapter = MembersAdapter( object : MemberListener {
+        membersRv?.adapter = MembersAdapter(object : MemberListener {
             override fun clickMember(member: String) {
                 showProfileUser(member)
             }
 
             override fun remove(member: EntityFullJid) {
-
+                presenter.kickUser(idChat, member)
             }
-        }, arrayListOf())
+        }, arrayListOf(),true)
+    }
+
+    override fun removeMember(member:EntityFullJid){
+        (membersRv?.adapter as MembersAdapter).removeMember(member)
     }
 }

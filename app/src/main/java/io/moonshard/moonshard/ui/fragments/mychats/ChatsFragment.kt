@@ -70,7 +70,6 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
             ?.commit()
     }
 
-
     fun setFilter(text:String){
         (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(text)
     }

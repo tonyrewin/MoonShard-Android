@@ -75,6 +75,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         }
     }
 
+
+
     fun joinChat(jid: String) {
         try {
             val manager =

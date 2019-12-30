@@ -2,6 +2,7 @@ package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.LatLng
+import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
@@ -14,6 +15,7 @@ import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -47,6 +49,11 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             }
 
             getAvatar(jid)
+
+                //todo fi
+            val isAdmin =  isAdminInChat(jid)
+            if(isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(false)
+
             viewState?.showData(
                 roomInfo.name,
                 roomInfo.occupantsCount,
@@ -67,7 +74,6 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                     return
                 }
             }
-            val kek = ""
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -86,7 +92,6 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 Log.e(throwable.message)
             })
     }
-
 
     //muc.getOccupantPresence(JidCreate.entityFullFrom("dgggrrg@conference.moonshard.tech/just")) must be
     private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {
@@ -128,7 +133,34 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                         throwable.message?.let { it1 -> viewState?.showError(it1) }
                     })
             }, { error ->
-                var kek = ""
+                Logger.d(error)
             })
+    }
+
+    //todo fix (how set privileges for all type user?)
+    private fun isAdminInChat(jid: String): Boolean {
+        return try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            val moderators = muc.moderators
+            isAdminFromOccupants(moderators)
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+        myJid?.let {
+            for (i in admins.indices) {
+                val adminJid = admins[0].jid.asUnescapedString().split("/")[0]
+                if (adminJid == it) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

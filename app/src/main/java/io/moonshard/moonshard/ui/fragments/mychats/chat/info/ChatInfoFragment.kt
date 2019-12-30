@@ -25,13 +25,7 @@ import java.io.IOException
 import java.util.*
 
 
-class ChatInfoFragment : MvpAppCompatFragment(),
-    ChatInfoView {
-
-    override fun showChatsScreen() {
-        fragmentManager?.popBackStack()
-        fragmentManager?.popBackStack()
-    }
+class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
 
     @InjectPresenter
     lateinit var presenter: ChatInfoPresenter
@@ -42,10 +36,6 @@ class ChatInfoFragment : MvpAppCompatFragment(),
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat_info, container, false)
-    }
-
-    override fun showError(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,13 +59,20 @@ class ChatInfoFragment : MvpAppCompatFragment(),
             presenter.leaveGroup(idChat)
         }
 
-
         addNewMember?.setOnClickListener {
-            showInvitewNewUserScreen(idChat)
+            showInviteNewUserScreen(idChat)
         }
     }
 
-    private fun showInvitewNewUserScreen(idChat: String) {
+   override fun showChangeChatButton(isShow:Boolean){
+        if(isShow){
+            changeChatInfoBtn?.visibility = View.VISIBLE
+        }else{
+            changeChatInfoBtn?.visibility = View.GONE
+        }
+    }
+
+    private fun showInviteNewUserScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -88,7 +85,7 @@ class ChatInfoFragment : MvpAppCompatFragment(),
             ?.commit()
     }
 
-    fun showManageChatScreen(idChat: String) {
+    private fun showManageChatScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val manageChatFragment =
@@ -101,14 +98,13 @@ class ChatInfoFragment : MvpAppCompatFragment(),
     }
 
     //todo maybe replace
-    fun showProfileUser(jid:String){
+    fun showProfileUser(jid: String) {
         val bundle = Bundle()
         bundle.putString("userJid", jid)
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.
-            hide(this)
+        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
     }
@@ -130,6 +126,15 @@ class ChatInfoFragment : MvpAppCompatFragment(),
         }, arrayListOf())
     }
 
+    override fun showError(error: String) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showChatsScreen() {
+        fragmentManager?.popBackStack()
+        fragmentManager?.popBackStack()
+    }
+
     override fun showData(
         name: String, occupantsCount: Int,
         onlineMembersValue: Int, latLngLocation: LatLng?,
@@ -141,13 +146,13 @@ class ChatInfoFragment : MvpAppCompatFragment(),
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance
-       // address?.text = location
+        // address?.text = location
         categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
     }
 
     override fun setAvatar(avatar: Bitmap?) {
-        MainApplication.getMainUIThread().post{
+        MainApplication.getMainUIThread().post {
             profileImage?.setImageBitmap(avatar)
         }
     }

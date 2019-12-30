@@ -299,6 +299,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         }
     }
 
+
     @Override
     public void invitationReceived(XMPPConnection conn, MultiUserChat room, EntityJid inviter, String reason, String password, Message message, MUCUser.Invite invitation) {
 

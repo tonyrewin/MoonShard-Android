@@ -11,6 +11,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ProfileUserFragment
@@ -22,6 +23,7 @@ import moxy.presenter.InjectPresenter
 class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     var idChat: String = ""
+    var fromMap:Boolean? = false
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -37,6 +39,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             idChat = it.getString("chatId")
+            fromMap= it.getBoolean("fromMap")
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
             presenter.isEvent()
@@ -138,5 +141,11 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun onDestroyView() {
         super.onDestroyView()
         ChatRepository.clean()
+
+        fromMap?.let {
+            if(it){
+                (activity as MainActivity).showBottomNavigationBar()
+            }
+        }
     }
 }

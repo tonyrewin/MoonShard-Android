@@ -113,4 +113,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         MainApplication.setMainActivity(null)
         MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
     }
+
+
 }

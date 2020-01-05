@@ -139,7 +139,7 @@
             tools:ignore="RtlSymmetry">
 
         <TextView
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="13dp"
                 android:textStyle="bold"
                 android:textSize="14sp"
@@ -179,36 +179,9 @@
                 android:background="#F5F5F5" />
 
         <TextView
-                android:layout_marginBottom="7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Категория"
-                android:textColor="#9B9BB6"
-                android:textSize="14sp" />
-
-        <TextView
-                android:layout_marginBottom="12dp"
-                android:id="@+id/categoryInfoTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="По интересам"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-
-        <View
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#F5F5F5" />
-
-        <TextView
                 android:layout_marginBottom="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Описание"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />

@@ -1,9 +1,12 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
+
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
-import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
+import io.moonshard.moonshard.presentation.presenter.chat.info.EventInfoPresenter
+import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
-import kotlinx.android.synthetic.main.fragment_chat_info.*
+import kotlinx.android.synthetic.main.fragment_event_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jxmpp.jid.EntityFullJid
@@ -25,21 +29,22 @@ import java.io.IOException
 import java.util.*
 
 
-class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
+class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
 
     @InjectPresenter
-    lateinit var presenter: ChatInfoPresenter
+    lateinit var presenter: EventInfoPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat_info, container, false)
+        return inflater.inflate(R.layout.fragment_event_info, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initAdapter()
         var idChat = ""
         arguments?.let {
@@ -52,7 +57,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         }
 
         changeChatInfoBtn?.setOnClickListener {
-            showManageChatScreen(idChat)
+           // showManageChatScreen(idChat)
         }
 
         leaveLayout?.setOnClickListener {
@@ -64,12 +69,17 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         }
     }
 
-   override fun showChangeChatButton(isShow:Boolean){
+    override fun showChangeChatButton(isShow:Boolean){
+        changeChatInfoBtn?.visibility = View.GONE
+
+        /*
         if(isShow){
             changeChatInfoBtn?.visibility = View.VISIBLE
         }else{
             changeChatInfoBtn?.visibility = View.GONE
         }
+
+         */
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
@@ -146,7 +156,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance
-        // address?.text = location
+        address?.text = getAddress(latLngLocation)
         //categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
     }

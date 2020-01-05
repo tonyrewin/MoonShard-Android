@@ -33,7 +33,6 @@ class ManageChatPresenter: MvpPresenter<ManageChatView>() {
         }
     }
 
-
     fun setAvatar(jid: String,bytes: ByteArray?, mimeType: String?){
                 val manager = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 try {

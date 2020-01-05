@@ -52,7 +52,11 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
 
     override fun setData(nickName: String?, jidPart: String?) {
         nameTv?.text = nickName ?: "Имя"
-        phoneTv?.text = jidPart ?: "jid"
+        if(!jidPart.isNullOrBlank()){
+            phoneTv?.text = "@$jidPart"
+        }else{
+            phoneTv?.text = "jid"
+        }
     }
 
     override fun showRegistrationScreen() {

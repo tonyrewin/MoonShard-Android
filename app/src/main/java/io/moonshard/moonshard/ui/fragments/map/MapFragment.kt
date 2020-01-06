@@ -434,6 +434,4 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
          val fragment = fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
-
-
 }

@@ -11,6 +11,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.auth.LoginActivity
 import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_settings_new.*
@@ -32,6 +33,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).showBottomNavigationBar()
 
         presenter.getAvatar()
         presenter.getName()
@@ -94,5 +96,4 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
     override fun setAvatar(avatar: Bitmap?) {
         avatarIv?.setImageBitmap(avatar)
     }
-
 }

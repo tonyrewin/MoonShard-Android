@@ -31,6 +31,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
     private var disposible: Disposable? = null
 
 
+
     override fun addNewChat(chat: GenericDialog) {
 
     }

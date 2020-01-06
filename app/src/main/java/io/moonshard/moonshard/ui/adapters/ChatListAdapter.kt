@@ -23,8 +23,9 @@ interface ChatListListener {
     fun clickChat(chat: ChatEntity)
 }
 
-class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: ChatListListener):
-    MvpBaseAdapter<ChatListAdapter.ChatListViewHolder>(parentDelegate, 0.toString()), ChatListRecyclerView {
+class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: ChatListListener) :
+    MvpBaseAdapter<ChatListAdapter.ChatListViewHolder>(parentDelegate, 0.toString()),
+    ChatListRecyclerView {
 
     init {
         setHasStableIds(true)
@@ -58,7 +59,7 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
     }
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
-        presenter.onBindViewHolder(holder, position,listener)
+        presenter.onBindViewHolder(holder, position, listener)
     }
 
     override fun onItemDelete(position: Int) {
@@ -71,7 +72,7 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
         return presenter.getItemId(position)
     }
 
-    inner class SwipeToDeleteCallback: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    inner class SwipeToDeleteCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -87,8 +88,10 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
     }
 
     fun showSnackbar(text: String) {
-        val snackbar = Snackbar.make(MainApplication.getMainActivity().findViewById(android.R.id.content),
-            text, Snackbar.LENGTH_SHORT)
+        val snackbar = Snackbar.make(
+            MainApplication.getMainActivity().findViewById(android.R.id.content),
+            text, Snackbar.LENGTH_SHORT
+        )
         snackbar.setAction(R.string.snackbar_undo) { v ->
             v.setOnClickListener {
                 presenter.bringChatBack()
@@ -104,7 +107,7 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
         snackbar.show()
     }
 
-    inner class ChatListViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ChatListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var avatar: ImageView = view.profileImage
         var chatName: TextView = view.chatItemName
         var lastMessageText: TextView = view.lastMessageChatText

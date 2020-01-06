@@ -3,6 +3,8 @@ package io.moonshard.moonshard.presentation.presenter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.View
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
@@ -23,16 +25,16 @@ import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 import java.util.*
-import java.util.logging.Logger
 
 @InjectViewState
 class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
     private var chats = emptyList<ChatEntity>().toMutableList()
     private var fullChats = emptyList<ChatEntity>().toMutableList()
 
+
     private var recentlyDeletedItem: ChatEntity? = null
 
-    private val bindedItems = emptyList<ChatEntity>().toMutableList()
+     val bindedItems = emptyList<ChatEntity>().toMutableList()
     private val disposables = emptyList<Disposable>().toMutableList()
 
     init {
@@ -41,7 +43,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
             .subscribeOn(Schedulers.io())
             .subscribe { newChats ->
                 chats = newChats.toMutableList()
-                fullChats = newChats.toMutableList()
+                fullChats= newChats.toMutableList()
                 sortChatsByRecentlyUpdatedDate()
                 viewState.onDataChange()
             })
@@ -67,7 +69,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
         } else {
             MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chat.jid))
         }
-        if (bindedItems.indexOf(chat) == -1) {
+            if (bindedItems.indexOf(chat) == -1) {
             setAvatar(chat.jid, chat.chatName, holder.avatar)
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
@@ -144,7 +146,6 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
             holder.itemView.setOnClickListener {
                 listener.clickChat(chat)
             }
-
             bindedItems.add(chat)
         }
     }
@@ -218,12 +219,20 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
 
 
     fun setFilter(filter: String) {
-        val list = fullChats.filter {
-            it.chatName.contains(filter, true)
+        if(filter.isBlank()){
+            chats.clear()
+            bindedItems.clear()
+            chats.addAll(fullChats)
+            viewState.onDataChange()
+        }else{
+            val list = fullChats.filter {
+                it.chatName.contains(filter, true)
+            }
+            chats.clear()
+            bindedItems.clear()
+            chats.addAll(list)
+            viewState.onDataChange()
         }
-        chats.clear()
-        chats.addAll(list)
-        viewState.onDataChange()
     }
 
     override fun onDestroy() {

@@ -34,8 +34,6 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
             )
         )
 
-
-
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var groupNameTv: TextView? = view.findViewById(R.id.groupNameTv)
         internal var categoryTv: TextView? = view.findViewById(R.id.categoryTv)

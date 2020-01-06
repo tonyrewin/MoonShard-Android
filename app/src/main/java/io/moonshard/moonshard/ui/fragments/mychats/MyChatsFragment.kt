@@ -57,7 +57,6 @@ class MyChatsFragment : Fragment() {
             val newFragment = CreateGroupFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(R.id.container, newFragment, "CreateGroupFragment")
-                ?.addToBackStack("CreateGroupFragment")
                 ?.commit()
         }
     }

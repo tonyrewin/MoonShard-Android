@@ -13,6 +13,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ProfileUserFragment
@@ -25,6 +26,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     var idChat: String = ""
     var fromMap: Boolean? = false
+    var fromCreateNewChat:Boolean=false
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -41,14 +43,19 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         arguments?.let {
             idChat = it.getString("chatId")
             fromMap = it.getBoolean("fromMap")
+            fromCreateNewChat = it.getBoolean("fromCreateNewChat",false)
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
             presenter.isEvent()
         }
 
         backBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
-            ChatRepository.clean()
+            if(fromCreateNewChat){
+                showChatsScreen()
+            }else{
+                fragmentManager?.popBackStack()
+                ChatRepository.clean()
+            }
         }
     }
 
@@ -130,6 +137,13 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     ) {
         nameChatTv?.text = name
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+    }
+
+     fun showChatsScreen() {
+        val fragment = MyChatsFragment()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.container, fragment, null)
+            ?.commit()
     }
 
     override fun setNameUser(name: String) {

@@ -52,8 +52,7 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         val chatFragment =
             CreateNewChatFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
-            ?.commit()
+        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.commit()
     }
 
 

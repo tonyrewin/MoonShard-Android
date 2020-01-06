@@ -91,15 +91,23 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-            //  if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
-         //   supportFragmentManager.popBackStack()
-        //}
+        /*
+        if(supportFragmentManager.findFragmentByTag("chatScreen")!=null){
+            val fragment = MyChatsFragment()
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.container, fragment).commit()
+            return
+        }
+
+         */
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
             ChooseChatRepository.clean()
+            return
         }
+
+        supportFragmentManager.popBackStack()
     }
 
     private fun showMapScreen() {

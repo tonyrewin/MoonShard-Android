@@ -48,10 +48,11 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     override fun showChatScreen(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
+        bundle.putBoolean("fromCreateNewChat",true)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack("chatScreen")
+        ft?.replace(R.id.container, chatFragment, "chatScreen")
             ?.commit()
     }
 

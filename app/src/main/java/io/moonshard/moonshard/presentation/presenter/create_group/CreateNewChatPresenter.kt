@@ -22,17 +22,17 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        username: String
+        chatName: String
     ) {
-        if (username.isNotBlank()) {
-            val actualUserName: String
+        if (chatName.isNotBlank()) {
+            val actualChatName: String
             val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
 
-            if (username.contains("@")) {
+            if (chatName.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
                 return
             } else {
-                actualUserName = username.split("@")[0]
+                actualChatName = chatName.split("@")[0]
             }
 
             try {
@@ -48,13 +48,13 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 val form = muc.configurationForm
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
-                answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
+                answerForm.setAnswer("muc#roomconfig_roomname", actualChatName)
                 muc.sendConfigurationForm(answerForm)
 
                 val chatEntity = ChatEntity(
                     0,
                     jidRoomString,
-                    actualUserName,
+                    actualChatName,
                     true,
                     0
                 )

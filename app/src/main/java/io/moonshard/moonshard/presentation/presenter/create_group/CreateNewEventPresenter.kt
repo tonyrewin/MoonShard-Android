@@ -132,10 +132,14 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             }
         }
 
+        val newAdminChats = arrayListOf<ChatEntity>()
+        newAdminChats.addAll(adminChats)
+
+
         for (i in adminChats.indices) {
             for(k in events.indices){
                 if(adminChats[i].jid==events[k].roomId){
-                    adminChats.remove(adminChats[i])
+                    newAdminChats.remove(adminChats[i])
                 }
             }
         }

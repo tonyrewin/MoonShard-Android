@@ -24,13 +24,12 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.search.UserSearchManager
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
     private var disposible: Disposable? = null
-
-
 
     override fun addNewChat(chat: GenericDialog) {
 
@@ -58,6 +57,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         )
 
         presenter.setDialogs()
+
     }
 
     override fun showChatScreen(chatId: String, chatName: String) {

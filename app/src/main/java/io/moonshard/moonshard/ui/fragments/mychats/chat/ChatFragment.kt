@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChatRepository
@@ -49,9 +50,10 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             presenter.isEvent()
         }
 
+
         backBtn?.setOnClickListener {
             if(fromCreateNewChat){
-                showChatsScreen()
+                activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }else{
                 fragmentManager?.popBackStack()
                 ChatRepository.clean()

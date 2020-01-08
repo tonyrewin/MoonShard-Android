@@ -2,6 +2,7 @@ package io.moonshard.moonshard.presentation.presenter
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.api.Category
@@ -106,6 +107,19 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             val kek = ""
         }
         return null
+    }
+
+    fun isJoin(jid:String):Boolean{
+        return try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            muc.isJoined
+        }catch (e:Exception){
+            Logger.d(e.message)
+            false
+        }
     }
 
     @SuppressLint("CheckResult")

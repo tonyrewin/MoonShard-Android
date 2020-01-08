@@ -20,7 +20,6 @@ class MyChatsFragment : Fragment() {
 
     private var disposible: Disposable? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,14 +32,19 @@ class MyChatsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
 
+        (activity!!.supportFragmentManager.findFragmentByTag("CreatedChatScreen"))?.let {
+            activity!!.supportFragmentManager.beginTransaction().remove(it).commit()
+        }
+
         cancelBtn?.setOnClickListener {
             hideSearch()
         }
 
-        disposible = findEd.afterTextChangeEvents()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                val chatsFragment = childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager.currentItem)
+        disposible = findEd?.afterTextChangeEvents()
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe {
+                val chatsFragment =
+                    childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager?.currentItem)
                 (chatsFragment as? ChatsFragment)?.setFilter(it.editable?.toString() ?: "")
             }
 
@@ -57,10 +61,10 @@ class MyChatsFragment : Fragment() {
             val newFragment = CreateGroupFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(R.id.container, newFragment, "CreateGroupFragment")
+                ?.addToBackStack("CreateGroupFragment")
                 ?.commit()
         }
     }
-
 
     private fun showSearch() {
         searchLayoutToolbar?.visibility = View.VISIBLE

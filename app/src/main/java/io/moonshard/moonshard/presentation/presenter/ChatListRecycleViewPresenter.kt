@@ -173,6 +173,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
+            //todo nickname must be fix( cardV)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
 
             if (!muc.isJoined) {

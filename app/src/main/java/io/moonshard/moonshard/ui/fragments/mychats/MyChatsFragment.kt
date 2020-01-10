@@ -14,6 +14,8 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_my_chats.*
+import java.lang.Exception
+import java.util.logging.Logger
 
 
 class MyChatsFragment : Fragment() {
@@ -43,9 +45,13 @@ class MyChatsFragment : Fragment() {
         disposible = findEd?.afterTextChangeEvents()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
-                val chatsFragment =
-                    childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager?.currentItem)
-                (chatsFragment as? ChatsFragment)?.setFilter(it.editable?.toString() ?: "")
+                try {
+                    val chatsFragment =
+                        childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager?.currentItem)
+                    (chatsFragment as? ChatsFragment)?.setFilter(it.editable?.toString() ?: "")
+                }catch (e:Exception){
+                    com.orhanobut.logger.Logger.d(e)
+                }
             }
 
         find?.setOnClickListener {

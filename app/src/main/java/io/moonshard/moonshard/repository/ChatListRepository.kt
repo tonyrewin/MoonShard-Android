@@ -6,6 +6,7 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
+import io.objectbox.rx.RxBoxStore
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -51,6 +52,34 @@ object ChatListRepository {
                     it.onNext(chat.first())
                 }
             }
+        }
+    }
+
+
+    fun changeChatName(chat:ChatEntity): Observable<Boolean>{
+        return Observable.create {
+            try {
+                chatBox.put(chat)
+                it.onNext(true)
+                it.onComplete()
+            }catch (e:Exception){
+                it.onError(NotFoundException())
+            }
+
+
+            /*
+            val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
+            RxQuery.observable(query).subscribe { chat ->
+                if (!it.isDisposed) {
+                    if (chat.isEmpty()) {
+                        it.onError(NotFoundException())
+                        return@subscribe
+                    }
+                    it.onNext(chat.first())
+                }
+            }
+
+             */
         }
     }
 

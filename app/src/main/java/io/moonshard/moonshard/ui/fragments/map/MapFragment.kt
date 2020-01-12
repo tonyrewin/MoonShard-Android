@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
@@ -37,6 +38,9 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.search.ReportedData
+import org.jivesoftware.smackx.search.UserSearchManager
+import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
 import java.util.*
 
@@ -399,24 +403,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 }
             }
         })
-
-        /*
-        try {
-            val search = UserSearchManager(MainApplication.getXmppConnection().connection)
-            val j =
-                JidCreate.domainBareFrom("search." + MainApplication.getXmppConnection().connection.xmppServiceDomain)
-            val searchForm = search.getSearchForm(j)
-            val answerForm = searchForm.createAnswerForm()
-            answerForm.setAnswer("nick", "test")
-
-            // answerForm.setAnswer("search", "test") // _user_name is "user1"
-            var data = search.getSearchResults(answerForm, j)
-            var kek = ""
-        } catch (e: Exception) {
-            var kek = ""
-        }
-
-         */
     }
 
     private fun getMyLocation() {

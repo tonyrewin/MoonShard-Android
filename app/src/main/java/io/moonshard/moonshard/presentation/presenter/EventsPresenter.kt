@@ -38,26 +38,28 @@ class EventsPresenter : MvpPresenter<EventsView>() {
             .subscribeOn(Schedulers.io())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
-                    getEvents(ChatRepository.idChatCurrent!!, rooms)
+                    getEvents(ChatRepository.idChatCurrent, rooms)
                 } else {
                     throwable.message?.let { viewState?.showError(it) }
                 }
             })
     }
 
-    private fun getEvents(jidChat: String, events: ArrayList<RoomPin>) {
-        val myEvents = arrayListOf<RoomPin>()
-        for (i in events.indices) {
-            if (jidChat == events[i].groupId) {
-                myEvents.add(events[i])
+    private fun getEvents(jidChat: String?, events: ArrayList<RoomPin>) {
+        jidChat?.let {
+            val myEvents = arrayListOf<RoomPin>()
+            for (i in events.indices) {
+                if (jidChat == events[i].groupId) {
+                    myEvents.add(events[i])
+                }
             }
-        }
 
-        if (myEvents.isEmpty()) {
-            viewState?.isShowCreateEventLayout(isShow = true, isAdmin = isAdminInChat(jidChat))
-        } else {
-            viewState?.isShowCreateEventLayout(false, isAdminInChat(jidChat))
-            viewState?.setEvents(myEvents)
+            if (myEvents.isEmpty()) {
+                viewState?.isShowCreateEventLayout(isShow = true, isAdmin = isAdminInChat(jidChat))
+            } else {
+                viewState?.isShowCreateEventLayout(false, isAdminInChat(jidChat))
+                viewState?.setEvents(myEvents)
+            }
         }
     }
 

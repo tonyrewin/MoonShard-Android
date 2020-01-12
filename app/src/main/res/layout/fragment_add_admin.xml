@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.AdminsFragment">
+        tools:context=".ui.fragments.mychats.create.chat.CreateNewChatFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -20,7 +20,7 @@
                 android:padding="0dp">
 
             <ImageView
-                    android:id="@+id/backBtn"
+                    android:id="@+id/back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -32,20 +32,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Администраторы"
+                    android:text="Добавить администратора"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
             <TextView
-                    android:id="@+id/newChat"
+                    android:id="@+id/addAdminBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
-                    android:src="@drawable/ic_new_chat"
-                    android:text="Изменить"
+                    android:text="Пригласить"
                     android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -54,6 +53,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+            android:id="@+id/profileSettingsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -61,46 +61,30 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
+            android:orientation="vertical">
 
-        <LinearLayout
-                android:id="@+id/addAdminLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="21dp"
-                    android:layout_marginTop="11dp"
-                    android:layout_marginEnd="21dp"
-                    android:src="@drawable/ic_user_plus" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:text="Добавить администратора"
-                    android:textColor="#0075FF"
-                    android:textSize="16sp" />
-
-        </LinearLayout>
-
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
+        <TextView
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="11dp"
-                android:background="#F5F5F5" />
+                android:layout_marginStart="11dp"
+                android:text="Имя пользователя"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/adminsRv"
+        <EditText
+                android:layout_marginEnd="13dp"
+                android:id="@+id/nameTv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="40dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/rounded_edittext"
+                android:inputType="text"
+                android:maxLength="255"
+                android:maxLines="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp" />
 
     </LinearLayout>
+
 </LinearLayout>

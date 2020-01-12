@@ -22,6 +22,7 @@ class AdminsFragment : MvpAppCompatFragment(),
 
     @InjectPresenter
     lateinit var presenter: AdminsPresenter
+    var idChat = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,13 +36,30 @@ class AdminsFragment : MvpAppCompatFragment(),
         initAdapter()
 
         arguments?.let {
-            val idChat = it.getString("chatId")
-            presenter.getAdmins(idChat!!)
+            idChat = it.getString("chatId")
+            presenter.getAdmins(idChat)
         }
 
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
+
+        addAdminLayout?.setOnClickListener {
+            showAddAdminScreen(idChat)
+        }
+    }
+
+    private fun showAddAdminScreen(idChat: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment =
+            AddAdminFragment()
+        fragment.arguments = bundle
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+
+        ft?.add(R.id.container, fragment, "AddAdminFragment")?.hide(this)
+            ?.addToBackStack("AddAdminFragment")
+            ?.commit()
     }
 
     override fun showToast(text: String) {

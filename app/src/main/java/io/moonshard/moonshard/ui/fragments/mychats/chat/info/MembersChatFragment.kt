@@ -15,7 +15,9 @@ import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_members_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
+import org.jxmpp.jid.impl.JidCreate
 
 
 class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
@@ -54,7 +56,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
         Toast.makeText(activity!!, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showMembers(members: List<EntityFullJid>) {
+    override fun showMembers(members: List<Occupant>) {
         (membersRv?.adapter as MembersAdapter).setMembers(members)
     }
 
@@ -89,13 +91,13 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
                 showProfileUser(member)
             }
 
-            override fun remove(member: EntityFullJid) {
-                presenter.kickUser(idChat, member)
+            override fun remove(member: Occupant) {
+                presenter.kickUser(idChat,JidCreate.entityFullFrom(idChat.toString()+"/"+ member.nick),member)
             }
         }, arrayListOf(),true)
     }
 
-    override fun removeMember(member:EntityFullJid){
+    override fun removeMember(member:Occupant){
         (membersRv?.adapter as MembersAdapter).removeMember(member)
     }
 }

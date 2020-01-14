@@ -39,6 +39,7 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
@@ -71,6 +72,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void kicked(EntityFullJid participant, Jid actor, String reason) {
         super.kicked(participant, actor, reason);
+
     }
 
     @SuppressLint("CheckResult")
@@ -187,27 +189,58 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
     @Override
     public void presenceAvailable(FullJid address, Presence availablePresence) {
+        String kek = "";
         //   EventBus.getDefault().post(new UserPresenceChangedEvent(address.asBareJid().asUnescapedString(), availablePresence.isAvailable()));
     }
 
     @Override
     public void presenceUnavailable(FullJid address, Presence presence) {
-        //EventBus.getDefault().post(new UserPresenceChangedEvent(address.asBareJid().asUnescapedString(), presence.isAvailable()));
+        try {
+            String kek = "";
+            MUCUser user = (MUCUser) presence.getExtensions().get(0);
+            HashSet<MUCUser.Status> statuses = (HashSet<MUCUser.Status>) user.getStatus();
+
+            boolean isKicked = false;
+
+            for (MUCUser.Status status : statuses) {
+                if (status.getCode() == 110) {
+                    isKicked = true;
+                    break;
+                }
+            }
+
+            if (isKicked) {
+                    ChatListRepository.INSTANCE.getChatByJid(JidCreate.bareFrom(address.asUnescapedString().split("/")[0]))
+                            .observeOn(Schedulers.io())
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(chatEntity -> {
+                                ChatListRepository.INSTANCE.removeChat(chatEntity)
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe();
+                            }, exc -> {
+                                String keks = "";
+                            });
+            }
+        } catch (Exception e) {
+            String keks = "";
+        }
     }
 
     @Override
     public void presenceError(Jid address, Presence errorPresence) {
-        // EventBus.getDefault().post(new UserPresenceChangedEvent(address.asBareJid().asUnescapedString(), errorPresence.isAvailable()));
+        String kek = "";
     }
 
     @Override
     public void presenceSubscribed(BareJid address, Presence subscribedPresence) {
-
+        String kek = "";
     }
+
 
     @Override
     public void presenceUnsubscribed(BareJid address, Presence unsubscribedPresence) {
-
+        String kek = "";
     }
 
     private void createNotificationChannel() {
@@ -301,6 +334,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         }
     }
 
+    @Override
+    public void banned(EntityFullJid participant, Jid actor, String reason) {
+        super.banned(participant, actor, reason);
+    }
 
     @Override
     public void invitationReceived(XMPPConnection conn, MultiUserChat room, EntityJid inviter, String reason, String password, Message message, MUCUser.Invite invitation) {
@@ -312,7 +349,6 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     //onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
                     if (e.getClass() == NotFoundException.class) {
-
                         try {
                             VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
                             VCard card = vm.loadVCard();
@@ -403,7 +439,6 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         messageEntity.chat.setTarget(chatEntity);
         messageEntity.sender.setTarget(chatUser);
         saveMessageJoin(messageEntity, chatJid, chatEntity);
-
     }
 
     void saveMessageJoin(MessageEntity messageEntity, String chatJid, ChatEntity chatEntity) {

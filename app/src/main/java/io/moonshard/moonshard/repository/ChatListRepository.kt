@@ -55,7 +55,6 @@ object ChatListRepository {
         }
     }
 
-
     fun changeChatName(chat:ChatEntity): Observable<Boolean>{
         return Observable.create {
             try {

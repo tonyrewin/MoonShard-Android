@@ -7,6 +7,6 @@ import org.jxmpp.jid.EntityFullJid
 
 interface MembersChatView: MvpView {
     fun showError(error:String)
-    fun showMembers(members:List<EntityFullJid>)
-    fun removeMember(member: EntityFullJid)
+    fun showMembers(members:List<Occupant>)
+    fun removeMember(member: Occupant)
 }

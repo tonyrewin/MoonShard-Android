@@ -24,6 +24,7 @@ import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_event_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
@@ -119,7 +120,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             ?.commit()
     }
 
-    override fun showMembers(members: List<EntityFullJid>) {
+    override fun showMembers(members: List<Occupant>) {
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
@@ -130,7 +131,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
                 showProfileUser(jid)
             }
 
-            override fun remove(member: EntityFullJid) {
+            override fun remove(member: Occupant) {
 
             }
         }, arrayListOf(),false)

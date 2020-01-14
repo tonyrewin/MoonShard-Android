@@ -38,7 +38,6 @@ class MyChatsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
 
-
         try {
             val search = UserSearchManager(MainApplication.getXmppConnection().connection)
             val j =

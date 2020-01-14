@@ -3,10 +3,11 @@ package io.moonshard.moonshard.presentation.view.chat.info
 import android.graphics.Bitmap
 import com.google.android.gms.maps.model.LatLng
 import moxy.MvpView
+import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 
 interface EventInfoView: MvpView {
-    fun showMembers(members: List<EntityFullJid>)
+    fun showMembers(members: List<Occupant>)
     fun showData(
         name: String,
         occupantsCount: Int,

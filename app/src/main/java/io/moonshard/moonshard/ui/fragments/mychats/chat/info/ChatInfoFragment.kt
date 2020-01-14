@@ -20,6 +20,7 @@ import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
@@ -109,18 +110,18 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             ?.commit()
     }
 
-    override fun showMembers(members: List<EntityFullJid>) {
+    override fun showMembers(members: List<Occupant>) {
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
     private fun initAdapter() {
         membersInfoRv?.layoutManager = LinearLayoutManager(context)
         membersInfoRv?.adapter = MembersAdapter(object : MemberListener {
-            override fun clickMember(jid: String) {
-                showProfileUser(jid)
+            override fun clickMember(member: String) {
+                showProfileUser(member)
             }
 
-            override fun remove(member: EntityFullJid) {
+            override fun remove(member: Occupant) {
 
             }
         }, arrayListOf(),false)

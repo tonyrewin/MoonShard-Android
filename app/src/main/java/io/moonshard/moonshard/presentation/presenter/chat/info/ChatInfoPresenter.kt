@@ -36,6 +36,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                     .getRoomInfo(groupId)
 
             val members = muc.occupants
+            var occupants = arrayListOf<Occupant>()
 
             var location: LatLng? = null
             var category = ""
@@ -50,9 +51,11 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
             getAvatar(jid)
 
-                //todo fi
-            val isAdmin =  isAdminInChat(jid)
-            if(isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(false)
+            //todo fi
+            val isAdmin = isAdminInChat(jid)
+            if (isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(
+                false
+            )
 
             viewState?.showData(
                 roomInfo.name,
@@ -67,13 +70,34 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             val card = vm.loadVCard()
             val myNickName = card.nickName
 
-            for(i in members.indices){
-                if(members[i].asUnescapedString().contains(myNickName)){
+            /*
+            //remove user with my nickName
+            for (i in members.indices) {
+                if (members[i].asUnescapedString().contains(myNickName)) {
                     members.remove(members[i])
-                    viewState?.showMembers(members)
-                    return
+                    break
                 }
             }
+             */
+
+            //
+            for (i in members.indices) {
+                occupants.add(muc.getOccupant(members[i]))
+            }
+
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val iterator = occupants.iterator()
+            while (iterator.hasNext()) {
+                val occupant = iterator.next()
+                if (occupant.jid==null) {
+                    iterator.remove()
+                }else if(occupant.jid.asBareJid().asUnescapedString()==myJid){
+                    iterator.remove()
+                }
+            }
+
+            viewState?.showMembers(occupants)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

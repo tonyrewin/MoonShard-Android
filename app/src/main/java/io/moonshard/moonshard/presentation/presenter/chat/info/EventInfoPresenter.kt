@@ -38,6 +38,8 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
                     .getRoomInfo(groupId)
 
             val members = muc.occupants
+            var occupants = arrayListOf<Occupant>()
+
 
             var location: LatLng? = null
             var category = ""
@@ -72,10 +74,15 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
             for(i in members.indices){
                 if(members[i].asUnescapedString().contains(myNickName)){
                     members.remove(members[i])
-                    viewState?.showMembers(members)
-                    return
+                    break
                 }
             }
+
+            for (i in members.indices) {
+                occupants.add(muc.getOccupant(members[i]))
+            }
+
+            viewState?.showMembers(occupants)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

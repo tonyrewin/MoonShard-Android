@@ -211,6 +211,5 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                     viewState?.showToast("Ошибка: ${throwable.message}")
                 }
             })
-
     }
 }

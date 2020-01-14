@@ -19,6 +19,7 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.iqregister.AccountManager
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 
@@ -72,11 +73,16 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
     @SuppressLint("CheckResult")
     fun joinChat(jid: String) {
             try {
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+
+
                 val manager =
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
-                val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
                 val info =
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                         .getRoomInfo(muc.room)

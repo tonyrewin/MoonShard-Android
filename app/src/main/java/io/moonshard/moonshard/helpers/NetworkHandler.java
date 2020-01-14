@@ -27,6 +27,8 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.packet.MUCUser;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
@@ -312,8 +314,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     if (e.getClass() == NotFoundException.class) {
 
                         try {
-                            Resourcepart nickname;
-                            nickname = Resourcepart.from(MainApplication.getJid());
+                            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+                            VCard card = vm.loadVCard();
+                            Resourcepart nickname = Resourcepart.from(card.getNickName());
 
                             room.join(nickname); //while get invitation you need to join that room
 

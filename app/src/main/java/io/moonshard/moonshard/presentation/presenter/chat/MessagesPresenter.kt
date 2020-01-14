@@ -25,6 +25,7 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -78,7 +79,11 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun join() {
         try {
-            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
+
             val jid = JidCreate.entityBareFrom(chatID)
             val muc =
                 MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)

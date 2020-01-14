@@ -38,7 +38,7 @@ class MyChatsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
 
-            /*
+
         try {
             val search = UserSearchManager(MainApplication.getXmppConnection().connection)
             val j =
@@ -65,7 +65,7 @@ class MyChatsFragment : Fragment() {
             var kek = ""
         }
 
-             */
+
 
         (activity!!.supportFragmentManager.findFragmentByTag("CreatedChatScreen"))?.let {
             activity!!.supportFragmentManager.beginTransaction().remove(it).commit()

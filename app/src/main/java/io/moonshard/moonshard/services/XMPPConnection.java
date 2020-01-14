@@ -31,6 +31,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.ping.PingManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.EntityFullJid;
@@ -620,8 +621,10 @@ public class XMPPConnection implements ConnectionListener {
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             EntityBareJid entityBareJid = JidCreate.entityBareFrom(jid);
             MultiUserChat muc = manager.getMultiUserChat(entityBareJid);
-            //todo nickname must be fix( cardV)
-            Resourcepart nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username);
+
+            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection);
+            VCard card = vm.loadVCard();
+            Resourcepart nickName = Resourcepart.from(card.getNickName());
 
             if (!muc.isJoined()) {
                 muc.join(nickName);

@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
@@ -40,8 +41,10 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
-                val nickName =
-                    Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
 
                 muc.create(nickName)
                 // room is now created by locked
@@ -81,7 +84,11 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
-            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
+
             muc.join(nickName)
             viewState?.showChatScreen(jid)
         } catch (e: Exception) {

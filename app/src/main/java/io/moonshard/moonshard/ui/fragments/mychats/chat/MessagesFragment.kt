@@ -152,14 +152,4 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         startActivityForResult(chooseFile, 1)
     }
 
-    private fun showChatInfo(chatId: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val chatFragment = ChatInfoFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "ChatInfoFragment")?.hide(this)
-            ?.addToBackStack("ChatInfoFragment")
-            ?.commit()
-    }
 }

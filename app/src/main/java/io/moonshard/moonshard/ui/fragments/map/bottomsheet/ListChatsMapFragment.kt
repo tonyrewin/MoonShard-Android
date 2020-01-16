@@ -59,12 +59,12 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
             for(i in fragmentManager!!.fragments.indices){
                 if(fragmentManager!!.fragments[i].tag == "MapScreen"){
                     fragment = (fragmentManager!!.fragments[i] as? MapFragment)
-                  //  (fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
                 }
             }
 
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
+            bundle.putBoolean("fromMap", true)
             val chatFragment = ChatFragment()
             chatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
@@ -76,5 +76,4 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     fun updateChats(){
         presenter.getChats()
     }
-
 }

@@ -20,6 +20,7 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
+import java.util.*
 
 @InjectViewState
 class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
@@ -70,17 +71,6 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             val card = vm.loadVCard()
             val myNickName = card.nickName
 
-            /*
-            //remove user with my nickName
-            for (i in members.indices) {
-                if (members[i].asUnescapedString().contains(myNickName)) {
-                    members.remove(members[i])
-                    break
-                }
-            }
-             */
-
-            //
             for (i in members.indices) {
                 occupants.add(muc.getOccupant(members[i]))
             }
@@ -169,19 +159,19 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
-            isAdminFromOccupants(muc,moderators)
+            isAdminFromOccupants(moderators)
         } catch (e: Exception) {
             false
         }
     }
 
-    private fun isAdminFromOccupants(muc: MultiUserChat,admins: List<Occupant>): Boolean {
+    private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
         try {
-            val myJid = SecurePreferences.getStringValue("jid", null)
+            val myJid = SecurePreferences.getStringValue("jid", null)?.toUpperCase(Locale.getDefault())
             myJid?.let {
                 for (i in admins.indices) {
-                    val adminJid =admins[i].jid.asBareJid().asUnescapedString()
-                    if (adminJid.contains(it,true)) {
+                    val adminJid =admins[i].jid.asBareJid().asUnescapedString().toUpperCase(Locale.getDefault())
+                    if (adminJid.equals(it,true)) {
                         return true
                     }
                 }

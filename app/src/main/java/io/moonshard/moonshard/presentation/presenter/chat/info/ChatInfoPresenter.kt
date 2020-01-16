@@ -169,21 +169,25 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
-            isAdminFromOccupants(moderators)
+            isAdminFromOccupants(muc,moderators)
         } catch (e: Exception) {
             false
         }
     }
 
-    private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
-        val myJid = SecurePreferences.getStringValue("jid", null)
-        myJid?.let {
-            for (i in admins.indices) {
-                val adminJid = admins[0].jid.asUnescapedString().split("/")[0]
-                if (adminJid == it) {
-                    return true
+    private fun isAdminFromOccupants(muc: MultiUserChat,admins: List<Occupant>): Boolean {
+        try {
+            val myJid = SecurePreferences.getStringValue("jid", null)
+            myJid?.let {
+                for (i in admins.indices) {
+                    val adminJid =admins[i].jid.asBareJid().asUnescapedString()
+                    if (adminJid.contains(it,true)) {
+                        return true
+                    }
                 }
             }
+        }catch (e:Exception){
+            return false
         }
         return false
     }

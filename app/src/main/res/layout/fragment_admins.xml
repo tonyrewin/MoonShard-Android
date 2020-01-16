@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,54 +53,61 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/layout_settings_bg"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolBar">
 
         <LinearLayout
-                android:id="@+id/addAdminLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/layout_settings_bg"
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
 
-            <ImageView
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:id="@+id/addAdminLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="21dp"
-                    android:layout_marginTop="11dp"
-                    android:layout_marginEnd="21dp"
-                    android:src="@drawable/ic_user_plus" />
+                    android:orientation="horizontal">
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:text="Добавить администратора"
-                    android:textColor="#0075FF"
-                    android:textSize="16sp" />
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="21dp"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="21dp"
+                        android:src="@drawable/ic_user_plus" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:text="Добавить администратора"
+                        android:textColor="#0075FF"
+                        android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="11dp"
+                    android:background="#F5F5F5" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/adminsRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="11dp"
-                android:background="#F5F5F5" />
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/adminsRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-    </LinearLayout>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

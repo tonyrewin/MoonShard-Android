@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import trikita.log.Log
+import java.lang.Exception
 
 
 interface MemberListener {
@@ -57,10 +58,12 @@ class MembersAdapter(
 
         holder.nameTv?.text = members[position].nick
         //holder.statusTv?.text = members[position].affiliation.
-        setAvatar(
-            members[position].jid.asBareJid().asUnescapedString(),
-            holder.userAvatar!!
-        )
+        try {
+            setAvatar(members[position].jid.asBareJid().asUnescapedString(), holder.userAvatar!!
+            )
+        }catch (e:Exception){
+
+        }
     }
 
     private fun setAvatar(jid: String, imageView: ImageView) {

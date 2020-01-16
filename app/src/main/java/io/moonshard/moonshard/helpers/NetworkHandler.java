@@ -195,6 +195,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
     @Override
     public void presenceUnavailable(FullJid address, Presence presence) {
+        /*
         try {
             String kek = "";
             MUCUser user = (MUCUser) presence.getExtensions().get(0);
@@ -225,6 +226,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         } catch (Exception e) {
             String keks = "";
         }
+
+         */
     }
 
     @Override
@@ -480,7 +483,6 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void newOutgoingMessage(EntityBareJid to, Message message, Chat chat) {
         String kek = "";
-
     }
 
     @Override
@@ -488,4 +490,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         super.left(participant);
     }
 
+    @Override
+    public void membershipRevoked(EntityFullJid participant) {
+        super.membershipRevoked(participant);
+    }
 }

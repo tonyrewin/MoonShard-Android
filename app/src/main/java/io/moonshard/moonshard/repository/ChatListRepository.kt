@@ -6,7 +6,6 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.models.dbEntities.ChatEntity_
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
-import io.objectbox.rx.RxBoxStore
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -55,13 +54,13 @@ object ChatListRepository {
         }
     }
 
-    fun changeChatName(chat:ChatEntity): Observable<Boolean>{
+    fun changeChatName(chat: ChatEntity): Observable<Boolean> {
         return Observable.create {
             try {
                 chatBox.put(chat)
                 it.onNext(true)
                 it.onComplete()
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 it.onError(NotFoundException())
             }
 
@@ -82,7 +81,7 @@ object ChatListRepository {
         }
     }
 
-    fun getChatsByName(name:String):Observable<ChatEntity>{
+    fun getChatsByName(name: String): Observable<ChatEntity> {
         return Observable.create {
             val query = chatBox.query().contains(ChatEntity_.chatName, name).build()
             RxQuery.observable(query).subscribe { chat ->
@@ -99,13 +98,15 @@ object ChatListRepository {
         return Completable.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.single(query).subscribe { chat ->
-                if (chat.isEmpty()) {
-                    it.onError(NotFoundException())
-                    return@subscribe
-                }
-                chat.first().unreadMessagesCount = newCountValue
-                addChat(chat.first()).subscribe {
-                    it.onComplete()
+                if (!it.isDisposed) {
+                    if (chat.isEmpty()) {
+                        it.onError(NotFoundException())
+                        return@subscribe
+                    }
+                    chat.first().unreadMessagesCount = newCountValue
+                    addChat(chat.first()).subscribe {
+                        it.onComplete()
+                    }
                 }
             }
         }

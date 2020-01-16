@@ -439,7 +439,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun showError(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        MainApplication.getMainUIThread().post {
+            Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun updateListRooms() {

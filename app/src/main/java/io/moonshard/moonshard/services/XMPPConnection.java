@@ -155,9 +155,6 @@ public class XMPPConnection implements ConnectionListener {
         chatManager = ChatManager.getInstanceFor(connection);
         chatManager.addIncomingListener(networkHandler);
         chatManager.addOutgoingListener(networkHandler);
-        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
-        ReconnectionManager.setEnabledPerDefault(true);
-        reconnectionManager.enableAutomaticReconnection();
         roster = Roster.getInstanceFor(connection);
         roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
         roster.addPresenceEventListener(networkHandler);
@@ -605,12 +602,16 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(chats -> {
-                    for (int i = 0; i < chats.size(); i++) {
-                        if (chats.get(i).isGroupChat()) {
-                            joinChat(chats.get(i).getJid());
-                        } else {
-                            MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chats.get(i).getJid()));
+                    try {
+                        for (int i = 0; i < chats.size(); i++) {
+                            if (chats.get(i).isGroupChat()) {
+                                joinChat(chats.get(i).getJid());
+                            } else {
+                                MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chats.get(i).getJid()));
+                            }
                         }
+                    }catch (Exception e){
+                        Logger.d(e);
                     }
                 });
     }

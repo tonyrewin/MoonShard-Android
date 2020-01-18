@@ -50,8 +50,8 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.chatName = name
-                    changeChatNameServer(muc, it)
                     changeDescription(muc, description)
+                    changeChatNameServer(muc, it)
                 }, {
 
                 })

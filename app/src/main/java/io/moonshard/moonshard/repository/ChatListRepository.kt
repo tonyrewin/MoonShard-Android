@@ -54,30 +54,14 @@ object ChatListRepository {
         }
     }
 
-    fun changeChatName(chat: ChatEntity): Observable<Boolean> {
-        return Observable.create {
+    fun changeChatName(chat: ChatEntity): Completable {
+        return Completable.create {
             try {
                 chatBox.put(chat)
-                it.onNext(true)
                 it.onComplete()
             } catch (e: Exception) {
                 it.onError(NotFoundException())
             }
-
-
-            /*
-            val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
-            RxQuery.observable(query).subscribe { chat ->
-                if (!it.isDisposed) {
-                    if (chat.isEmpty()) {
-                        it.onError(NotFoundException())
-                        return@subscribe
-                    }
-                    it.onNext(chat.first())
-                }
-            }
-
-             */
         }
     }
 

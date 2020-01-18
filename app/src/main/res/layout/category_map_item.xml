@@ -10,7 +10,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_heart" />
+            android:src="@drawable/ic_heart_category" />
 
     <TextView
             android:id="@+id/nameCategoryTv"

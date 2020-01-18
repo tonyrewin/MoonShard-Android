@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.api.Category
-import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 
 
@@ -53,14 +52,14 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
     private fun setDrawable(imageView:ImageView, category:Category){
         when {
             category.categoryName=="Тусовки" -> {
-                imageView.setImageResource(R.drawable.ic_star)
+                imageView.setImageResource(R.drawable.ic_star_category)
             }
             category.categoryName=="Бизнес ивенты" -> {
-                imageView.setImageResource(R.drawable.ic_case)
+                imageView.setImageResource(R.drawable.ic_case_category)
 
             }
             category.categoryName=="Кружок по интересам" -> {
-                imageView.setImageResource(R.drawable.ic_heart)
+                imageView.setImageResource(R.drawable.ic_heart_category)
 
             }
             category.categoryName=="Культурные мероприятия" -> {

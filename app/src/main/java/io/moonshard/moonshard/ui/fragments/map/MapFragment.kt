@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
-import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
@@ -38,9 +37,6 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smackx.search.ReportedData
-import org.jivesoftware.smackx.search.UserSearchManager
-import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
 import java.util.*
 
@@ -55,6 +51,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     var sheetBehavior: BottomSheetBehavior<View>? = null
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
+
+    private val defaultZoom: Float = 6F
+
+    private var defaultMoscowlatitude: Double = 55.751244
+    private var defaultMoscowlongitude: Double = 37.618423
+
 
 
     override fun onMapReady(map: GoogleMap?) {
@@ -82,6 +84,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         }
 
         presenter.getRooms("", "", "", null)
+        getZoomCenter()
     }
 
     override fun onCreateView(
@@ -145,6 +148,18 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
+    private fun getZoomCenter() {
+        if(MainApplication.getCurrentLocation()!=null){
+            val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        }else{
+            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        }
+    }
+
     fun update(category: Category) {
         presenter.getRooms("", "", "", category)
     }
@@ -182,14 +197,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 1
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             if (addresses.isNotEmpty()) {
-                val address =
-                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                val city = addresses[0].locality
-                val state = addresses[0].adminArea
-                val country = addresses[0].countryName
-                val postalCode = addresses[0].postalCode
-                val knownName = addresses[0].featureName // Only if available else return NULL
-                return address
+                return addresses[0].getAddressLine(0)
             }
         } catch (e: IOException) {
             e.printStackTrace()

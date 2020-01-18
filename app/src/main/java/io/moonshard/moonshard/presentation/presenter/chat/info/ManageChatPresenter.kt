@@ -60,17 +60,6 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         }
     }
 
-    private fun changeChatNameBaseDate(chat: ChatEntity) {
-        ChatListRepository.changeChatName(chat)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                viewState.showChatInfo()
-            }, {
-                Logger.d(it)
-            })
-    }
-
     private fun changeChatNameServer(muc: MultiUserChat, chat: ChatEntity) {
         try {
             val form = muc.configurationForm
@@ -81,6 +70,17 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         } catch (e: Exception) {
             Logger.d(e.message)
         }
+    }
+
+    private fun changeChatNameBaseDate(chat: ChatEntity) {
+        ChatListRepository.changeChatName(chat)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                viewState.showChatInfo()
+            }, {
+                Logger.d(it)
+            })
     }
 
     private fun changeDescription(muc: MultiUserChat, description: String) {

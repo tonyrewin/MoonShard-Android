@@ -170,6 +170,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     override fun initViewPagerFromEvent() {
+        tabLayout?.visibility = View.GONE
         initToolBarInfoEvent()
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(

@@ -36,19 +36,17 @@ import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
 
 public class MainApplication extends Application {
+
     private static ApplicationComponent component;
     public static final String SERVICE_TOPIC = "moonshard";
     public static final String PROTOCOL_ID = "/moonshard/1.0.0";
     public static ServiceConnection serviceConnection = null;
     private static P2ChatService service = null;
-
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
     public final static String DEFAULT_NTP_SERVER = "time.apple.com";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
-
-
     private static String jid;
     private static SharedPreferences preferences;
     private static XMPPConnection xmppConnection;

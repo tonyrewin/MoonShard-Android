@@ -1,8 +1,9 @@
 package io.moonshard.moonshard.common.utils
 
-import io.moonshard.moonshard.common.AutoDisposable
+import io.moonshard.moonshard.common.BasePresenter
 import io.reactivex.disposables.Disposable
+import moxy.MvpView
 
-fun Disposable.addTo(autoDisposable: AutoDisposable) {
-    autoDisposable.add(this)
+fun <V : MvpView?> Disposable.autoDispose(presenter: BasePresenter<V>) {
+    presenter.addDisposable(this)
 }

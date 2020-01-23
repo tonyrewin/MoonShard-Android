@@ -58,7 +58,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     private var defaultMoscowlongitude: Double = 37.618423
 
 
-
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         map?.isMyLocationEnabled = true
@@ -132,14 +131,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                         readBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
+                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
 
                         joinBtn2?.setOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                         readBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
+                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                     }
                 }
@@ -149,11 +148,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     private fun getZoomCenter() {
-        if(MainApplication.getCurrentLocation()!=null){
-            val latLng = LatLng(MainApplication.getCurrentLocation().latitude, MainApplication.getCurrentLocation().longitude)
+        if (MainApplication.getCurrentLocation() != null) {
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
             mMap?.animateCamera(cameraUpdate)
-        }else{
+        } else {
             val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
             mMap?.animateCamera(cameraUpdate)
@@ -173,11 +175,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         defaultBottomSheet.visibility = View.VISIBLE
     }
 
-    override fun showChatScreens(chatId: String) {
+    override fun showChatScreens(chatId: String, stateChat: String) {
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             bundle.putBoolean("fromMap", true)
+            bundle.putString("stateChat", stateChat)
             val chatFragment = ChatFragment()
             chatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()

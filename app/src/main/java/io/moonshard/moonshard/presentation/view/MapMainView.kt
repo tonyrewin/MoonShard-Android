@@ -6,5 +6,5 @@ import moxy.MvpView
 interface MapMainView: MvpView {
     fun showRoomsOnMap(rooms:ArrayList<RoomPin>)
     fun showError(error:String)
-    fun showChatScreens(chatId: String)
+    fun showChatScreens(chatId: String,stateChat:String)
 }

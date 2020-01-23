@@ -151,5 +151,4 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
     }
-
 }

@@ -52,6 +52,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
                 answerForm.setAnswer("muc#roomconfig_roomname", actualChatName)
+
                 val arrayList = arrayListOf<String>()
                 arrayList.add("anyone")
                 answerForm.setAnswer("muc#roomconfig_whois",arrayList)

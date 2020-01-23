@@ -153,7 +153,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (muc.isJoined) {
-                            viewState?.showChatScreens(jid)
+                            viewState?.showChatScreens(jid,"join")
                         }
                     }, {
                         if (it is NotFoundException) {
@@ -162,13 +162,36 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                                 .subscribeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     if (muc.isJoined) {
-                                        viewState?.showChatScreens(jid)
+                                        viewState?.showChatScreens(jid,"join")
                                     }
                                 }, { throwable ->
                                     throwable.message?.let { it1 -> viewState?.showError(it1) }
                                 })
                         }
                     })
+            } catch (e: Exception) {
+                e.message?.let { viewState?.showError(it) }
+            }
+        } ?: viewState?.showError("Ошибка")
+    }
+
+    fun readChat(jid: String, nameRoom: String?) {
+        nameRoom?.let {
+            try {
+                val manager =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val entityBareJid = JidCreate.entityBareFrom(jid)
+                val muc = manager.getMultiUserChat(entityBareJid)
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+
+                if (!muc.isJoined) {
+                    muc.join(nickName)
+                }
+
+                viewState?.showChatScreens(jid,"read")
             } catch (e: Exception) {
                 e.message?.let { viewState?.showError(it) }
             }

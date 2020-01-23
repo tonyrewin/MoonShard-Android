@@ -83,6 +83,10 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
          */
     }
 
+   override fun hideLine(){
+        view?.visibility = View.GONE
+    }
+
     private fun showInviteNewUserScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -121,6 +125,9 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     override fun showMembers(members: List<Occupant>) {
+        if(members.isEmpty()){
+            hideLine()
+        }
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 

@@ -111,6 +111,9 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     override fun showMembers(members: List<Occupant>) {
+        if(members.isEmpty()){
+            hideLine()
+        }
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
@@ -184,6 +187,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             e.printStackTrace()
         }
         return "Информация отсутствует"
+    }
+
+   override fun hideLine(){
+        view?.visibility = View.GONE
     }
 
     private fun calculationByDistance(latLng: LatLng?): String {

@@ -286,13 +286,13 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 String roomName = (message.getFrom().toString().split("@conference.moonshard.tech"))[0];
                 String roomJid = (message.getFrom().toString().split("/"))[0];
 
-            Jid fromJid = message.getFrom();
-            Log.d(fromJid.asUnescapedString());
-            if (fromJid.getResourceOrEmpty().toString().equals(MainApplication.getCurrentLoginCredentials().username)) {
-                return; // this is our message, dropping
-            }
+                Jid fromJid = message.getFrom();
+                Log.d(fromJid.asUnescapedString());
+                if (fromJid.getResourceOrEmpty().toString().equals(MainApplication.getCurrentLoginCredentials().username)) {
+                    return; // this is our message, dropping
+                }
 
-            String chatID = roomName;
+                String chatID = roomName;
 
 
                 ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(roomJid))
@@ -318,8 +318,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                             }
                         });
 
-            if (!MainApplication.getCurrentChatActivity().equals(chatID)) {
-                createNotification(chatID, message);
+                if (!MainApplication.getCurrentChatActivity().equals(chatID)) {
+                    createNotification(chatID, message);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

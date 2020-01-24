@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageChatPresenter
@@ -16,7 +17,6 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
-import java.lang.Exception
 import java.net.URLConnection
 
 
@@ -40,6 +40,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
         arguments?.let {
             idChat = it.getString("chatId")
+            presenter.getDataInfo(idChat)
         }
 
         membersLayout?.setOnClickListener {
@@ -50,9 +51,8 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
             showAdminsScreen()
         }
 
-        readBtn?.setOnClickListener {
-            presenter.setNewNameChat(nameEt.text.toString(), idChat)
-                //presenter.setAvatar(idChat,bytes,mimeType)
+        readyBtn?.setOnClickListener {
+            presenter.setData(nameEt.text.toString(), descriptionEt.text.toString(), idChat)
         }
 
         backBtn?.setOnClickListener {
@@ -60,7 +60,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
         }
 
         avatarIv?.setOnClickListener {
-            chooseFile()
+            //chooseFile()
         }
     }
 
@@ -120,8 +120,32 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
         return try {
             val inputStream = BufferedInputStream(ByteArrayInputStream(data))
             URLConnection.guessContentTypeFromStream(inputStream)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             null
         }
+    }
+
+    override fun showName(name: String?) {
+        nameEt?.setText(name)
+    }
+
+    override fun showDescription(description: String) {
+        descriptionEt?.setText(description)
+    }
+
+    override fun showChatInfo() {
+        activity!!.supportFragmentManager.popBackStack()
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showOccupantsCount(text: String) {
+        occupantsCountTv?.text = text
+    }
+
+    override fun showAdminsCount(text: String) {
+        adminsCountTv?.text = text
     }
 }

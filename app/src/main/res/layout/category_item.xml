@@ -14,7 +14,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_star" />
+            android:src="@drawable/ic_star_category" />
 
     <TextView
             android:id="@+id/name"

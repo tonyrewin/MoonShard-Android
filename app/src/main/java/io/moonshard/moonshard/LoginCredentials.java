@@ -5,6 +5,7 @@ public class LoginCredentials {
     public String password = "";
     public String jabberHost = "moonshard.tech";
 
+
     public boolean isEmpty() {
         return username.equals("") && password.equals("");
     }

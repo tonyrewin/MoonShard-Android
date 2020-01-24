@@ -73,14 +73,14 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
     private fun setDrawable(imageView:ImageView, category:Category){
         when {
             category.categoryName=="Тусовки" -> {
-                imageView.setImageResource(R.drawable.ic_star)
+                imageView.setImageResource(R.drawable.ic_star_category)
             }
             category.categoryName=="Бизнес ивенты" -> {
-                imageView.setImageResource(R.drawable.ic_case)
+                imageView.setImageResource(R.drawable.ic_case_category)
 
             }
             category.categoryName=="Кружок по интересам" -> {
-                imageView.setImageResource(R.drawable.ic_heart)
+                imageView.setImageResource(R.drawable.ic_heart_category)
 
             }
             category.categoryName=="Культурные мероприятия" -> {

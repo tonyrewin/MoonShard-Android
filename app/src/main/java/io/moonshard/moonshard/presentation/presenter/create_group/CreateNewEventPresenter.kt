@@ -35,8 +35,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
     fun getCategories() {
         viewState?.showProgressBar()
         compositeDisposable.add(useCase!!.getCategories()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { categories, throwable ->
                 viewState?.hideProgressBar()
                 if (throwable == null) {
@@ -80,6 +80,9 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
                 answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
+                val arrayList = arrayListOf<String>()
+                arrayList.add("anyone")
+                answerForm.setAnswer("muc#roomconfig_whois",arrayList)
                 muc.sendConfigurationForm(answerForm)
 
                 val chatEntity = ChatEntity(
@@ -132,10 +135,14 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             }
         }
 
+        val newAdminChats = arrayListOf<ChatEntity>()
+        newAdminChats.addAll(adminChats)
+
+
         for (i in adminChats.indices) {
             for(k in events.indices){
                 if(adminChats[i].jid==events[k].roomId){
-                    adminChats.remove(adminChats[i])
+                    newAdminChats.remove(adminChats[i])
                 }
             }
         }
@@ -170,8 +177,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
                     events.addAll(rooms)
@@ -197,8 +204,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             group?.jid,
             eventStartDate
         )
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { _, throwable ->
                 if (throwable == null) {
                     viewState?.showMapScreen()
@@ -207,6 +214,5 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                     viewState?.showToast("Ошибка: ${throwable.message}")
                 }
             })
-
     }
 }

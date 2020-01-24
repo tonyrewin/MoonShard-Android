@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
+        android:background="#F9F9F9"
         tools:context=".ui.fragments.mychats.chat.info.ManageChatFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,6 +14,8 @@
             android:layout_height="56dp"
             android:background="@android:color/white"
             android:elevation="6dp">
+
+
 
         <RelativeLayout
                 android:layout_width="match_parent"
@@ -33,13 +36,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Управление группой"
+                    android:text="Управление чатом"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
             <TextView
-                    android:id="@+id/readBtn"
+                    android:id="@+id/readyBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -53,6 +56,16 @@
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_below="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
     <RelativeLayout
@@ -108,7 +121,8 @@
                 android:layout_height="wrap_content"/>
 
         <EditText
-                android:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
+                android:minHeight="75dp"
+                tools:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
                 android:layout_alignLeft="@+id/descriptionTv"
                 android:layout_below="@+id/descriptionTv"
                 android:id="@+id/descriptionEt"
@@ -175,10 +189,11 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
+                android:id="@+id/occupantsCountTv"
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
                 android:layout_alignParentRight="true"
-                android:text="123"
+                tools:text="123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -219,10 +234,11 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
+                android:id="@+id/adminsCountTv"
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
                 android:layout_alignParentRight="true"
-                android:text="123"
+                tools:text="123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -261,4 +277,8 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
@@ -22,17 +23,17 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        username: String
+        chatName: String
     ) {
-        if (username.isNotBlank()) {
-            val actualUserName: String
+        if (chatName.isNotBlank()) {
+            val actualChatName: String
             val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
 
-            if (username.contains("@")) {
+            if (chatName.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
                 return
             } else {
-                actualUserName = username.split("@")[0]
+                actualChatName = chatName.split("@")[0]
             }
 
             try {
@@ -40,21 +41,27 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
-                val nickName =
-                    Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
 
                 muc.create(nickName)
                 // room is now created by locked
                 val form = muc.configurationForm
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
-                answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
+                answerForm.setAnswer("muc#roomconfig_roomname", actualChatName)
+
+                val arrayList = arrayListOf<String>()
+                arrayList.add("anyone")
+                answerForm.setAnswer("muc#roomconfig_whois",arrayList)
                 muc.sendConfigurationForm(answerForm)
 
                 val chatEntity = ChatEntity(
                     0,
                     jidRoomString,
-                    actualUserName,
+                    actualChatName,
                     true,
                     0
                 )
@@ -75,15 +82,17 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
         }
     }
 
-
-
     fun joinChat(jid: String) {
         try {
             val manager =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
-            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
+
             muc.join(nickName)
             viewState?.showChatScreen(jid)
         } catch (e: Exception) {

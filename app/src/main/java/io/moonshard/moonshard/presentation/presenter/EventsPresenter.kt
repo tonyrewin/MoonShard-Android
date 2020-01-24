@@ -34,30 +34,32 @@ class EventsPresenter : MvpPresenter<EventsView>() {
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
-                    getEvents(ChatRepository.idChatCurrent!!, rooms)
+                    getEvents(ChatRepository.idChatCurrent, rooms)
                 } else {
                     throwable.message?.let { viewState?.showError(it) }
                 }
             })
     }
 
-    private fun getEvents(jidChat: String, events: ArrayList<RoomPin>) {
-        val myEvents = arrayListOf<RoomPin>()
-        for (i in events.indices) {
-            if (jidChat == events[i].groupId) {
-                myEvents.add(events[i])
+    private fun getEvents(jidChat: String?, events: ArrayList<RoomPin>) {
+        jidChat?.let {
+            val myEvents = arrayListOf<RoomPin>()
+            for (i in events.indices) {
+                if (jidChat == events[i].groupId) {
+                    myEvents.add(events[i])
+                }
             }
-        }
 
-        if (myEvents.isEmpty()) {
-            viewState?.isShowCreateEventLayout(isShow = true, isAdmin = isAdminInChat(jidChat))
-        } else {
-            viewState?.isShowCreateEventLayout(false, isAdminInChat(jidChat))
-            viewState?.setEvents(myEvents)
+            if (myEvents.isEmpty()) {
+                viewState?.isShowCreateEventLayout(isShow = true, isAdmin = isAdminInChat(jidChat))
+            } else {
+                viewState?.isShowCreateEventLayout(false, isAdminInChat(jidChat))
+                viewState?.setEvents(myEvents)
+            }
         }
     }
 

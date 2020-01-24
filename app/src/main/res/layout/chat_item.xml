@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="83dp"
-        android:background="#FFFFFF"
+        android:background="?android:attr/selectableItemBackground"
+        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:paddingStart="16dp">
@@ -15,7 +16,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 app:civ_border_color="@android:color/transparent"
-                android:background="@android:color/white"
+                android:background="@android:color/transparent"
                 android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -34,11 +35,13 @@
     </RelativeLayout>
 
     <LinearLayout
+            android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/chatListProfileImageContainer"
+            android:layout_toStartOf="@+id/lastMessageReadState"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -46,16 +49,20 @@
                 android:id="@+id/chatItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ChatName"
+                tools:text="ChatName"
+                tools:visibility="visible"
                 android:textColor="#333333"
                 android:textSize="17sp"
                 android:visibility="invisible" />
 
         <TextView
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:id="@+id/lastMessageChatText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MessageText"
+                tools:text="MessageText"
+                tools:visibility="visible"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
                 android:visibility="invisible" />
@@ -63,6 +70,7 @@
     </LinearLayout>
 
     <ImageView
+            tools:visibility="visible"
             android:id="@+id/lastMessageReadState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,18 +82,20 @@
             android:visibility="invisible" />
 
     <TextView
+            tools:visibility="visible"
             android:id="@+id/lastMessageDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="18dp"
-            android:text="14:14"
+            tools:text="14:14"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
             android:visibility="invisible" />
 
     <TextView
+            tools:visibility="visible"
             android:id="@+id/unreadMessageCount"
             android:layout_width="26dp"
             android:layout_height="26dp"
@@ -95,7 +105,7 @@
             android:layout_marginEnd="17dp"
             android:background="@drawable/unread_message_count_background"
             android:gravity="center"
-            android:text="0"
+            tools:text="0"
             android:textColor="@android:color/white"
             android:visibility="invisible" />
 

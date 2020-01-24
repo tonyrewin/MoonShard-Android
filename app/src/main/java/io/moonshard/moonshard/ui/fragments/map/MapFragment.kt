@@ -27,11 +27,9 @@ import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
@@ -53,6 +51,11 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     var sheetBehavior: BottomSheetBehavior<View>? = null
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
+
+    private val defaultZoom: Float = 6F
+
+    private var defaultMoscowlatitude: Double = 55.751244
+    private var defaultMoscowlongitude: Double = 37.618423
 
 
     override fun onMapReady(map: GoogleMap?) {
@@ -80,6 +83,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         }
 
         presenter.getRooms("", "", "", null)
+        getZoomCenter()
     }
 
     override fun onCreateView(
@@ -94,6 +98,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         for (i in RoomsMap.rooms.indices) {
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
+
+                    if (presenter.isJoin(it)) {
+                        joinBtn?.visibility = View.GONE
+                        joinBtn2?.visibility = View.GONE
+                    } else {
+                        joinBtn?.visibility = View.VISIBLE
+                        joinBtn2?.visibility = View.VISIBLE
+                    }
+
                     val roomInfo = presenter.getRoom(it)
                     val onlineUsers = presenter.getValueOnlineUsers(it)
                     roomInfo?.let {
@@ -115,23 +128,38 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         descriptionTv?.text = roomInfo.description
 
                         joinBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                         readBtn?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
+                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
 
                         joinBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
+                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                         readBtn2?.setOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!,roomInfo.name)
+                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                     }
                 }
             }
         }
         return true
+    }
+
+    private fun getZoomCenter() {
+        if (MainApplication.getCurrentLocation() != null) {
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        } else {
+            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        }
     }
 
     fun update(category: Category) {
@@ -147,11 +175,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         defaultBottomSheet.visibility = View.VISIBLE
     }
 
-    override fun showChatScreens(chatId: String) {
+    override fun showChatScreens(chatId: String, stateChat: String) {
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             bundle.putBoolean("fromMap", true)
+            bundle.putString("stateChat", stateChat)
             val chatFragment = ChatFragment()
             chatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
@@ -171,14 +200,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 1
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             if (addresses.isNotEmpty()) {
-                val address =
-                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                val city = addresses[0].locality
-                val state = addresses[0].adminArea
-                val country = addresses[0].countryName
-                val postalCode = addresses[0].postalCode
-                val knownName = addresses[0].featureName // Only if available else return NULL
-                return address
+                return addresses[0].getAddressLine(0)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -292,17 +314,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
-    fun showCategoryBottomSheet(){
+    fun showCategoryBottomSheet() {
         bottomSheetCategory.visibility = View.VISIBLE
         bottomSheetFind.visibility = View.GONE
-        categoryFilterName.text = "Категория: "+RoomsMap.category?.categoryName
-        sheetBehavior?.setPeekHeight(convertDpToPixel(100F,context),false)
+        categoryFilterName.text = "Категория: " + RoomsMap.category?.categoryName
+        sheetBehavior?.setPeekHeight(convertDpToPixel(100F, context), false)
     }
 
-    fun hideCategoryBottomSheet(){
+    fun hideCategoryBottomSheet() {
         bottomSheetCategory.visibility = View.GONE
         bottomSheetFind.visibility = View.VISIBLE
-        sheetBehavior?.setPeekHeight(convertDpToPixel(85F,context),false)
+        sheetBehavior?.setPeekHeight(convertDpToPixel(85F, context), false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -322,9 +344,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         val llInfoBottomSheet = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
-        if(RoomsMap.isFilter){
+        if (RoomsMap.isFilter) {
             showCategoryBottomSheet()
-        }else{
+        } else {
             hideCategoryBottomSheet()
         }
 
@@ -346,12 +368,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         removeFilterBtn?.setOnClickListener {
             RoomsMap.clearFilters()
-            presenter.getRooms("","","",null)
+            presenter.getRooms("", "", "", null)
             hideCategoryBottomSheet()
             updateListRooms()
         }
 
-        sheetInfoBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        sheetInfoBehavior?.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
             }
@@ -400,7 +423,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 MainApplication.getCurrentLocation().longitude
             )
             val cameraUpdate =
-                CameraUpdateFactory.newLatLngZoom(latLng,8f)
+                CameraUpdateFactory.newLatLngZoom(latLng, 8f)
             mMap?.animateCamera(cameraUpdate)
         }
     }
@@ -427,13 +450,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     override fun showError(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        MainApplication.getMainUIThread().post {
+            Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        }
     }
 
-    fun updateListRooms(){
-         val fragment = fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+    fun updateListRooms() {
+        val fragment =
+            fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
-
-
 }

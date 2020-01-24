@@ -25,6 +25,7 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -53,7 +54,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             .subscribe({
                 chat = it
                 loadLocalMessages()
-                // loadMoreMessages() // FIXME
+               // loadMoreMessages() // FIXME
             }, {
                 com.orhanobut.logger.Logger.d(it.message)
             })
@@ -78,13 +79,17 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun join() {
         try {
-            val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
+
             val jid = JidCreate.entityBareFrom(chatID)
             val muc =
                 MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
             val mec = muc?.getEnterConfigurationBuilder(nickName)
 
-            mec?.requestNoHistory()
+         //   mec?.requestNoHistory()
             val mucEnterConfig = mec?.build()
             muc?.join(mucEnterConfig)
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
@@ -188,8 +193,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
     @SuppressLint("CheckResult")
     fun loadMoreMessages() {
         loadMessagesFromMAM()
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ query ->
                 if (query != null) {
                     val adapterMessages = ArrayList<GenericMessage>()
@@ -199,15 +204,17 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                 Forwarded.extractMessagesFrom(Collections.singleton(forwardedMessage))[0]
                             if (message.body != null) {
                                 MessageRepository.getMessageById(message.stanzaId)
-                                    .observeOn(Schedulers.io())
-                                    .subscribeOn(AndroidSchedulers.mainThread())
-                                    .subscribe({}, {
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe({
+                                        adapterMessages.add(GenericMessage(it))
+                                    }, {
                                         if (it is NotFoundException) {
                                             val senderJid =
                                                 message.from.asBareJid().asUnescapedString()
                                             ChatUserRepository.getUserAsSingle(message.from.asBareJid())
-                                                .observeOn(Schedulers.io())
-                                                .subscribeOn(AndroidSchedulers.mainThread())
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({ chatUser ->
                                                     val messageEntity = MessageEntity(
                                                         messageUid = UUID.randomUUID().toString(),
@@ -220,6 +227,14 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                     )
                                                     messageEntity.chat.target = chat
                                                     messageEntity.sender.target = chatUser
+
+                                                    MessageRepository.saveMessage(messageEntity)
+                                                        .observeOn(Schedulers.io())
+                                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe({
+                                                            adapterMessages.add(GenericMessage(messageEntity))
+                                                        },{ throwable -> Log.e(throwable.message) })
+                                                    //need save message
                                                 }, {
                                                     val chatUser = ChatUser(
                                                         jid = message.from.asBareJid().asUnescapedString(),
@@ -240,6 +255,13 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                             )
                                                             messageEntity.chat.target = chat
                                                             messageEntity.sender.target = chatUser
+
+                                                            MessageRepository.saveMessage(messageEntity)
+                                                                .observeOn(Schedulers.io())
+                                                                .subscribeOn(AndroidSchedulers.mainThread())
+                                                                .subscribe({
+                                                                    adapterMessages.add(GenericMessage(messageEntity))
+                                                                },{ throwable -> Log.e(throwable.message) })
                                                         }
                                                 })
 
@@ -336,7 +358,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
         }
     }
-
+//mamManager.queryArchive(MamManager.MamQueryArgs.builder().limitResultsToJid(JidCreate.from(chatID)).build()).messageCount
     @SuppressLint("CheckResult")
     fun loadMessagesFromMAM(): Single<MamManager.MamQuery> {
         return Single.create {
@@ -347,14 +369,14 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                         .observeOn(Schedulers.io())
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .subscribe({ msg ->
+                            val mamQuery =  mamManager.queryArchive(
+                                MamManager.MamQueryArgs.builder()
+                                    .beforeUid(msg.messageUid)
+                                    .limitResultsToJid(JidCreate.from(chatID))
+                                    .setResultPageSizeTo(50)
+                                    .build())
                             it.onSuccess(
-                                mamManager.queryArchive(
-                                    MamManager.MamQueryArgs.builder()
-                                        .beforeUid(msg.messageUid)
-                                        .limitResultsToJid(JidCreate.from(chatID))
-                                        .setResultPageSizeTo(50)
-                                        .build()
-                                )
+                                mamQuery
                             )
                         }, { ex ->
                             it.onError(ex)
@@ -365,15 +387,14 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             } else {
                 it.onError(Exception())
             }
-            it.onError(Exception())
         }
     }
 
     @SuppressLint("CheckResult")
     private fun getAvatar(jid: String) {
         MainApplication.getXmppConnection().loadAvatar(jid)
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ bytes ->
                 if (bytes != null) {
                     val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

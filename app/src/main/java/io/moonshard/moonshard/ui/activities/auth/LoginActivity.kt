@@ -77,6 +77,7 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     override fun onAuthenticated() {
+        presenter.addSupportChat()
         runOnUiThread {
             hideLoader()
             showContactsScreen()

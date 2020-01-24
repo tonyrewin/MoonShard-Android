@@ -12,19 +12,22 @@ import org.jxmpp.jid.impl.JidCreate
 class InviteUserPresenter: MvpPresenter<InviteUserView>() {
 
     fun inviteUser(user:String,jidChatString:String){
+        try {
+            if(user.contains("@")){
+                viewState.showError("Вы ввели недопустимый символ")
+                return
+            }
 
-        if(user.contains("@")){
-            viewState.showError("Вы ввели недопустимый символ")
-            return
+            val chatJid = JidCreate.entityBareFrom(jidChatString)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(chatJid)
+
+            muc.invite(JidCreate.entityBareFrom("$user@moonshard.tech"),"Приглашение в чат")
+
+            viewState?.showChatScreen()
+        }catch (e:Exception){
+            e.message?.let { viewState?.showError(it) }
         }
-
-        val chatJid = JidCreate.entityBareFrom(jidChatString)
-        val muc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                .getMultiUserChat(chatJid)
-
-        muc.invite(JidCreate.entityBareFrom("$user@moonshard.tech"),"Приглашение в чат")
-
-       viewState?.showChatScreen()
     }
 }

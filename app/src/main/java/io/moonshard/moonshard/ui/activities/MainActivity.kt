@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
@@ -91,15 +92,24 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-            //  if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
-         //   supportFragmentManager.popBackStack()
-        //}
+
+        if(supportFragmentManager.findFragmentByTag("CreatedChatScreen")!=null){
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+           // val fragment = MyChatsFragment()
+          //  val fragmentTransaction = supportFragmentManager.beginTransaction()
+          //  fragmentTransaction.replace(R.id.container, fragment).commit()
+            //supportFragmentManager.popBackStack()
+           // supportFragmentManager.popBackStack()
+            return
+        }
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
             ChooseChatRepository.clean()
+            return
         }
+
+        supportFragmentManager.popBackStack()
     }
 
     private fun showMapScreen() {

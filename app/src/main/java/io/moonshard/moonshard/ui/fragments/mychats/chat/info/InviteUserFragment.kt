@@ -16,10 +16,10 @@ import moxy.presenter.InjectPresenter
 
 class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
 
-
     @InjectPresenter
     lateinit var presenter: InviteUserPresenter
     var idChat = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

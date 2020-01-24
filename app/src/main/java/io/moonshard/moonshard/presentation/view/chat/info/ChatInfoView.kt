@@ -8,7 +8,7 @@ import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 
 interface ChatInfoView: MvpView {
-    fun showMembers(members:List<EntityFullJid>)
+    fun showMembers(members:List<Occupant>)
     fun showData(
         name: String,
         occupantsCount: Int,
@@ -22,4 +22,6 @@ interface ChatInfoView: MvpView {
     fun setAvatar(avatar: Bitmap?)
 
     fun showChangeChatButton(isShow: Boolean)
+    fun hideLine()
+    fun hideDescription()
 }

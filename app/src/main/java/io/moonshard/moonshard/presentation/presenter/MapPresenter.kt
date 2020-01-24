@@ -2,6 +2,7 @@ package io.moonshard.moonshard.presentation.presenter
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.api.Category
@@ -18,6 +19,7 @@ import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 
@@ -37,8 +39,8 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         } else {
             //this hard data - center Moscow
             compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { rooms, throwable ->
                     if (throwable == null) {
                         RoomsMap.clean()
@@ -59,8 +61,8 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             "37.618423",
             10000.toString()
         )
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
                     RoomsMap.clean()
@@ -108,6 +110,19 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         return null
     }
 
+    fun isJoin(jid:String):Boolean{
+        return try {
+            val manager =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            muc.isJoined
+        }catch (e:Exception){
+            Logger.d(e.message)
+            false
+        }
+    }
+
     @SuppressLint("CheckResult")
     fun joinChat(jid: String, nameRoom: String?) {
         nameRoom?.let {
@@ -116,8 +131,11 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
-                val nickName =
-                    Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+
 
                 if (!muc.isJoined) {
                     muc.join(nickName)
@@ -135,7 +153,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (muc.isJoined) {
-                            viewState?.showChatScreens(jid)
+                            viewState?.showChatScreens(jid,"join")
                         }
                     }, {
                         if (it is NotFoundException) {
@@ -144,13 +162,36 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                                 .subscribeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     if (muc.isJoined) {
-                                        viewState?.showChatScreens(jid)
+                                        viewState?.showChatScreens(jid,"join")
                                     }
                                 }, { throwable ->
                                     throwable.message?.let { it1 -> viewState?.showError(it1) }
                                 })
                         }
                     })
+            } catch (e: Exception) {
+                e.message?.let { viewState?.showError(it) }
+            }
+        } ?: viewState?.showError("Ошибка")
+    }
+
+    fun readChat(jid: String, nameRoom: String?) {
+        nameRoom?.let {
+            try {
+                val manager =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val entityBareJid = JidCreate.entityBareFrom(jid)
+                val muc = manager.getMultiUserChat(entityBareJid)
+
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+
+                if (!muc.isJoined) {
+                    muc.join(nickName)
+                }
+
+                viewState?.showChatScreens(jid,"read")
             } catch (e: Exception) {
                 e.message?.let { viewState?.showError(it) }
             }

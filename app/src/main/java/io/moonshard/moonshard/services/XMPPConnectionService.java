@@ -32,18 +32,14 @@ import io.moonshard.moonshard.MainApplication;
 public class XMPPConnectionService extends Service {
 
     private static final int RECONNECT_TRY_INTERVAL_MS = 10000; // 10 Seconds
-
-
     public static XMPPConnection.ConnectionState CONNECTION_STATE = XMPPConnection.ConnectionState.DISCONNECTED;
     public static XMPPConnection.SessionState SESSION_STATE = XMPPConnection.SessionState.LOGGED_OUT;
-
     private Thread thread;
     private Handler threadHandler;
     private boolean isThreadAlive = false;
     private XMPPConnection connection;
     private Context context = MainApplication.getContext();
     private XMPPServiceBinder binder = new XMPPServiceBinder();
-
     private LocationListener locationListener = new LocationListener() {
 
         @Override

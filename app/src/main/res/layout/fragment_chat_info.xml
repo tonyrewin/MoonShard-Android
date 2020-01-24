@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="#F9F9F9"
         tools:context=".ui.fragments.mychats.chat.info.ChatInfoFragment">
-
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -58,6 +54,16 @@
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_below="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <RelativeLayout
             android:id="@+id/mainLayout"
@@ -126,7 +132,7 @@
     </RelativeLayout>
 
     <LinearLayout
-            android:id="@+id/location"
+            android:id="@+id/descriptionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -139,7 +145,7 @@
             tools:ignore="RtlSymmetry">
 
         <TextView
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="13dp"
                 android:textStyle="bold"
                 android:textSize="14sp"
@@ -179,36 +185,10 @@
                 android:background="#F5F5F5" />
 
         <TextView
-                android:layout_marginBottom="7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Категория"
-                android:textColor="#9B9BB6"
-                android:textSize="14sp" />
-
-        <TextView
-                android:layout_marginBottom="12dp"
-                android:id="@+id/categoryInfoTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="По интересам"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-
-        <View
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#F5F5F5" />
-
-        <TextView
+                android:id="@+id/descriptionTv"
                 android:layout_marginBottom="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Описание"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
@@ -272,6 +252,7 @@
             tools:ignore="RtlSymmetry">
 
         <LinearLayout
+                android:layout_marginBottom="10dp"
                 android:id="@+id/addNewMember"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -296,10 +277,10 @@
         </LinearLayout>
 
         <View
+                android:id="@+id/viewAddUser"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="11dp"
-                android:layout_marginTop="8dp"
                 android:background="#F5F5F5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
@@ -348,5 +329,6 @@
 
     </RelativeLayout>
     </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.core.widget.NestedScrollView>
+</RelativeLayout>

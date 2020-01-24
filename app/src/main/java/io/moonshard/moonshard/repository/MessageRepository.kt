@@ -9,6 +9,7 @@ import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
+import io.objectbox.rx.RxBoxStore
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -18,6 +19,10 @@ import org.jxmpp.jid.impl.JidCreate
 
 object MessageRepository {
     private val messageBox: Box<MessageEntity> = ObjectBox.boxStore.boxFor()
+
+    fun observeMessageStorage(): Observable<Class<Any>> {
+        return RxBoxStore.observable<MessageEntity>(messageBox.store)
+    }
 
     fun saveMessage(messageEntity: MessageEntity): Completable {
         return Completable.create {
@@ -54,16 +59,36 @@ object MessageRepository {
         }
     }
 
-    fun getLastMessage(jid: Jid): Observable<MessageEntity> {
+    fun getLastMessageObservable(jid: Jid): Observable<MessageEntity> {
         return Observable.create {
             val msgQuery = messageBox.query {
                 order(MessageEntity_.timestamp, QueryBuilder.DESCENDING)
                 link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
             }
             RxQuery.observable(msgQuery).subscribe({ message ->
-                if(it.isDisposed){
+                if(!it.isDisposed){
                     if (message.isNotEmpty()) {
                         it.onNext(message.first())
+                    } else {
+                        it.onError(NotFoundException())
+                    }
+                }
+            }, { e ->
+                it.onError(e)
+            })
+        }
+    }
+
+    fun getLastMessageSingle(jid: Jid): Single<MessageEntity> {
+        return Single.create {
+            val msgQuery = messageBox.query {
+                order(MessageEntity_.timestamp, QueryBuilder.DESCENDING)
+                link(MessageEntity_.chat).equal(ChatEntity_.jid, jid.asUnescapedString())
+            }
+            RxQuery.observable(msgQuery).subscribe({ message ->
+                if(!it.isDisposed){
+                    if (message.isNotEmpty()) {
+                        it.onSuccess(message.first())
                     } else {
                         it.onError(NotFoundException())
                     }

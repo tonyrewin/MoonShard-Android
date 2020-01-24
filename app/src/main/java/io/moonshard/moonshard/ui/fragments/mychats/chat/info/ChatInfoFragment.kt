@@ -20,6 +20,7 @@ import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
 import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
@@ -62,6 +63,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         addNewMember?.setOnClickListener {
             showInviteNewUserScreen(idChat)
         }
+    }
+
+    override fun hideDescription(){
+        descriptionLayout?.visibility = View.GONE
     }
 
    override fun showChangeChatButton(isShow:Boolean){
@@ -109,18 +114,21 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             ?.commit()
     }
 
-    override fun showMembers(members: List<EntityFullJid>) {
+    override fun showMembers(members: List<Occupant>) {
+        if(members.isEmpty()){
+            hideLine()
+        }
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
     private fun initAdapter() {
         membersInfoRv?.layoutManager = LinearLayoutManager(context)
         membersInfoRv?.adapter = MembersAdapter(object : MemberListener {
-            override fun clickMember(jid: String) {
-                showProfileUser(jid)
+            override fun clickMember(member: String) {
+                showProfileUser(member)
             }
 
-            override fun remove(member: EntityFullJid) {
+            override fun remove(member: Occupant) {
 
             }
         }, arrayListOf(),false)
@@ -147,8 +155,12 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
         locationValueInfoTv?.text = distance
         // address?.text = location
-        categoryInfoTv?.text = category
+        //categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
+
+        if(description.isBlank()){
+            hideDescription()
+        }
     }
 
     override fun setAvatar(avatar: Bitmap?) {
@@ -183,6 +195,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             e.printStackTrace()
         }
         return "Информация отсутствует"
+    }
+
+   override fun hideLine(){
+       viewAddUser?.visibility = View.GONE
     }
 
     private fun calculationByDistance(latLng: LatLng?): String {

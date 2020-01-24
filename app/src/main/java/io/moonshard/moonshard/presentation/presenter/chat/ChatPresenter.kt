@@ -1,9 +1,13 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.graphics.BitmapFactory
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.BasePresenter
+import io.moonshard.moonshard.common.utils.autoDispose
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.view.chat.ChatView
+import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -20,13 +24,10 @@ import trikita.log.Log
 
 
 @InjectViewState
-class ChatPresenter : MvpPresenter<ChatView>() {
-
+class ChatPresenter : BasePresenter<ChatView>() {
     private var useCase: RoomsUseCase? = null
     private lateinit var chatID: String
     private lateinit var chatName: String
-
-    private val compositeDisposable = CompositeDisposable()
 
     init {
         useCase = RoomsUseCase()
@@ -34,6 +35,11 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     fun setChatId(chatId: String) {
         chatID = chatId
+        ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME update unread messages count on each message read
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+            .autoDispose(this)
         if(chatId.contains("conference")){
             getDataInfoMuc()
         }else{
@@ -54,13 +60,13 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }
             getAvatar(chatID,nickName)
             viewState?.setNameUser(nickName)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
     }
 
 
-        fun getDataInfoMuc() {
+    fun getDataInfoMuc() {
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =
@@ -105,6 +111,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             }, { throwable ->
                 Log.e(throwable.message)
             })
+            .autoDispose(this)
     }
 
     fun isEvent() {
@@ -117,7 +124,7 @@ class ChatPresenter : MvpPresenter<ChatView>() {
 
     fun getRooms() {
         //this hard data - center Moscow
-        compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
+        useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { rooms, throwable ->
@@ -125,7 +132,8 @@ class ChatPresenter : MvpPresenter<ChatView>() {
                 if (throwable != null) {
                     throwable.message?.let { viewState?.showError(it) }
                 }
-            })
+            }
+            .autoDispose(this)
     }
 
     fun initPager(rooms: ArrayList<RoomPin>?) {
@@ -139,6 +147,19 @@ class ChatPresenter : MvpPresenter<ChatView>() {
             viewState.initViewPager()
         } else {
             viewState.initViewPager()
+        }
+    }
+
+    fun disconnectFromChat(state:String){
+        try {
+            if(state=="read") {
+                val muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                        .getMultiUserChat(JidCreate.entityBareFrom(chatID))
+                muc.leave()
+            }
+        }catch (e:Exception){
+            Logger.d(e)
         }
     }
 }

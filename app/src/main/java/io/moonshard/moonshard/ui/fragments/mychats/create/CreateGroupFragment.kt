@@ -29,7 +29,7 @@ class CreateGroupFragment : Fragment() {
         initViewPager()
 
         back?.setOnClickListener {
-            fragmentManager?.popBackStack()
+            activity?.supportFragmentManager?.popBackStack()
         }
     }
 

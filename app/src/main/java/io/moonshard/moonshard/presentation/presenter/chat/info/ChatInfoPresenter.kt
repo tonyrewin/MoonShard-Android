@@ -20,6 +20,7 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
+import java.util.*
 
 @InjectViewState
 class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
@@ -36,6 +37,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                     .getRoomInfo(groupId)
 
             val members = muc.occupants
+            var occupants = arrayListOf<Occupant>()
 
             var location: LatLng? = null
             var category = ""
@@ -50,9 +52,11 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
             getAvatar(jid)
 
-                //todo fi
-            val isAdmin =  isAdminInChat(jid)
-            if(isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(false)
+            //todo fi
+            val isAdmin = isAdminInChat(jid)
+            if (isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(
+                false
+            )
 
             viewState?.showData(
                 roomInfo.name,
@@ -67,13 +71,23 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             val card = vm.loadVCard()
             val myNickName = card.nickName
 
-            for(i in members.indices){
-                if(members[i].asUnescapedString().contains(myNickName)){
-                    members.remove(members[i])
-                    viewState?.showMembers(members)
-                    return
+            for (i in members.indices) {
+                occupants.add(muc.getOccupant(members[i]))
+            }
+
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val iterator = occupants.iterator()
+            while (iterator.hasNext()) {
+                val occupant = iterator.next()
+                if (occupant.jid==null) {
+                    iterator.remove()
+                }else if(occupant.jid.asBareJid().asUnescapedString()==myJid){
+                    iterator.remove()
                 }
             }
+
+            viewState?.showMembers(occupants)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
@@ -81,8 +95,8 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
     private fun getAvatar(jid: String) {
         MainApplication.getXmppConnection().loadAvatar(jid)
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ bytes ->
                 if (bytes != null) {
                     val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -152,14 +166,18 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
     }
 
     private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
-        val myJid = SecurePreferences.getStringValue("jid", null)
-        myJid?.let {
-            for (i in admins.indices) {
-                val adminJid = admins[0].jid.asUnescapedString().split("/")[0]
-                if (adminJid == it) {
-                    return true
+        try {
+            val myJid = SecurePreferences.getStringValue("jid", null)?.toUpperCase(Locale.getDefault())
+            myJid?.let {
+                for (i in admins.indices) {
+                    val adminJid =admins[i].jid.asBareJid().asUnescapedString().toUpperCase(Locale.getDefault())
+                    if (adminJid.equals(it,true)) {
+                        return true
+                    }
                 }
             }
+        }catch (e:Exception){
+            return false
         }
         return false
     }

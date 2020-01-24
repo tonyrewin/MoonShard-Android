@@ -1,55 +1,115 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
+import io.moonshard.moonshard.repository.ChatListRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smack.XMPPException
-import org.jivesoftware.smack.packet.IQ
+import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
-import org.jivesoftware.smackx.vcardtemp.packet.VCard
-import org.jxmpp.jid.EntityBareJid
 import org.jxmpp.jid.impl.JidCreate
-import org.jxmpp.jid.parts.Resourcepart
 
 
 @InjectViewState
-class ManageChatPresenter: MvpPresenter<ManageChatView>() {
+class ManageChatPresenter : MvpPresenter<ManageChatView>() {
 
-    fun setNewNameChat(name:String,jid: String){
+    fun getDataInfo(jid: String) {
         try {
-            val groupId = JidCreate.entityBareFrom(jid)
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getMultiUserChat(groupId)
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
-          //  val resourcepartNickname = JidCreate.bareFrom(name+"@conference.moonshard.tech").resourceOrEmpty
-           // muc.changeNickname(Resourcepart.from(name))
+            val info =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getRoomInfo(muc.room)
+
+            viewState?.showName(info.name)
+            viewState?.showDescription(info.description)
+            viewState?.showOccupantsCount(info.occupantsCount.toString())
+            viewState?.showAdminsCount(muc.moderators.size.toString())
         } catch (e: Exception) {
-            val test = ""
-           // e.message?.let { viewState?.showToast(it) }
+            Logger.d(e)
         }
     }
 
+    fun setData(name: String, description: String, jid: String) {
+        try {
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
-    fun setAvatar(jid: String,bytes: ByteArray?, mimeType: String?){
-                val manager = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                try {
-                    val card = manager.loadVCard(JidCreate.entityBareFrom(jid))
-                    if (bytes != null && mimeType != null) {
-                        card.setAvatar(bytes, mimeType)
-                    }
-                    manager.saveVCard(card)
-                } catch (e: SmackException.NoResponseException) {
-                    e.printStackTrace()
-                } catch (e: XMPPException.XMPPErrorException) {
-                    e.printStackTrace()
-                } catch (e: SmackException.NotConnectedException) {
-                    e.printStackTrace()
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
+            ChatListRepository.getChatByJid(JidCreate.from(jid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.chatName = name
+                    changeDescription(muc, description)
+                    changeChatNameServer(muc, it)
+                }, {
+
+                })
+        } catch (e: Exception) {
+            e.message?.let { viewState.showToast(it) }
+        }
+    }
+
+    private fun changeChatNameServer(muc: MultiUserChat, chat: ChatEntity) {
+        try {
+            val form = muc.configurationForm
+            val answerForm = form.createAnswerForm()
+            answerForm.setAnswer("muc#roomconfig_roomname", chat.chatName)
+            muc.sendConfigurationForm(answerForm)
+            changeChatNameBaseDate(chat)
+        } catch (e: Exception) {
+            Logger.d(e.message)
+        }
+    }
+
+    private fun changeChatNameBaseDate(chat: ChatEntity) {
+        ChatListRepository.changeChatName(chat)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                viewState.showChatInfo()
+            }, {
+                Logger.d(it)
+            })
+    }
+
+    private fun changeDescription(muc: MultiUserChat, description: String) {
+        try {
+            val form = muc.configurationForm
+            val answerForm = form.createAnswerForm()
+            answerForm.setAnswer("muc#roomconfig_roomdesc", description)
+            muc.sendConfigurationForm(answerForm)
+        } catch (e: Exception) {
+            Logger.d(e.message)
+        }
+    }
+
+    fun setAvatar(jid: String, bytes: ByteArray?, mimeType: String?) {
+        val manager = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+        try {
+            val card = manager.loadVCard(JidCreate.entityBareFrom(jid))
+            if (bytes != null && mimeType != null) {
+                card.setAvatar(bytes, mimeType)
+            }
+            manager.saveVCard(card)
+        } catch (e: SmackException.NoResponseException) {
+            e.printStackTrace()
+        } catch (e: XMPPException.XMPPErrorException) {
+            e.printStackTrace()
+        } catch (e: SmackException.NotConnectedException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 }

@@ -166,7 +166,11 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
+
         setStatus(true, "ONLINE");
+
+
+
 
     }
 
@@ -225,6 +229,17 @@ public class XMPPConnection implements ConnectionListener {
         reconnectionManager.enableAutomaticReconnection();
 
         joinAllChats();
+
+        mamManager = MamManager.getInstanceFor(this.connection);
+        try {
+            if (mamManager.isSupported()) {
+                MamManager.getInstanceFor(this.connection).enableMamForAllMessages();
+            } else {
+                mamManager = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -615,6 +630,8 @@ public class XMPPConnection implements ConnectionListener {
                     MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             EntityBareJid entityBareJid = JidCreate.entityBareFrom(jid);
             MultiUserChat muc = manager.getMultiUserChat(entityBareJid);
+
+
 
             VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             VCard card = vm.loadVCard();

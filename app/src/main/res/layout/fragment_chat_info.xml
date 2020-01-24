@@ -132,7 +132,7 @@
     </RelativeLayout>
 
     <LinearLayout
-            android:id="@+id/location"
+            android:id="@+id/descriptionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -185,6 +185,7 @@
                 android:background="#F5F5F5" />
 
         <TextView
+                android:id="@+id/descriptionTv"
                 android:layout_marginBottom="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -251,6 +252,7 @@
             tools:ignore="RtlSymmetry">
 
         <LinearLayout
+                android:layout_marginBottom="10dp"
                 android:id="@+id/addNewMember"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -275,10 +277,10 @@
         </LinearLayout>
 
         <View
+                android:id="@+id/viewAddUser"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="11dp"
-                android:layout_marginTop="8dp"
                 android:background="#F5F5F5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>

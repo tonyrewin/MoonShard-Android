@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.graphics.BitmapFactory
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.BasePresenter
 import io.moonshard.moonshard.common.utils.autoDispose
@@ -146,6 +147,19 @@ class ChatPresenter : BasePresenter<ChatView>() {
             viewState.initViewPager()
         } else {
             viewState.initViewPager()
+        }
+    }
+
+    fun disconnectFromChat(state:String){
+        try {
+            if(state=="read") {
+                val muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                        .getMultiUserChat(JidCreate.entityBareFrom(chatID))
+                muc.leave()
+            }
+        }catch (e:Exception){
+            Logger.d(e)
         }
     }
 }

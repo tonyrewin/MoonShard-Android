@@ -28,6 +28,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     var idChat: String = ""
     var fromMap: Boolean? = false
     var fromCreateNewChat:Boolean=false
+    var stateChat:String = "join"
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -44,9 +45,11 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         arguments?.let {
             idChat = it.getString("chatId")
             fromMap = it.getBoolean("fromMap")
+            stateChat = it.getString("stateChat","join")
             fromCreateNewChat = it.getBoolean("fromCreateNewChat",false)
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
+            ChatRepository.stateChat = stateChat
             presenter.isEvent()
         }
 
@@ -170,6 +173,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     override fun initViewPagerFromEvent() {
+        tabLayout?.visibility = View.GONE
         initToolBarInfoEvent()
         tabLayout.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
@@ -186,6 +190,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        presenter.disconnectFromChat(stateChat)
         ChatRepository.clean()
 
         fromMap?.let {

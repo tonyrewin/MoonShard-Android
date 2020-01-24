@@ -1,12 +1,9 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
-
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.chat.info.EventInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
@@ -25,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_event_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Occupant
-import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
 
@@ -58,7 +53,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
 
         changeChatInfoBtn?.setOnClickListener {
-           // showManageChatScreen(idChat)
+            // showManageChatScreen(idChat)
         }
 
         leaveLayout?.setOnClickListener {
@@ -70,7 +65,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
     }
 
-    override fun showChangeChatButton(isShow:Boolean){
+    override fun showChangeChatButton(isShow: Boolean) {
         changeChatInfoBtn?.visibility = View.GONE
 
         /*
@@ -81,6 +76,16 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
 
          */
+    }
+
+    override fun hideLine() {
+        viewAddUser?.visibility = View.GONE
+    }
+
+    override fun hideDescription() {
+        descriptionTv?.visibility = View.GONE
+        descriptionInfoTv?.visibility = View.GONE
+        viewDescription?.visibility = View.GONE
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
@@ -121,6 +126,9 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     override fun showMembers(members: List<Occupant>) {
+        if (members.isEmpty()) {
+            hideLine()
+        }
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
@@ -134,7 +142,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             override fun remove(member: Occupant) {
 
             }
-        }, arrayListOf(),false)
+        }, arrayListOf(), false)
     }
 
     override fun showError(error: String) {
@@ -160,6 +168,10 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         address?.text = getAddress(latLngLocation)
         //categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
+
+        if (description.isBlank()) {
+            hideDescription()
+        }
     }
 
     override fun setAvatar(avatar: Bitmap?) {

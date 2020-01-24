@@ -65,6 +65,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         }
     }
 
+    override fun hideDescription(){
+        descriptionLayout?.visibility = View.GONE
+    }
+
    override fun showChangeChatButton(isShow:Boolean){
         if(isShow){
             changeChatInfoBtn?.visibility = View.VISIBLE
@@ -111,6 +115,9 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     override fun showMembers(members: List<Occupant>) {
+        if(members.isEmpty()){
+            hideLine()
+        }
         (membersInfoRv?.adapter as MembersAdapter).setMembers(members)
     }
 
@@ -150,6 +157,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         // address?.text = location
         //categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
+
+        if(description.isBlank()){
+            hideDescription()
+        }
     }
 
     override fun setAvatar(avatar: Bitmap?) {
@@ -184,6 +195,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             e.printStackTrace()
         }
         return "Информация отсутствует"
+    }
+
+   override fun hideLine(){
+       viewAddUser?.visibility = View.GONE
     }
 
     private fun calculationByDistance(latLng: LatLng?): String {

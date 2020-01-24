@@ -39,8 +39,8 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         } else {
             //this hard data - center Moscow
             compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { rooms, throwable ->
                     if (throwable == null) {
                         RoomsMap.clean()
@@ -61,8 +61,8 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             "37.618423",
             10000.toString()
         )
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
                     RoomsMap.clean()

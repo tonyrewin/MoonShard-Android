@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.hideKeyboard
+import io.moonshard.moonshard.models.ChatListItem
 import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
@@ -28,36 +29,38 @@ import org.jivesoftware.smackx.search.UserSearchManager
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
-
-    private var disposible: Disposable? = null
-
     override fun addNewChat(chat: GenericDialog) {
 
     }
 
     override fun showError(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 
     @InjectPresenter
     lateinit var presenter: ChatsPresenter
+    private lateinit var chatListAdapter: ChatListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).showBottomNavigationBar()
 
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
-        chatsRv?.adapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener {
-            override fun clickChat(chat: ChatEntity) {
-                showChatScreen(chat.jid, chat.chatName)
+        chatListAdapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener {
+            override fun clickChat(chat: ChatListItem) {
+                showChatScreen(chat.jid.asUnescapedString(), chat.chatName)
             }
         })
+        chatsRv?.adapter = chatListAdapter
         ItemTouchHelper((chatsRv.adapter as ChatListAdapter).SwipeToDeleteCallback()).attachToRecyclerView(
             chatsRv
         )
 
-        presenter.setDialogs()
+        presenter.observeChatList()
+    }
 
+    override fun updateChatList(chats: List<ChatListItem>) {
+        chatListAdapter.setData(chats)
     }
 
     override fun showChatScreen(chatId: String, chatName: String) {

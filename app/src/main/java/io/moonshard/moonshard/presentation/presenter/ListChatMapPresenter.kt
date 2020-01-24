@@ -39,8 +39,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
         }else{
             //this hard data - center Moscow
             compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { rooms, throwable ->
                     if (throwable == null) {
                         RoomsMap.clean()
@@ -56,8 +56,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
 
     private fun getRoomsByCategory(lat: String, lng: String, radius: String, category: Category){
         compositeDisposable.add(useCase!!.getRoomsByCategory(category.id,"55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
                     RoomsMap.clean()

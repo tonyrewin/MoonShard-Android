@@ -9,6 +9,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.rx.RxQuery
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
 
@@ -22,19 +23,25 @@ object ChatListRepository {
 
     fun addChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
-            chatBox.put(chatEntity)
-            it.onComplete()
+            if (!it.isDisposed) {
+                chatBox.put(chatEntity)
+                it.onComplete()
+            }
         }
     }
 
     fun removeChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
             if (!chatBox.remove(chatEntity)) {
-                it.onError(NotFoundException())
-                return@create
+                if (!it.isDisposed) {
+                    it.onError(NotFoundException())
+                    return@create
+                }
             }
             MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
-                it.onComplete()
+                if (it.isDisposed) {
+                    it.onComplete()
+                }
             }
         }
     }
@@ -54,13 +61,32 @@ object ChatListRepository {
         }
     }
 
+    fun getChatByJidSingle(jid: Jid): Single<ChatEntity> {
+        return Single.create {
+            val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
+            RxQuery.single(query).subscribe { chat ->
+                if (!it.isDisposed) {
+                    if (chat.isEmpty()) {
+                        it.onError(NotFoundException())
+                        return@subscribe
+                    }
+                    it.onSuccess(chat.first())
+                }
+            }
+        }
+    }
+
     fun changeChatName(chat: ChatEntity): Completable {
         return Completable.create {
             try {
-                chatBox.put(chat)
+                if (!it.isDisposed) {
+                    chatBox.put(chat)
+                }
                 it.onComplete()
             } catch (e: Exception) {
-                it.onError(NotFoundException())
+                if (!it.isDisposed) {
+                    it.onError(NotFoundException())
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="83dp"
-        android:background="#FFFFFF"
+        android:background="?android:attr/selectableItemBackground"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:paddingStart="16dp">
@@ -15,7 +15,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 app:civ_border_color="@android:color/transparent"
-                android:background="@android:color/white"
+                android:background="@android:color/transparent"
                 android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

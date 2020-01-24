@@ -35,8 +35,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
     fun getCategories() {
         viewState?.showProgressBar()
         compositeDisposable.add(useCase!!.getCategories()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { categories, throwable ->
                 viewState?.hideProgressBar()
                 if (throwable == null) {
@@ -177,8 +177,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 if (throwable == null) {
                     events.addAll(rooms)
@@ -204,8 +204,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             group?.jid,
             eventStartDate
         )
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { _, throwable ->
                 if (throwable == null) {
                     viewState?.showMapScreen()

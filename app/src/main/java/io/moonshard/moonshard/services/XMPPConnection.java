@@ -154,7 +154,6 @@ public class XMPPConnection implements ConnectionListener {
 
         chatManager = ChatManager.getInstanceFor(connection);
         chatManager.addIncomingListener(networkHandler);
-        chatManager.addOutgoingListener(networkHandler);
         roster = Roster.getInstanceFor(connection);
         roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
         roster.addPresenceEventListener(networkHandler);
@@ -356,7 +355,7 @@ public class XMPPConnection implements ConnectionListener {
                 try {
                     jid = JidCreate.entityBareFrom(senderID);
                 } catch (XmppStringprepException e) {
-                    e.printStackTrace();
+                    Log.e(e);
                 }
 
                 byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
@@ -368,7 +367,7 @@ public class XMPPConnection implements ConnectionListener {
                 }
                 emitter.onSuccess(avatarBytes);
             } else {
-                emitter.onError(new IllegalArgumentException());
+                emitter.tryOnError(new IllegalArgumentException());
             }
         });
     }
@@ -499,14 +498,8 @@ public class XMPPConnection implements ConnectionListener {
                 byte[] avatar = null;
                 try {
                     avatar = manager.loadVCard(jid).getAvatar();
-                } catch (SmackException.NoResponseException e) {
-                    e.printStackTrace();
-                } catch (XMPPException.XMPPErrorException e) {
-                    e.printStackTrace();
-                } catch (SmackException.NotConnectedException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (SmackException.NoResponseException | InterruptedException | SmackException.NotConnectedException | XMPPException.XMPPErrorException e) {
+                    Log.e(e);
                 }
                 return avatar;
             }

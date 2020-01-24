@@ -90,8 +90,8 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
 
     private fun getAvatar(jid: String) {
         MainApplication.getXmppConnection().loadAvatar(jid)
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ bytes ->
                 if (bytes != null) {
                     val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

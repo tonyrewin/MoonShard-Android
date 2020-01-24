@@ -144,8 +144,8 @@ open class MessagesAdapter(
     private fun setAvatar(jid: String, imageView: ImageView) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid)
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
                     val avatar: Bitmap?
                     if (bytes != null) {

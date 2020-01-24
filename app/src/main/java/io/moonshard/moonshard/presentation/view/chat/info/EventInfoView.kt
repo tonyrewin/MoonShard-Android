@@ -23,4 +23,5 @@ interface EventInfoView: MvpView {
 
     fun showChangeChatButton(isShow: Boolean)
     fun hideLine()
+    fun hideDescription()
 }

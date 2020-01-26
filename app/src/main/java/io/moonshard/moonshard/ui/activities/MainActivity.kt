@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     override fun onDestroy() {
         super.onDestroy()
         MainApplication.setMainActivity(null)
-        MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
+       // MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
     }
 
 

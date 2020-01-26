@@ -133,7 +133,9 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
                             imageView.setImageBitmap(avatar)
                         }
                     }
-                }, { throwable -> Log.e(throwable.message) })
+                }, {
+                        throwable -> Log.e(throwable.message)
+                })
         }
     }
 

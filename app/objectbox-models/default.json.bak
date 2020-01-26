@@ -49,7 +49,7 @@
     },
     {
       "id": "2:6800849399877525902",
-      "lastPropertyId": "11:281949629575498001",
+      "lastPropertyId": "12:7287327998997445115",
       "name": "MessageEntity",
       "properties": [
         {
@@ -115,6 +115,13 @@
           "name": "isSystemMessage",
           "type": 1,
           "flags": 4
+        },
+        {
+          "id": "12:7287327998997445115",
+          "name": "stanzaId",
+          "indexId": "6:3491688466644478439",
+          "type": 9,
+          "flags": 2080
         }
       ],
       "relations": []
@@ -159,7 +166,7 @@
     }
   ],
   "lastEntityId": "3:2632880248119381374",
-  "lastIndexId": "5:894091964411297408",
+  "lastIndexId": "6:3491688466644478439",
   "lastRelationId": "2:5994661834050608599",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

@@ -161,17 +161,12 @@ public class XMPPConnection implements ConnectionListener {
         FileTransferNegotiator.IBB_ONLY = true;
 
         if (MainApplication.isIsMainActivityDestroyed()) {
-            sendUserPresence(new Presence(Presence.Type.unavailable));
+           // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
-
         setStatus(true, "ONLINE");
-
-
-
-
     }
 
     public void disconnect() {
@@ -190,6 +185,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public void setStatus(boolean available, String status) throws XMPPException {
+
         Presence.Type type = available ? Presence.Type.available : Presence.Type.unavailable;
         Presence presence = new Presence(type);
         presence.setStatus(status);
@@ -415,6 +411,18 @@ public class XMPPConnection implements ConnectionListener {
         return stream.toByteArray();
     }
 
+    private byte[] createTextAvatarForNotification(String firstLetter) {
+        Drawable avatarText = TextDrawable.builder()
+                .beginConfig()
+                .width(84)
+                .height(84)
+                .endConfig()
+                .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
+    }
+
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
         BaseActivity baseActivity = getLoginActivity();
@@ -631,14 +639,13 @@ public class XMPPConnection implements ConnectionListener {
             EntityBareJid entityBareJid = JidCreate.entityBareFrom(jid);
             MultiUserChat muc = manager.getMultiUserChat(entityBareJid);
 
-
-
             VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             VCard card = vm.loadVCard();
             Resourcepart nickName = Resourcepart.from(card.getNickName());
 
             if (!muc.isJoined()) {
                 muc.join(nickName);
+                muc.addMessageListener(MainApplication.getXmppConnection().getNetwork());
             }
         } catch (Exception e) {
             Logger.d(e.getMessage());

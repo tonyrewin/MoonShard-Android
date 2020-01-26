@@ -136,7 +136,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 val card = vm.loadVCard()
                 val nickName = Resourcepart.from(card.nickName)
 
-
                 if (!muc.isJoined) {
                     muc.join(nickName)
                 }

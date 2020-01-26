@@ -66,8 +66,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         mMap?.setOnMarkerClickListener(this)
 
         mMap?.setOnMapClickListener {
-            defaultBottomSheet.visibility = View.VISIBLE
-            infoBottomSheet.visibility = View.GONE
+            defaultBottomSheet?.visibility = View.VISIBLE
+            infoBottomSheet?.visibility = View.GONE
         }
 
         zoomPlus?.setOnClickListener {
@@ -172,7 +172,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun showBottomSheet() {
-        defaultBottomSheet.visibility = View.VISIBLE
+        defaultBottomSheet?.visibility = View.VISIBLE
     }
 
     override fun showChatScreens(chatId: String, stateChat: String) {
@@ -308,22 +308,22 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST,
             io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.CATEGORY
         )
-        bottomSheetViewPager.offscreenPageLimit = 1
-        bottomSheetViewPager.adapter = sectionsPagerAdapter
-        bottomSheetTabs.setupWithViewPager(bottomSheetViewPager)
+        bottomSheetViewPager?.offscreenPageLimit = 1
+        bottomSheetViewPager?.adapter = sectionsPagerAdapter
+        bottomSheetTabs?.setupWithViewPager(bottomSheetViewPager)
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
     fun showCategoryBottomSheet() {
-        bottomSheetCategory.visibility = View.VISIBLE
-        bottomSheetFind.visibility = View.GONE
-        categoryFilterName.text = "Категория: " + RoomsMap.category?.categoryName
+        bottomSheetCategory?.visibility = View.VISIBLE
+        bottomSheetFind?.visibility = View.GONE
+        categoryFilterName?.text = "Категория: " + RoomsMap.category?.categoryName
         sheetBehavior?.setPeekHeight(convertDpToPixel(100F, context), false)
     }
 
     fun hideCategoryBottomSheet() {
-        bottomSheetCategory.visibility = View.GONE
-        bottomSheetFind.visibility = View.VISIBLE
+        bottomSheetCategory?.visibility = View.GONE
+        bottomSheetFind?.visibility = View.VISIBLE
         sheetBehavior?.setPeekHeight(convertDpToPixel(85F, context), false)
     }
 
@@ -384,10 +384,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     BottomSheetBehavior.STATE_HIDDEN -> {
                     }
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        buttonsTop.visibility = View.GONE
+                        buttonsTop?.visibility = View.GONE
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        buttonsTop.visibility = View.VISIBLE
+                        buttonsTop?.visibility = View.VISIBLE
                     }
                 }
             }
@@ -403,12 +403,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     BottomSheetBehavior.STATE_HIDDEN -> {
                     }
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        swipeBtn.setImageResource(R.drawable.ic_line_bottom_sheet)
-                        buttonsTop.visibility = View.GONE
+                        swipeBtn?.setImageResource(R.drawable.ic_line_bottom_sheet)
+                        buttonsTop?.visibility = View.GONE
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        swipeBtn.setImageResource(R.drawable.ic_bottom_sheet_up)
-                        buttonsTop.visibility = View.VISIBLE
+                        swipeBtn?.setImageResource(R.drawable.ic_bottom_sheet_up)
+                        buttonsTop?.visibility = View.VISIBLE
                     }
 
                 }

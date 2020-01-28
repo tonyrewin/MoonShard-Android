@@ -129,6 +129,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     fun showProfileUser(jid: String) {
         val bundle = Bundle()
         bundle.putString("userJid", jid)
+        bundle.putBoolean("fromChatFragment",true)
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()

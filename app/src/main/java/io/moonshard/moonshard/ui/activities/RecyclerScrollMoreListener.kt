@@ -64,7 +64,6 @@ class RecyclerScrollMoreListener(var layoutManager: LinearLayoutManager,
     }
 
     interface OnLoadMoreListener {
-
         fun getMessagesCount(): Int
         fun onLoadMore(var1: Int, var2: Int)
     }

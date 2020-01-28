@@ -19,7 +19,10 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
 
     @InjectPresenter
     lateinit var presenter: ProfileUserPresenter
+
     private var userJid = ""
+
+    private var fromChatFragment = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +37,7 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
 
         arguments?.let {
             userJid = it.getString("userJid")
+            fromChatFragment = it.getBoolean("fromChatFragment",false)
             presenter.getInfoProfile(userJid)
             presenter.getAvatar(userJid)
         }
@@ -43,7 +47,11 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
         }
 
         sendMsgBtn?.setOnClickListener {
-            presenter.startChatWithUser(userJid)
+            if(fromChatFragment){
+                fragmentManager?.popBackStack()
+            }else{
+                presenter.startChatWithUser(userJid)
+            }
         }
     }
 

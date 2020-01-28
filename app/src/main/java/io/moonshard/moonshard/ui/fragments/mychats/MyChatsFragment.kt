@@ -9,6 +9,7 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.hideKeyboard
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
@@ -70,7 +71,7 @@ class MyChatsFragment : Fragment() {
             activity!!.supportFragmentManager.beginTransaction().remove(it).commit()
         }
 
-        cancelBtn?.setOnClickListener {
+        cancelBtn?.setSafeOnClickListener {
             hideSearch()
         }
 
@@ -86,7 +87,7 @@ class MyChatsFragment : Fragment() {
                 }
             }
 
-        find?.setOnClickListener {
+        find?.setSafeOnClickListener {
             if (searchLayoutToolbar?.visibility == View.GONE) {
                 showSearch()
             } else {
@@ -94,7 +95,7 @@ class MyChatsFragment : Fragment() {
             }
         }
 
-        newChat?.setOnClickListener {
+        newChat?.setSafeOnClickListener {
             (activity as MainActivity).hideBottomNavigationBar()
             val newFragment = CreateGroupFragment()
             val ft = activity?.supportFragmentManager?.beginTransaction()

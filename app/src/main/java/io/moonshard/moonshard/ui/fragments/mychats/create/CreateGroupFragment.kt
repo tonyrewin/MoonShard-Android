@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import kotlinx.android.synthetic.main.fragment_create_group.*
 
@@ -28,7 +29,7 @@ class CreateGroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
     }

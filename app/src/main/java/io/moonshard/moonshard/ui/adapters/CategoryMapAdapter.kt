@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 
@@ -40,7 +41,7 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
         holder.categoryName?.text = categories[position].categoryName
         holder.categoryInfo?.text = categories[position].categoryName
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             RoomsMap.isFilter = true
             RoomsMap.category = categories[position]
             focusedItem = position

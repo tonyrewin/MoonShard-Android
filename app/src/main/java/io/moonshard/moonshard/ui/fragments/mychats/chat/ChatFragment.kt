@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
@@ -54,7 +55,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         }
 
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             if(fromCreateNewChat){
                 activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }else{
@@ -65,21 +66,21 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     private fun initToolBarInfoChat() {
-        avatarChat?.setOnClickListener {
+        avatarChat?.setSafeOnClickListener {
             showChatInfo(idChat)
         }
 
-        valueMembersChatTv?.setOnClickListener {
+        valueMembersChatTv?.setSafeOnClickListener {
             showChatInfo(idChat)
         }
 
-        nameChatTv?.setOnClickListener {
+        nameChatTv?.setSafeOnClickListener {
             showChatInfo(idChat)
         }
     }
 
     private fun initToolBarInfoEvent() {
-        avatarChat?.setOnClickListener {
+        avatarChat?.setSafeOnClickListener {
             if (idChat.contains("conference")) {
                 showEventInfo(idChat)
             } else {
@@ -87,7 +88,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             }
         }
 
-        valueMembersChatTv?.setOnClickListener {
+        valueMembersChatTv?.setSafeOnClickListener {
             if (idChat.contains("conference")) {
                 showEventInfo(idChat)
             } else {
@@ -95,7 +96,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             }
         }
 
-        nameChatTv?.setOnClickListener {
+        nameChatTv?.setSafeOnClickListener {
             if (idChat.contains("conference")) {
                 showEventInfo(idChat)
             } else {

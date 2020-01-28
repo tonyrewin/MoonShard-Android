@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.EventsPresenter
@@ -42,7 +43,7 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         presenter.getRooms()
         ChatRepository.idChatCurrent?.let {
             idChat = it
-            addNewEventBtn.setOnClickListener {
+            addNewEventBtn.setSafeOnClickListener {
                 showCreateNewEventScreen(idChat)
             }
         }

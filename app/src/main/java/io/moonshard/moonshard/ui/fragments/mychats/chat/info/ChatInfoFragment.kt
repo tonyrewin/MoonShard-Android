@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
@@ -48,19 +49,19 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             presenter.getMembers(idChat)
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        changeChatInfoBtn?.setOnClickListener {
+        changeChatInfoBtn?.setSafeOnClickListener {
             showManageChatScreen(idChat)
         }
 
-        leaveLayout?.setOnClickListener {
+        leaveLayout?.setSafeOnClickListener {
             presenter.leaveGroup(idChat)
         }
 
-        addNewMember?.setOnClickListener {
+        addNewMember?.setSafeOnClickListener {
             showInviteNewUserScreen(idChat)
         }
     }

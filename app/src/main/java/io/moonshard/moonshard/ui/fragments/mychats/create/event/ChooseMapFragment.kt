@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import java.io.IOException
@@ -40,15 +41,15 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         mMap?.setOnCameraMoveCanceledListener(this)
         mMap?.setOnPoiClickListener(this)
 
-        zoomPlus?.setOnClickListener {
+        zoomPlus?.setSafeOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomIn())
         }
 
-        zoomMinus?.setOnClickListener {
+        zoomMinus?.setSafeOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomOut())
         }
 
-        myLocationBtn?.setOnClickListener {
+        myLocationBtn?.setSafeOnClickListener {
             getMyLocation()
         }
     }
@@ -67,12 +68,12 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
 
-        doneBtn?.setOnClickListener {
+        doneBtn?.setSafeOnClickListener {
             ChooseChatRepository.address = addressTv.text.toString()
             fragmentManager?.popBackStack()
         }
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
     }

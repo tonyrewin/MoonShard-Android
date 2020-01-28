@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.settings.SecurityPresenter
 import io.moonshard.moonshard.presentation.view.settings.SecurityView
 import io.moonshard.moonshard.ui.activities.MainActivity
@@ -32,13 +33,13 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigationBar()
 
-        readBtn?.setOnClickListener {
+        readBtn?.setSafeOnClickListener {
             presenter.changePassword(newPassEt.text.toString(), repeatNewPassEt.text.toString(),currentPassEt.text.toString())
         }
         showOrHidePassword()
 
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
     }
@@ -59,7 +60,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
 
     private fun showOrHidePassword(){
         var isSecurityCurrent=true
-        visibleCurrentPassBtn?.setOnClickListener {
+        visibleCurrentPassBtn?.setSafeOnClickListener {
             if(isSecurityCurrent){
                 currentPassEt?.transformationMethod = null
                 visibleCurrentPassBtn?.setImageResource(R.drawable.ic_pass_on)
@@ -72,7 +73,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
         }
 
         var isSecurity = true
-        visibleNewPassBtn?.setOnClickListener {
+        visibleNewPassBtn?.setSafeOnClickListener {
             if (isSecurity) {
                 newPassEt?.transformationMethod = null
                 visibleNewPassBtn?.setImageResource(R.drawable.ic_pass_on)
@@ -85,7 +86,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
         }
 
         var isSecurityRepeat=true
-        visibleRepeatNewPassBtn?.setOnClickListener {
+        visibleRepeatNewPassBtn?.setSafeOnClickListener {
             if (isSecurityRepeat) {
                 repeatNewPassEt?.transformationMethod = null
                 visibleRepeatNewPassBtn?.setImageResource(R.drawable.ic_pass_on)

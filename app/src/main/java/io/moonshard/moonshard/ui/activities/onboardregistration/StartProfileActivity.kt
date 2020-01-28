@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.StartProfilePresenter
 import io.moonshard.moonshard.presentation.view.StartProfileView
 import io.moonshard.moonshard.ui.activities.MainActivity
@@ -35,19 +36,19 @@ class StartProfileActivity : MvpAppCompatActivity(), StartProfileView {
 
         nickNameEt?.setText(presenter.getNickName())
 
-        avatarIv?.setOnClickListener {
+        avatarIv?.setSafeOnClickListener {
             chooseFile()
         }
 
-        changeAvatarTv?.setOnClickListener {
+        changeAvatarTv?.setSafeOnClickListener {
             chooseFile()
         }
 
-        startBtn?.setOnClickListener {
+        startBtn?.setSafeOnClickListener {
             presenter.setData(nickNameEt.text.toString(),bytes,mimeType)
         }
 
-        clearNickTv?.setOnClickListener {
+        clearNickTv?.setSafeOnClickListener {
             nickNameEt.text.clear()
         }
     }

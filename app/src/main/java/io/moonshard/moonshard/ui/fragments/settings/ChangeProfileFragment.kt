@@ -17,6 +17,7 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.net.URLConnection
 import android.graphics.BitmapFactory
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import java.lang.Exception
 
 
@@ -54,7 +55,7 @@ class ChangeProfileFragment : MvpAppCompatFragment(), ChangeProfileView {
         presenter.getInfoProfile()
         presenter.getAvatar()
 
-        readyBtn?.setOnClickListener {
+        readyBtn?.setSafeOnClickListener {
             presenter.setData(
                 nameTv?.text.toString(),
                 descriptionTv?.text.toString(),
@@ -63,11 +64,11 @@ class ChangeProfileFragment : MvpAppCompatFragment(), ChangeProfileView {
             )
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        avatarIv?.setOnClickListener {
+        avatarIv?.setSafeOnClickListener {
             chooseFile()
         }
     }

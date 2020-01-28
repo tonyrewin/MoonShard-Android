@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.ISlidePolicy
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_acquaintance.*
 
@@ -36,7 +37,7 @@ class AcquaintanceFragment : Fragment(), ISlidePolicy {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        skipBtn?.setOnClickListener {
+        skipBtn?.setSafeOnClickListener {
             showRegistrationScreen()
         }
     }

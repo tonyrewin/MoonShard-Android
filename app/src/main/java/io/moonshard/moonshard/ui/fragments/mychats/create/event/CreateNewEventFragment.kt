@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewEventPresenter
@@ -76,16 +77,16 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             timeTv?.text = ChooseChatRepository.time
         }
 
-        timesLayout?.setOnClickListener {
+        timesLayout?.setSafeOnClickListener {
             ChooseChatRepository.name = nameTv?.text.toString()
             showTimesScreen()
         }
 
-        location?.setOnClickListener {
+        location?.setSafeOnClickListener {
             methodRequiresTwoPermission()
         }
 
-        dateLayout?.setOnClickListener {
+        dateLayout?.setSafeOnClickListener {
             DatePickerDialog(
                 activity!!, d,
                 dateAndTime.get(Calendar.YEAR),
@@ -97,7 +98,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
         nameTv?.setText(ChooseChatRepository.name)
 
-        newChat?.setOnClickListener {
+        newChat?.setSafeOnClickListener {
             presenter.createGroupChat(
                 nameTv?.text.toString(),
                 ChooseChatRepository.lat,
@@ -108,7 +109,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             )
         }
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
             ChooseChatRepository.clean()
         }

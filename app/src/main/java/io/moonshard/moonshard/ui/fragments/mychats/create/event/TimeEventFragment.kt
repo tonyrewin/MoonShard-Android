@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.ui.adapters.RvTimeListener
 import io.moonshard.moonshard.ui.adapters.TimeGroupChatAdapter
@@ -27,7 +28,7 @@ class TimeEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 

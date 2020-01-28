@@ -14,6 +14,7 @@ import com.google.maps.android.SphericalUtil
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -54,7 +55,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         holder.locationValueTv?.text =
             calculationByDistance(chats[position].latitude, chats[position].longitude)
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             listener.clickChat(chats[position])
         }
     }

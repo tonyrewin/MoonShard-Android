@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smackx.muc.Occupant
@@ -48,11 +49,11 @@ class MembersAdapter(
             holder.removeBtn?.visibility = View.GONE
         }
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             listener.clickMember(members[position].jid.asBareJid().asUnescapedString())
         }
 
-        holder.removeBtn?.setOnClickListener {
+        holder.removeBtn?.setSafeOnClickListener {
             listener.remove(members[position])
         }
 

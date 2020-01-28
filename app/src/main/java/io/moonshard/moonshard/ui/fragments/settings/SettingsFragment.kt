@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.SettingsPresenter
 import io.moonshard.moonshard.presentation.view.SettingsView
 import io.moonshard.moonshard.ui.activities.MainActivity
@@ -37,17 +38,17 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
 
         presenter.getAvatar()
         presenter.getName()
-        logOut?.setOnClickListener {
+        logOut?.setSafeOnClickListener {
             MainApplication.resetLoginCredentials()
             MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
             presenter.logOut()
         }
 
-        profileSettingsLayout?.setOnClickListener {
+        profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
         }
 
-        securityLayout?.setOnClickListener {
+        securityLayout?.setSafeOnClickListener {
             showSecurityScreen()
         }
     }

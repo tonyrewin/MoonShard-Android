@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.presentation.presenter.chat.MessagesPresenter
@@ -78,11 +79,11 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         presenter.setChatId(idChat)
         if (idChat.contains("conference")) presenter.join()
 
-        sendMessage.setOnClickListener {
+        sendMessage.setSafeOnClickListener {
             presenter.sendMessage(editText.text.toString())
         }
 
-        addAttachment?.setOnClickListener {
+        addAttachment?.setSafeOnClickListener {
             chooseFile()
         }
 

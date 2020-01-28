@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.hdodenhof.circleimageview.CircleImageView
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.api.Category
 
@@ -63,7 +64,7 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
 
         holder.categoryName?.text = categories[position].categoryName
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
             listener.clickChat(categories[position])

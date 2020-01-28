@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.RegisterPresenter
 import io.moonshard.moonshard.presentation.view.RegisterView
 import io.moonshard.moonshard.services.XMPPConnectionService
@@ -39,12 +40,12 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
             startService() // if we want open this screen when logout we must use handle 5 sec
             auth()
-            alreadyHaveText?.setOnClickListener {
+            alreadyHaveText?.setSafeOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
 
-            registerBtn?.setOnClickListener {
+            registerBtn?.setSafeOnClickListener {
                 presenter.register(editEmail.text.toString(), editPassword.text.toString())
             }
 
@@ -53,7 +54,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
             alreadyHaveText?.text = content
 
             var isSecurity = true
-            visiblePassBtn?.setOnClickListener {
+            visiblePassBtn?.setSafeOnClickListener {
                 if (isSecurity) {
                     editPassword?.transformationMethod = null
                     visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)

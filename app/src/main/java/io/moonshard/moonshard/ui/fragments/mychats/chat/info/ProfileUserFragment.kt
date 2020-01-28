@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ProfileUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ProfileUserView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
@@ -42,11 +43,11 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
             presenter.getAvatar(userJid)
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        sendMsgBtn?.setOnClickListener {
+        sendMsgBtn?.setSafeOnClickListener {
             if(fromChatFragment){
                 fragmentManager?.popBackStack()
             }else{

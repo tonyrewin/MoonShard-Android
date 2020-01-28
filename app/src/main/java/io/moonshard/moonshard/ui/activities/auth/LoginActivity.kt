@@ -16,6 +16,7 @@ import android.text.style.UnderlineSpan
 import android.text.SpannableString
 import android.text.method.PasswordTransformationMethod
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.BaseActivity
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_login.editEmail
@@ -38,7 +39,7 @@ class LoginActivity : BaseActivity(), LoginView {
         dontHaveText.text = content
 
         var isSecurity = true
-        visiblePassBtn?.setOnClickListener {
+        visiblePassBtn?.setSafeOnClickListener {
             if (isSecurity) {
                 editPassword?.transformationMethod = null
                 visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
@@ -50,7 +51,7 @@ class LoginActivity : BaseActivity(), LoginView {
             }
         }
 
-        loginBtn?.setOnClickListener {
+        loginBtn?.setSafeOnClickListener {
             val actualUserName: String
             if (editEmail?.text.toString().contains("@")) {
                 showError("Вы ввели недопустимый символ")
@@ -62,12 +63,12 @@ class LoginActivity : BaseActivity(), LoginView {
             }
         }
 
-        dontHaveText?.setOnClickListener {
+        dontHaveText?.setSafeOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
 
-        forgotPassTv?.setOnClickListener {
+        forgotPassTv?.setSafeOnClickListener {
 
         }
     }

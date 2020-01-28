@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.InviteUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.InviteUserView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
@@ -36,11 +37,11 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
             idChat = it.getString("chatId")
         }
 
-        inviteUserBtn?.setOnClickListener {
+        inviteUserBtn?.setSafeOnClickListener {
             presenter.inviteUser(nameTv.text.toString(), idChat)
         }
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
     }

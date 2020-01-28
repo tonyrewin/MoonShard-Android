@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.AdminsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import io.moonshard.moonshard.ui.adapters.chat.AdminListener
@@ -40,11 +41,11 @@ class AdminsFragment : MvpAppCompatFragment(),
             presenter.getAdmins(idChat)
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        addAdminLayout?.setOnClickListener {
+        addAdminLayout?.setSafeOnClickListener {
             showAddAdminScreen(idChat)
         }
     }

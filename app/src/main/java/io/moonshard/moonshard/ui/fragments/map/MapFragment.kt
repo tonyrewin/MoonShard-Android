@@ -22,6 +22,7 @@ import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
@@ -70,15 +71,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             infoBottomSheet?.visibility = View.GONE
         }
 
-        zoomPlus?.setOnClickListener {
+        zoomPlus?.setSafeOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomIn())
         }
 
-        zoomMinus?.setOnClickListener {
+        zoomMinus?.setSafeOnClickListener {
             mMap?.animateCamera(CameraUpdateFactory.zoomOut())
         }
 
-        myLocationBtn?.setOnClickListener {
+        myLocationBtn?.setSafeOnClickListener {
             getMyLocation()
         }
 
@@ -127,17 +128,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         )
                         descriptionTv?.text = roomInfo.description
 
-                        joinBtn?.setOnClickListener {
+                        joinBtn?.setSafeOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
-                        readBtn?.setOnClickListener {
+                        readBtn?.setSafeOnClickListener {
                             presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
 
-                        joinBtn2?.setOnClickListener {
+                        joinBtn2?.setSafeOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
-                        readBtn2?.setOnClickListener {
+                        readBtn2?.setSafeOnClickListener {
                             presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
                         }
                     }
@@ -350,7 +351,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             hideCategoryBottomSheet()
         }
 
-        swipeInfoBtn?.setOnClickListener {
+        swipeInfoBtn?.setSafeOnClickListener {
             if (sheetInfoBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             } else {
@@ -358,7 +359,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             }
         }
 
-        swipeBtn?.setOnClickListener {
+        swipeBtn?.setSafeOnClickListener {
             if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             } else {
@@ -366,7 +367,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             }
         }
 
-        removeFilterBtn?.setOnClickListener {
+        removeFilterBtn?.setSafeOnClickListener {
             RoomsMap.clearFilters()
             presenter.getRooms("", "", "", null)
             hideCategoryBottomSheet()

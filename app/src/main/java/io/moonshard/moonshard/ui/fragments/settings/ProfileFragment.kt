@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.settings.ProfileView
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -31,15 +32,15 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
         presenter.getInfoProfile()
         presenter.getAvatar()
 
-        changeBtn?.setOnClickListener {
+        changeBtn?.setSafeOnClickListener {
             showChangeProfileScreen()
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        editIv?.setOnClickListener {
+        editIv?.setSafeOnClickListener {
             showChangeProfileScreen()
         }
     }

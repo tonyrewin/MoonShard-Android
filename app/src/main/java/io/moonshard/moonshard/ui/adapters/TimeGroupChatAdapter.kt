@@ -9,6 +9,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 
 
 interface RvTimeListener {
@@ -41,7 +42,7 @@ class TimeGroupChatAdapter(
             holder.checkIv?.visibility = View.GONE
             holder.mainLayout?.setBackgroundColor(Color.parseColor("#FFFFFF"))
         }
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
             listener.clickChat(times[position])

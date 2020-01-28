@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.hdodenhof.circleimageview.CircleImageView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -68,7 +69,7 @@ class GroupsAdapter(val listener: GroupsListener, private var groups: ArrayList<
 
         holder.categoryName?.text = groups[position].chatName
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.setSafeOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
             listener.clickChat(groups[position])

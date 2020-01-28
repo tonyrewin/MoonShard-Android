@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.AddAdminPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.AddAdminView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
@@ -43,7 +44,7 @@ class AddAdminFragment : MvpAppCompatFragment(),
             idChat = it.getString("chatId")
         }
 
-        addAdminBtn?.setOnClickListener {
+        addAdminBtn?.setSafeOnClickListener {
             presenter.addAdmin(nameTv.text.toString(),idChat)
         }
 

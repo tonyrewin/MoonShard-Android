@@ -8,6 +8,7 @@ import android.widget.ImageView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.ChatListItem
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
@@ -104,7 +105,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
                 holder.lastMessageReadState.visibility = View.INVISIBLE
             }
 
-            holder.itemView.setOnClickListener {
+            holder.itemView.setSafeOnClickListener {
                 listener.clickChat(chat)
             }
         } catch (e: Exception) {

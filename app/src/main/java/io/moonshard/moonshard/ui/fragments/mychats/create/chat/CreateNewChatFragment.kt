@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
@@ -33,11 +34,11 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newChat?.setOnClickListener {
+        newChat?.setSafeOnClickListener {
             presenter.createGroupChat(nameTv.text.toString())
         }
 
-        back?.setOnClickListener {
+        back?.setSafeOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
     }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
 import kotlinx.android.synthetic.main.fragment_connection_on_board.*
 
@@ -27,11 +28,11 @@ class ConnectionOnBoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        skipBtn?.setOnClickListener {
+        skipBtn?.setSafeOnClickListener {
             showRegistrationScreen()
         }
 
-        nextBtn?.setOnClickListener {
+        nextBtn?.setSafeOnClickListener {
             showRegistrationScreen()
         }
     }

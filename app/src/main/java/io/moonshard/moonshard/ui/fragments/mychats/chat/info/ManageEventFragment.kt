@@ -13,6 +13,7 @@ import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageEventPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import kotlinx.android.synthetic.main.fragment_manage_event.*
@@ -48,24 +49,24 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
             idChat = it.getString("chatId")
         }
 
-        membersLayout?.setOnClickListener {
+        membersLayout?.setSafeOnClickListener {
             showMembersScreen()
         }
 
-        adminsLayout?.setOnClickListener {
+        adminsLayout?.setSafeOnClickListener {
             showAdminsScreen()
         }
 
-        readBtn?.setOnClickListener {
+        readBtn?.setSafeOnClickListener {
             presenter.setNewNameChat(nameEt.text.toString(), idChat)
             //presenter.setAvatar(idChat,bytes,mimeType)
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        avatarIv?.setOnClickListener {
+        avatarIv?.setSafeOnClickListener {
             chooseFile()
         }
     }

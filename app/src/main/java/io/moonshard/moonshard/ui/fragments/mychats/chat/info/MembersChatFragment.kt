@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.MembersChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.MembersChatView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
@@ -43,11 +44,11 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
             presenter.getMembers(idChat)
         }
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        addMemberBtn?.setOnClickListener {
+        addMemberBtn?.setSafeOnClickListener {
             showInvitewNewUserScreen(idChat)
         }
     }

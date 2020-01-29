@@ -613,6 +613,19 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+    public void addKickBlBla(String jid) {
+        try {
+            EntityBareJid groupId = JidCreate.entityBareFrom(jid);
+            MultiUserChat muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                            .getMultiUserChat(groupId);
+
+            muc.addUserStatusListener(networkHandler);
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void joinAllChats() {
         ChatListRepository.INSTANCE.getChats()
                 .subscribeOn(Schedulers.io())
@@ -620,6 +633,8 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribe(chats -> {
                     try {
                         for (int i = 0; i < chats.size(); i++) {
+                            addChatStatusListener(chats.get(i).getJid());
+                            addKickBlBla(chats.get(i).getJid());
                             if (chats.get(i).isGroupChat()) {
                                 joinChat(chats.get(i).getJid());
                             } else {

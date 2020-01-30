@@ -76,10 +76,106 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         createNotificationChannel();
     }
 
+
+    //дергается у всех пользователей в т.ч и у того кто кикнул(им сообщается что пользователя кикнули)
     @Override
     public void kicked(EntityFullJid participant, Jid actor, String reason) {
         super.kicked(participant, actor, reason);
-        //дергается у того кто кикнул(т.е у админа)
+        try {
+            EntityBareJid chatJid = participant.asEntityBareJidIfPossible();
+
+            /*
+            MultiUserChat muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                            .getMultiUserChat(chatJid);
+
+            String nickNameAdmin = muc.getOccupant(actor.asEntityFullJidIfPossible()).getNick().toString();
+             */
+
+            String nickNameParticipant = participant.asUnescapedString().split("/")[1];
+            String messageText = "Администратор" + " удалил "+ nickNameParticipant + " из чата";
+
+            MessageEntity messageEntity = new MessageEntity(
+                    0,
+                    UUID.randomUUID().toString(),
+                    null,
+                    TrueTime.now().getTime(),
+                    messageText,
+                    true,
+                    false,
+                    false,
+                    true
+            );
+
+            ChatListRepository.INSTANCE.getChatByJid(chatJid.asBareJid())
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(chatEntity -> {
+                        messageEntity.chat.setTarget(chatEntity);
+                        ChatUser user = new ChatUser(0, participant.asUnescapedString(), nickNameParticipant, -1, false);
+                        messageEntity.sender.setTarget(user);
+                        saveMessageKick(messageEntity, chatJid.asBareJid().asUnescapedString(), chatEntity, actor.asBareJid().asUnescapedString());
+                    }, e -> {
+
+                    });
+        }catch (Exception e){
+            Logger.d(e);
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    void saveMessageKick(MessageEntity messageEntity, String chatJid, ChatEntity chatEntity, String adminJid) {
+        MessageRepository.INSTANCE.saveMessage(messageEntity)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    messagePubsub.onNext(messageEntity);
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
+                        createNotificationKicked(chatJid, messageEntity.getText(), adminJid);
+                    }
+                }, throwable -> {
+                    Log.e(throwable.getMessage());
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void createNotificationKicked(String chatJid, String message, String adminJid) {
+        try {
+            String myJid = SecurePreferences.getStringValue("jid", null);
+
+            EntityBareJid groupId = JidCreate.entityBareFrom(chatJid);
+
+            MultiUserChat muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                            .getMultiUserChat(groupId);
+
+            if (!myJid.equals(adminJid)) {
+                String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
+                MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(bytes -> {
+                                    Bitmap avatar = null;
+                                    if (bytes != null) {
+                                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                    }
+                                    NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                                            .setSmallIcon(R.drawable.amu_bubble_mask)
+                                            .setContentTitle(nickNameChat)
+                                            .setContentText(message)
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                    if (avatar != null) {
+                                        notification.setLargeIcon(getCircleBitmap(avatar));
+                                    }
+                                    notificationManager.notify(new Random().nextInt(), notification.build());
+                                }, throwable ->
+                                        Log.e(throwable.getMessage())
+                        );
+            }
+        } catch (Exception e) {
+            Logger.d(e.getMessage());
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -489,7 +585,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 true,
                 false,
                 false,
-                false
+                true
         );
         messageEntity.chat.setTarget(chatEntity);
         messageEntity.sender.setTarget(chatUser);

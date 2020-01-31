@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.BasePresenter
+import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.common.utils.autoDispose
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.view.chat.ChatView
@@ -100,18 +101,18 @@ class ChatPresenter : BasePresenter<ChatView>() {
     }
 
     private fun getAvatar(jid: String,name:String) {
-        MainApplication.getXmppConnection().loadAvatar(jid,name)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ bytes ->
-                if (bytes != null) {
-                    val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    viewState?.setAvatar(avatar)
-                }
-            }, { throwable ->
-                Log.e(throwable.message)
-            })
-            .autoDispose(this)
+            MainApplication.getXmppConnection().loadAvatar(jid, name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    if (bytes != null) {
+                        val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        viewState?.setAvatar(avatar)
+                    }
+                }, { throwable ->
+                    Log.e(throwable.message)
+                })
+                .autoDispose(this)
     }
 
     fun isEvent() {

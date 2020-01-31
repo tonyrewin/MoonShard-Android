@@ -23,7 +23,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
         val chatEntity = ChatEntity(
             0,
             "support@conference.moonshard.tech",
-            "Чат поддерки",
+            "Чат поддержки",
             true,
             0
         )

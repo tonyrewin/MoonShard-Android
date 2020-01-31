@@ -8,6 +8,7 @@ import android.widget.ImageView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
+import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.ChatListItem
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -122,21 +123,21 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
 
     @SuppressLint("CheckResult")
     private fun setAvatar(jid: String, nameChat: String, imageView: ImageView) {
-        if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid, nameChat)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bytes ->
-                    val avatar: Bitmap?
-                    if (bytes != null) {
-                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        MainApplication.getMainUIThread().post {
-                            imageView.setImageBitmap(avatar)
+            if (MainApplication.getCurrentChatActivity() != jid) {
+                MainApplication.getXmppConnection().loadAvatar(jid, nameChat)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ bytes ->
+                        val avatar: Bitmap?
+                        if (bytes != null) {
+                            avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            MainApplication.getMainUIThread().post {
+                                imageView.setImageBitmap(avatar)
+                            }
                         }
-                    }
-                }, {
-                        throwable -> Log.e(throwable.message)
-                })
+                    }, { throwable ->
+                        Log.e(throwable.message)
+                    })
         }
     }
 

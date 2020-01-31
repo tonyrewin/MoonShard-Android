@@ -372,44 +372,11 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void presenceAvailable(FullJid address, Presence availablePresence) {
         String kek = "";
-        //   EventBus.getDefault().post(new UserPresenceChangedEvent(address.asBareJid().asUnescapedString(), availablePresence.isAvailable()));
     }
 
     @Override
     public void presenceUnavailable(FullJid address, Presence presence) {
-        /*
-        try {
-            String kek = "";
-            MUCUser user = (MUCUser) presence.getExtensions().get(0);
-            HashSet<MUCUser.Status> statuses = (HashSet<MUCUser.Status>) user.getStatus();
 
-            boolean isKicked = false;
-
-            for (MUCUser.Status status : statuses) {
-                if (status.getCode() == 110) {
-                    isKicked = true;
-                    break;
-                }
-            }
-
-            if (isKicked) {
-                    ChatListRepository.INSTANCE.getChatByJid(JidCreate.bareFrom(address.asUnescapedString().split("/")[0]))
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe(chatEntity -> {
-                                ChatListRepository.INSTANCE.removeChat(chatEntity)
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe();
-                            }, exc -> {
-                                String keks = "";
-                            });
-            }
-        } catch (Exception e) {
-            String keks = "";
-        }
-
-         */
     }
 
     @Override
@@ -539,6 +506,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         super.joined(participant);
         try {
             String chatJid = participant.asUnescapedString().split("/")[0];
+
+            if(chatJid.equals("support@conference.moonshard.tech")) return;
+
             String jidAuthor = participant.asUnescapedString().split("/")[1];
 
             ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(chatJid))
@@ -654,7 +624,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void kicked(Jid actor, String reason) {
         String test = "";
-        //todo дергается у пользователя которого кикинули
+        //todo дергается у пользователя которого кикинули,actor почему-то 0
     }
 
     @Override

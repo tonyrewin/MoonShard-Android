@@ -8,9 +8,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.Base64
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import java.io.ByteArrayOutputStream
 
 
 object Utils {
@@ -59,5 +61,32 @@ object Utils {
             view = View(activity)
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun bitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
+
+    fun stringToBitMap(encodedString: String): Bitmap? {
+        try {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
+    }
+
+    fun stringToByteArray(encodedString: String): ByteArray? {
+        try {
+            if (encodedString.isEmpty()) return null
+            return Base64.decode(encodedString, Base64.DEFAULT);
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
     }
 }

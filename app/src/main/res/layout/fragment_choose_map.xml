@@ -109,7 +109,6 @@
             android:scaleType="center"
             android:src="@drawable/ic_pin_2_search" />
 
-
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

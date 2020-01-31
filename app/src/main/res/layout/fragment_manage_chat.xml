@@ -8,6 +8,7 @@
         android:background="#F9F9F9"
         tools:context=".ui.fragments.mychats.chat.info.ManageChatFragment">
 
+
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
@@ -280,5 +281,12 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

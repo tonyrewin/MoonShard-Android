@@ -29,6 +29,11 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     private var latLngInterestPoint: PointOfInterest? = null
 
+    private val defaultZoom: Float = 6F
+
+    private var defaultMoscowlatitude: Double = 55.751244
+    private var defaultMoscowlongitude: Double = 37.618423
+
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         map?.isMyLocationEnabled = true
@@ -76,6 +81,8 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
+
+        getZoomCenter()
     }
 
     override fun onPoiClick(pointOfInterest: PointOfInterest?) {
@@ -84,6 +91,21 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         val cameraUpdate =
             CameraUpdateFactory.newLatLngZoom(pointOfInterest?.latLng, mMap?.cameraPosition?.zoom!!)
         mMap?.animateCamera(cameraUpdate)
+    }
+
+    private fun getZoomCenter() {
+        if (MainApplication.getCurrentLocation() != null) {
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        } else {
+            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        }
     }
 
     private fun getMyLocation() {

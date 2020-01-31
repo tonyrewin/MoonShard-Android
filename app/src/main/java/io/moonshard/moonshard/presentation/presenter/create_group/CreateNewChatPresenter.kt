@@ -6,12 +6,14 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
 import io.moonshard.moonshard.repository.ChatListRepository
+import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jivesoftware.smackx.vcardtemp.packet.VCard
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import java.util.*
@@ -57,6 +59,10 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 arrayList.add("anyone")
                 answerForm.setAnswer("muc#roomconfig_whois",arrayList)
                 muc.sendConfigurationForm(answerForm)
+
+                val vmMuc = VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val vCardMuc = VCard()
+                vmMuc.saveVCard(vCardMuc, JidCreate.entityBareFrom(jidRoomString))
 
                 val chatEntity = ChatEntity(
                     0,

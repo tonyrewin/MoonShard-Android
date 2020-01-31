@@ -44,19 +44,22 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        try {
+            val roomInfo = getRoom(chats[position].roomId.toString())
+            val onlineUser = getValueOnlineUsers(
+                chats[position].roomId.toString())
 
-        val roomInfo = getRoom(chats[position].roomId.toString())
-        val onlineUser = getValueOnlineUsers(
-            chats[position].roomId.toString())
+            setAvatar(chats[position].roomId.toString(), holder.groupIv!!,roomInfo?.name!!)
+            holder.groupNameTv?.text = roomInfo?.name.toString()
+            holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
+            holder.locationValueTv?.text =
+                calculationByDistance(chats[position].latitude, chats[position].longitude)
 
-        setAvatar(chats[position].roomId.toString(), holder.groupIv!!)
-        holder.groupNameTv?.text = roomInfo?.name.toString()
-        holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
-        holder.locationValueTv?.text =
-            calculationByDistance(chats[position].latitude, chats[position].longitude)
-
-        holder.itemView.setSafeOnClickListener {
-            listener.clickChat(chats[position])
+            holder.itemView.setSafeOnClickListener {
+                listener.clickChat(chats[position])
+            }
+        }catch (e:Exception){
+            Logger.d(e)
         }
     }
 
@@ -132,9 +135,13 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         return ""
     }
 
-    private fun setAvatar(jid: String, imageView: ImageView) {
+    private fun setAvatar(
+        jid: String,
+        imageView: ImageView,
+        nameChat: String
+    ) {
         if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid)
+            MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->

@@ -389,21 +389,4 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
         }
     }
-
-    @SuppressLint("CheckResult")
-    private fun getAvatar(jid: String) {
-        MainApplication.getXmppConnection().loadAvatar(jid)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ bytes ->
-                if (bytes != null) {
-                    val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    //viewState?.setAvatar(avatar)
-                }
-            }, { throwable ->
-                Log.e(throwable.message)
-            })
-    }
-
-
 }

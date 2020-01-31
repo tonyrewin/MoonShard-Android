@@ -5,7 +5,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
@@ -52,7 +51,7 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
                 }
             }
 
-            getAvatar(jid)
+            getAvatar(jid,roomInfo.name)
 
             //todo fi
             val isAdmin =  isAdminInChat(jid)
@@ -88,8 +87,8 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
         }
     }
 
-    private fun getAvatar(jid: String) {
-        MainApplication.getXmppConnection().loadAvatar(jid)
+    private fun getAvatar(jid: String, nameChat: String) {
+        MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ bytes ->

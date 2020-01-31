@@ -44,7 +44,6 @@ class MembersChatPresenter : MvpPresenter<MembersChatView>() {
         }
     }
 
-    //TODO bug with not listent kick
     fun kickUser(jidChat: String, jidUserInChat: EntityFullJid, fullUser: Occupant) {
         try {
             val groupId = JidCreate.entityBareFrom(jidChat)

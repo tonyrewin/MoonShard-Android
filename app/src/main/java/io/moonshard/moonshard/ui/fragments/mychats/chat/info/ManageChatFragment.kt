@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
+import io.moonshard.moonshard.common.utils.Utils.bitMapToString
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
@@ -28,6 +29,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
     var idChat = ""
     var bytes: ByteArray? = null
     var mimeType: String? = null
+    var stringByteAvatar:String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +55,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
         }
 
         readyBtn?.setSafeOnClickListener {
-            presenter.setData(nameEt.text.toString(), descriptionEt.text.toString(), idChat)
+            presenter.setData(nameEt.text.toString(), descriptionEt.text.toString(), idChat,bytes,mimeType)
         }
 
         backBtn?.setSafeOnClickListener {
@@ -61,7 +63,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
         }
 
         avatarIv?.setSafeOnClickListener {
-            //chooseFile()
+            chooseFile()
         }
     }
 
@@ -97,9 +99,11 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
             if (input != null) {
                 val file = StreamUtil.stream2file(input)
                 bytes = file.readBytes()
+
                 bytes?.let {
                     mimeType = getMimeType(it)
                     val bitmap = BitmapFactory.decodeFile(file.path)
+                  //  stringByteAvatar = bitMapToString(bitmap)
                     setAvatar(bitmap)
                 }
             }
@@ -148,5 +152,13 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
     override fun showAdminsCount(text: String) {
         adminsCountTv?.text = text
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

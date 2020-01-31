@@ -20,7 +20,13 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.net.URLConnection
 import java.util.*
+import android.graphics.Bitmap
+import io.moonshard.moonshard.common.utils.Utils.stringToBitMap
+
 
 @InjectViewState
 class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
@@ -50,7 +56,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 }
             }
 
-            getAvatar(jid)
+            getAvatar(jid,roomInfo.name)
 
             //todo fi
             val isAdmin = isAdminInChat(jid)
@@ -93,19 +99,20 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         }
     }
 
-    private fun getAvatar(jid: String) {
-        MainApplication.getXmppConnection().loadAvatar(jid)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ bytes ->
-                if (bytes != null) {
-                    val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    viewState?.setAvatar(avatar)
-                }
-            }, { throwable ->
-                Log.e(throwable.message)
-            })
-    }
+    private fun getAvatar(jid: String,nameChat:String) {
+            MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    if (bytes != null) {
+                        val avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        viewState?.setAvatar(avatar)
+                    }
+                }, { throwable ->
+                    Log.e(throwable.message)
+                })
+        }
+
 
     //muc.getOccupantPresence(JidCreate.entityFullFrom("dgggrrg@conference.moonshard.tech/just")) must be
     private fun getValueOnlineUsers(muc: MultiUserChat, members: List<EntityFullJid>): Int {

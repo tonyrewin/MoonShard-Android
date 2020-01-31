@@ -5,6 +5,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
 import io.moonshard.moonshard.repository.ChatListRepository
+import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
@@ -39,8 +40,15 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         }
     }
 
-    fun setData(name: String, description: String, jid: String) {
+    fun setData(
+        name: String,
+        description: String,
+        jid: String,
+        bytes: ByteArray?,
+        mimeType: String?
+    ) {
         try {
+            viewState.showProgressBar()
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
@@ -50,6 +58,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.chatName = name
+                    setAvatarServer(muc,bytes,mimeType)
                     changeDescription(muc, description)
                     changeChatNameServer(muc, it)
                 }, {
@@ -72,11 +81,32 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         }
     }
 
+    private fun setAvatarServer(muc: MultiUserChat, bytes: ByteArray?, mimeType: String?) {
+        try {
+            val vm = VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCardMuc(muc.room)
+            card.setAvatar(bytes,mimeType)
+            vm.saveVCard(card,muc.room)
+
+
+            /*
+            val form = muc.configurationForm
+            val answerForm = form.createAnswerForm()
+            answerForm.setAnswer("muc#roomconfig_lang",avatarBytes)
+            muc.sendConfigurationForm(answerForm)
+
+             */
+        } catch (e: Exception) {
+            Logger.d(e.message)
+        }
+    }
+
     private fun changeChatNameBaseDate(chat: ChatEntity) {
         ChatListRepository.changeChatName(chat)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                viewState?.hideProgressBar()
                 viewState.showChatInfo()
             }, {
                 Logger.d(it)

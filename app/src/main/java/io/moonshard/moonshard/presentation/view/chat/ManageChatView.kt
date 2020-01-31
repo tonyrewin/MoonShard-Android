@@ -11,4 +11,6 @@ interface ManageChatView: MvpView {
     fun showToast(text: String)
     fun showOccupantsCount(text: String)
     fun showAdminsCount(text: String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

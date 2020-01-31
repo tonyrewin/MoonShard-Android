@@ -39,7 +39,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         back?.setSafeOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
+            activity?.onBackPressed()
         }
     }
 

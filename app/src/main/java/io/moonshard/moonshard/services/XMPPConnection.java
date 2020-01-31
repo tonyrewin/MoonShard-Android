@@ -56,6 +56,7 @@ import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
 import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
+import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -125,7 +126,7 @@ public class XMPPConnection implements ConnectionListener {
                 .setKeystoreType(null)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.required)
                 .setCompressionEnabled(true)
-                .setConnectTimeout(7000)
+                .setConnectTimeout(10000)
                 .build();
 
         connection = new XMPPTCPConnection(conf);
@@ -161,7 +162,7 @@ public class XMPPConnection implements ConnectionListener {
         FileTransferNegotiator.IBB_ONLY = true;
 
         if (MainApplication.isIsMainActivityDestroyed()) {
-           // sendUserPresence(new Presence(Presence.Type.unavailable));
+            // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
@@ -375,7 +376,11 @@ public class XMPPConnection implements ConnectionListener {
                     emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
                 }
                 if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
-                    emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
+                    if(!nameChat.isEmpty()){
+                        emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
+                    }else{
+                        emitter.onError(new IllegalArgumentException());
+                    }
                     return;
                 }
                 EntityBareJid jid = null;
@@ -385,14 +390,25 @@ public class XMPPConnection implements ConnectionListener {
                     e.printStackTrace();
                 }
 
-                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
+                if (!jid.asUnescapedString().contains("conference")) {
+                    byte[] avatarBytes = MainApplication.getXmppConnection().getAvatar(jid);
 
-                if (avatarBytes != null) {
-                    MainApplication.avatarsCache.put(senderID, avatarBytes);
-                } else {
-                    avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                    if (avatarBytes != null) {
+                        MainApplication.avatarsCache.put(senderID, avatarBytes);
+                    } else {
+                        avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                    }
+                    emitter.onSuccess(avatarBytes);
+                }else{
+                    byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
+
+                    if (avatarBytes != null) {
+                        MainApplication.avatarsCache.put(senderID, avatarBytes);
+                    } else {
+                        avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                    }
+                    emitter.onSuccess(avatarBytes);
                 }
-                emitter.onSuccess(avatarBytes);
             } else {
                 emitter.onError(new IllegalArgumentException());
             }
@@ -503,6 +519,24 @@ public class XMPPConnection implements ConnectionListener {
         try {
             if (isConnectionReady()) {
                 VCardManager manager = VCardManager.getInstanceFor(connection);
+                byte[] avatar = null;
+                try {
+                    avatar = manager.loadVCard(jid).getAvatar();
+                } catch (SmackException.NoResponseException | InterruptedException | SmackException.NotConnectedException | XMPPException.XMPPErrorException e) {
+                    Log.e(e);
+                }
+                return avatar;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    public byte[] getAvatarMuc(EntityBareJid jid) {
+        try {
+            if (isConnectionReady()) {
+                VCardCustomManager manager = VCardCustomManager.getInstanceFor(connection);
                 byte[] avatar = null;
                 try {
                     avatar = manager.loadVCard(jid).getAvatar();
@@ -641,7 +675,7 @@ public class XMPPConnection implements ConnectionListener {
                                 MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chats.get(i).getJid()));
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Logger.d(e);
                     }
                 });

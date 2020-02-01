@@ -34,6 +34,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
     val dateAndTime = Calendar.getInstance()
 
+    var fromEventsFragment:Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +59,11 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            fromEventsFragment = it.getBoolean("chatId",false)
+        }
+
         ChooseChatRepository.date = dateAndTime
         setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
 
@@ -203,10 +210,15 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         ChooseChatRepository.name = nameTv?.text.toString()
         val chatFragment =
             ChooseMapFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "ChooseMapFragment")
-            ?.addToBackStack("ChooseMapFragment")
-            ?.commit()
+        if(fromEventsFragment){
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(io.moonshard.moonshard.R.id.mainContainer, chatFragment, "ChooseMapFragment")
+                ?.addToBackStack("ChooseMapFragment")?.commit()
+        }else{
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "ChooseMapFragment")
+                ?.addToBackStack("ChooseMapFragment")?.commit()
+        }
     }
 
     private fun initAdapter() {
@@ -249,10 +261,16 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     private fun showTimesScreen() {
         val chatFragment =
             TimeEventFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "TimeEventFragment")
-            ?.addToBackStack("TimeEventFragment")
-            ?.commit()
+        if(fromEventsFragment){
+            val ft =activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(io.moonshard.moonshard.R.id.mainContainer, chatFragment, "TimeEventFragment")
+                ?.addToBackStack("TimeEventFragment")?.commit()
+        }else{
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "TimeEventFragment")
+                ?.addToBackStack("TimeEventFragment")
+                ?.commit()
+        }
     }
 
     override fun showProgressBar() {

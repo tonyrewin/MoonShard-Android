@@ -58,7 +58,7 @@ class AdminsFragment : MvpAppCompatFragment(),
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
 
-        ft?.add(R.id.container, fragment, "AddAdminFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "AddAdminFragment")?.hide(this)
             ?.addToBackStack("AddAdminFragment")
             ?.commit()
     }

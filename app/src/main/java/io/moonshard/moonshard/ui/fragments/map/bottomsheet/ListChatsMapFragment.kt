@@ -14,8 +14,7 @@ import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.ui.adapters.ListChatMapAdapter
 import io.moonshard.moonshard.ui.adapters.ListChatMapListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_list_chats_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -65,10 +64,11 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             bundle.putBoolean("fromMap", true)
-            val chatFragment = ChatFragment()
-            chatFragment.arguments = bundle
+            val mainChatFragment =
+                MainChatFragment()
+            mainChatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, chatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack(null)
+            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack(null)
                 ?.commit()
         }
     }

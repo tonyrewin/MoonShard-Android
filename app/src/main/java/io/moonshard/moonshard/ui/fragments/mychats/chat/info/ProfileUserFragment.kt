@@ -10,7 +10,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ProfileUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ProfileUserView
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_profile_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -81,10 +81,10 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
     override fun showChatScreen(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
+        val mainChatFragment = MainChatFragment()
+        mainChatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "chatScreen")?.hide(this)
+        ft?.replace(R.id.container, mainChatFragment, "chatScreen")
             ?.addToBackStack("chatScreen")
             ?.commit()
     }

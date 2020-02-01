@@ -28,9 +28,8 @@ import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*
@@ -39,7 +38,6 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
 import java.util.*
 
@@ -184,10 +182,11 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             bundle.putString("chatId", chatId)
             bundle.putBoolean("fromMap", true)
             bundle.putString("stateChat", stateChat)
-            val chatFragment = ChatFragment()
-            chatFragment.arguments = bundle
+            val mainChatFragment =
+                MainChatFragment()
+            mainChatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, chatFragment)?.hide(this)?.addToBackStack(null)
+            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
                 ?.commit()
         }
     }
@@ -417,22 +416,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 }
             }
         })
-
-
-
-        try {
-
-
-
-            val vm = VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-          //  val vcard = VCard()
-           // vm.saveVCard(vcard, JidCreate.entityBareFrom("support@conference.moonshard.tech"))
-            var card = vm.loadVCardMuc(JidCreate.entityBareFrom("support@conference.moonshard.tech"))
-        } catch (e: Exception) {
-            var error = ""
-        }
-
-
     }
 
     private fun getMyLocation() {

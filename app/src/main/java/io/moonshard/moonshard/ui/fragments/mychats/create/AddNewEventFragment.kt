@@ -30,8 +30,11 @@ class AddNewEventFragment : Fragment() {
         }
     }
     fun showCreateNewChatScreen(){
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventsFragment",false)
         val chatFragment =
             CreateNewEventFragment()
+        chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
             ?.commit()

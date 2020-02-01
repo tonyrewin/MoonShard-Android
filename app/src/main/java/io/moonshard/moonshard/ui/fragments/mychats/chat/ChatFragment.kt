@@ -110,9 +110,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         bundle.putString("chatId", chatId)
         val eventFragment = EventInfoFragment()
         eventFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, eventFragment, "EventInfoFragment")?.hide(this)
-            ?.addToBackStack("EventInfoFragment")
+        val ft = fragmentManager?.beginTransaction()
+        ft?.add(R.id.mainContainer, eventFragment, "EventInfoFragment")?.addToBackStack("EventInfoFragment")
             ?.commit()
     }
 
@@ -121,8 +120,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         bundle.putString("chatId", chatId)
         val chatFragment = ChatInfoFragment()
         chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "ChatInfoFragment")?.hide(this)
+        val ft = fragmentManager?.beginTransaction()
+        ft?.add(R.id.mainContainer, chatFragment, "ChatInfoFragment")?.hide(this)
             ?.addToBackStack("ChatInfoFragment")
             ?.commit()
     }
@@ -133,8 +132,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         bundle.putBoolean("fromChatFragment",true)
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
+        val ft = fragmentManager?.beginTransaction()
+        ft?.add(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
     }
@@ -194,11 +193,5 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onDestroyView()
         presenter.disconnectFromChat(stateChat)
         ChatRepository.clean()
-
-        fromMap?.let {
-            if (it) {
-                (activity as MainActivity).showBottomNavigationBar()
-            }
-        }
     }
 }

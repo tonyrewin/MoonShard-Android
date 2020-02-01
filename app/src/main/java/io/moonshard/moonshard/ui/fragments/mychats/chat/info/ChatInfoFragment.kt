@@ -86,7 +86,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
 
-        ft?.add(R.id.container, fragment, "InviteUserFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
             ?.addToBackStack("InviteUserFragment")
             ?.commit()
     }
@@ -98,7 +98,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             ManageChatFragment()
         manageChatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, manageChatFragment, "manageChatFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, manageChatFragment, "manageChatFragment")?.hide(this)
             ?.addToBackStack("manageChatFragment")
             ?.commit()
     }
@@ -110,7 +110,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
     }

@@ -5,15 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_create_new_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -55,10 +52,10 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
         bundle.putBoolean("fromCreateNewChat",true)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
+        val mainChatFragment = MainChatFragment()
+        mainChatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreatedChatScreen")?.commit()
+        ft?.replace(R.id.container, mainChatFragment, "CreatedChatScreen")?.commit()
     }
 
     override fun showToast(text: String) {

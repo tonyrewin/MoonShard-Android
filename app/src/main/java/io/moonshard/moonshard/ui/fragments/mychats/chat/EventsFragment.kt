@@ -52,24 +52,23 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
     fun showCreateNewEventScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putBoolean("fromEventsFragment", true)
         val chatFragment = CreateNewEventFragment()
         chatFragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")
+        ft?.replace(R.id.mainContainer, chatFragment, "CreateNewEventFragment")
             ?.addToBackStack("CreateNewEventFragment")
             ?.commit()
     }
-
-
 
    override fun showChatScreens(jid:String){
        val bundle = Bundle()
        bundle.putString("chatId", jid)
        bundle.putBoolean("fromEvent",true)
-       val chatFragment = ChatFragment()
-       chatFragment.arguments = bundle
+       val mainChatFragment = MainChatFragment()
+       mainChatFragment.arguments = bundle
        val ft = activity?.supportFragmentManager?.beginTransaction()
-       ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack(null)
+       ft?.replace(R.id.container, mainChatFragment, "chatScreen")?.addToBackStack(null)
            ?.commit()
     }
 

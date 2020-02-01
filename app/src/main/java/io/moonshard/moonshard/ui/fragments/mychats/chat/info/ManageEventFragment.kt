@@ -77,7 +77,7 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
         val fragment = AdminsFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "AdminsFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "AdminsFragment")?.hide(this)
             ?.addToBackStack("AdminsFragment")
             ?.commit()
     }
@@ -88,7 +88,7 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
         val fragment = MembersChatFragment()
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "MembersChatFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "MembersChatFragment")?.hide(this)
             ?.addToBackStack("MembersChatFragment")
             ?.commit()
     }

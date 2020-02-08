@@ -64,6 +64,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun sendMessage(text: String) {
+        if(text.isBlank()) return
+
         sendMessageInternal(text)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

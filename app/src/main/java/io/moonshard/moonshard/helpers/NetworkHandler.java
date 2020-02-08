@@ -108,8 +108,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             );
 
             ChatListRepository.INSTANCE.getChatByJid(chatJid.asBareJid())
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(chatEntity -> {
                         messageEntity.chat.setTarget(chatEntity);
                         ChatUser user = new ChatUser(0, participant.asUnescapedString(), nickNameParticipant, -1, false);
@@ -126,8 +126,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @SuppressLint("CheckResult")
     void saveMessageKick(MessageEntity messageEntity, String chatJid, ChatEntity chatEntity, String adminJid) {
         MessageRepository.INSTANCE.saveMessage(messageEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
                     ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
@@ -153,8 +153,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             if (!myJid.equals(adminJid)) {
                 String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
                 MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bytes -> {
                                     Bitmap avatar = null;
                                     if (bytes != null) {
@@ -183,8 +183,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
         String chatJid = chat.getXmppAddressOfChatPartner().asUnescapedString();
         ChatListRepository.INSTANCE.getChatByJid(chat.getXmppAddressOfChatPartner().asBareJid())
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(chatEntity -> {
                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
@@ -197,8 +197,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                 0
                         );
                         ChatListRepository.INSTANCE.addChat(chatEntity)
-                                .observeOn(Schedulers.io())
-                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> {
                                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                                 });
@@ -251,8 +251,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
     void saveMessage(MessageEntity messageEntity, String chatJid, Message message, ChatEntity chatEntity) {
         MessageRepository.INSTANCE.saveMessage(messageEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
                     ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
@@ -287,8 +287,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 if (!myJid.equals(jidFrom)) {
                     String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
                     MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(bytes -> {
                                         Bitmap avatar = null;
                                         if (bytes != null) {
@@ -316,8 +316,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
                 if (!myJid.equals(chatJid)) {
                     MainApplication.getXmppConnection().loadAvatar(chatJid, nickname)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(bytes -> {
                                         Bitmap avatar = null;
                                         if (bytes != null) {
@@ -422,8 +422,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 }
 
                 ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(roomJid))
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(chatEntity -> {
                             onIncomingMessageInternal(chatEntity, message, roomJid, message.getFrom().asUnescapedString());
                         }, e -> {
@@ -436,8 +436,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                         0
                                 );
                                 ChatListRepository.INSTANCE.addChat(chatEntity)
-                                        .observeOn(Schedulers.io())
-                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(() -> {
                                             onIncomingMessageInternal(chatEntity, message, roomJid, message.getFrom().asUnescapedString());
                                         });
@@ -457,8 +457,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void invitationReceived(XMPPConnection conn, MultiUserChat room, EntityJid inviter, String reason, String password, Message message, MUCUser.Invite invitation) {
         ChatListRepository.INSTANCE.getChatByJid(room.getRoom())
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(chatEntity -> {
                     //onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
@@ -512,8 +512,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             String jidAuthor = participant.asUnescapedString().split("/")[1];
 
             ChatListRepository.INSTANCE.getChatByJid(JidCreate.from(chatJid))
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(chatEntity -> {
                         ChatUserRepository.INSTANCE.getUserAsSingle(JidCreate.from(participant))
                                 .subscribeOn(Schedulers.io())
@@ -564,8 +564,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
     void saveMessageJoin(MessageEntity messageEntity, String chatJid, ChatEntity chatEntity, String jidUser) {
         MessageRepository.INSTANCE.saveMessage(messageEntity)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
                     ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
@@ -591,8 +591,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             if (!myJid.equals(jidUser)) {
                 String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
                 MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bytes -> {
                                     Bitmap avatar = null;
                                     if (bytes != null) {

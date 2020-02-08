@@ -146,8 +146,8 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chat ->
                 ChatListRepository.removeChat(chat)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         viewState?.showChatsScreen()
                     }, { throwable ->

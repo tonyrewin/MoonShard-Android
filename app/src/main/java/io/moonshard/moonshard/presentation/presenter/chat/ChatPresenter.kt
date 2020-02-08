@@ -37,8 +37,8 @@ class ChatPresenter : BasePresenter<ChatView>() {
     fun setChatId(chatId: String) {
         chatID = chatId
         ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME update unread messages count on each message read
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
             .autoDispose(this)
         if(chatId.contains("conference")){
@@ -126,8 +126,8 @@ class ChatPresenter : BasePresenter<ChatView>() {
     fun getRooms() {
         //this hard data - center Moscow
         useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
                 initPager(rooms)
                 if (throwable != null) {
@@ -135,6 +135,7 @@ class ChatPresenter : BasePresenter<ChatView>() {
                 }
             }
             .autoDispose(this)
+        //initPager(arrayListOf()) // todo для тест потом удалить
     }
 
     fun initPager(rooms: ArrayList<RoomPin>?) {

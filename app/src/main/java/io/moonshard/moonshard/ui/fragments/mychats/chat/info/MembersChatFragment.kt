@@ -13,11 +13,11 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.MembersChatPresen
 import io.moonshard.moonshard.presentation.view.chat.MembersChatView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_members_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Occupant
-import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 
 
@@ -49,7 +49,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
         }
 
         addMemberBtn?.setSafeOnClickListener {
-            showInvitewNewUserScreen(idChat)
+            showInviteNewUserScreen(idChat)
         }
     }
 
@@ -63,6 +63,10 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
 
     //todo maybe replace
     fun showProfileUser(jid: String) {
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
+
+
+        /*
         val bundle = Bundle()
         bundle.putString("userJid", jid)
         val fragment = ProfileUserFragment()
@@ -71,9 +75,15 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
         ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
+
+         */
     }
 
-    private fun showInvitewNewUserScreen(idChat: String) {
+    private fun showInviteNewUserScreen(idChat: String) {
+
+        (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
+
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -83,6 +93,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
         ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
             ?.addToBackStack("InviteUserFragment")
             ?.commit()
+         */
     }
 
     private fun initAdapter() {

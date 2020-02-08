@@ -50,6 +50,10 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
     }
 
     fun showCreateNewEventScreen(idChat: String) {
+
+
+        (parentFragment as? MainChatFragment)?.showCreateNewEventScreen(idChat)
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         bundle.putBoolean("fromEventsFragment", true)
@@ -59,6 +63,8 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         ft?.replace(R.id.mainContainer, chatFragment, "CreateNewEventFragment")
             ?.addToBackStack("CreateNewEventFragment")
             ?.commit()
+
+         */
     }
 
    override fun showChatScreens(jid:String){
@@ -106,5 +112,9 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
             eventsRv.visibility = View.VISIBLE
             createNewEventLayout.visibility = View.GONE
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 }

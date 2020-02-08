@@ -18,11 +18,11 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.ChatInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ChatInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_chat_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smackx.muc.Occupant
-import org.jxmpp.jid.EntityFullJid
 import java.io.IOException
 import java.util.*
 
@@ -79,40 +79,15 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment =
-            InviteUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-
-        ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
-            ?.addToBackStack("InviteUserFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
     }
 
     private fun showManageChatScreen(idChat: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val manageChatFragment =
-            ManageChatFragment()
-        manageChatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, manageChatFragment, "manageChatFragment")?.hide(this)
-            ?.addToBackStack("manageChatFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showManageChatScreen(idChat)
     }
 
-    //todo maybe replace
     fun showProfileUser(jid: String) {
-        val bundle = Bundle()
-        bundle.putString("userJid", jid)
-        val fragment = ProfileUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
-            ?.addToBackStack("ProfileUserFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
     }
 
     override fun showMembers(members: List<Occupant>) {

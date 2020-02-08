@@ -49,14 +49,7 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
         Toast.makeText(context!!, error, Toast.LENGTH_SHORT).show()
     }
 
-    //todo maybre crash
     override fun showChatScreen() {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val mainChatFragment = MainChatFragment()
-        mainChatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 }

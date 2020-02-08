@@ -79,6 +79,8 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
     }
 
     override fun showChatScreen(chatId: String) {
+        (parentFragment as? MainChatFragment)?.showChatWithStack()
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
         val mainChatFragment = MainChatFragment()
@@ -87,6 +89,7 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
         ft?.replace(R.id.container, mainChatFragment, "chatScreen")
             ?.addToBackStack("chatScreen")
             ?.commit()
+         */
     }
 
 

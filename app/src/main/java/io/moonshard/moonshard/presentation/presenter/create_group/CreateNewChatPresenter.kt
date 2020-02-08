@@ -73,8 +73,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 )
 
                 ChatListRepository.addChat(chatEntity)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         joinChat(jidRoomString)
                     }, {

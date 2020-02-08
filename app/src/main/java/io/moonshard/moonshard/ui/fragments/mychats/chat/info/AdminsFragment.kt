@@ -12,6 +12,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.AdminsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import io.moonshard.moonshard.ui.adapters.chat.AdminListener
 import io.moonshard.moonshard.ui.adapters.chat.AdminsAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_admins.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -51,6 +52,9 @@ class AdminsFragment : MvpAppCompatFragment(),
     }
 
     private fun showAddAdminScreen(idChat: String) {
+        (parentFragment as? MainChatFragment)?.showAddAdminScreen(idChat)
+
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -61,6 +65,8 @@ class AdminsFragment : MvpAppCompatFragment(),
         ft?.replace(R.id.mainContainer, fragment, "AddAdminFragment")?.hide(this)
             ?.addToBackStack("AddAdminFragment")
             ?.commit()
+
+         */
     }
 
     override fun showToast(text: String) {

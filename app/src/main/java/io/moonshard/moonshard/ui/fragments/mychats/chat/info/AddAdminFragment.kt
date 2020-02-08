@@ -51,6 +51,9 @@ class AddAdminFragment : MvpAppCompatFragment(),
     }
 
     override fun showChatScreen() {
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
+
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val mainChatFragment = MainChatFragment()
@@ -58,6 +61,7 @@ class AddAdminFragment : MvpAppCompatFragment(),
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
             ?.commit()
+         */
     }
 
 

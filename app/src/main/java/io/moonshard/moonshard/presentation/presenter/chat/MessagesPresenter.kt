@@ -47,6 +47,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
+        viewState?.showProgressBar()
         chatID = chatId
         ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
@@ -229,8 +230,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                     messageEntity.sender.target = chatUser
 
                                                     MessageRepository.saveMessage(messageEntity)
-                                                        .observeOn(Schedulers.io())
-                                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                                        .subscribeOn(Schedulers.io())
+                                                        .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe({
                                                             adapterMessages.add(GenericMessage(messageEntity))
                                                         },{ throwable -> Log.e(throwable.message) })
@@ -257,8 +258,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                             messageEntity.sender.target = chatUser
 
                                                             MessageRepository.saveMessage(messageEntity)
-                                                                .observeOn(Schedulers.io())
-                                                                .subscribeOn(AndroidSchedulers.mainThread())
+                                                                .subscribeOn(Schedulers.io())
+                                                                .observeOn(AndroidSchedulers.mainThread())
                                                                 .subscribe({
                                                                     adapterMessages.add(GenericMessage(messageEntity))
                                                                 },{ throwable -> Log.e(throwable.message) })
@@ -290,6 +291,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
             genericMessages.sortWith(messageComparator)
             viewState.setMessages(genericMessages, true)
+            viewState?.hideProgressBar()
         }, {
             com.orhanobut.logger.Logger.d(it.message)
         })
@@ -366,8 +368,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
                 if (mamManager != null) {
                     MessageRepository.getFirstMessage(chat.jid)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ msg ->
                             val mamQuery =  mamManager.queryArchive(
                                 MamManager.MamQueryArgs.builder()

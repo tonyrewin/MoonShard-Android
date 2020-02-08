@@ -16,6 +16,7 @@ import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageEventPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_manage_event.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -72,6 +73,10 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
     }
 
     private fun showAdminsScreen() {
+
+        ( parentFragment as? MainChatFragment)?.showAddAdminScreen(idChat)
+
+/*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = AdminsFragment()
@@ -80,9 +85,15 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
         ft?.replace(R.id.mainContainer, fragment, "AdminsFragment")?.hide(this)
             ?.addToBackStack("AdminsFragment")
             ?.commit()
+
+ */
     }
 
     private fun showMembersScreen() {
+
+        ( parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
+
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = MembersChatFragment()
@@ -91,6 +102,8 @@ class ManageEventFragment : MvpAppCompatFragment(),ManageEventView {
         ft?.replace(R.id.mainContainer, fragment, "MembersChatFragment")?.hide(this)
             ?.addToBackStack("MembersChatFragment")
             ?.commit()
+
+         */
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

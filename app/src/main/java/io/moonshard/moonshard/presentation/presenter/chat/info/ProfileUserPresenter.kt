@@ -67,8 +67,8 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                     if(it is NotFoundException) {
 
                         ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 createChatOneToOne(jid)
                             }, { throwable ->

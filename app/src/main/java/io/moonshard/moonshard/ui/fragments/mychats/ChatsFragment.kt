@@ -15,7 +15,6 @@ import io.moonshard.moonshard.presentation.view.ChatsView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
 import io.moonshard.moonshard.ui.adapters.ChatListListener
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_chats.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -41,7 +40,7 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
         chatListAdapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener {
             override fun clickChat(chat: ChatListItem) {
-                showChatScreen(chat.jid.asUnescapedString(), chat.chatName)
+                showChatScreen(chat.jid.asUnescapedString())
             }
         })
         chatsRv?.adapter = chatListAdapter
@@ -56,18 +55,11 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         chatListAdapter.setData(chats)
     }
 
-    override fun showChatScreen(chatId: String, chatName: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        bundle.putSerializable("chatName", chatName)
-        val mainChatFragment = MainChatFragment()
-        mainChatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, mainChatFragment, "chatScreen")?.addToBackStack("chatScreen")
-            ?.commit()
+    override fun showChatScreen(chatId: String) {
+        (activity as? MainActivity)?.showMainChatScreen(chatId = chatId)
     }
 
-    fun setFilter(text:String){
+    fun setFilter(text: String) {
         (chatsRv?.adapter as? ChatListAdapter)?.presenter?.setFilter(text)
     }
 

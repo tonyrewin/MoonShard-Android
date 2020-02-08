@@ -4,26 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.hideKeyboard
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.view.chat.MyChatsView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.create.CreateGroupFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_my_chats.*
+import moxy.MvpAppCompatFragment
 import org.jivesoftware.smackx.search.ReportedData
 import org.jivesoftware.smackx.search.UserSearchManager
 import org.jxmpp.jid.impl.JidCreate
-import java.lang.Exception
-import java.util.logging.Logger
 
 
-class MyChatsFragment : Fragment() {
+class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
 
     private var disposible: Disposable? = null
 
@@ -37,6 +36,7 @@ class MyChatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViewPager()
 
         try {
@@ -51,7 +51,7 @@ class MyChatsFragment : Fragment() {
             if (data.rows != null) {
                 val it = data.rows as Iterator<ReportedData.Row>
                 while (it.hasNext()) {
-                    val row = it.next ()
+                    val row = it.next()
                     val iterator = row.getValues("jid") as Iterator<ReportedData.Row>
                     if (iterator.hasNext()) {
                         val value = iterator.next().toString()
@@ -64,7 +64,6 @@ class MyChatsFragment : Fragment() {
         } catch (e: Exception) {
             var kek = ""
         }
-
 
 
         (activity!!.supportFragmentManager.findFragmentByTag("CreatedChatScreen"))?.let {
@@ -82,7 +81,7 @@ class MyChatsFragment : Fragment() {
                     val chatsFragment =
                         childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager?.currentItem)
                     (chatsFragment as? ChatsFragment)?.setFilter(it.editable?.toString() ?: "")
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     com.orhanobut.logger.Logger.d(e)
                 }
             }
@@ -120,7 +119,7 @@ class MyChatsFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        tabLayout.setupWithViewPager(viewPager)
+        tabLayout?.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,
             context!!,
@@ -128,4 +127,14 @@ class MyChatsFragment : Fragment() {
         )
         viewPager?.adapter = sectionsPagerAdapter
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+
 }

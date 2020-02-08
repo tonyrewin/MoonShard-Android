@@ -9,8 +9,8 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -28,17 +28,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         mainBottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.my_chats_bottom_nav_item -> {
-                    val fragment = MyChatsFragment()
-                    val fragmentTransaction = supportFragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.container, fragment).commit()
+                    showMyChatsFragment()
                 }
                 R.id.find_chats_map_bottom_nav_item -> {
                     methodRequiresTwoPermission()
                 }
                 R.id.settings_bottom_nav_item -> {
-                    val fragment = SettingsFragment()
-                    val fragmentTransaction = supportFragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.container, fragment).commit()
+                    showSettingsFragment()
                 }
             }
             true
@@ -93,13 +89,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onBackPressed() {
 
-        if(supportFragmentManager.findFragmentByTag("CreatedChatScreen")!=null){
+        if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-           // val fragment = MyChatsFragment()
-          //  val fragmentTransaction = supportFragmentManager.beginTransaction()
-          //  fragmentTransaction.replace(R.id.container, fragment).commit()
-            //supportFragmentManager.popBackStack()
-           // supportFragmentManager.popBackStack()
             return
         }
 
@@ -109,6 +100,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
 
+        if (supportFragmentManager.findFragmentByTag("chatScreen") != null) {
+            val mainChatScreen = supportFragmentManager.findFragmentByTag("chatScreen")
+            if (mainChatScreen!!.childFragmentManager.backStackEntryCount > 0) {
+                mainChatScreen.childFragmentManager.popBackStack()
+                return
+            }
+        }
         supportFragmentManager.popBackStack()
     }
 
@@ -118,11 +116,33 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         ft.replace(R.id.container, newFragment, "MapScreen").commit()
     }
 
+    fun showMyChatsFragment() {
+        val fragment = MyChatsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, fragment).show(fragment).commit()
+    }
+
+    fun showSettingsFragment() {
+        val fragment = SettingsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, fragment).commit()
+    }
+
+    fun showMainChatScreen(chatId: String, fromMap: Boolean = false, stateChat: String = "join") {
+        val bundle = Bundle()
+        bundle.putString("chatId", chatId)
+        bundle.putBoolean("fromMap", fromMap)
+        bundle.putString("stateChat", stateChat)
+        val mainChatFragment = MainChatFragment()
+        mainChatFragment.arguments = bundle
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, mainChatFragment, "chatScreen").addToBackStack("chatScreen")
+            .commit()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         MainApplication.setMainActivity(null)
-       // MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
+        // MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
     }
-
-
 }

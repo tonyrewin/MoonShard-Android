@@ -18,6 +18,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.EventInfoPresente
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
 import io.moonshard.moonshard.ui.adapters.chat.MembersAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_event_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -90,6 +91,9 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
+
+        (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
+/*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -100,9 +104,15 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
             ?.addToBackStack("InviteUserFragment")
             ?.commit()
+
+ */
     }
 
     private fun showManageChatScreen(idChat: String) {
+
+        (parentFragment as? MainChatFragment)?.showManageChatScreen(idChat)
+
+/*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val manageChatFragment =
@@ -112,10 +122,14 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         ft?.replace(R.id.mainContainer, manageChatFragment, "manageChatFragment")?.hide(this)
             ?.addToBackStack("manageChatFragment")
             ?.commit()
+
+ */
     }
 
-    //todo maybe replace
     fun showProfileUser(jid: String) {
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
+
+        /*
         val bundle = Bundle()
         bundle.putString("userJid", jid)
         val fragment = ProfileUserFragment()
@@ -124,6 +138,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
             ?.addToBackStack("ProfileUserFragment")
             ?.commit()
+
+         */
     }
 
     override fun showMembers(members: List<Occupant>) {

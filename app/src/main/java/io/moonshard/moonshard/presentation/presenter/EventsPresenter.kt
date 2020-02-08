@@ -97,8 +97,8 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                 }, {
                     if (it is NotFoundException) {
                         ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 if (muc.isJoined) {
                                     viewState?.showChatScreens(jid)

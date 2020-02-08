@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
-import io.moonshard.moonshard.common.utils.Utils.bitMapToString
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_manage_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -68,25 +68,12 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
     }
 
     private fun showAdminsScreen() {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment = AdminsFragment()
-        fragment.arguments = bundle
-        val ft = childFragmentManager.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "AdminsFragment")?.hide(this)
-            ?.addToBackStack("AdminsFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showAdminsScreen(idChat)
     }
 
     private fun showMembersScreen() {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment = MembersChatFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "MembersChatFragment")?.hide(this)
-            ?.addToBackStack("MembersChatFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

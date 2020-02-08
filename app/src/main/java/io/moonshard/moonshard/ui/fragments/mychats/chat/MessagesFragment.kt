@@ -17,7 +17,6 @@ import io.moonshard.moonshard.presentation.view.MessagesView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
 import kotlinx.android.synthetic.main.messages_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -30,36 +29,13 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     var idChat: String = ""
 
-    override fun addToStart(message: GenericMessage, reverse: Boolean) {
-        MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as? MessagesAdapter)?.addToStart(message, reverse)
-        }
-    }
-
-    override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
-        MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as? MessagesAdapter)?.addToEnd(msgs, reverse)
-        }
-    }
-
-    override fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
-        MainApplication.getMainUIThread().post {
-            (messagesRv?.adapter as? MessagesAdapter)?.setMessages(msgs, reverse)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(
             R.layout.messages_chat,
             container, false
         )
-    }
-
-    override fun cleanMessage() {
-        editText?.text?.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,9 +45,9 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
         setAdapter()
 
-        if(ChatRepository.idChatCurrent!=null){
+        if (ChatRepository.idChatCurrent != null) {
             idChat = ChatRepository.idChatCurrent!!
-        }else{
+        } else {
             arguments?.let {
                 idChat = it.getString("chatId")
             }
@@ -93,6 +69,28 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
                 presenter.loadRecentPageMessages()
             }
         })
+    }
+
+    override fun cleanMessage() {
+        editText?.text?.clear()
+    }
+
+    override fun addToStart(message: GenericMessage, reverse: Boolean) {
+        MainApplication.getMainUIThread().post {
+            (messagesRv?.adapter as? MessagesAdapter)?.addToStart(message, reverse)
+        }
+    }
+
+    override fun addToEnd(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
+        MainApplication.getMainUIThread().post {
+            (messagesRv?.adapter as? MessagesAdapter)?.addToEnd(msgs, reverse)
+        }
+    }
+
+    override fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean) {
+        MainApplication.getMainUIThread().post {
+            (messagesRv?.adapter as? MessagesAdapter)?.setMessages(msgs, reverse)
+        }
     }
 
     override fun onDestroyView() {
@@ -132,7 +130,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
-            if(input!=null){
+            if (input != null) {
                 val file = StreamUtil.stream2file(input)
                 presenter.sendFile(file)
             }
@@ -145,4 +143,14 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
     }
+
+    override fun showProgressBar() {
+        //progressBar?.visibility=View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+       // progressBar?.visibility=View.GONE
+    }
+
+
 }

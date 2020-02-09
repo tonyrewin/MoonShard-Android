@@ -28,6 +28,7 @@ import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.fragments.map.bottomsheet.CategoriesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
@@ -303,6 +304,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         }
     }
 
+
+    //todo maybe change on childFragmentManager ?
     private fun setupBottomSheet() {
         val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
             activity!!.supportFragmentManager,
@@ -373,6 +376,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             presenter.getRooms("", "", "", null)
             hideCategoryBottomSheet()
             updateListRooms()
+            clearCategoryAdapter()
         }
 
         sheetInfoBehavior?.setBottomSheetCallback(object :
@@ -416,6 +420,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 }
             }
         })
+    }
+
+
+    fun clearCategoryAdapter(){
+        val fragment =
+            fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
+        (fragment as? CategoriesFragment)?.clearCategories()
     }
 
     private fun getMyLocation() {

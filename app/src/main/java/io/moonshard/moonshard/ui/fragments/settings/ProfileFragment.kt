@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
@@ -54,21 +55,25 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
     }
 
     override fun setData(nickName: String?, description: String?) {
-        if (nickName != null) {
-            nickNameTv?.text = nickName.toString()
-        } else {
-            nickNameTv?.text = "Имя"
-        }
+        MainApplication.getMainUIThread().post {
+            if (nickName != null) {
+                nickNameTv?.text = nickName.toString()
+            } else {
+                nickNameTv?.text = "Имя"
+            }
 
-        if (description != null) {
-            descriptionTv?.text = description.toString()
-        } else {
-            descriptionTv?.text = "Информация о вас не заполнена"
+            if (description != null) {
+                descriptionTv?.text = description.toString()
+            } else {
+                descriptionTv?.text = "Информация о вас не заполнена"
+            }
         }
     }
 
     override fun setAvatar(avatar: Bitmap?) {
-        avatarIv?.setImageBitmap(avatar)
+        MainApplication.getMainUIThread().post {
+            avatarIv?.setImageBitmap(avatar)
+        }
     }
 
     override fun showError(error: String) {

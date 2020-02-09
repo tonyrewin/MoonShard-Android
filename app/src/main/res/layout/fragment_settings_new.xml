@@ -68,7 +68,7 @@
                         android:layout_marginLeft="11dp"
                         android:layout_marginTop="20dp"
                         android:layout_toRightOf="@+id/avatarIv"
-                        android:text="Kanaevsky"
+                        tools:text="Kanaevsky"
                         android:textColor="#333333"
                         android:textSize="17sp" />
 
@@ -79,7 +79,7 @@
                         android:layout_below="@+id/nameTv"
                         android:layout_alignLeft="@+id/nameTv"
                         android:layout_marginTop="1dp"
-                        android:text="kanaevsky1989"
+                        tools:text="kanaevsky1989"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 

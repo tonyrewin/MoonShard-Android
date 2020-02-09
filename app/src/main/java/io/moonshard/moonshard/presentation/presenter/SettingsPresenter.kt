@@ -1,9 +1,13 @@
 package io.moonshard.moonshard.presentation.presenter
 
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.SettingsView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.vcardtemp.VCardManager
@@ -26,29 +30,49 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         }.start()
     }
 
-    fun getAvatar() {
-        try {
+    fun getAvatar(){
+        getAvatarBitmap().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                viewState?.setAvatar(it)
+            },{
+                it.message?.let { it1 -> viewState?.showError(it1) }
+            })
+    }
+
+    private fun getAvatarBitmap(): Observable<Bitmap> {
+        return Observable.create {
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()
             val avatarBytes = card.avatar
-            avatarBytes?.let {
+
+            if (avatarBytes != null) {
                 val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-                viewState?.setAvatar(bitmap)
+                it.onNext(bitmap)
             }
-        } catch (e: Exception) {
-            e.message?.let { viewState?.showError(it) }
         }
     }
 
     fun getName() {
-        try {
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard()
-            val nickName = card.nickName
-            val jidPart = card.to.asBareJid().localpartOrNull.toString()
-            viewState?.setData(nickName, jidPart)
-        } catch (e: Exception) {
-            e.message?.let { viewState?.showError(it) }
+        getNameFromVCard().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
+                viewState?.setData(it["nickName"], it["jidPart"])
+            },{
+                it.message?.let { it1 -> viewState?.showError(it1) }
+            })
+    }
+
+    private fun getNameFromVCard(): Observable<HashMap<String,String>> {
+        return Observable.create {
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = card.nickName
+                val jidPart = card.to.asBareJid().localpartOrNull.toString()
+            val hashMapData = hashMapOf<String,String>()
+            hashMapData["nickName"] = nickName
+            hashMapData["jidPart"] = jidPart
+                it.onNext(hashMapData)
         }
     }
 }

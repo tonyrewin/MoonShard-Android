@@ -14,6 +14,13 @@ class SecurityPresenter : MvpPresenter<SecurityView>() {
     fun changePassword(
         newPass: String, repeatNewPass: String, currentPass: String
     ) {
+        if (newPass == repeatNewPass) {
+            changeNewPassword(newPass)
+        } else {
+            viewState?.showError("Пароли не совпадают")
+        }
+
+        /*
         if (SecurePreferences.getStringValue("pass", "") == currentPass) {
             if (newPass == repeatNewPass) {
                 changeNewPassword(newPass)
@@ -23,6 +30,7 @@ class SecurityPresenter : MvpPresenter<SecurityView>() {
         } else {
             viewState?.showError("Текущий пароль неверный")
         }
+         */
     }
 
     private fun changeNewPassword(newPass: String) {

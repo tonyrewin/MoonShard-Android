@@ -72,6 +72,7 @@ class ChangeProfilePresenter : MvpPresenter<ChangeProfileView>() {
                 viewState?.hideProgressBar()
                 viewState?.setAvatar(it)
             }, {
+                viewState?.hideProgressBar()
                 it.message?.let { it1 -> viewState?.showError(it1) }
             })
     }
@@ -85,6 +86,8 @@ class ChangeProfilePresenter : MvpPresenter<ChangeProfileView>() {
             if (avatarBytes != null) {
                 val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
                 it.onNext(bitmap)
+            }else{
+                it.onError(Throwable())
             }
         }
     }

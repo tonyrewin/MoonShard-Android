@@ -49,6 +49,8 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
             if (avatarBytes != null) {
                 val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
                 it.onNext(bitmap)
+            }else{
+                it.onError(Throwable())
             }
         }
     }

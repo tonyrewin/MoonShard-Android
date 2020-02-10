@@ -20,6 +20,8 @@ import io.moonshard.moonshard.ui.activities.onboard.MainIntroActivity
 import io.moonshard.moonshard.ui.activities.onboardregistration.StartProfileActivity
 import kotlinx.android.synthetic.main.activity_register.*
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smack.SmackException
+import org.jivesoftware.smack.XMPPException
 
 
 class RegisterActivity : BaseActivity(), RegisterView {
@@ -102,7 +104,20 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
-            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+            when (e) {
+                is XMPPException -> {
+                    showError("Произошла ошибка на сервере")
+                }
+                is SmackException.NoResponseException -> {
+                    showError("Время ожидания ответа от сервера истекло")
+                }
+                is SmackException.NotConnectedException -> {
+                    showError("Отсутствует интернет-соединение")
+                }
+                else -> {
+                    e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+                }
+            }
         }
     }
 

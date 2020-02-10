@@ -3,25 +3,24 @@ package io.moonshard.moonshard.ui.activities.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.PasswordTransformationMethod
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
-import kotlinx.android.synthetic.main.activity_login.*
-import moxy.presenter.InjectPresenter
-import android.text.style.UnderlineSpan
-import android.text.SpannableString
-import android.text.method.PasswordTransformationMethod
-import io.moonshard.moonshard.R
-import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.BaseActivity
 import io.moonshard.moonshard.ui.activities.MainActivity
-import kotlinx.android.synthetic.main.activity_login.editEmail
-import kotlinx.android.synthetic.main.activity_login.editPassword
-import kotlinx.android.synthetic.main.activity_login.visiblePassBtn
+import kotlinx.android.synthetic.main.activity_login.*
+import moxy.presenter.InjectPresenter
+import org.jivesoftware.smack.SmackException
+import org.jivesoftware.smack.XMPPException
 
 
 class LoginActivity : BaseActivity(), LoginView {
@@ -113,7 +112,21 @@ class LoginActivity : BaseActivity(), LoginView {
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
-            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+
+            when (e) {
+                is XMPPException -> {
+                    showError("Произошла ошибка на сервере")
+                }
+                is SmackException.NoResponseException -> {
+                    showError("Время ожидания ответа от сервера истекло")
+                }
+                is SmackException.NotConnectedException -> {
+                    showError("Отсутствует интернет-соединение")
+                }
+                else -> {
+                    e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+                }
+            }
         }
     }
 

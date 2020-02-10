@@ -35,7 +35,6 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).showBottomNavigationBar()
 
         chatsRv?.layoutManager = LinearLayoutManager(view.context)
         chatListAdapter = ChatListAdapter(this.mvpDelegate, object : ChatListListener {

@@ -13,6 +13,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
@@ -38,6 +39,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.showBottomNavigationBar()
+
 
         arguments?.let {
             idChat = it.getString("chatId")
@@ -119,6 +122,10 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             ?.commit()
 
          */
+    }
+
+    fun showCreateNewEventScreen(idChat: String) {
+        (parentFragment as? MainChatFragment)?.showCreateNewEventScreen(idChat)
     }
 
     private fun showChatInfo(chatId: String) {
@@ -204,6 +211,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+
 /*
         for (fragment in childFragmentManager.fragments) {
         childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()

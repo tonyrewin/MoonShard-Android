@@ -19,12 +19,12 @@ import io.moonshard.moonshard.ui.adapters.CategoryListener
 import io.moonshard.moonshard.ui.adapters.create.GroupsAdapter
 import io.moonshard.moonshard.ui.adapters.create.GroupsListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_create_new_event.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
@@ -34,7 +34,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
     val dateAndTime = Calendar.getInstance()
 
-    var fromEventsFragment:Boolean = false
+    var fromEventsFragment: Boolean = false
 
 
     override fun onCreateView(
@@ -61,11 +61,11 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            fromEventsFragment = it.getBoolean("chatId",false)
+            fromEventsFragment = it.getBoolean("fromEventsFragment", false)
         }
 
         ChooseChatRepository.date = dateAndTime
-        setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
+        setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
 
         initAdapter()
 
@@ -111,7 +111,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 ChooseChatRepository.lat,
                 ChooseChatRepository.lng,
                 ChooseChatRepository.getTimeSec(),
-                ChooseChatRepository.category,ChooseChatRepository.group,
+                ChooseChatRepository.category, ChooseChatRepository.group,
                 ChooseChatRepository.getEventStartDate()
             )
         }
@@ -210,11 +210,9 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         ChooseChatRepository.name = nameTv?.text.toString()
         val chatFragment =
             ChooseMapFragment()
-        if(fromEventsFragment){
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(io.moonshard.moonshard.R.id.mainContainer, chatFragment, "ChooseMapFragment")
-                ?.addToBackStack("ChooseMapFragment")?.commit()
-        }else{
+        if (fromEventsFragment) {
+            (parentFragment as? MainChatFragment)?.showChooseMapScreen()
+        } else {
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "ChooseMapFragment")
                 ?.addToBackStack("ChooseMapFragment")?.commit()
@@ -231,7 +229,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
 
         groupsRv?.layoutManager = LinearLayoutManager(context)
-        groupsRv?.adapter = GroupsAdapter(object:GroupsListener{
+        groupsRv?.adapter = GroupsAdapter(object : GroupsListener {
             override fun clickChat(categoryName: ChatEntity) {
                 ChooseChatRepository.group = categoryName
             }
@@ -243,7 +241,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     }
 
     override fun showAdminChats(chats: ArrayList<ChatEntity>) {
-        ( groupsRv?.adapter as? GroupsAdapter)?.updateGroups(chats)
+        (groupsRv?.adapter as? GroupsAdapter)?.updateGroups(chats)
     }
 
     override fun showMapScreen() {
@@ -261,11 +259,15 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     private fun showTimesScreen() {
         val chatFragment =
             TimeEventFragment()
-        if(fromEventsFragment){
-            val ft =activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(io.moonshard.moonshard.R.id.mainContainer, chatFragment, "TimeEventFragment")
+        if (fromEventsFragment) {
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.replace(
+                io.moonshard.moonshard.R.id.mainContainer,
+                chatFragment,
+                "TimeEventFragment"
+            )
                 ?.addToBackStack("TimeEventFragment")?.commit()
-        }else{
+        } else {
             val ft = activity?.supportFragmentManager?.beginTransaction()
             ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "TimeEventFragment")
                 ?.addToBackStack("TimeEventFragment")

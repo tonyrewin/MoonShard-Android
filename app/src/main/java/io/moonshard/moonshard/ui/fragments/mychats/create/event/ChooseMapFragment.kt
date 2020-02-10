@@ -17,6 +17,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import java.io.IOException
 import java.util.*
@@ -79,7 +80,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         }
 
         back?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+                fragmentManager?.popBackStack()
         }
 
         getZoomCenter()
@@ -109,12 +110,13 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
     }
 
     private fun getMyLocation() {
-        if(MainApplication.getCurrentLocation()!=null){
+        if (MainApplication.getCurrentLocation() != null) {
             val latLng = LatLng(
                 MainApplication.getCurrentLocation().latitude,
                 MainApplication.getCurrentLocation().longitude
             )
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
+            val cameraUpdate =
+                CameraUpdateFactory.newLatLngZoom(latLng, mMap?.cameraPosition?.zoom!!)
             mMap?.animateCamera(cameraUpdate)
         }
     }

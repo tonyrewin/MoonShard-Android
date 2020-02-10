@@ -51,8 +51,7 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
 
     fun showCreateNewEventScreen(idChat: String) {
 
-
-        (parentFragment as? MainChatFragment)?.showCreateNewEventScreen(idChat)
+        (parentFragment as? ChatFragment)?.showCreateNewEventScreen(idChat)
         /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)

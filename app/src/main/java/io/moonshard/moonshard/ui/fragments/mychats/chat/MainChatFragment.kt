@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
+import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 
 
@@ -178,6 +179,14 @@ class MainChatFragment : Fragment() {
             .commit()
     }
 
+    fun showChooseMapScreen(){
+        val fragment =
+            ChooseMapFragment()
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "ChooseMapFragment")
+            .addToBackStack("ChooseMapFragment").commit()
+    }
+
     fun showChatScreens(jid: String) {
         val bundle = Bundle()
         bundle.putString("chatId", jid)
@@ -194,7 +203,7 @@ class MainChatFragment : Fragment() {
         for (fragment in childFragmentManager.fragments) {
             childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
         }
-        (activity as? MainActivity)?.showBottomNavigationBar()
+        if(fromMap) (activity as? MainActivity)?.showBottomNavigationBar()
     }
 
     fun back() {

@@ -8,4 +8,6 @@ interface ChangeProfileView: MvpView {
     fun setAvatar(avatar:Bitmap?)
     fun showProfile()
     fun showError(error:String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

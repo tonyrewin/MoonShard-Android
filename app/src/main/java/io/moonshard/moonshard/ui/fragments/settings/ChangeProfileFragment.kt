@@ -116,4 +116,12 @@ class ChangeProfileFragment : MvpAppCompatFragment(), ChangeProfileView {
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
 }

@@ -460,7 +460,6 @@ public class XMPPConnection implements ConnectionListener {
         Log.d("Auth", "Time taken to register: " + (System.currentTimeMillis() - l));
     }
 
-
     public boolean login(String jid, String pass) {
         String username = jid.split("@")[0];
         XMPPTCPConnection connection = getConnection();

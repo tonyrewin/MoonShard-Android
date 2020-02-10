@@ -29,7 +29,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     private var latLngInterestPoint: PointOfInterest? = null
 
-    private val defaultZoom: Float = 6F
+    private val defaultZoom: Float = 9F
 
     private var defaultMoscowlatitude: Double = 55.751244
     private var defaultMoscowlongitude: Double = 37.618423

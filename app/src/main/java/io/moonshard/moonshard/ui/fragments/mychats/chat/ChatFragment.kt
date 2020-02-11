@@ -41,7 +41,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         super.onViewCreated(view, savedInstanceState)
         (activity as? MainActivity)?.showBottomNavigationBar()
 
-
         arguments?.let {
             idChat = it.getString("chatId")
             fromMap = it.getBoolean("fromMap", false)
@@ -111,57 +110,22 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     private fun showEventInfo(chatId: String) {
         (parentFragment as? MainChatFragment)?.showEventInfo(chatId)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val eventFragment = EventInfoFragment()
-        eventFragment.arguments = bundle
-        val ft = fragmentManager?.beginTransaction()
-        ft?.add(R.id.container, eventFragment, "EventInfoFragment")?.addToBackStack("EventInfoFragment")
-            ?.commit()
-
-         */
     }
 
     fun showCreateNewEventScreen(idChat: String) {
         (parentFragment as? MainChatFragment)?.showCreateNewEventScreen(idChat)
     }
 
+    fun showChatFragment(jid:String){
+        (parentFragment as? MainChatFragment)?.showChatScreen(jid)
+    }
+
     private fun showChatInfo(chatId: String) {
-
         (parentFragment as? MainChatFragment)?.showChatInfo(chatId)
-
-        // (activity as? MainActivity)?.showChatInfo(chatId,this)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val chatFragment = ChatInfoFragment()
-        chatFragment.arguments = bundle
-        val ft = fragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, chatFragment, "ChatInfoFragment")
-            ?.addToBackStack("ChatInfoFragment")
-            ?.commit()
-
-         */
     }
 
     private fun showProfileUser(jid: String) {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("userJid", jid)
-        bundle.putBoolean("fromChatFragment",true)
-        val fragment = ProfileUserFragment()
-        fragment.arguments = bundle
-        val ft = fragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
-            ?.addToBackStack("ProfileUserFragment")
-            ?.commit()
-
-         */
     }
 
     override fun setDataMuc(

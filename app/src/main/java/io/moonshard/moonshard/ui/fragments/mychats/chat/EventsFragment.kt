@@ -14,7 +14,6 @@ import io.moonshard.moonshard.presentation.presenter.EventsPresenter
 import io.moonshard.moonshard.presentation.view.chat.EventsView
 import io.moonshard.moonshard.ui.adapters.chat.EventAdapter
 import io.moonshard.moonshard.ui.adapters.chat.EventListener
-import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_events.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -49,39 +48,19 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         }
     }
 
-    fun showCreateNewEventScreen(idChat: String) {
-
+    private fun showCreateNewEventScreen(idChat: String) {
         (parentFragment as? ChatFragment)?.showCreateNewEventScreen(idChat)
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        bundle.putBoolean("fromEventsFragment", true)
-        val chatFragment = CreateNewEventFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, chatFragment, "CreateNewEventFragment")
-            ?.addToBackStack("CreateNewEventFragment")
-            ?.commit()
-
-         */
     }
 
-   override fun showChatScreens(jid:String){
-       val bundle = Bundle()
-       bundle.putString("chatId", jid)
-       bundle.putBoolean("fromEvent",true)
-       val mainChatFragment = MainChatFragment()
-       mainChatFragment.arguments = bundle
-       val ft = activity?.supportFragmentManager?.beginTransaction()
-       ft?.replace(R.id.container, mainChatFragment, "chatScreen")?.addToBackStack(null)
-           ?.commit()
+   override fun showChatScreen(jid:String){
+       (parentFragment as? ChatFragment)?.showChatFragment(jid)
     }
 
     private fun initAdapter() {
         eventsRv?.layoutManager = LinearLayoutManager(context)
         eventsRv?.adapter = EventAdapter(object : EventListener {
             override fun eventClick(event: RoomPin) {
-                event.roomId?.let { showChatScreens(it) }
+                event.roomId?.let { showChatScreen(it) }
             }
         }, arrayListOf())
     }

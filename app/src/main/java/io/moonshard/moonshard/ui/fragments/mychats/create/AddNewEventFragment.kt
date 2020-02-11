@@ -8,6 +8,7 @@ import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_add_new_event.*
 
@@ -30,13 +31,6 @@ class AddNewEventFragment : Fragment() {
         }
     }
     fun showCreateNewChatScreen(){
-        val bundle = Bundle()
-        bundle.putBoolean("fromEventsFragment",false)
-        val chatFragment =
-            CreateNewEventFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
-            ?.commit()
+        (activity as? MainActivity)?.showCreateNewEventScreen()
     }
 }

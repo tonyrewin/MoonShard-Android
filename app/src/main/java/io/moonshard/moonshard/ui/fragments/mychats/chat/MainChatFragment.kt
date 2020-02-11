@@ -12,13 +12,13 @@ import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
+import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 
 
 class MainChatFragment : Fragment() {
 
     var idChat: String = ""
     var fromMap: Boolean = false
-    var fromCreateNewChat: Boolean = false
     var stateChat: String = "join"
 
     override fun onCreateView(
@@ -37,20 +37,31 @@ class MainChatFragment : Fragment() {
             idChat = it.getString("chatId")
             fromMap = it.getBoolean("fromMap", false)
             stateChat = it.getString("stateChat", "join")
-            fromCreateNewChat = it.getBoolean("fromCreateNewChat", false)
         }
-        showChat()
+        showChatFirstStart()
     }
 
-    private fun showChat() {
+    private fun showChatFirstStart(jidChat: String = idChat) {
         val bundle = Bundle()
-        bundle.putString("chatId", idChat)
+        bundle.putString("chatId", jidChat)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment").commit()
+        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$jidChat").commit()
+    }
+
+    private fun showChat(jidChat: String = idChat) {
+        val bundle = Bundle()
+        bundle.putString("chatId", jidChat)
+        bundle.putBoolean("fromMap", fromMap)
+        bundle.putString("stateChat", stateChat)
+        val chatFragment = ChatFragment()
+        chatFragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$jidChat")
+            .addToBackStack("realChatFragment:$jidChat").commit()
     }
 
     fun showChatWithStack() {
@@ -166,7 +177,6 @@ class MainChatFragment : Fragment() {
             .commit()
     }
 
-
     fun showCreateNewEventScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -179,7 +189,15 @@ class MainChatFragment : Fragment() {
             .commit()
     }
 
-    fun showChooseMapScreen(){
+    fun showTimeEventScreen() {
+        val chatFragment =
+            TimeEventFragment()
+        val ft = activity?.supportFragmentManager?.beginTransaction()
+        ft?.replace(R.id.mainContainer, chatFragment, "TimeEventFragment")
+            ?.addToBackStack("TimeEventFragment")?.commit()
+    }
+
+    fun showChooseMapScreen() {
         val fragment =
             ChooseMapFragment()
         val ft = childFragmentManager.beginTransaction()
@@ -187,14 +205,15 @@ class MainChatFragment : Fragment() {
             .addToBackStack("ChooseMapFragment").commit()
     }
 
-    fun showChatScreens(jid: String) {
+    fun showChatScreen(jid: String) {
         val bundle = Bundle()
         bundle.putString("chatId", jid)
         bundle.putBoolean("fromEvent", true)
         val mainChatFragment = MainChatFragment()
         mainChatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, mainChatFragment, "chatScreen").addToBackStack("chatScreen").commit()
+        ft.replace(R.id.mainContainer, mainChatFragment, "chatScreen").addToBackStack("chatScreen")
+            .commit()
     }
 
     override fun onDestroyView() {
@@ -203,7 +222,8 @@ class MainChatFragment : Fragment() {
         for (fragment in childFragmentManager.fragments) {
             childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
         }
-        if(fromMap) (activity as? MainActivity)?.showBottomNavigationBar()
+
+        if (fromMap) (activity as? MainActivity)?.showBottomNavigationBar()
     }
 
     fun back() {

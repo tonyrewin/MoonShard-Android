@@ -4,6 +4,5 @@ import moxy.MvpView
 
 interface AddChatView : MvpView {
     fun showError(text:String?)
-    fun back()
     fun showCreateNewChatScreen()
 }

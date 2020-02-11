@@ -36,6 +36,7 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).showBottomNavigationBar()
 
         initViewPager()
 
@@ -95,12 +96,8 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
         }
 
         newChat?.setSafeOnClickListener {
-            (activity as MainActivity).hideBottomNavigationBar()
-            val newFragment = CreateGroupFragment()
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(R.id.container, newFragment, "CreateGroupFragment")
-                ?.addToBackStack("CreateGroupFragment")
-                ?.commit()
+            (activity as? MainActivity)?.hideBottomNavigationBar()
+            (activity as? MainActivity)?.showCreateGroupScreen()
         }
     }
 
@@ -135,6 +132,4 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
     override fun onResume() {
         super.onResume()
     }
-
-
 }

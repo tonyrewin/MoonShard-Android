@@ -1,8 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import com.instacart.library.truetime.TrueTime
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.GenericMessage
@@ -55,7 +55,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             .subscribe({
                 chat = it
                 loadLocalMessages()
-               // loadMoreMessages() // FIXME
+                // loadMoreMessages() // FIXME
             }, {
                 com.orhanobut.logger.Logger.d(it.message)
             })
@@ -64,7 +64,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun sendMessage(text: String) {
-        if(text.isBlank()) return
+        if (text.isBlank()) return
 
         sendMessageInternal(text)
             .subscribeOn(Schedulers.io())
@@ -92,7 +92,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
             val mec = muc?.getEnterConfigurationBuilder(nickName)
 
-         //   mec?.requestNoHistory()
+            //   mec?.requestNoHistory()
             val mucEnterConfig = mec?.build()
             muc?.join(mucEnterConfig)
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
@@ -183,7 +183,9 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
             override fun onNext(message: MessageEntity) {
                 ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
-                    .subscribe()
+                    .subscribe({ }, {
+                        Logger.d(it)
+                    })
                 viewState?.addToStart(GenericMessage(message), true)
             }
 
@@ -235,8 +237,13 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                         .subscribeOn(Schedulers.io())
                                                         .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe({
-                                                            adapterMessages.add(GenericMessage(messageEntity))
-                                                        },{ throwable -> Log.e(throwable.message) })
+                                                            adapterMessages.add(
+                                                                GenericMessage(
+                                                                    messageEntity
+                                                                )
+                                                            )
+                                                        },
+                                                            { throwable -> Log.e(throwable.message) })
                                                     //need save message
                                                 }, {
                                                     val chatUser = ChatUser(
@@ -259,12 +266,19 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                             messageEntity.chat.target = chat
                                                             messageEntity.sender.target = chatUser
 
-                                                            MessageRepository.saveMessage(messageEntity)
+                                                            MessageRepository.saveMessage(
+                                                                messageEntity
+                                                            )
                                                                 .subscribeOn(Schedulers.io())
                                                                 .observeOn(AndroidSchedulers.mainThread())
                                                                 .subscribe({
-                                                                    adapterMessages.add(GenericMessage(messageEntity))
-                                                                },{ throwable -> Log.e(throwable.message) })
+                                                                    adapterMessages.add(
+                                                                        GenericMessage(
+                                                                            messageEntity
+                                                                        )
+                                                                    )
+                                                                },
+                                                                    { throwable -> Log.e(throwable.message) })
                                                         }
                                                 })
 
@@ -362,7 +376,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
         }
     }
-//mamManager.queryArchive(MamManager.MamQueryArgs.builder().limitResultsToJid(JidCreate.from(chatID)).build()).messageCount
+
+    //mamManager.queryArchive(MamManager.MamQueryArgs.builder().limitResultsToJid(JidCreate.from(chatID)).build()).messageCount
     @SuppressLint("CheckResult")
     fun loadMessagesFromMAM(): Single<MamManager.MamQuery> {
         return Single.create {
@@ -373,12 +388,13 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ msg ->
-                            val mamQuery =  mamManager.queryArchive(
+                            val mamQuery = mamManager.queryArchive(
                                 MamManager.MamQueryArgs.builder()
                                     .beforeUid(msg.messageUid)
                                     .limitResultsToJid(JidCreate.from(chatID))
                                     .setResultPageSizeTo(50)
-                                    .build())
+                                    .build()
+                            )
                             it.onSuccess(
                                 mamQuery
                             )

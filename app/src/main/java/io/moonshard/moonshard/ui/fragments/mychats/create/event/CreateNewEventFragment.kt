@@ -14,6 +14,7 @@ import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewEventPresenter
 import io.moonshard.moonshard.presentation.view.CreateNewEventView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
 import io.moonshard.moonshard.ui.adapters.create.GroupsAdapter
@@ -206,16 +207,12 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         }
     }
 
-    fun showChooseMapScreen() {
+    private fun showChooseMapScreen() {
         ChooseChatRepository.name = nameTv?.text.toString()
-        val chatFragment =
-            ChooseMapFragment()
         if (fromEventsFragment) {
             (parentFragment as? MainChatFragment)?.showChooseMapScreen()
         } else {
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "ChooseMapFragment")
-                ?.addToBackStack("ChooseMapFragment")?.commit()
+            (activity as? MainActivity)?.showChooseMapScreen()
         }
     }
 
@@ -245,11 +242,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     }
 
     override fun showMapScreen() {
-        val mapFragment = MapFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(io.moonshard.moonshard.R.id.container, mapFragment, null)
-            ?.addToBackStack(null)
-            ?.commit()
+        (activity as? MainActivity)?.showMapScrenFromCreateNewEventScreen()
     }
 
     override fun showToast(text: String) {
@@ -257,21 +250,10 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     }
 
     private fun showTimesScreen() {
-        val chatFragment =
-            TimeEventFragment()
         if (fromEventsFragment) {
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(
-                io.moonshard.moonshard.R.id.mainContainer,
-                chatFragment,
-                "TimeEventFragment"
-            )
-                ?.addToBackStack("TimeEventFragment")?.commit()
+            (parentFragment as? MainChatFragment)?.showTimeEventScreen()
         } else {
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.replace(io.moonshard.moonshard.R.id.container, chatFragment, "TimeEventFragment")
-                ?.addToBackStack("TimeEventFragment")
-                ?.commit()
+            (activity as? MainActivity)?.showTimeEventScreen()
         }
     }
 

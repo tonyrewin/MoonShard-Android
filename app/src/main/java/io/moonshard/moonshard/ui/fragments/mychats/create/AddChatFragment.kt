@@ -9,6 +9,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.create_group.AddChatPresenter
 import io.moonshard.moonshard.presentation.view.AddChatView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.chat.CreateNewChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
@@ -43,17 +44,7 @@ class AddChatFragment : MvpAppCompatFragment(), AddChatView {
         } ?: Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
     }
 
-    override fun back() {
-        val newFragment = ChatsFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, newFragment)?.commit()
-    }
-
    override fun showCreateNewChatScreen(){
-        val chatFragment =
-            CreateNewChatFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.
-            addToBackStack("CreateNewEventFragment")?.commit()
+       (activity as? MainActivity)?.showCreateNewChatScreen()
     }
 }

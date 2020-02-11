@@ -92,7 +92,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (muc.isJoined) {
-                        viewState?.showChatScreens(jid)
+                        viewState?.showChatScreen(jid)
                     }
                 }, {
                     if (it is NotFoundException) {
@@ -101,7 +101,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 if (muc.isJoined) {
-                                    viewState?.showChatScreens(jid)
+                                    viewState?.showChatScreen(jid)
                                 }
                             }, { throwable ->
                                 Logger.d(throwable.message)

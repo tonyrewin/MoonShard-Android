@@ -495,7 +495,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     String sucess = "";
-                    //  onIncomingMessageInternal(chatEntity, message,  room.getRoom().asEntityBareJidString(), inviter.asEntityBareJidString());
+                    //  onIncomingMessageInternal(chatEntity, message,  room.getRoomInfo().asEntityBareJidString(), inviter.asEntityBareJidString());
                 }, e -> {
                     Logger.d(e);
                 });

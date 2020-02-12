@@ -22,17 +22,18 @@ import java.util.*
 @InjectViewState
 class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
-
     @SuppressLint("CheckResult")
     fun createGroupChat(
         chatName: String
     ) {
+        viewState?.showProgressBar()
         if (chatName.isNotBlank()) {
             val actualChatName: String
             val jidRoomString = UUID.randomUUID().toString()+"-chat" + "@conference.moonshard.tech"
 
             if (chatName.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
+                viewState?.hideProgressBar()
                 return
             } else {
                 actualChatName = chatName.split("@")[0]
@@ -81,14 +82,16 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                         it.message?.let { viewState?.showToast(it) }
                     })
             } catch (e: Exception) {
+                viewState?.hideProgressBar()
                 e.message?.let { viewState?.showToast(it) }
             }
         } else {
+            viewState?.hideProgressBar()
             viewState?.showToast("Заполните поле")
         }
     }
 
-    fun joinChat(jid: String) {
+    private fun joinChat(jid: String) {
         try {
             val manager =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
@@ -100,9 +103,13 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             val nickName = Resourcepart.from(card.nickName)
 
             muc.join(nickName)
+
+            viewState?.hideProgressBar()
             viewState?.showChatScreen(jid)
         } catch (e: Exception) {
-            Logger.d(e.message)
+            viewState?.hideProgressBar()
+            e.message?.let { viewState?.showToast(it) }
         }
     }
+
 }

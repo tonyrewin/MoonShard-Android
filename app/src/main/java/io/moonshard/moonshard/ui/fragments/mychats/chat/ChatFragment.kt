@@ -54,15 +54,23 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         backBtn?.setSafeOnClickListener {
             if (fromCreateNewChat) {
-                activity!!.supportFragmentManager.popBackStack(
-                    null,
+                //good
+                activity!!.supportFragmentManager.popBackStack(null,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
             } else {
+                if(parentFragment is MainChatFragment){
+                    parentFragment?.fragmentManager?.popBackStack()
+                }
+                //fragmentManager?.popBackStack()
+
+
+                /*
                 activity!!.supportFragmentManager.popBackStack(
                     null,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
+                 */
                 ChatRepository.clean()
             }
         }

@@ -58,7 +58,7 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                 unreadMessagesCount = 0
             )
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

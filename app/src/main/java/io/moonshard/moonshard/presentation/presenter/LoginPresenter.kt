@@ -20,6 +20,7 @@ import javax.inject.Inject
 class LoginPresenter : MvpPresenter<LoginView>() {
 
     fun addSupportChat(){
+        /*
         val chatEntity = ChatEntity(
             0,
             "support@conference.moonshard.tech",
@@ -36,6 +37,7 @@ class LoginPresenter : MvpPresenter<LoginView>() {
             }, {
                 Logger.d(it)
             })
+         */
 
     }
 

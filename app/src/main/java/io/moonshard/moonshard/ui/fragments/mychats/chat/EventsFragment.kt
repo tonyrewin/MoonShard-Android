@@ -26,7 +26,6 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
 
     var idChat: String = ""
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

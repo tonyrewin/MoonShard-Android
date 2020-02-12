@@ -104,11 +104,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
 
+
         val mainChatScreen = supportFragmentManager.findFragmentByTag("chatScreen")
         if (mainChatScreen != null) {
             if (mainChatScreen.childFragmentManager.backStackEntryCount > 0) {
                 mainChatScreen.childFragmentManager.popBackStack()
                 return
+            }else{
+                supportFragmentManager.popBackStack(null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
             }
         }
         supportFragmentManager.popBackStack()
@@ -147,11 +152,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         fragmentTransaction.replace(R.id.container, fragment).commit()
     }
 
-    fun showMainChatScreen(chatId: String, fromMap: Boolean = false, stateChat: String = "join") {
+    fun showMainChatScreen(chatId: String, fromMap: Boolean = false, stateChat: String = "join",fromCreateNewChat:Boolean = false) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
+        bundle.putBoolean("fromCreateNewChat",fromCreateNewChat)
         val mainChatFragment = MainChatFragment()
         mainChatFragment.arguments = bundle
         val ft = supportFragmentManager.beginTransaction()

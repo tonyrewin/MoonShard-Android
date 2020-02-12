@@ -16,6 +16,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.RoomPin
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.packet.Presence
@@ -45,26 +46,36 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            val roomInfo = getRoom(chats[position].roomId.toString())
-            val onlineUser = getValueOnlineUsers(
-                chats[position].roomId.toString())
+            getRoomInfo(chats[position].roomId.toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    setValueMembersTv(it, chats[position].roomId.toString(), holder.valueMembersTv)
+                    setAvatar(chats[position].roomId.toString(), holder.groupIv!!, it.name!!)
+                    holder.groupNameTv?.text = it.name.toString()
+                }, {
+                    Logger.d(it)
+                })
 
-            setAvatar(chats[position].roomId.toString(), holder.groupIv!!,roomInfo?.name!!)
-            holder.groupNameTv?.text = roomInfo?.name.toString()
-            holder.valueMembersTv?.text = "${roomInfo?.occupantsCount} человек, $onlineUser онлайн"
-            holder.locationValueTv?.text =
-                calculationByDistance(chats[position].latitude, chats[position].longitude)
+            calculationByDistance(chats[position].latitude, chats[position].longitude)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    holder.locationValueTv?.text = it
+                }, {
+                    Logger.d(it)
+                })
 
             holder.itemView.setSafeOnClickListener {
                 listener.clickChat(chats[position])
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Logger.d(e)
         }
     }
 
-    fun getRoom(jid: String): RoomInfo? {
-        try {
+    fun getRoomInfo(jid: String): Observable<RoomInfo> {
+        return Observable.create {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
@@ -74,74 +85,84 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             val info =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(muc.room)
-            return info
-        } catch (e: Exception) {
-            val error = ""
-            Logger.d(e.message)
-            Logger.d(jid)
+
+            it.onNext(info)
         }
-        return null
     }
 
-    fun getValueOnlineUsers(jid: String): Int {
-        try {
-            val groupId = JidCreate.entityBareFrom(jid)
+    private fun setValueMembersTv(roomInfo: RoomInfo, jid: String, valueMembersTv: TextView?) {
+        getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                valueMembersTv?.text = "${roomInfo.occupantsCount} человек, $it онлайн"
+            }, {
 
-            val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getMultiUserChat(groupId)
-            val members = muc.occupants
+            })
+    }
 
-            var onlineValue = 0
-            for (i in members.indices) {
-                val userOccupantPresence =
-                    muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
-                if (userOccupantPresence.type == Presence.Type.available) {
-                    onlineValue++
+    private fun getValueOnlineUsers(jid: String): Observable<Int> {
+        return Observable.create {
+            try {
+                val groupId = JidCreate.entityBareFrom(jid)
+
+                val muc =
+                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                        .getMultiUserChat(groupId)
+                val members = muc.occupants
+
+                var onlineValue = 0
+                for (i in members.indices) {
+                    val userOccupantPresence =
+                        muc.getOccupantPresence(members[i].asEntityFullJidIfPossible())
+                    if (userOccupantPresence.type == Presence.Type.available) {
+                        onlineValue++
+                    }
                 }
+                it.onNext(onlineValue)
+            } catch (e: Exception) {
+                it.onNext(0)
             }
-            return onlineValue
-        }catch (e:Exception){
-            return 0
         }
     }
 
-    private fun calculationByDistance(latRoom: String?, lngRoom: String?): String {
-        if(latRoom!=null && lngRoom!=null) {
+    private fun calculationByDistance(latRoom: String?, lngRoom: String?): Observable<String> {
+        return Observable.create {
+            if (latRoom != null && lngRoom != null) {
 
-            MainApplication.getCurrentLocation()?.let {
-                val myLat = MainApplication.getCurrentLocation().latitude
-                val myLng = MainApplication.getCurrentLocation().longitude
+                MainApplication.getCurrentLocation()?.let { location ->
+                    val myLat = MainApplication.getCurrentLocation().latitude
+                    val myLng = MainApplication.getCurrentLocation().longitude
 
-                val km = SphericalUtil.computeDistanceBetween(
-                    LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                    LatLng(myLat, myLng)
-                ).toInt() / 1000
-                return if (km < 1) {
-                    (SphericalUtil.computeDistanceBetween(
-                        LatLng(
-                            latRoom.toDouble(),
-                            lngRoom.toDouble()
-                        ), LatLng(myLat, myLng)
-                    ).toInt()).toString() + " метрах"
-                } else {
-                    (SphericalUtil.computeDistanceBetween(
+                    val km = SphericalUtil.computeDistanceBetween(
                         LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                         LatLng(myLat, myLng)
-                    ).toInt() / 1000).toString() + " км"
+                    ).toInt() / 1000
+                    if (km < 1) {
+                        it.onNext(
+                            SphericalUtil.computeDistanceBetween(
+                                LatLng(
+                                    latRoom.toDouble(),
+                                    lngRoom.toDouble()
+                                ), LatLng(myLat, myLng)
+                            ).toInt().toString() + " метрах"
+                        )
+                    } else {
+                        it.onNext(
+                            (SphericalUtil.computeDistanceBetween(
+                                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                                LatLng(myLat, myLng)
+                            ).toInt() / 1000).toString() + " км"
+                        )
+                    }
                 }
             }
+            it.onNext("")
         }
-        return ""
     }
 
-    private fun setAvatar(
-        jid: String,
-        imageView: ImageView,
-        nameChat: String
-    ) {
+    private fun setAvatar(jid: String, imageView: ImageView, nameChat: String) {
         if (MainApplication.getCurrentChatActivity() != jid) {
-            MainApplication.getXmppConnection().loadAvatar(jid,nameChat)
+            MainApplication.getXmppConnection().loadAvatar(jid, nameChat)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bytes ->
@@ -156,9 +177,9 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         }
     }
 
-    fun setChats(moderators: ArrayList<RoomPin>) {
+    fun setChats(newChats: ArrayList<RoomPin>) {
         chats.clear()
-        chats.addAll(moderators)
+        chats.addAll(newChats)
         notifyDataSetChanged()
     }
 

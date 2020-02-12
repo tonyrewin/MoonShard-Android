@@ -53,7 +53,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

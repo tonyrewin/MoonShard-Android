@@ -35,15 +35,23 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         }
 
         back?.setSafeOnClickListener {
-            activity?.onBackPressed()
+            fragmentManager?.popBackStack()
         }
     }
 
     override fun showChatScreen(chatId: String) {
-        (activity as? MainActivity)?.showMainChatScreen(chatId)
+        (activity as? MainActivity)?.showMainChatScreen(chatId,fromCreateNewChat = true)
     }
 
     override fun showToast(text: String) {
         Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

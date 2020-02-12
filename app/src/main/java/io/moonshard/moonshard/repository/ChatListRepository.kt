@@ -46,16 +46,16 @@ object ChatListRepository {
         }
     }
 
-    fun getChatByJid(jid: Jid): Observable<ChatEntity> {
-        return Observable.create {
+    fun getChatByJid(jid: Jid): Single<ChatEntity> {
+        return Single.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
-            RxQuery.observable(query).subscribe { chat ->
+            RxQuery.single(query).subscribe { chat ->
                 if (!it.isDisposed) {
                     if (chat.isEmpty()) {
                         it.onError(NotFoundException())
                         return@subscribe
                     }
-                    it.onNext(chat.first())
+                    it.onSuccess(chat.first())
                 }
             }
         }

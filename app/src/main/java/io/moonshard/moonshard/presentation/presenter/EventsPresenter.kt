@@ -30,7 +30,6 @@ class EventsPresenter : MvpPresenter<EventsView>() {
         useCase = RoomsUseCase()
     }
 
-
     fun getRooms() {
         //this hard data - center Moscow
         compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
@@ -87,7 +86,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                 unreadMessagesCount = 0
             )
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

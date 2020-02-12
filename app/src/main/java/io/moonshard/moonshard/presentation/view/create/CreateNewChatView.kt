@@ -5,4 +5,6 @@ import moxy.MvpView
 interface CreateNewChatView: MvpView {
     fun showToast(text: String)
     fun showChatScreen(chatId: String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

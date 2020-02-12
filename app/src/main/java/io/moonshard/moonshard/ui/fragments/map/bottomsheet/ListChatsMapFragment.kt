@@ -64,11 +64,10 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
             val bundle = Bundle()
             bundle.putString("chatId", chatId)
             bundle.putBoolean("fromMap", true)
-            val mainChatFragment =
-                MainChatFragment()
+            val mainChatFragment = MainChatFragment()
             mainChatFragment.arguments = bundle
             val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack(null)
+            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack("chatScreen")
                 ?.commit()
         }
     }

@@ -128,7 +128,7 @@ class EventInfoPresenter: MvpPresenter<EventInfoView>() {
     }
 
     private fun removeChatFromBd(jid: String) {
-        ChatListRepository.getChatByJid(JidCreate.from(jid))
+        ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chat ->

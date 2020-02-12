@@ -20,6 +20,7 @@ class MainChatFragment : Fragment() {
     var idChat: String = ""
     var fromMap: Boolean = false
     var stateChat: String = "join"
+    var fromCreateNewChat: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +38,7 @@ class MainChatFragment : Fragment() {
             idChat = it.getString("chatId")
             fromMap = it.getBoolean("fromMap", false)
             stateChat = it.getString("stateChat", "join")
+            fromCreateNewChat = it.getBoolean("fromCreateNewChat", false)
         }
         showChatFirstStart()
     }
@@ -46,22 +48,11 @@ class MainChatFragment : Fragment() {
         bundle.putString("chatId", jidChat)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
+        bundle.putBoolean("fromCreateNewChat",fromCreateNewChat)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$jidChat").commit()
-    }
-
-    private fun showChat(jidChat: String = idChat) {
-        val bundle = Bundle()
-        bundle.putString("chatId", jidChat)
-        bundle.putBoolean("fromMap", fromMap)
-        bundle.putString("stateChat", stateChat)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
-        val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$jidChat")
-            .addToBackStack("realChatFragment:$jidChat").commit()
     }
 
     fun showChatWithStack() {

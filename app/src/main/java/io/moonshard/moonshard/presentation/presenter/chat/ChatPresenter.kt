@@ -66,7 +66,6 @@ class ChatPresenter : BasePresenter<ChatView>() {
         }
     }
 
-
     fun getDataInfoMuc() {
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
@@ -117,7 +116,11 @@ class ChatPresenter : BasePresenter<ChatView>() {
 
     fun isEvent() {
         if(chatID.contains("conference")){
-            getRooms()
+            if(chatID.contains("event")){
+                viewState.initViewPagerFromEvent()
+            }else if(chatID.contains("chat")){
+                viewState.initViewPager()
+            }
         }else{
             viewState?.initViewPagerFromEvent()
         }
@@ -129,27 +132,11 @@ class ChatPresenter : BasePresenter<ChatView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
-                initPager(rooms)
                 if (throwable != null) {
                     throwable.message?.let { viewState?.showError(it) }
                 }
             }
             .autoDispose(this)
-        //initPager(arrayListOf()) // todo для тест потом удалить
-    }
-
-    fun initPager(rooms: ArrayList<RoomPin>?) {
-        if (rooms != null) {
-            for (i in rooms.indices) {
-                if (rooms[i].roomId == chatID) {
-                    viewState.initViewPagerFromEvent()
-                    return
-                }
-            }
-            viewState.initViewPager()
-        } else {
-            viewState.initViewPager()
-        }
     }
 
     fun disconnectFromChat(state:String){

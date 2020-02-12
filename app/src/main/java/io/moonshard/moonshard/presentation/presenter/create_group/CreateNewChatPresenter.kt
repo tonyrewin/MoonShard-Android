@@ -29,7 +29,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     ) {
         if (chatName.isNotBlank()) {
             val actualChatName: String
-            val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
+            val jidRoomString = UUID.randomUUID().toString()+"-chat" + "@conference.moonshard.tech"
 
             if (chatName.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")

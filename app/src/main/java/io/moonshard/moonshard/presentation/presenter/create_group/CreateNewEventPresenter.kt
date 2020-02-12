@@ -59,7 +59,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
         if (latitude != null && longitude != null && category != null) {
             val actualUserName: String
-            val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
+            val jidRoomString = UUID.randomUUID().toString()+"-event" + "@conference.moonshard.tech"
 
             if (username.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")

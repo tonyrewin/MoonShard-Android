@@ -23,6 +23,8 @@ import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.disco.packet.DiscoverItems;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
@@ -45,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,8 +55,10 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.common.NotFoundException;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
@@ -74,6 +79,7 @@ public class XMPPConnection implements ConnectionListener {
     private MamManager mamManager;
     public MultiUserChatManager multiUserChatManager = null;
     public ChatManager chatManager = null;
+    public ServiceDiscoveryManager serviceDiscoveryManager = null;
 
     public enum ConnectionState {
         CONNECTED,
@@ -221,6 +227,8 @@ public class XMPPConnection implements ConnectionListener {
             baseActivity.onAuthenticated();
         }
 
+        serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(connection);
+
         ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
         ReconnectionManager.setEnabledPerDefault(true);
         reconnectionManager.enableAutomaticReconnection();
@@ -237,6 +245,8 @@ public class XMPPConnection implements ConnectionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+       // syncConferenceChats();
     }
 
     @Override
@@ -376,9 +386,9 @@ public class XMPPConnection implements ConnectionListener {
                     emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
                 }
                 if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
-                    if(!nameChat.isEmpty()){
+                    if (!nameChat.isEmpty()) {
                         emitter.onSuccess(createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
-                    }else{
+                    } else {
                         emitter.onError(new IllegalArgumentException());
                     }
                     return;
@@ -399,7 +409,7 @@ public class XMPPConnection implements ConnectionListener {
                         avatarBytes = createTextAvatar(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
                     }
                     emitter.onSuccess(avatarBytes);
-                }else{
+                } else {
                     byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
 
                     if (avatarBytes != null) {
@@ -612,6 +622,46 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+    public void addUserToGroup2(String userName, String groupName) {
+        try {
+            BareJid bareJid = JidCreate.bareFrom(userName);
+
+            RosterGroup group = roster.getGroup(groupName);
+            if (null == group) {
+                group = roster.createGroup(groupName);
+            }
+
+            String[] arr = new String[]{group.getName()};
+            roster.createEntry(bareJid, "kek", arr);
+
+            RosterEntry entry = roster.getEntry(bareJid);
+            if (entry != null) {
+                try {
+                    group.addEntry(entry);
+                } catch (XMPPException e) {
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NoResponseException e) {
+                    e.printStackTrace();
+                } catch (SmackException.NotConnectedException e) {
+                    if (connectAndLogin()) {
+                        addUserToGroup(userName, groupName);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getGroup(String groupName) {
+        RosterGroup gr = roster.getGroup(groupName);
+        String test = "";
+
+    }
+
+
     public void sendUserPresence(Presence presence) {
         if (connection != null) {
             if (isConnectionReady()) {
@@ -629,6 +679,13 @@ public class XMPPConnection implements ConnectionListener {
     public MamManager getMamManager() {
         if (isConnectionReady()) {
             return mamManager;
+        }
+        return null;
+    }
+
+    public ServiceDiscoveryManager getServiceDiscoveryManager() {
+        if (isConnectionReady()) {
+            return serviceDiscoveryManager;
         }
         return null;
     }
@@ -697,6 +754,39 @@ public class XMPPConnection implements ConnectionListener {
             }
         } catch (Exception e) {
             Logger.d(e.getMessage());
+        }
+    }
+
+    void syncConferenceChats() {
+        try {
+            List<DiscoverItems.Item> chats =  getServiceDiscoveryManager().discoverItems(JidCreate.from("conference.moonshard.tech")).getItems();
+
+            for(DiscoverItems.Item chat : chats){
+                ChatListRepository.INSTANCE.getChatByJidSingle(chat.getEntityID())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+
+                        },e->{
+                            if (e instanceof NotFoundException) {
+                                ChatEntity chatEntity = new ChatEntity(
+                                        0,
+                                        chat.getEntityID().asUnescapedString(),
+                                        chat.getName(),
+                                        true,
+                                        0
+                                );
+
+                                ChatListRepository.INSTANCE.addChat(chatEntity)
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe();
+
+                            }
+                        });
+            }
+        } catch (Exception e) {
+
         }
     }
 }

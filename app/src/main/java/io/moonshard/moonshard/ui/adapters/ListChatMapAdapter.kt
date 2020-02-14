@@ -16,7 +16,9 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.RoomPin
+import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.packet.Presence
@@ -74,8 +76,8 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         }
     }
 
-    fun getRoomInfo(jid: String): Observable<RoomInfo> {
-        return Observable.create {
+    fun getRoomInfo(jid: String): Single<RoomInfo> {
+        return Single.create {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
@@ -86,7 +88,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(muc.room)
 
-            it.onNext(info)
+            it.onSuccess(info)
         }
     }
 
@@ -100,8 +102,8 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             })
     }
 
-    private fun getValueOnlineUsers(jid: String): Observable<Int> {
-        return Observable.create {
+    private fun getValueOnlineUsers(jid: String): Single<Int> {
+        return Single.create {
             try {
                 val groupId = JidCreate.entityBareFrom(jid)
 
@@ -118,15 +120,15 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                         onlineValue++
                     }
                 }
-                it.onNext(onlineValue)
+                it.onSuccess(onlineValue)
             } catch (e: Exception) {
-                it.onNext(0)
+                it.onSuccess(0)
             }
         }
     }
 
-    private fun calculationByDistance(latRoom: String?, lngRoom: String?): Observable<String> {
-        return Observable.create {
+    private fun calculationByDistance(latRoom: String?, lngRoom: String?): Single<String> {
+        return Single.create {
             if (latRoom != null && lngRoom != null) {
 
                 MainApplication.getCurrentLocation()?.let { location ->
@@ -138,7 +140,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                         LatLng(myLat, myLng)
                     ).toInt() / 1000
                     if (km < 1) {
-                        it.onNext(
+                        it.onSuccess(
                             SphericalUtil.computeDistanceBetween(
                                 LatLng(
                                     latRoom.toDouble(),
@@ -147,7 +149,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                             ).toInt().toString() + " метрах"
                         )
                     } else {
-                        it.onNext(
+                        it.onSuccess(
                             (SphericalUtil.computeDistanceBetween(
                                 LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                                 LatLng(myLat, myLng)
@@ -156,7 +158,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                     }
                 }
             }
-            it.onNext("")
+            it.onSuccess("")
         }
     }
 

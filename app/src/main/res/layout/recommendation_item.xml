@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="83dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:background="@drawable/layout_settings_bg"
         android:id="@+id/mainLayout"
         android:orientation="vertical"
@@ -15,9 +16,9 @@
             android:layout_width="54.5dp"
             android:layout_height="54.5dp"
             android:layout_marginTop="17dp"
-            android:id="@+id/profileImage"
+            android:id="@+id/avatarEvent"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_mutabor"
+            tools:src="@drawable/ic_mutabor"
             app:civ_border_color="@android:color/transparent" />
 
 
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginTop="16dp"
-            android:layout_toEndOf="@+id/profileImage"
+            android:layout_toEndOf="@+id/avatarEvent"
             android:src="@drawable/ic_users" />
 
     <TextView
@@ -38,17 +39,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/usersIv"
-            android:text="МЫ ИДЕМ"
+            tools:text="МЫ ИДЕМ"
             android:textColor="#333333"
             android:textSize="17sp" />
 
     <TextView
+            android:visibility="gone"
             android:id="@+id/categoryTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/groupNameTv"
             android:layout_alignStart="@+id/usersIv"
-            android:text="Тусовки"
+            tools:text="Тусовки"
             android:textColor="#535353"
             android:textSize="14sp" />
 
@@ -58,9 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/categoryTv"
             android:layout_alignStart="@+id/categoryTv"
-            android:text="666 members, 30 online"
+            tools:text="666 members, 30 online"
             />
-
 
     <View
             android:layout_width="match_parent"

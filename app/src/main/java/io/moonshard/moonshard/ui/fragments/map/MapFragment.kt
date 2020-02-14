@@ -27,6 +27,7 @@ import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
+import io.moonshard.moonshard.services.XMPPConnection
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.CategoriesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
@@ -338,6 +339,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
         (activity as? MainActivity)?.setMapActiveBottomBar()
+
+
+       // MainApplication.getXmppConnection().addUserToGroup2("myTestUser@moonshard.tech","myGroup")
+      //  MainApplication.getXmppConnection().getGroup("myGroup")
+        //ServiceDiscoveryManager.getInstanceFor(MainApplication.getXmppConnection().connection).discoverItems(JidCreate.from("conference.moonshard.tech"))
+
+
+        var hashMap = hashMapOf<String,String>()
+       hashMap.values.forEach {
+           it
+       }
 
         setupBottomSheet()
 

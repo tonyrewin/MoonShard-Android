@@ -138,4 +138,11 @@ object ChatListRepository {
             }
         }
     }
+
+    fun clearChats(): Completable {
+        return Completable.create {
+            chatBox.removeAll()
+            it.onComplete()
+        }
+    }
 }

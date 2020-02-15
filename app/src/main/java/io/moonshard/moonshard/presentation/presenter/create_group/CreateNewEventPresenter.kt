@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
+import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.db.ChooseChatRepository
@@ -103,7 +104,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 ChatListRepository.addChat(chatEntity)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
+                    .subscribe ({
                         createRoomOnServer(
                             latitude,
                             longitude,
@@ -113,7 +114,9 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                             group,
                             eventStartDate
                         )
-                    }
+                    },{
+                        Logger.d(it)
+                    })
             } catch (e: Exception) {
                 e.message?.let { viewState?.showToast(it) }
             }

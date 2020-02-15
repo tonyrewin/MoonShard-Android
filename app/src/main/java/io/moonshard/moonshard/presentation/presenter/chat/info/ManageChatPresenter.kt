@@ -87,15 +87,6 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             val card = vm.loadVCardMuc(muc.room)
             card.setAvatar(bytes,mimeType)
             vm.saveVCard(card,muc.room)
-
-
-            /*
-            val form = muc.configurationForm
-            val answerForm = form.createAnswerForm()
-            answerForm.setAnswer("muc#roomconfig_lang",avatarBytes)
-            muc.sendConfigurationForm(answerForm)
-
-             */
         } catch (e: Exception) {
             Logger.d(e.message)
         }
@@ -121,25 +112,6 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             muc.sendConfigurationForm(answerForm)
         } catch (e: Exception) {
             Logger.d(e.message)
-        }
-    }
-
-    fun setAvatar(jid: String, bytes: ByteArray?, mimeType: String?) {
-        val manager = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-        try {
-            val card = manager.loadVCard(JidCreate.entityBareFrom(jid))
-            if (bytes != null && mimeType != null) {
-                card.setAvatar(bytes, mimeType)
-            }
-            manager.saveVCard(card)
-        } catch (e: SmackException.NoResponseException) {
-            e.printStackTrace()
-        } catch (e: XMPPException.XMPPErrorException) {
-            e.printStackTrace()
-        } catch (e: SmackException.NotConnectedException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
         }
     }
 }

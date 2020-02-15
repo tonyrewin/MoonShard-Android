@@ -41,4 +41,7 @@ class RoomsRepository {
         return api.getRoomsByCategory(categoryId,lat, lng,radius)
     }
 
+    fun changeRoom(room:RoomPin):Single<RoomPin>{
+        return api.changeRoom(room)
+    }
 }

@@ -57,4 +57,8 @@ class RecommendationsFragment : MvpAppCompatFragment(), RecommendationsView {
     override fun showRecommendations(recommendations: List<ChatEntity>) {
         (recommendationsRv?.adapter as? RecommendationsAdapter)?.updateRecommendations(recommendations)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }

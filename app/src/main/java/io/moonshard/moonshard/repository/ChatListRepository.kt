@@ -105,18 +105,20 @@ object ChatListRepository {
     }
 
     fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
-        return Completable.create {
+        return Completable.create { completableEmitter ->
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.single(query).subscribe { chat ->
-                if (!it.isDisposed) {
+                if (!completableEmitter.isDisposed) {
                     if (chat.isEmpty()) {
-                        it.onError(NotFoundException())
+                        completableEmitter.onError(NotFoundException())
                         return@subscribe
                     }
                     chat.first().unreadMessagesCount = newCountValue
-                    addChat(chat.first()).subscribe {
-                        it.onComplete()
-                    }
+                    addChat(chat.first()).subscribe({
+                        completableEmitter.onComplete()
+                    }, {
+                        completableEmitter.onError(it)
+                    })
                 }
             }
         }

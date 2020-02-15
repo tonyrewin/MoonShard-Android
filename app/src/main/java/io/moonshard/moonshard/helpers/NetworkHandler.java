@@ -130,7 +130,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()),
+                            chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+
+                    }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
                         createNotificationKicked(chatJid, messageEntity.getText(), adminJid);
                     }
@@ -255,7 +258,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+
+                    }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
                         Jid fromJid = message.getFrom();
                         Log.d(fromJid.asUnescapedString());
@@ -568,7 +573,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe();
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+
+                    }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
                         createNotificationJoin(chatJid, messageEntity.getText(), jidUser);
                     }

@@ -21,6 +21,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 
 
@@ -39,7 +40,11 @@ class ChatPresenter : BasePresenter<ChatView>() {
         ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME update unread messages count on each message read
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
+            .subscribe({
+
+            },{
+                Logger.d(it)
+            })
             .autoDispose(this)
         if(chatId.contains("conference")){
             getDataInfoMuc()
@@ -75,6 +80,15 @@ class ChatPresenter : BasePresenter<ChatView>() {
             val roomInfo =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getRoomInfo(groupId)
+
+            //we can optimization
+            if(!muc.isJoined){
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+                muc.join(nickName)
+            }
+
             val occupants = muc.occupants
 
             val name = roomInfo.name

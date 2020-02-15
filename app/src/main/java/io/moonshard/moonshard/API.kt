@@ -34,4 +34,6 @@ interface API {
         @Query("radius") radius: String
     ): Single<ArrayList<RoomPin>>
 
+    @PUT("/rooms/update")
+    fun changeRoom(@Body room:RoomPin):Single<RoomPin>
 }

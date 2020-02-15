@@ -21,17 +21,16 @@ import moxy.presenter.InjectPresenter
 
 
 class ChatsFragment : MvpAppCompatFragment(), ChatsView {
-    override fun addNewChat(chat: GenericDialog) {
-
-    }
-
-    override fun showError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-    }
 
     @InjectPresenter
     lateinit var presenter: ChatsPresenter
     private lateinit var chatListAdapter: ChatListAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_chats, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,9 +66,11 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         (activity as MainActivity).hideBottomNavigationBar()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_chats, container, false)
+    override fun addNewChat(chat: GenericDialog) {
+
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 }

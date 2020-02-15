@@ -205,6 +205,7 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:id="@+id/dateTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -309,11 +310,12 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:id="@+id/occupantsCountTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginEnd="22dp"
-                            android:text="123"
+                            tools:text="123"
                             android:textColor="#333333" />
 
                 </RelativeLayout>
@@ -352,11 +354,12 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:id="@+id/adminsCountTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginEnd="22dp"
-                            android:text="123"
+                            tools:text="123"
                             android:textColor="#333333" />
                 </RelativeLayout>
 
@@ -393,9 +396,14 @@
                         android:src="@drawable/ic_next_gray" />
 
             </RelativeLayout>
-
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

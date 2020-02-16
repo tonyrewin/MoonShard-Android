@@ -65,8 +65,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$chatId")
-            .addToBackStack("realChatFragment:$chatId").commit()
+        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$chatId").commit()
     }
 
     fun showChatInfo(chatId: String) {

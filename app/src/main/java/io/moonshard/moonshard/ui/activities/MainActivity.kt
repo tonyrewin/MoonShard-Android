@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
             }
+            return
         }
         supportFragmentManager.popBackStack()
     }

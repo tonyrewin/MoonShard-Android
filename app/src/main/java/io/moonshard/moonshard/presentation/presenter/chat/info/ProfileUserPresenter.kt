@@ -65,7 +65,6 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                     viewState?.showChatScreen(jid)
                 }, {
                     if(it is NotFoundException) {
-
                         ChatListRepository.addChat(chatEntity)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +76,9 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                     }
                 })
         } catch (e: Exception) {
-            e.message?.let { viewState?.showError(it) }
+            e.message?.let {
+                viewState?.showError(it)
+            }
         }
     }
 

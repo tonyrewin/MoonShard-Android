@@ -31,7 +31,7 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         super.onViewCreated(view, savedInstanceState)
 
         newChat?.setSafeOnClickListener {
-            presenter.createGroupChat(nameTv.text.toString())
+            presenter.createGroupChat(nameTv.text.toString(),descriptionTv.text.toString())
         }
 
         back?.setSafeOnClickListener {

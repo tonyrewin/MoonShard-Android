@@ -1,7 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
-import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
@@ -24,7 +23,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        chatName: String
+        chatName: String,
+        description: String
     ) {
         viewState?.showProgressBar()
         if (chatName.isNotBlank()) {
@@ -56,6 +56,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
                 answerForm.setAnswer("muc#roomconfig_roomname", actualChatName)
                 answerForm.setAnswer("muc#roomconfig_publicroom",true)
+                answerForm.setAnswer("muc#roomconfig_roomdesc", description)
                 val arrayList = arrayListOf<String>()
                 arrayList.add("anyone")
                 answerForm.setAnswer("muc#roomconfig_whois",arrayList)

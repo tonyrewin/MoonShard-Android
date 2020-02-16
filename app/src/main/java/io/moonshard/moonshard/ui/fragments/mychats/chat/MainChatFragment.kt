@@ -8,14 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.view.chat.MainChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
+import moxy.MvpAppCompatFragment
 
 
-class MainChatFragment : Fragment() {
+class MainChatFragment : MvpAppCompatFragment(),MainChatView {
 
     var idChat: String = ""
     var fromMap: Boolean = false
@@ -55,17 +57,16 @@ class MainChatFragment : Fragment() {
         ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$jidChat").commit()
     }
 
-    fun showChatWithStack() {
+    fun showChatWithStack(chatId: String) {
         val bundle = Bundle()
-        bundle.putString("chatId", idChat)
+        bundle.putString("chatId", chatId)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment")
-            .addToBackStack("realChatFragment").commit()
+        ft.replace(R.id.mainContainer, chatFragment, "realChatFragment:$chatId")
+            .addToBackStack("realChatFragment:$chatId").commit()
     }
 
     fun showChatInfo(chatId: String) {
@@ -74,20 +75,20 @@ class MainChatFragment : Fragment() {
         val chatFragment = ChatInfoFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, chatFragment, "ChatInfoFragment")
-            .addToBackStack("ChatInfoFragment")
+        ft.replace(R.id.mainContainer, chatFragment, "ChatInfoFragment:$chatId")
+            .addToBackStack("ChatInfoFragment:$chatId")
             .commit()
     }
 
-    fun showProfileUserScreen(jid: String) {
+    fun showProfileUserScreen(jid: String,fromMuc:Boolean = true) {
         val bundle = Bundle()
         bundle.putString("userJid", jid)
-        bundle.putBoolean("fromChatFragment", true)
+        bundle.putBoolean("fromMuc", fromMuc)
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, fragment, "ProfileUserFragment")
-            .addToBackStack("ProfileUserFragment")
+        ft.replace(R.id.mainContainer, fragment, "ProfileUserFragment$jid")
+            .addToBackStack("ProfileUserFragment:$jid")
             .commit()
     }
 
@@ -183,9 +184,9 @@ class MainChatFragment : Fragment() {
     fun showTimeEventScreen() {
         val chatFragment =
             TimeEventFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, chatFragment, "TimeEventFragment")
-            ?.addToBackStack("TimeEventFragment")?.commit()
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, chatFragment, "TimeEventFragment")
+            .addToBackStack("TimeEventFragment").commit()
     }
 
     fun showChooseMapScreen() {
@@ -215,9 +216,5 @@ class MainChatFragment : Fragment() {
         }
 
         if (fromMap) (activity as? MainActivity)?.showBottomNavigationBar()
-    }
-
-    fun back() {
-        fragmentManager?.popBackStack()
     }
 }

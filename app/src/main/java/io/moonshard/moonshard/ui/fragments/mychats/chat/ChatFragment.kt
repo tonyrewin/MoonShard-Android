@@ -53,25 +53,19 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
         backBtn?.setSafeOnClickListener {
             if (fromCreateNewChat) {
-                //good
                 activity!!.supportFragmentManager.popBackStack(null,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
             } else {
                 if(parentFragment is MainChatFragment){
-                    parentFragment?.fragmentManager?.popBackStack()
+                    if(parentFragment!!.childFragmentManager.backStackEntryCount==0){
+                        parentFragment!!.fragmentManager?.popBackStack()
+                    }else{
+                        parentFragment!!.childFragmentManager.popBackStackImmediate()
+                    }
                 }
-                //fragmentManager?.popBackStack()
-
-
-                /*
-                activity!!.supportFragmentManager.popBackStack(
-                    null,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
-                 */
-                ChatRepository.clean()
             }
+            ChatRepository.clean()
         }
     }
 
@@ -132,7 +126,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     private fun showProfileUser(jid: String) {
-        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid,false)
     }
 
     override fun setDataMuc(

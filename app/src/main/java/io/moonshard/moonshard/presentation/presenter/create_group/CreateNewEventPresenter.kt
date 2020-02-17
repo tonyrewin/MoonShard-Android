@@ -12,6 +12,7 @@ import io.moonshard.moonshard.presentation.view.CreateNewEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -125,10 +126,13 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         }
     }
 
-    fun getGroups() {
+    private fun getGroups() {
         ChatListRepository.getChats()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .map {
+                it.filter { chatEntity -> chatEntity.jid.contains("chat") }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chats ->
                 getAdminChats(chats)
             }, { throwable ->
@@ -147,7 +151,6 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
         val newAdminChats = arrayListOf<ChatEntity>()
         newAdminChats.addAll(adminChats)
-
 
         for (i in adminChats.indices) {
             for(k in events.indices){

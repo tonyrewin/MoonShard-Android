@@ -20,9 +20,9 @@ class RecommendationsPresenter : MvpPresenter<RecommendationsView>() {
                 )
                     .items
 
-            // val chats = chatsAndEvents.filter { it.entityID.contains("chat") }
+            val chats = chatsAndEvents.filter { it.entityID.contains("chat") }
 
-            val chatsEntity = convertDiscoverItemsToChatEntityList(chatsAndEvents)
+            val chatsEntity = convertDiscoverItemsToChatEntityList(chats)
 
             viewState?.showRecommendations(chatsEntity)
         } catch (e: Exception) {

@@ -44,7 +44,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
-    public final static String DEFAULT_NTP_SERVER = "time.apple.com";
+    public final static String DEFAULT_NTP_SERVER = "showTimeDays.apple.com";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
     private static String jid;

@@ -14,6 +14,7 @@ import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.presenter.chat.info.EventInfoPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.ui.adapters.chat.MemberListener
@@ -47,7 +48,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         var idChat = ""
         arguments?.let {
             idChat = it.getString("chatId")
-            presenter.getMembers(idChat)
+            presenter.getRoomInfo(idChat)
         }
 
         backBtn?.setSafeOnClickListener {
@@ -55,7 +56,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
 
         changeChatInfoBtn?.setSafeOnClickListener {
-            // showManageChatScreen(idChat)
+            showManageEventScreen(idChat)
         }
 
         leaveLayout?.setSafeOnClickListener {
@@ -68,16 +69,15 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     override fun showChangeChatButton(isShow: Boolean) {
-        changeChatInfoBtn?.visibility = View.GONE
+      //  changeChatInfoBtn?.visibility = View.GONE
 
-        /*
+
         if(isShow){
             changeChatInfoBtn?.visibility = View.VISIBLE
         }else{
             changeChatInfoBtn?.visibility = View.GONE
         }
 
-         */
     }
 
     override fun hideLine() {
@@ -91,55 +91,15 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
-
         (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
-/*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment =
-            InviteUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-
-        ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
-            ?.addToBackStack("InviteUserFragment")
-            ?.commit()
-
- */
     }
 
-    private fun showManageChatScreen(idChat: String) {
-
-        (parentFragment as? MainChatFragment)?.showManageChatScreen(idChat)
-
-/*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val manageChatFragment =
-            ManageChatFragment()
-        manageChatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, manageChatFragment, "manageChatFragment")?.hide(this)
-            ?.addToBackStack("manageChatFragment")
-            ?.commit()
-
- */
+    private fun showManageEventScreen(idChat: String) {
+        (parentFragment as? MainChatFragment)?.showManageEventScreen(idChat)
     }
 
     fun showProfileUser(jid: String) {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("userJid", jid)
-        val fragment = ProfileUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
-            ?.addToBackStack("ProfileUserFragment")
-            ?.commit()
-
-         */
     }
 
     override fun showMembers(members: List<Occupant>) {
@@ -191,6 +151,52 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
     }
 
+    override fun setStartDate(dayOfMonth: Int, month: Int) {
+        when (month) {
+            0 -> {
+                startDateEvent.text = "$dayOfMonth января"
+            }
+            1 -> {
+                startDateEvent.text = "$dayOfMonth февраля"
+
+            }
+            2 -> {
+                startDateEvent.text = "$dayOfMonth марта"
+
+            }
+            3 -> {
+                startDateEvent.text = "$dayOfMonth апреля"
+
+            }
+            4 -> {
+                startDateEvent.text = "$dayOfMonth мая"
+
+            }
+            5 -> {
+                startDateEvent.text = "$dayOfMonth июня"
+
+            }
+            6 -> {
+                startDateEvent.text = "$dayOfMonth июля"
+            }
+            7 -> {
+                startDateEvent.text = "$dayOfMonth августа"
+            }
+            8 -> {
+                startDateEvent.text = "$dayOfMonth сенятбря"
+            }
+            9 -> {
+                startDateEvent.text = "$dayOfMonth октября"
+            }
+            10 -> {
+                startDateEvent.text = "$dayOfMonth ноября"
+            }
+            11 -> {
+                startDateEvent.text = "$dayOfMonth декабря"
+            }
+        }
+    }
+
     override fun setAvatar(avatar: Bitmap?) {
         MainApplication.getMainUIThread().post {
             profileImage?.setImageBitmap(avatar)
@@ -212,11 +218,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             if (addresses.isNotEmpty()) {
                 val address =
                     addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                val city = addresses[0].locality
-                val state = addresses[0].adminArea
-                val country = addresses[0].countryName
-                val postalCode = addresses[0].postalCode
-                val knownName = addresses[0].featureName // Only if available else return NULL
+                ChangeEventRepository.name = address
                 return address
             }
         } catch (e: IOException) {

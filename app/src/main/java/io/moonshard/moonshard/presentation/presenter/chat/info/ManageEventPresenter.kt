@@ -1,72 +1,135 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.db.ChangeEventRepository
+import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
-import io.moonshard.moonshard.presentation.view.chat.ManageChatView
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
+import io.moonshard.moonshard.ui.fragments.map.RoomsMap
+import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smack.SmackException
-import org.jivesoftware.smack.XMPPException
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
+import java.text.SimpleDateFormat
+import java.util.*
 
 @InjectViewState
 class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
-    fun getDataInfo(jid: String) {
-        try {
-            val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
+    private var useCase: RoomsUseCase? = null
+    private val compositeDisposable = CompositeDisposable()
+    private var infoEventMuc: RoomInfo? = null
 
-            val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getRoomInfo(muc.room)
+    init {
+        useCase = RoomsUseCase()
+    }
 
-            viewState?.showName(info.name)
-            viewState?.showDescription(info.description)
-            viewState?.showOccupantsCount(info.occupantsCount.toString())
-            viewState?.showAdminsCount(muc.moderators.size.toString())
-        } catch (e: Exception) {
-            Logger.d(e)
-        }
+    fun getInfoChat(jid: String) {
+        val muc =
+            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                .getMultiUserChat(JidCreate.entityBareFrom(jid))
+
+        infoEventMuc =
+            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                .getRoomInfo(muc.room)
+
+
+        viewState?.showName(ChangeEventRepository.name)
+        viewState?.showDescription(ChangeEventRepository.description)
+        viewState?.showOccupantsCount(infoEventMuc?.occupantsCount.toString())
+        viewState?.showAdminsCount(muc.moderators.size.toString())
+        viewState?.showTimeDays(ChangeEventRepository.event?.ttl!!)
+        viewState?.showAdress(
+            LatLng(
+                ChangeEventRepository.event!!.latitude,
+                ChangeEventRepository.event!!.longitude
+            )
+        )
+
+        val calendar =
+            convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
+
+        viewState?.setStartDate(
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH)
+        )
+    }
+
+    private fun convertUnixTimeStampToCalendar(newStartDate: Long): Calendar {
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date(newStartDate * 1000L)
+        sdf.format(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        return calendar
     }
 
     fun setData(
         name: String,
         description: String,
-        jid: String,
+        idChat: String,
         bytes: ByteArray?,
-        mimeType: String?
+        mimeType: String?,
+        event:RoomPin
     ) {
         try {
             viewState.showProgressBar()
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
+                    .getMultiUserChat(JidCreate.entityBareFrom(idChat))
 
-            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(idChat))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it.chatName = name
-                    setAvatarServer(muc,bytes,mimeType)
+                    setAvatarServer(muc, bytes, mimeType)
                     changeDescription(muc, description)
                     changeChatNameServer(muc, it)
+                    changeEventServer(event
+                    )
                 }, {
 
                 })
         } catch (e: Exception) {
             e.message?.let { viewState.showToast(it) }
         }
+    }
+
+    //ttl - it days in millisec
+    fun changeEventServer(
+        event: RoomPin
+    ) {
+
+        val gson = Gson()
+        var test = gson.toJson(
+           event
+        )
+
+        compositeDisposable.add(useCase!!.changeRoom(
+            event
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { event, throwable ->
+                if (throwable == null) {
+                    viewState.showChatInfo()
+                } else {
+                    viewState?.showToast("Ошибка: ${throwable.message}")
+                }
+            })
     }
 
     private fun changeChatNameServer(muc: MultiUserChat, chat: ChatEntity) {
@@ -83,10 +146,11 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
     private fun setAvatarServer(muc: MultiUserChat, bytes: ByteArray?, mimeType: String?) {
         try {
-            val vm = VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val vm =
+                VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCardMuc(muc.room)
-            card.setAvatar(bytes,mimeType)
-            vm.saveVCard(card,muc.room)
+            card.setAvatar(bytes, mimeType)
+            vm.saveVCard(card, muc.room)
         } catch (e: Exception) {
             Logger.d(e.message)
         }
@@ -98,7 +162,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 viewState?.hideProgressBar()
-                viewState.showChatInfo()
+                // viewState.showChatInfo()
             }, {
                 Logger.d(it)
             })
@@ -113,5 +177,11 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         } catch (e: Exception) {
             Logger.d(e.message)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
+        //ChangeEventRepository.clean()
     }
 }

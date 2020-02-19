@@ -42,4 +42,9 @@ class RoomsUseCase {
     fun changeRoom(room:RoomPin):Single<RoomPin>{
         return roomsRepository.changeRoom(room)
     }
+
+    fun getRoom(eventId:Long):Single<RoomPin>{
+        return roomsRepository.getRoom(eventId)
+    }
+
 }

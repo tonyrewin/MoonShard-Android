@@ -25,6 +25,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.disco.packet.DiscoverItems;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
@@ -36,7 +37,6 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
@@ -80,6 +80,7 @@ public class XMPPConnection implements ConnectionListener {
     public MultiUserChatManager multiUserChatManager = null;
     public ChatManager chatManager = null;
     public ServiceDiscoveryManager serviceDiscoveryManager = null;
+    public FileTransferManager fileTransferManager = null;
 
     public enum ConnectionState {
         CONNECTED,
@@ -173,6 +174,9 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
+        fileTransferManager = FileTransferManager.getInstanceFor(connection);
+        fileTransferManager.addFileTransferListener(networkHandler);
+
         setStatus(true, "ONLINE");
     }
 
@@ -246,7 +250,7 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
 
-       // syncConferenceChats();
+        // syncConferenceChats();
     }
 
     @Override
@@ -283,9 +287,7 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
-    public void sendFile(EntityFullJid jid, File file) {
-        //  try {
-
+    public void sendFile(File file) {
         Observable.fromCallable(() -> {
             HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
             try {
@@ -309,6 +311,16 @@ public class XMPPConnection implements ConnectionListener {
                     //Use result for something
                 });
     }
+
+    public void sendMyFile(File file) {
+        try {
+            HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
+            manager.uploadFile(file);
+        } catch (Exception e) {
+            String kek = "";
+        }
+    }
+
 
     Single<URL> getTest(File file) {
         HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
@@ -759,15 +771,15 @@ public class XMPPConnection implements ConnectionListener {
 
     void syncConferenceChats() {
         try {
-            List<DiscoverItems.Item> chats =  getServiceDiscoveryManager().discoverItems(JidCreate.from("conference.moonshard.tech")).getItems();
+            List<DiscoverItems.Item> chats = getServiceDiscoveryManager().discoverItems(JidCreate.from("conference.moonshard.tech")).getItems();
 
-            for(DiscoverItems.Item chat : chats){
+            for (DiscoverItems.Item chat : chats) {
                 ChatListRepository.INSTANCE.getChatByJidSingle(chat.getEntityID())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {
 
-                        },e->{
+                        }, e -> {
                             if (e instanceof NotFoundException) {
                                 ChatEntity chatEntity = new ChatEntity(
                                         0,

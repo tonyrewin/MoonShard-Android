@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
@@ -130,6 +131,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         ChatListRepository.getChats()
             .subscribeOn(Schedulers.io())
             .map {
+                Log.d("TAAAAg", Thread.currentThread().name)
                 it.filter { chatEntity -> chatEntity.jid.contains("chat") }
             }
             .observeOn(AndroidSchedulers.mainThread())

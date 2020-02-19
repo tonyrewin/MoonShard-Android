@@ -59,7 +59,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                     Logger.d(it)
                 })
 
-            calculationByDistance(chats[position].latitude, chats[position].longitude)
+            calculationByDistance(chats[position].latitude.toString(), chats[position].longitude.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -82,7 +82,6 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             val muc =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                     .getMultiUserChat(groupId)
-            Logger.d(groupId.asUnescapedString())
 
             val info =
                 MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)

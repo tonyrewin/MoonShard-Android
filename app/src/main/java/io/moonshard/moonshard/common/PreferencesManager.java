@@ -304,7 +304,7 @@ public class PreferencesManager {
      * Tells if the timestamp must be displayed in 12h format
      *
      * @param context the context
-     * @return true if the time must be displayed in 12h format
+     * @return true if the showTimeDays must be displayed in 12h format
      */
     public static boolean displayTimeIn12hFormat(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false);
@@ -593,10 +593,10 @@ public class PreferencesManager {
     }
 
     /**
-     * Provides the minimum last access time to keep a media file.
+     * Provides the minimum last access showTimeDays to keep a media file.
      *
      * @param context the context
-     * @return the min last access time (in seconds)
+     * @return the min last access showTimeDays (in seconds)
      */
     public static long getMinMediasLastAccessTime(Context context) {
         int selection = getSelectedMediasSavingPeriod(context);

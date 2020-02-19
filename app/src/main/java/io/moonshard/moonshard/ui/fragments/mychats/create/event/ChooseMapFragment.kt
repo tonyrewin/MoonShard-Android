@@ -16,8 +16,8 @@ import com.google.android.gms.maps.model.PointOfInterest
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_choose_map.*
 import java.io.IOException
 import java.util.*
@@ -34,6 +34,8 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     private var defaultMoscowlatitude: Double = 55.751244
     private var defaultMoscowlongitude: Double = 37.618423
+
+    private var fromManageEventScreen: Boolean = false
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
@@ -71,16 +73,24 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            fromManageEventScreen = it.getBoolean("fromManageEventScreen", false)
+        }
+
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
 
         doneBtn?.setSafeOnClickListener {
-            ChooseChatRepository.address = addressTv.text.toString()
+            if (fromManageEventScreen) {
+                ChangeEventRepository.address = addressTv.text.toString()
+            } else {
+                ChooseChatRepository.address = addressTv.text.toString()
+            }
             fragmentManager?.popBackStack()
         }
 
         back?.setSafeOnClickListener {
-                fragmentManager?.popBackStack()
+            fragmentManager?.popBackStack()
         }
 
         getZoomCenter()
@@ -142,22 +152,14 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         latLng?.let {
             val address = getAddress(latLng)
             addressTv?.text = address
-            ChooseChatRepository.lat = latLng.latitude
-            ChooseChatRepository.lng = latLng.longitude
+            if (fromManageEventScreen) {
+                ChangeEventRepository.event!!.latitude = latLng.latitude
+                ChangeEventRepository.event!!.longitude = latLng.longitude
+            } else {
+                ChooseChatRepository.lat = latLng.latitude
+                ChooseChatRepository.lng = latLng.longitude
+            }
         }
-
-        /*
-    latLng?.let {
-        latLngInterestPoint = null
-        if(latLngInterestPoint?.latLng == latLng){
-            var nextSlide = ""
-        }else{
-            val adress = getAddress(latLng)
-            Toast.makeText(context, adress, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-         */
     }
 
     fun getAddress(location: LatLng): String {

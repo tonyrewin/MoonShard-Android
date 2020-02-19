@@ -215,4 +215,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         super.onDestroy()
         MainApplication.setMainActivity(null)
     }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
 }

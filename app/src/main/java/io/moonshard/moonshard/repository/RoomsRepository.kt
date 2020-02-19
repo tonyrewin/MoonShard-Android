@@ -27,7 +27,6 @@ class RoomsRepository {
         return api.putRoom(request)
     }
 
-
     fun getRooms(lat: String, lng: String, radius: String
     ): Single<ArrayList<RoomPin>> {
         return api.getRooms(lat,lng,radius)
@@ -43,5 +42,9 @@ class RoomsRepository {
 
     fun changeRoom(room:RoomPin):Single<RoomPin>{
         return api.changeRoom(room)
+    }
+
+    fun getRoom(eventId:Long):Single<RoomPin>{
+        return api.getRoom(eventId)
     }
 }

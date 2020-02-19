@@ -168,7 +168,7 @@
                     android:id="@+id/startDateEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="13 декабря"
+                    tools:text="13 декабря"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 

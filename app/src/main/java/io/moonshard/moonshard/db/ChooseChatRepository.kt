@@ -14,7 +14,6 @@ object ChooseChatRepository {
     var date: Calendar?=null
     var group: ChatEntity?=null
 
-
     fun clean(){
         address=""
         time = ""
@@ -25,7 +24,6 @@ object ChooseChatRepository {
         date=null
         group = null
     }
-
 
     fun getEventStartDate(): Long {
        return date!!.timeInMillis / 1000

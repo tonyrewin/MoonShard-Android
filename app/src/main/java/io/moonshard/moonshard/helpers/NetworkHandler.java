@@ -27,6 +27,9 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
+import org.jivesoftware.smackx.filetransfer.FileTransferListener;
+import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
+import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.DefaultParticipantStatusListener;
 import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -66,7 +69,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import trikita.log.Log;
 
-public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener, UserStatusListener {
+public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener, UserStatusListener, FileTransferListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
     private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
@@ -209,6 +212,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 });
     }
 
+
+    //todo  TrueTime.now().getTtl(), crash when showTimeDays on phone not correct
     @SuppressLint("CheckResult")
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
         MessageEntity messageEntity = new MessageEntity(
@@ -526,6 +531,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                 .subscribe(user -> {
                                             return;
                                         }, throwable -> {
+                                    if(throwable instanceof NotFoundException){
                                             MultiUserChat muc = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
                                                     .getMultiUserChat(JidCreate.entityBareFrom(chatEntity.getJid()));
 
@@ -537,7 +543,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                             ChatUserRepository.INSTANCE.saveUser(user);
                                             onIncomingMessageJoin(chatEntity, chatJid, participant.asUnescapedString(), user, occupantUser.getJid().asBareJid());
                                         }
+                                }
                                 );
+
                     }, e -> {
                         Logger.d(e);
                     });
@@ -692,5 +700,15 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void roomDestroyed(MultiUserChat alternateMUC, String reason) {
         String test = "";
+    }
+
+    @Override
+    public void fileTransferRequest(FileTransferRequest request) {
+        try {
+            IncomingFileTransfer kek =  request.accept();
+            Bitmap bitmap = BitmapFactory.decodeStream(kek.receiveFile());
+        }catch (Exception e){
+            String kek = e.getLocalizedMessage();
+        }
     }
 }

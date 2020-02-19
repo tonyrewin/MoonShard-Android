@@ -108,17 +108,23 @@
                         android:paddingEnd="5dp" />
 
 
+                <LinearLayout
+                        android:id="@+id/locationLayout"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="11dp"
+                        android:layout_below="@+id/nameEt"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+
                 <TextView
                         android:id="@+id/locationTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/nameEt"
-                        android:layout_marginStart="11dp"
-                        android:layout_marginTop="10dp"
                         android:text="Местоположение" />
 
                 <TextView
-                        android:id="@+id/location"
+                        android:id="@+id/locationValueTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/locationTv"
@@ -141,6 +147,7 @@
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
 
+
                 <View
                         android:id="@+id/view"
                         android:layout_width="match_parent"
@@ -151,11 +158,13 @@
                         android:layout_marginBottom="5dp"
                         android:background="#F5F5F5" />
 
+                </LinearLayout>
+
                 <TextView
                         android:id="@+id/descriptionTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/view"
+                        android:layout_below="@+id/locationLayout"
                         android:layout_marginStart="11dp"
                         android:text="Описание" />
 
@@ -170,7 +179,7 @@
                         android:background="@drawable/rounded_edittext"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
-                        android:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных" />
+                        android:minHeight="75dp" />
 
             </RelativeLayout>
 
@@ -227,6 +236,7 @@
                         android:background="#F5F5F5" />
 
                 <RelativeLayout
+                        android:id="@+id/timesLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -242,6 +252,7 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:id="@+id/timeTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"

@@ -27,7 +27,6 @@ import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.presenter.MapPresenter
 import io.moonshard.moonshard.presentation.view.MapMainView
-import io.moonshard.moonshard.services.XMPPConnection
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.CategoriesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
@@ -41,6 +40,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -114,8 +114,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                     val onlineUsers = presenter.getValueOnlineUsers(it)
                     roomInfo?.let {
                         val distance = (calculationByDistance(
-                            RoomsMap.rooms[i].latitude,
-                            RoomsMap.rooms[i].longitude
+                            RoomsMap.rooms[i].latitude.toString(),
+                            RoomsMap.rooms[i].longitude.toString()
                         ))
 
                         groupNameInfoContentTv?.text = roomInfo.name
@@ -341,15 +341,16 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (activity as? MainActivity)?.setMapActiveBottomBar()
 
 
-       // MainApplication.getXmppConnection().addUserToGroup2("myTestUser@moonshard.tech","myGroup")
-      //  MainApplication.getXmppConnection().getGroup("myGroup")
+
+        // MainApplication.getXmppConnection().addUserToGroup2("myTestUser@moonshard.tech","myGroup")
+        //  MainApplication.getXmppConnection().getGroup("myGroup")
         //ServiceDiscoveryManager.getInstanceFor(MainApplication.getXmppConnection().connection).discoverItems(JidCreate.from("conference.moonshard.tech"))
 
 
-        var hashMap = hashMapOf<String,String>()
-       hashMap.values.forEach {
-           it
-       }
+        var hashMap = hashMapOf<String, String>()
+        hashMap.values.forEach {
+            it
+        }
 
         setupBottomSheet()
 
@@ -435,7 +436,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
 
-    fun clearCategoryAdapter(){
+    fun clearCategoryAdapter() {
         val fragment =
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
         (fragment as? CategoriesFragment)?.clearCategories()
@@ -479,6 +480,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
         }
     }
+
 
     fun updateListRooms() {
         val fragment =

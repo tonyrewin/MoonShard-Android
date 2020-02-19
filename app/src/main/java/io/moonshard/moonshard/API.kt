@@ -34,6 +34,10 @@ interface API {
         @Query("radius") radius: String
     ): Single<ArrayList<RoomPin>>
 
+    @Headers("Accept: application/json", "Content-type:application/json")
     @PUT("/rooms/update")
     fun changeRoom(@Body room:RoomPin):Single<RoomPin>
+
+    @GET("rooms/{eventId}")
+    fun getRoom(@Path("eventId") eventId:Long):Single<RoomPin>
 }

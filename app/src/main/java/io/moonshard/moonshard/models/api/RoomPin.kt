@@ -3,15 +3,15 @@ package io.moonshard.moonshard.models.api
 import com.google.gson.annotations.SerializedName
 
 data class RoomPin(@SerializedName("id")
-                   var id: String,
+                   var id: Long,
                    @SerializedName("latitude")
-                   var latitude: String,
+                   var latitude: Double,
                    @SerializedName("longitude")
-                   var longitude: String,
+                   var longitude: Double,
                    @SerializedName("created_at")
-                   var createdAt: Boolean,
+                   var createdAt: Long,
                    @SerializedName("ttl")
-                   var ttl: String?,
+                   var ttl: Long?,
                    @SerializedName("categories")
                    var category: ArrayList<Category>?,
                    @SerializedName("roomId")
@@ -19,4 +19,4 @@ data class RoomPin(@SerializedName("id")
                    @SerializedName("parentGroupId")
                    var groupId: String?,
                    @SerializedName("eventStartDate")
-                   var eventStartDate:String?)
+                   var eventStartDate:Long?)

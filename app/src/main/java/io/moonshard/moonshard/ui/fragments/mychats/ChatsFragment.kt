@@ -66,10 +66,6 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
         (activity as MainActivity).hideBottomNavigationBar()
     }
 
-    override fun addNewChat(chat: GenericDialog) {
-
-    }
-
     override fun showError(error: String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }

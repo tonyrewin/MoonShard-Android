@@ -27,7 +27,6 @@ import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
-import org.jxmpp.jid.FullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
@@ -155,13 +154,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun sendFile(path: File) {
         if (MainApplication.getXmppConnection().isConnectionReady) {
-            val jid: FullJid?
-            try {
-                jid = JidCreate.entityFullFrom("$chatID/Smack")
-                MainApplication.getXmppConnection().sendFile(jid, path)
-            } catch (e: XmppStringprepException) {
-
-            }
+           MainApplication.getXmppConnection().sendFile(path)
         }
     }
 
@@ -332,7 +325,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                     chatID,
                                     message.stanzaId,
                                     message.from.asBareJid().asUnescapedString(),
-                                    forwardedMessage.delayInformation.stamp.time,
+                                    forwardedMessage.delayInformation.stamp.showTimeDays,
                                     message.body,
                                     true,
                                     true

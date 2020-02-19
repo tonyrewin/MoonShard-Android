@@ -1,14 +1,10 @@
 package io.moonshard.moonshard.ui.fragments.mychats
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.presenter.chat.RecommendationsPresenter
@@ -41,7 +37,7 @@ class RecommendationsFragment : MvpAppCompatFragment(), RecommendationsView {
         presenter.getRecommendation()
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         recommendationsRv?.layoutManager = LinearLayoutManager(context)
         recommendationsRv?.adapter = RecommendationsAdapter(object : RecommendationsListener {
             override fun recommendationsClick(jid: String) {
@@ -55,10 +51,9 @@ class RecommendationsFragment : MvpAppCompatFragment(), RecommendationsView {
     }
 
     override fun showRecommendations(recommendations: List<ChatEntity>) {
-        (recommendationsRv?.adapter as? RecommendationsAdapter)?.updateRecommendations(recommendations)
+        (recommendationsRv?.adapter as? RecommendationsAdapter)?.updateRecommendations(
+            recommendations
+        )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
@@ -114,6 +113,18 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
+    fun showManageEventScreen(idChat: String) {
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val manageChatFragment =
+            ManageEventFragment()
+        manageChatFragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, manageChatFragment, "manageEventFragment")
+            .addToBackStack("manageEventFragment")
+            .commit()
+    }
+
     fun showInviteNewUserScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -180,17 +191,23 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showTimeEventScreen() {
-        val chatFragment =
+    fun showTimeEventScreen(fromManageEventScreen:Boolean=false) {
+        val bundle = Bundle()
+        bundle.putBoolean("fromManageEventScreen", fromManageEventScreen)
+        val fragment =
             TimeEventFragment()
+        fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, chatFragment, "TimeEventFragment")
+        ft.replace(R.id.mainContainer, fragment, "TimeEventFragment")
             .addToBackStack("TimeEventFragment").commit()
     }
 
-    fun showChooseMapScreen() {
+    fun showChooseMapScreen(fromManageEventScreen:Boolean=false) {
+        val bundle = Bundle()
+        bundle.putBoolean("fromManageEventScreen", fromManageEventScreen)
         val fragment =
             ChooseMapFragment()
+        fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "ChooseMapFragment")
             .addToBackStack("ChooseMapFragment").commit()
@@ -215,5 +232,6 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         }
 
         if (fromMap) (activity as? MainActivity)?.showBottomNavigationBar()
+        ChangeEventRepository.clean()
     }
 }

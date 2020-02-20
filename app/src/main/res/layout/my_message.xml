@@ -2,22 +2,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        android:paddingRight="15dp"
-        android:paddingLeft="60dp"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginTop="9dp"
+        android:paddingBottom="5dp"
+        android:layout_marginRight="12dp"
         android:clipToPadding="false">
 
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_alignParentRight="true"
+            android:elevation="2dp"
+            android:background="@drawable/my_message"
+            android:paddingVertical="10dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:scaleType="fitXY"
+                android:id="@+id/fileIv"
+                android:layout_width="270dp"
+                android:layout_height="152dp"
+                tools:src="@drawable/palmy" />
+
     <TextView
+            android:layout_gravity="right"
+            android:layout_below="@+id/fileIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/message_body"
-            android:background="@drawable/my_message"
             android:textColor="#333333"
             android:padding="10dp"
-            android:elevation="2dp"
             android:textSize="16sp"
-            android:layout_alignParentRight="true"
-            android:text="Placeholder message"
+            tools:text="Placeholder message"
             />
+
+    </LinearLayout>
 
 </RelativeLayout>

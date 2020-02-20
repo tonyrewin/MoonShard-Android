@@ -40,4 +40,8 @@ public class GenericMessage {
     public boolean isSystemMessage() {
         return messageEntity.isSystemMessage();
     }
+
+    public boolean isFile() {
+        return messageEntity.isFile();
+    }
 }

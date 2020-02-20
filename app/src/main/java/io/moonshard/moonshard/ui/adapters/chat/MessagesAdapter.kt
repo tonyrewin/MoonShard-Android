@@ -3,6 +3,7 @@ package io.moonshard.moonshard.ui.adapters.chat
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.DateFormatter
@@ -102,11 +105,24 @@ open class MessagesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
-                (holder as ViewHolderMyMessage).bodyText?.text = myMsgs[position].text
+                if(myMsgs[position].isFile){
+                    Picasso.get().load(myMsgs[position].text).into((holder as ViewHolderMyMessage).fileIv)
+                }else{
+                    (holder as ViewHolderMyMessage).bodyText?.text = myMsgs[position].text
+                    holder.fileIv?.visibility = View.GONE
+                }
             }
             1 -> {
+
+                if(myMsgs[position].isFile){
+                    Picasso.get().load(myMsgs[position].text).into((holder as ViewHolderMyMessage).fileIv)
+                }else{
+                    (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
+                    holder.fileIv?.visibility = View.GONE
+                }
+
                 val nameInGroups = myMsgs[position].user.name.split("/")
-                var name = ""
+                val name: String
 
                 name = if (nameInGroups.size > 1) {
                     nameInGroups[1]
@@ -114,9 +130,7 @@ open class MessagesAdapter(
                     myMsgs[position].user.name.split("@")[0]
                 }
 
-                (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
-                holder.name?.text = name
-
+                (holder as ViewHolderDifferentMessage).name?.text = name
 
                 setAvatar( myMsgs[position].user.name+"@moonshard.tech",holder.avatar!!)
             }
@@ -139,6 +153,7 @@ open class MessagesAdapter(
             }
         }
     }
+
 
     @SuppressLint("CheckResult")
     private fun setAvatar(jid: String, imageView: ImageView) {
@@ -267,11 +282,13 @@ open class MessagesAdapter(
 
     inner class ViewHolderMyMessage(view: View) : RecyclerView.ViewHolder(view) {
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
+        internal var fileIv:ImageView? = view.findViewById(R.id.fileIv)
     }
 
     inner class ViewHolderDifferentMessage(view: View) : RecyclerView.ViewHolder(view) {
         internal var avatar: ImageView? = view.findViewById(R.id.avatar)
         internal var name: TextView? = view.findViewById(R.id.name)
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
+        internal var fileIv:ImageView? = view.findViewById(R.id.fileIv)
     }
 }

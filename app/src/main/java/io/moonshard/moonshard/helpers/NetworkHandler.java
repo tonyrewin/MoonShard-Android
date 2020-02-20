@@ -12,7 +12,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Build;
+import android.webkit.URLUtil;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -107,7 +109,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     true,
                     false,
                     false,
-                    true
+                    true,false
             );
 
             ChatListRepository.INSTANCE.getChatByJid(chatJid.asBareJid())
@@ -213,20 +215,38 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     }
 
 
-    //todo  TrueTime.now().getTtl(), crash when showTimeDays on phone not correct
     @SuppressLint("CheckResult")
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
-        MessageEntity messageEntity = new MessageEntity(
-                0,
-                UUID.randomUUID().toString(),
-                message.getStanzaId(),
-                TrueTime.now().getTime(),
-                message.getBody(),
-                true,
-                false,
-                false,
-                false
-        );
+        MessageEntity messageEntity;
+        if(URLUtil.isValidUrl(message.getBody())){
+             messageEntity = new MessageEntity(
+                    0,
+                    UUID.randomUUID().toString(),
+                    message.getStanzaId(),
+                    TrueTime.now().getTime(),
+                    message.getBody(),
+                    true,
+                    false,
+                    false,
+                    false,
+                     true
+            );
+        }else{
+             messageEntity = new MessageEntity(
+                    0,
+                    UUID.randomUUID().toString(),
+                    message.getStanzaId(),
+                    TrueTime.now().getTime(),
+                    message.getBody(),
+                    true,
+                    false,
+                    false,
+                    false,
+                     false
+            );
+        }
+
+
         messageEntity.chat.setTarget(chatEntity);
         String messageAuthorNickname;
 
@@ -568,7 +588,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 true,
                 false,
                 false,
-                true
+                true,false
         );
         messageEntity.chat.setTarget(chatEntity);
         messageEntity.sender.setTarget(chatUser);

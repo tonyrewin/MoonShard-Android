@@ -23,7 +23,10 @@ import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.SmackException
+import org.jivesoftware.smack.XMPPException
 import org.jivesoftware.smackx.forward.packet.Forwarded
+import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager
 import org.jivesoftware.smackx.mam.MamManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
@@ -62,10 +65,10 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
     }
 
     @SuppressLint("CheckResult")
-    fun sendMessage(text: String) {
+    fun sendMessage(text: String, isFile: Boolean = false) {
         if (text.isBlank()) return
 
-        sendMessageInternal(text)
+        sendMessageInternal(text, isFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -101,7 +104,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         }
     }
 
-    private fun sendMessageInternal(text: String): Single<MessageEntity> {
+    private fun sendMessageInternal(text: String, isFile: Boolean): Single<MessageEntity> {
         return Single.create {
             val jid: EntityBareJid
             try {
@@ -142,7 +145,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 text = text,
                 isSent = false,
                 isRead = false,
-                isCurrentUserSender = true
+                isCurrentUserSender = true,
+                isFile = isFile
             )
             // message.sender = ??? FIXME
             message.chat.target = this.chat
@@ -152,9 +156,29 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         }
     }
 
-    fun sendFile(path: File) {
+    fun sendFile(file: File) {
         if (MainApplication.getXmppConnection().isConnectionReady) {
-           MainApplication.getXmppConnection().sendFile(path)
+            // MainApplication.getXmppConnection().upLoadFile(path)
+            upLoadFile(file).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    sendMessage(it,true)
+                }, {
+
+                })
+        }
+    }
+
+    private fun upLoadFile(file: File): Single<String> {
+        return Single.create {
+            val manager =
+                HttpFileUploadManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            try {
+                val url = manager.uploadFile(file).toString()
+                it.onSuccess(url)
+            } catch (e:Exception) {
+                it.onError(Throwable("Did not load"))
+            }
         }
     }
 
@@ -179,7 +203,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                     .subscribe({ }, {
                         Logger.d(it)
                     })
-                viewState?.addToStart(GenericMessage(message), true)
+                viewState.addToStart(GenericMessage(message), true)
             }
 
             override fun onError(e: Throwable) {}
@@ -281,7 +305,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                         }
                     MainApplication.getMainUIThread().post {
                         adapterMessages.sortWith(messageComparator)
-                        viewState?.addToEnd(adapterMessages, true)
+                        viewState.addToEnd(adapterMessages, true)
                     }
                 }
             }, {
@@ -300,7 +324,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
             genericMessages.sortWith(messageComparator)
             viewState.setMessages(genericMessages, true)
-            viewState?.hideProgressBar()
+            viewState.hideProgressBar()
         }, {
             com.orhanobut.logger.Logger.d(it.message)
         })

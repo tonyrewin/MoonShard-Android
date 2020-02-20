@@ -2,6 +2,8 @@ package io.moonshard.moonshard;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
@@ -52,6 +54,7 @@ public class StreamUtil {
         }
         return null;
     }
+
 
     public static String getFileName(Context context,Uri uri) {
         String result = null;

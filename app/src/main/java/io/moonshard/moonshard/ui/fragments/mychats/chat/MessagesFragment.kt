@@ -44,8 +44,6 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            //  StreamUtil.getTempFile(context,"")
-
         (activity as? MainActivity)?.hideBottomNavigationBar()
 
         setAdapter()
@@ -132,7 +130,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         super.onActivityResult(requestCode, resultCode, data)
 
         val uri = data?.data
-        
+
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
             if (input != null) {
@@ -144,7 +142,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     private fun chooseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
-        chooseFile.type = "*/*"
+        chooseFile.type = "image/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
     }
@@ -156,6 +154,4 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
     override fun hideProgressBar() {
        // progressBar?.visibility=View.GONE
     }
-
-
 }

@@ -80,7 +80,6 @@ public class XMPPConnection implements ConnectionListener {
     public MultiUserChatManager multiUserChatManager = null;
     public ChatManager chatManager = null;
     public ServiceDiscoveryManager serviceDiscoveryManager = null;
-    public FileTransferManager fileTransferManager = null;
 
     public enum ConnectionState {
         CONNECTED,
@@ -174,8 +173,6 @@ public class XMPPConnection implements ConnectionListener {
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
         multiUserChatManager.addInvitationListener(networkHandler);
 
-        fileTransferManager = FileTransferManager.getInstanceFor(connection);
-        fileTransferManager.addFileTransferListener(networkHandler);
 
         setStatus(true, "ONLINE");
     }
@@ -282,56 +279,6 @@ public class XMPPConnection implements ConnectionListener {
                 sendMessage(recipientJid, messageText);
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void sendFile(File file) {
-        Observable.fromCallable(() -> {
-            HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-            try {
-                return manager.uploadFile(file);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (XMPPException.XMPPErrorException e) {
-                e.printStackTrace();
-            } catch (SmackException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return "";
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((result) -> {
-                    String kek = "";
-                    //Use result for something
-                });
-    }
-
-    public void sendMyFile(File file) {
-        try {
-            HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-            manager.uploadFile(file);
-        } catch (Exception e) {
-            String kek = "";
-        }
-    }
-
-
-    Single<URL> getTest(File file) {
-        HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
-        try {
-            return Single.just(manager.uploadFile(file));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

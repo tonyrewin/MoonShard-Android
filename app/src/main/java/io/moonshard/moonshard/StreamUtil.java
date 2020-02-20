@@ -1,5 +1,10 @@
 package io.moonshard.moonshard;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -21,4 +26,37 @@ public class StreamUtil {
         return tempFile;
     }
 
+    public static File getTempFile(Context context, String url) {
+        url = "https://upload.moonshard.tech/upload/mjEq_VXHJOv5Ongs/stream2file1320186155637012917.tmp";
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+           File file = File.createTempFile(fileName, null, context.getCacheDir());
+            return file;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getFileName(Context context,Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
 }

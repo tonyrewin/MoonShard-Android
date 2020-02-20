@@ -1,7 +1,10 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +43,8 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+            //  StreamUtil.getTempFile(context,"")
 
         (activity as? MainActivity)?.hideBottomNavigationBar()
 
@@ -127,6 +132,8 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         super.onActivityResult(requestCode, resultCode, data)
 
         val uri = data?.data
+
+        var kek = StreamUtil.getFileName(context,uri)
 
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)

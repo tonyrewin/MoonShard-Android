@@ -291,8 +291,7 @@ public class XMPPConnection implements ConnectionListener {
         Observable.fromCallable(() -> {
             HttpFileUploadManager manager = HttpFileUploadManager.getInstanceFor(connection);
             try {
-                Single.just(manager.uploadFile(file));
-                return true;
+                return manager.uploadFile(file);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (XMPPException.XMPPErrorException e) {
@@ -302,7 +301,7 @@ public class XMPPConnection implements ConnectionListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return false;
+            return "";
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

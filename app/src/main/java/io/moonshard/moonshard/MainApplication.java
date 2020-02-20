@@ -13,8 +13,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.instacart.library.truetime.TrueTime;
+import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -34,6 +36,7 @@ import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainApplication extends Application {
 
@@ -101,6 +104,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        initTime();
 
         setupLogger();
 
@@ -255,6 +260,16 @@ public class MainApplication extends Application {
 
     public static LoginCredentials getCurrentLoginCredentials() {
         return currentLoginCredentials;
+    }
+
+    void initTime(){
+        TrueTimeRx.build().initializeRx("time.apple.com")
+                .subscribeOn(Schedulers.io())
+                .subscribe(date -> {
+                    Log.d("time", "TrueTime was initialized at: %s" + date);
+                }, throwable -> {
+                    Log.e("time", "TrueTime init failed: ");
+                });
     }
 }
 

@@ -26,11 +26,26 @@ public class StreamUtil {
         return tempFile;
     }
 
+
+    public static File stream2file (Context context,Uri uri,InputStream in) throws IOException {
+
+        String fileNameWithFormat = getFileName(context,uri);
+        String fileName = fileNameWithFormat.split("\\.")[0]; // "\\. equals "." "
+        String formatFile = "."+fileNameWithFormat.split("\\.")[1];
+
+        final File tempFile = File.createTempFile(fileName, formatFile);
+        tempFile.deleteOnExit();
+        try (FileOutputStream out = new FileOutputStream(tempFile)) {
+            IOUtils.copy(in, out);
+        }
+        return tempFile;
+    }
+
     public static File getTempFile(Context context, String url) {
         url = "https://upload.moonshard.tech/upload/mjEq_VXHJOv5Ongs/stream2file1320186155637012917.tmp";
         try {
             String fileName = Uri.parse(url).getLastPathSegment();
-           File file = File.createTempFile(fileName, null, context.getCacheDir());
+            File file = File.createTempFile(fileName, null, context.getCacheDir());
             return file;
         }catch (IOException e) {
             e.printStackTrace();

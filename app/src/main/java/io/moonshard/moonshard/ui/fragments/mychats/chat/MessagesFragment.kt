@@ -132,13 +132,11 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         super.onActivityResult(requestCode, resultCode, data)
 
         val uri = data?.data
-
-        var kek = StreamUtil.getFileName(context,uri)
-
+        
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
             if (input != null) {
-                val file = StreamUtil.stream2file(input)
+                val file = StreamUtil.stream2file(context,uri,input)
                 presenter.sendFile(file)
             }
         }

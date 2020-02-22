@@ -6,4 +6,5 @@
         android:id="@+id/mainContainer"
         tools:context=".ui.fragments.mychats.chat.MainChatFragment">
 
+
 </RelativeLayout>

@@ -16,6 +16,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.FullPhotoFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -128,6 +129,11 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     private fun showProfileUser(jid: String) {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid,false)
+    }
+
+    fun showFullScreen(url:String){
+        //toolBar?.visibility = View.GONE
+        (parentFragment as? MainChatFragment)?.showFullScreen(url)
     }
 
     override fun setDataMuc(

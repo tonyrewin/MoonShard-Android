@@ -1,12 +1,12 @@
 package io.moonshard.moonshard.ui.fragments.map
 
+import android.graphics.Canvas
+import android.graphics.Outline
+import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
@@ -340,7 +340,24 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (activity as MainActivity).showBottomNavigationBar()
         (activity as? MainActivity)?.setMapActiveBottomBar()
 
+/*
+        val canvas = Canvas()
+       canvas.drawRoundRect()
 
+        fileIv.outlineProvider = object : ViewOutlineProvider() {
+
+            override fun getOutline(view: View?, outline: Outline?) {
+                outline?.setRoundRect(0, 0, view!!.width, view!!.height, 16F)
+                outline?.setRect(view!!.width/2, 0, view.width, view.height/2)
+            }
+        }
+
+
+        fileIv.clipToOutline = true
+
+
+
+ */
 
         // MainApplication.getXmppConnection().addUserToGroup2("myTestUser@moonshard.tech","myGroup")
         //  MainApplication.getXmppConnection().getGroup("myGroup")

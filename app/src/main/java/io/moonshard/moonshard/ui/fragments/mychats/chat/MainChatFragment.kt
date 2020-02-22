@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
@@ -13,6 +14,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
+import kotlinx.android.synthetic.main.fragment_main_chat.*
 import moxy.MvpAppCompatFragment
 
 
@@ -222,6 +224,16 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, mainChatFragment, "chatScreen").addToBackStack("chatScreen")
             .commit()
+    }
+
+
+    fun showFullScreen(url:String){
+        val bundle = Bundle()
+        bundle.putString("url", url)
+        val eventFragment = FullPhotoFragment()
+        eventFragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.add(R.id.mainContainer, eventFragment).addToBackStack("FullPhotoFragment").commit()
     }
 
     override fun onDestroyView() {

@@ -23,9 +23,13 @@ object ChatListRepository {
 
     fun addChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
-            if (!it.isDisposed) {
-                chatBox.put(chatEntity)
-                it.onComplete()
+            try {
+                if (!it.isDisposed) {
+                    chatBox.put(chatEntity)
+                    it.onComplete()
+                }
+            }catch (e:Exception){
+                it.onError(e)
             }
         }
     }

@@ -9,7 +9,6 @@
         android:clipToPadding="false"
         android:focusableInTouchMode="true">
 
-
     <androidx.recyclerview.widget.RecyclerView
             android:layout_above="@+id/sendMessageBar"
             android:id="@+id/messagesRv"
@@ -74,4 +73,5 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
 </RelativeLayout>

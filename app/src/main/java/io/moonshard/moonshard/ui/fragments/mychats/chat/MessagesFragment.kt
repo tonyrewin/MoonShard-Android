@@ -1,16 +1,18 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
-import android.content.Context
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChatRepository
@@ -20,9 +22,15 @@ import io.moonshard.moonshard.presentation.view.MessagesView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.chat.MessagesAdapter
+import io.moonshard.moonshard.ui.adapters.chat.PhotoListener
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.FullPhotoFragment
 import kotlinx.android.synthetic.main.messages_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import androidx.core.view.MotionEventCompat.getActionMasked
+import android.R
+
+
 
 
 class MessagesFragment : MvpAppCompatFragment(), MessagesView {
@@ -36,7 +44,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(
-            R.layout.messages_chat,
+            io.moonshard.moonshard.R.layout.messages_chat,
             container, false
         )
     }
@@ -117,13 +125,22 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         messagesRv?.adapter =
             MessagesAdapter(
                 arrayListOf(),
-                messagesRv.layoutManager as LinearLayoutManager
+                messagesRv.layoutManager as LinearLayoutManager,
+                object : PhotoListener{
+                    override fun clickPhoto(url: String) {
+                        showFullScreen(url)
+                    }
+                }
             )
 
         val listener =
             RecyclerScrollMoreListener(layoutManager, messagesRv.adapter as MessagesAdapter)
 
         messagesRv?.addOnScrollListener(listener)
+    }
+
+    private fun showFullScreen(url:String){
+        (parentFragment as? ChatFragment)?.showFullScreen(url)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

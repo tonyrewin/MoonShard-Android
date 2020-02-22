@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -116,40 +117,56 @@ open class MessagesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
-
-                (holder as ViewHolderMyMessage).mainFile?.setShapeAppearanceModel(
-                    holder.mainFile?.shapeAppearanceModel
-                        ?.toBuilder()
-                         ?.setTopRightCorner(CornerFamily.ROUNDED, 16F)
-                        ?.setTopLeftCorner(CornerFamily.ROUNDED, 16F)
-                        ?.setBottomRightCorner(CornerFamily.ROUNDED, 2F)
-                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, 16F)
-                        !!.build())
-
-                holder.mainFile?.setOnClickListener {
+                (holder as ViewHolderMyMessage).mainFile?.setOnClickListener {
                     listener.clickPhoto(myMsgs[position].text)
                 }
+
+                holder.mainFile?.setShapeAppearanceModel(
+                    holder.mainFile?.shapeAppearanceModel
+                        ?.toBuilder()
+                        ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (2 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                    !!.build())
 
                 if (myMsgs[position].isFile) {
                     holder.layoutBodyMessage?.visibility = View.GONE
                     holder.mainFile?.visibility = View.VISIBLE
 
-
                     Picasso.get().load(myMsgs[position].text)
-                        .into((holder as ViewHolderMyMessage).mainFile)
+                        .into(holder.mainFile)
                 } else {
-                    (holder as ViewHolderMyMessage).bodyText?.text = myMsgs[position].text
-                    holder.fileIv?.visibility = View.GONE
+                    holder.layoutBodyMessage?.visibility = View.VISIBLE
+                    holder.mainFile?.visibility = View.GONE
+                    holder.bodyText?.text = myMsgs[position].text
                 }
             }
             1 -> {
+                (holder as ViewHolderDifferentMessage).mainFile?.setOnClickListener {
+                    listener.clickPhoto(myMsgs[position].text)
+                }
+
+                holder.mainFile?.setShapeAppearanceModel(
+                    holder.mainFile?.shapeAppearanceModel
+                        ?.toBuilder()
+                        ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (2 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                    !!.build())
+
 
                 if (myMsgs[position].isFile) {
+                    holder.layoutBodyMessage?.visibility = View.GONE
+                    holder.mainFile?.visibility = View.VISIBLE
+
                     Picasso.get().load(myMsgs[position].text)
                         .into((holder as ViewHolderMyMessage).fileIv)
                 } else {
-                    (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
-                    holder.fileIv?.visibility = View.GONE
+                    holder.bodyText?.text = myMsgs[position].text
+                    holder.layoutBodyMessage?.visibility = View.VISIBLE
+                    holder.mainFile?.visibility = View.GONE
                 }
 
                 val nameInGroups = myMsgs[position].user.name.split("/")
@@ -161,7 +178,7 @@ open class MessagesAdapter(
                     myMsgs[position].user.name.split("@")[0]
                 }
 
-                (holder as ViewHolderDifferentMessage).name?.text = name
+                holder.name?.text = name
 
                 setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
             }
@@ -323,6 +340,7 @@ open class MessagesAdapter(
         internal var name: TextView? = view.findViewById(R.id.name)
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
         internal var fileIv: ImageView? = view.findViewById(R.id.fileIv)
-
+        internal var mainFile: ShapeableImageView? = view.findViewById(R.id.mainFile)
+        internal var layoutBodyMessage: LinearLayout? = view.findViewById(R.id.layoutBodyMessage)
     }
 }

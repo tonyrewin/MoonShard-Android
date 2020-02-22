@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -152,20 +153,20 @@ open class MessagesAdapter(
                         ?.toBuilder()
                         ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
                         ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (2 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
+                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (2* Resources.getSystem().displayMetrics.density))
                     !!.build())
 
 
                 if (myMsgs[position].isFile) {
-                    holder.layoutBodyMessage?.visibility = View.GONE
                     holder.mainFile?.visibility = View.VISIBLE
+                    holder.bodyText?.visibility = View.GONE
 
                     Picasso.get().load(myMsgs[position].text)
-                        .into((holder as ViewHolderMyMessage).fileIv)
+                        .into((holder.mainFile))
                 } else {
                     holder.bodyText?.text = myMsgs[position].text
-                    holder.layoutBodyMessage?.visibility = View.VISIBLE
+                    holder.bodyText?.visibility = View.VISIBLE
                     holder.mainFile?.visibility = View.GONE
                 }
 
@@ -341,6 +342,6 @@ open class MessagesAdapter(
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
         internal var fileIv: ImageView? = view.findViewById(R.id.fileIv)
         internal var mainFile: ShapeableImageView? = view.findViewById(R.id.mainFile)
-        internal var layoutBodyMessage: LinearLayout? = view.findViewById(R.id.layoutBodyMessage)
+        internal var layoutBodyMessage: RelativeLayout? = view.findViewById(R.id.layoutBodyMessage)
     }
 }

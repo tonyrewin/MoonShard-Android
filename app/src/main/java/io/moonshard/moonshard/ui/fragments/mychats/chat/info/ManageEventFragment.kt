@@ -68,7 +68,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         }
 
         locationLayout?.setSafeOnClickListener {
-            ChangeEventRepository.name = nameTv?.text.toString()
+            ChangeEventRepository.name = nameEt?.text.toString()
             ChangeEventRepository.description = descriptionEt?.text.toString()
             methodRequiresTwoPermission()
         }
@@ -111,7 +111,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         }
 
         timesLayout?.setSafeOnClickListener {
-            ChangeEventRepository.name = nameTv?.text.toString()
+            ChangeEventRepository.name = nameEt?.text.toString()
             ChangeEventRepository.description = descriptionEt?.text.toString()
             showTimesScreen()
         }
@@ -227,7 +227,6 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     private fun showChooseMapScreen() {
-        ChangeEventRepository.name = nameTv?.text.toString()
         (parentFragment as? MainChatFragment)?.showChooseMapScreen(fromManageEventScreen=true)
     }
 

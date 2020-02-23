@@ -132,7 +132,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="8dp"
                         android:paddingEnd="5dp"
-                        android:text="Улица Парковая, Одинцово, Россия"
+                        tools:text="Улица Парковая, Одинцово, Россия"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -220,7 +220,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="22dp"
-                            android:text="13 декабря"
+                            tools:text="13 декабря"
                             android:textColor="#8A000000"
                             android:textSize="13dp" />
 
@@ -258,7 +258,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="22dp"
-                            android:text="4 дня"
+                            tools:text="4 дня"
                             android:textColor="#8A000000"
                             android:textSize="13dp" />
 

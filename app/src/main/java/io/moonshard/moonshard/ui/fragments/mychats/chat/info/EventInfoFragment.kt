@@ -218,7 +218,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             if (addresses.isNotEmpty()) {
                 val address =
                     addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                ChangeEventRepository.name = address
+                ChangeEventRepository.address = address
                 return address
             }
         } catch (e: IOException) {

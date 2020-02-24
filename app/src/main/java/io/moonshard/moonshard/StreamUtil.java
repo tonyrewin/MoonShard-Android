@@ -35,6 +35,8 @@ public class StreamUtil {
         String fileName = fileNameWithFormat.split("\\.")[0]; // "\\. equals "." "
         String formatFile = "."+fileNameWithFormat.split("\\.")[1];
 
+
+
         final File tempFile = File.createTempFile(fileName, formatFile);
         tempFile.deleteOnExit();
         try (FileOutputStream out = new FileOutputStream(tempFile)) {

@@ -340,7 +340,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (activity as MainActivity).showBottomNavigationBar()
         (activity as? MainActivity)?.setMapActiveBottomBar()
 
+
 /*
+
         val canvas = Canvas()
        canvas.drawRoundRect()
 

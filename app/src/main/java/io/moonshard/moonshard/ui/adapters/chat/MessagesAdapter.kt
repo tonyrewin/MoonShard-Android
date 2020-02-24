@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -118,12 +117,12 @@ open class MessagesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
-                (holder as ViewHolderMyMessage).mainFile?.setOnClickListener {
+                (holder as ViewHolderMyMessage).mainImage?.setOnClickListener {
                     listener.clickPhoto(myMsgs[position].text)
                 }
 
-                holder.mainFile?.setShapeAppearanceModel(
-                    holder.mainFile?.shapeAppearanceModel
+                holder.mainImage?.setShapeAppearanceModel(
+                    holder.mainImage?.shapeAppearanceModel
                         ?.toBuilder()
                         ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
                         ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
@@ -132,24 +131,36 @@ open class MessagesAdapter(
                     !!.build())
 
                 if (myMsgs[position].isFile) {
-                    holder.layoutBodyMessage?.visibility = View.GONE
-                    holder.mainFile?.visibility = View.VISIBLE
 
-                    Picasso.get().load(myMsgs[position].text)
-                        .into(holder.mainFile)
+                    if(myMsgs[position].isImage){
+                        holder.layoutFile?.visibility = View.GONE
+                        holder.layoutMessage?.visibility = View.GONE
+                        holder.mainImage?.visibility = View.VISIBLE
+
+                        Picasso.get().load(myMsgs[position].text)
+                            .into(holder.mainImage)
+                    }else{
+                        holder.layoutFile?.visibility = View.VISIBLE
+                        holder.layoutMessage?.visibility = View.GONE
+                        holder.mainImage?.visibility = View.GONE
+                        holder.nameFile?.text = myMsgs[position].fileNameFromURL
+                        holder.sizeFile?.text = myMsgs[position].sizeFile.toString()
+                    }
+
                 } else {
-                    holder.layoutBodyMessage?.visibility = View.VISIBLE
-                    holder.mainFile?.visibility = View.GONE
+                    holder.layoutMessage?.visibility = View.VISIBLE
+                    holder.mainImage?.visibility = View.GONE
                     holder.bodyText?.text = myMsgs[position].text
+                    holder.layoutFile?.visibility = View.GONE
                 }
             }
             1 -> {
-                (holder as ViewHolderDifferentMessage).mainFile?.setOnClickListener {
+                (holder as ViewHolderDifferentMessage).mainImage?.setOnClickListener {
                     listener.clickPhoto(myMsgs[position].text)
                 }
 
-                holder.mainFile?.setShapeAppearanceModel(
-                    holder.mainFile?.shapeAppearanceModel
+                holder.mainImage?.setShapeAppearanceModel(
+                    holder.mainImage?.shapeAppearanceModel
                         ?.toBuilder()
                         ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
                         ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
@@ -159,15 +170,28 @@ open class MessagesAdapter(
 
 
                 if (myMsgs[position].isFile) {
-                    holder.mainFile?.visibility = View.VISIBLE
-                    holder.bodyText?.visibility = View.GONE
 
-                    Picasso.get().load(myMsgs[position].text)
-                        .into((holder.mainFile))
+                    if(myMsgs[position].isImage){
+                        holder.layoutFile?.visibility = View.GONE
+                        holder.bodyText?.visibility = View.GONE
+                        holder.layoutBodyMessage?.visibility=View.VISIBLE
+                        holder.mainImage?.visibility = View.VISIBLE
+
+                        Picasso.get().load(myMsgs[position].text)
+                            .into((holder.mainImage))
+                    }else{
+                        holder.layoutFile?.visibility = View.VISIBLE
+
+                        holder.bodyText?.visibility = View.GONE
+                        holder.layoutBodyMessage?.visibility=View.GONE
+                        holder.mainImage?.visibility = View.GONE
+                        holder.nameFile?.text = myMsgs[position].fileNameFromURL
+                        holder.sizeFile?.text = myMsgs[position].sizeFile.toString()
+                    }
                 } else {
                     holder.bodyText?.text = myMsgs[position].text
                     holder.bodyText?.visibility = View.VISIBLE
-                    holder.mainFile?.visibility = View.GONE
+                    holder.mainImage?.visibility = View.GONE
                 }
 
                 val nameInGroups = myMsgs[position].user.name.split("/")
@@ -330,9 +354,12 @@ open class MessagesAdapter(
 
     inner class ViewHolderMyMessage(view: View) : RecyclerView.ViewHolder(view) {
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
-        internal var fileIv: ImageView? = view.findViewById(R.id.fileIv)
-        internal var mainFile: ShapeableImageView? = view.findViewById(R.id.mainFile)
-        internal var layoutBodyMessage: LinearLayout? = view.findViewById(R.id.layoutBodyMessage)
+        internal var mainImage: ShapeableImageView? = view.findViewById(R.id.mainImage)
+        internal var layoutMessage: LinearLayout? = view.findViewById(R.id.layoutMessage)
+        internal var layoutFile: RelativeLayout? = view.findViewById(R.id.layoutFile)
+        internal var nameFile: TextView? = view.findViewById(R.id.nameFile)
+        internal var sizeFile: TextView? = view.findViewById(R.id.sizeFile)
+
     }
 
 
@@ -340,8 +367,12 @@ open class MessagesAdapter(
         internal var avatar: ImageView? = view.findViewById(R.id.avatar)
         internal var name: TextView? = view.findViewById(R.id.name)
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
-        internal var fileIv: ImageView? = view.findViewById(R.id.fileIv)
-        internal var mainFile: ShapeableImageView? = view.findViewById(R.id.mainFile)
+        internal var mainImage: ShapeableImageView? = view.findViewById(R.id.mainImage)
+
+        internal var layoutFile: RelativeLayout? = view.findViewById(R.id.layoutFile)
         internal var layoutBodyMessage: RelativeLayout? = view.findViewById(R.id.layoutBodyMessage)
+        internal var nameFile: TextView? = view.findViewById(R.id.nameFile)
+        internal var sizeFile: TextView? = view.findViewById(R.id.sizeFile)
+
     }
 }

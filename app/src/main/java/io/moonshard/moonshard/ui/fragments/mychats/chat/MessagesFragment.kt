@@ -159,7 +159,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     private fun chooseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
-        chooseFile.type = "image/*"
+        chooseFile.type = "*/*"
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, 1)
     }

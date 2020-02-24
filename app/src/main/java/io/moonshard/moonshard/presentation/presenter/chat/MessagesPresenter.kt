@@ -158,7 +158,6 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun sendFile(file: File) {
         if (MainApplication.getXmppConnection().isConnectionReady) {
-            // MainApplication.getXmppConnection().upLoadFile(path)
             upLoadFile(file).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

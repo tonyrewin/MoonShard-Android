@@ -18,6 +18,7 @@ import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
@@ -34,6 +35,7 @@ import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
 import trikita.log.Log
+import zlc.season.rxdownload4.download
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -180,6 +182,28 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
         }
     }
+
+   fun  downloadFile(url:String){
+      val disposable = url.download()
+           .observeOn(AndroidSchedulers.mainThread())
+           .subscribeBy(
+               onNext = { progress ->
+
+                 //  progress.
+                 //  //download progress
+                   //button.text = "${progress.downloadSizeStr()}/${progress.totalSizeStr()}"
+                   //button.setProgress(progress)
+               },
+               onComplete = {
+                   //download complete
+                  // button.text = "Open"
+               },
+               onError = {
+                   //download failed
+                   //button.text = "Retry"
+               }
+           )
+   }
 
     override fun onDestroy() {
         onNewMessageDisposable?.dispose()

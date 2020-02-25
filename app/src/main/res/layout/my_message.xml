@@ -10,7 +10,7 @@
 
     <LinearLayout
             android:layout_marginStart="58dp"
-            tools:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/layoutMessage"
             android:orientation="vertical"
             android:layout_alignParentRight="true"
@@ -55,8 +55,9 @@
             android:id="@+id/mainImage"
             tools:src="@drawable/palmy"
             android:scaleType="fitXY"
+            android:maxHeight="250dp"
             android:minWidth="270dp"
-            android:minHeight="270dp"/>
+            android:minHeight="200dp"/>
 
 
 
@@ -84,12 +85,14 @@
                     android:layout_height="40dp"/>
 
             <ImageView
+                    android:id="@+id/statusFileIv"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_file"
+                    android:src="@drawable/ic_download_file"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
             <ProgressBar
+                    android:id="@+id/progressBarFile"
                     android:visibility="gone"
                     android:layout_marginStart="-4dp"
                     android:layout_marginBottom="-4dp"

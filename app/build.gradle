@@ -178,6 +178,7 @@ dependencies {
 
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
     implementation 'com.github.MikeOrtiz:TouchImageView:2.3.3' // Android X
+    implementation "com.github.ssseasonnn:RxDownload:1.0.9"
 
 }
 

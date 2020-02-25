@@ -46,6 +46,18 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyC9k6CdfZf-4r1XajiakvjYpghYqQom-Y8" />
+
+
+        <provider
+                android:name=".common.GenericFileProvider"
+                android:authorities="${applicationId}.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

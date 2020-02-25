@@ -1,46 +1,56 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
+import com.orhanobut.logger.Logger
 import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.models.GenericMessage
 import io.moonshard.moonshard.ui.activities.RecyclerScrollMoreListener
 import io.moonshard.moonshard.ui.adapters.DateFormatter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import trikita.log.Log
+import zlc.season.rxdownload4.download
+import zlc.season.rxdownload4.file
+import java.io.File
 import java.util.*
 
 interface PhotoListener {
-    fun clickPhoto(url:String)
+    fun clickPhoto(url: String)
 }
 
 open class MessagesAdapter(
     private var myMsgs: MutableList<GenericMessage>,
     val layoutManager: LinearLayoutManager,
-    val listener:PhotoListener
+    val listener: PhotoListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), RecyclerScrollMoreListener.OnLoadMoreListener {
 
     private var loadMoreListener: OnLoadMoreListener? = null
 
-         var isImageFitToScreen:Boolean = false
+    var isImageFitToScreen: Boolean = false
 
+    var disposable: Disposable? = null
+
+    val fileStatus: String = "not_downloading"
 
     fun setLoadMoreListener(loadMoreListener: OnLoadMoreListener) {
         this.loadMoreListener = loadMoreListener
@@ -124,29 +134,62 @@ open class MessagesAdapter(
                 holder.mainImage?.setShapeAppearanceModel(
                     holder.mainImage?.shapeAppearanceModel
                         ?.toBuilder()
-                        ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (2 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                    !!.build())
+                        ?.setTopRightCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setTopLeftCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setBottomRightCorner(
+                            CornerFamily.ROUNDED,
+                            (2 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setBottomLeftCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                    !!.build()
+                )
 
                 if (myMsgs[position].isFile) {
-
-                    if(myMsgs[position].isImage){
+                    if (myMsgs[position].isImage) {
                         holder.layoutFile?.visibility = View.GONE
                         holder.layoutMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.VISIBLE
 
                         Picasso.get().load(myMsgs[position].text)
                             .into(holder.mainImage)
-                    }else{
+                    } else {
                         holder.layoutFile?.visibility = View.VISIBLE
                         holder.layoutMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.GONE
                         holder.nameFile?.text = myMsgs[position].fileNameFromURL
-                        holder.sizeFile?.text = myMsgs[position].sizeFile.toString()
-                    }
+                        getSizeFile(myMsgs[position].text,holder.sizeFile)
 
+                        val fileInStorage = myMsgs[position].text.file()
+
+                        if (fileInStorage.isFile) {
+                            holder.statusFileIv?.setImageResource(R.drawable.ic_file)
+
+                            holder.layoutFile?.setOnClickListener {
+                                openFile(fileInStorage, it.context)
+                            }
+                        } else {
+                            holder.statusFileIv?.setImageResource(R.drawable.ic_download_file)
+
+                            holder.layoutFile?.setOnClickListener {
+                                downloadFile(
+                                    myMsgs[position].text,
+                                    holder.sizeFile!!,
+                                    holder.statusFileIv,
+                                    holder.progressBarFile,
+                                    holder.layoutFile
+                                )
+                            }
+                        }
+                    }
                 } else {
                     holder.layoutMessage?.visibility = View.VISIBLE
                     holder.mainImage?.visibility = View.GONE
@@ -162,31 +205,44 @@ open class MessagesAdapter(
                 holder.mainImage?.setShapeAppearanceModel(
                     holder.mainImage?.shapeAppearanceModel
                         ?.toBuilder()
-                        ?.setTopRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setTopLeftCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomRightCorner(CornerFamily.ROUNDED, (16 * Resources.getSystem().displayMetrics.density))
-                        ?.setBottomLeftCorner(CornerFamily.ROUNDED, (2* Resources.getSystem().displayMetrics.density))
-                    !!.build())
+                        ?.setTopRightCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setTopLeftCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setBottomRightCorner(
+                            CornerFamily.ROUNDED,
+                            (16 * Resources.getSystem().displayMetrics.density)
+                        )
+                        ?.setBottomLeftCorner(
+                            CornerFamily.ROUNDED,
+                            (2 * Resources.getSystem().displayMetrics.density)
+                        )
+                    !!.build()
+                )
 
 
                 if (myMsgs[position].isFile) {
 
-                    if(myMsgs[position].isImage){
+                    if (myMsgs[position].isImage) {
                         holder.layoutFile?.visibility = View.GONE
                         holder.bodyText?.visibility = View.GONE
-                        holder.layoutBodyMessage?.visibility=View.VISIBLE
+                        holder.layoutBodyMessage?.visibility = View.VISIBLE
                         holder.mainImage?.visibility = View.VISIBLE
 
                         Picasso.get().load(myMsgs[position].text)
                             .into((holder.mainImage))
-                    }else{
+                    } else {
                         holder.layoutFile?.visibility = View.VISIBLE
 
                         holder.bodyText?.visibility = View.GONE
-                        holder.layoutBodyMessage?.visibility=View.GONE
+                        holder.layoutBodyMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.GONE
                         holder.nameFile?.text = myMsgs[position].fileNameFromURL
-                        holder.sizeFile?.text = myMsgs[position].sizeFile.toString()
+                        getSizeFile(myMsgs[position].text,holder.sizeFile)
                     }
                 } else {
                     holder.bodyText?.text = myMsgs[position].text
@@ -261,15 +317,8 @@ open class MessagesAdapter(
      * @param scroll  `true` if need to scroll list to bottom when message added.
      */
     fun addToStart(message: GenericMessage, scroll: Boolean) {
-        /*
-        val isNewMessageToday = !isPreviousSameDate(0, message.createdAt)
-        if (isNewMessageToday) {
-            myMsgs.add(0, message)
-        }
-         */
         val element = message
         myMsgs.add(0, element)
-        //notifyItemRangeInserted(0, if (isNewMessageToday) 2 else 1)
         notifyItemRangeInserted(0, 1)
         if (scroll) {
             layoutManager.scrollToPosition(0)
@@ -316,7 +365,6 @@ open class MessagesAdapter(
         )
     }
 
-
     fun generateDateHeaders(messages: List<GenericMessage>) {
         for (i in messages.indices) {
             val message = messages[i]
@@ -334,6 +382,71 @@ open class MessagesAdapter(
                 this.myMsgs.add(message)
             }
         }
+    }
+
+    fun openFile(file: File, context: Context) {
+        try {
+            val uri = FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName + ".provider",
+                file
+            )
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Logger.d(e)
+        }
+    }
+
+    fun getSizeFile(url: String,textView: TextView?) {
+        StreamUtil.getSizeFile(url).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe ({
+                textView?.text = it
+            },{
+            })
+    }
+
+    fun downloadFile(
+        url: String,
+        textSize: TextView,
+        statusFileIv: ImageView?,
+        progressBarFile: ProgressBar?,
+        layoutFile: RelativeLayout?
+    ) {
+        statusFileIv?.setImageResource(R.drawable.ic_close_file)
+        progressBarFile?.visibility = View.VISIBLE
+
+        layoutFile?.setOnClickListener {
+            stopDownloadingFile()
+            statusFileIv?.setImageResource(R.drawable.ic_download_file)
+        }
+
+        disposable = url.download()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = { progress ->
+                    textSize.text = "${progress.downloadSizeStr()} MB }"
+                },
+                onComplete = {
+                    progressBarFile?.visibility = View.GONE
+                    statusFileIv?.setImageResource(R.drawable.ic_file)
+                    textSize.text = "SUCCESS"
+
+                    layoutFile?.setOnClickListener {
+                        openFile(url.file(), it.context)
+                    }
+                },
+                onError = {
+                    statusFileIv?.setImageResource(R.drawable.ic_download_file)
+                    progressBarFile?.visibility = View.GONE
+                    textSize.text = "ERROR"
+                }
+            )
+    }
+
+    fun stopDownloadingFile() {
+        disposable?.dispose()
     }
 
     /**
@@ -359,9 +472,9 @@ open class MessagesAdapter(
         internal var layoutFile: RelativeLayout? = view.findViewById(R.id.layoutFile)
         internal var nameFile: TextView? = view.findViewById(R.id.nameFile)
         internal var sizeFile: TextView? = view.findViewById(R.id.sizeFile)
-
+        internal var statusFileIv: ImageView? = view.findViewById(R.id.statusFileIv)
+        internal var progressBarFile: ProgressBar? = view.findViewById(R.id.progressBarFile)
     }
-
 
     inner class ViewHolderDifferentMessage(view: View) : RecyclerView.ViewHolder(view) {
         internal var avatar: ImageView? = view.findViewById(R.id.avatar)
@@ -373,6 +486,5 @@ open class MessagesAdapter(
         internal var layoutBodyMessage: RelativeLayout? = view.findViewById(R.id.layoutBodyMessage)
         internal var nameFile: TextView? = view.findViewById(R.id.nameFile)
         internal var sizeFile: TextView? = view.findViewById(R.id.sizeFile)
-
     }
 }

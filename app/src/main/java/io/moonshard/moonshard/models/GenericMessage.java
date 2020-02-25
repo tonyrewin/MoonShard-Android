@@ -59,19 +59,6 @@ public class GenericMessage {
         return mimeType != null && mimeType.startsWith("image");
     }
 
-    public  int getSizeFile(){
-        String path = messageEntity.getText();
-        try {
-
-            URL url = new URL(path);
-            URLConnection urlConnection = url.openConnection();
-            urlConnection.connect();
-            return urlConnection.getContentLength();
-        }catch (Exception e) {
-            return 0;
-        }
-    }
-
     public  String getFileNameFromURL() {
         String url = messageEntity.getText();
 

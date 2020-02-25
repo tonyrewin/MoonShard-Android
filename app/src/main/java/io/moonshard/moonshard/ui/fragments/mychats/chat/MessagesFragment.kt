@@ -151,7 +151,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
         if (uri != null) {
             val input = context?.contentResolver?.openInputStream(uri)
             if (input != null) {
-                val file = StreamUtil.stream2file(context,uri,input)
+                val file = StreamUtil.stream2file(context!!,uri,input)
                 presenter.sendFile(file)
             }
         }

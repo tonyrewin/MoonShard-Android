@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.orhanobut.logger.Logger
@@ -160,8 +161,8 @@ open class MessagesAdapter(
                         holder.layoutMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.VISIBLE
 
-                        Picasso.get().load(myMsgs[position].text)
-                            .into(holder.mainImage)
+                        Glide.with(holder.itemView.context).load(myMsgs[position].text)
+                            .into(holder.mainImage!!)
                     } else {
                         holder.layoutFile?.visibility = View.VISIBLE
                         holder.layoutMessage?.visibility = View.GONE
@@ -233,8 +234,8 @@ open class MessagesAdapter(
                         holder.layoutBodyMessage?.visibility = View.VISIBLE
                         holder.mainImage?.visibility = View.VISIBLE
 
-                        Picasso.get().load(myMsgs[position].text)
-                            .into((holder.mainImage))
+                        Glide.with(holder.itemView.context).load(myMsgs[position].text)
+                            .into(holder.mainImage!!)
                     } else {
                         holder.layoutFile?.visibility = View.VISIBLE
 

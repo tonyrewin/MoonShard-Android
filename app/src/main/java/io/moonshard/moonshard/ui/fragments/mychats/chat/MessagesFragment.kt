@@ -121,6 +121,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
         messagesRv?.layoutManager = layoutManager
 
+
         messagesRv?.adapter =
             MessagesAdapter(
                 arrayListOf(),
@@ -140,6 +141,11 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
             RecyclerScrollMoreListener(layoutManager, messagesRv.adapter as MessagesAdapter)
 
         messagesRv?.addOnScrollListener(listener)
+
+        messagesRv.setHasFixedSize(true);
+        messagesRv.setItemViewCacheSize(20);
+        messagesRv.isDrawingCacheEnabled = true;
+        messagesRv.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH;
     }
 
     private fun showFullScreen(url:String){

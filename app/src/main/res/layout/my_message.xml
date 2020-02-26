@@ -39,7 +39,7 @@
             android:textColor="#333333"
             android:padding="10dp"
             android:textSize="16sp"
-            tools:text="Placeholder message"
+            tools:text="P"
             />
 
     </LinearLayout>
@@ -57,7 +57,7 @@
             tools:src="@drawable/palmy"
             android:scaleType="fitXY"
             android:maxHeight="250dp"
-            android:minWidth="270dp"
+            android:minWidth="300dp"
             android:minHeight="200dp"/>
 
     <RelativeLayout

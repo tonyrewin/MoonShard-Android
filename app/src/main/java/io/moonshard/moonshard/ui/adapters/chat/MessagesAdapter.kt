@@ -35,6 +35,7 @@ import java.util.*
 
 interface PhotoListener {
     fun clickPhoto(url: String)
+    fun clickUserAvater(jid:String)
 }
 
 open class MessagesAdapter(
@@ -285,6 +286,10 @@ open class MessagesAdapter(
                 holder.name?.text = name
 
                 setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
+
+                holder.avatar?.setOnClickListener {
+                    listener.clickUserAvater(myMsgs[position].user.jid)
+                }
             }
             2 -> {
                 val nameInGroups = myMsgs[position].user.name.split("/")
@@ -302,6 +307,10 @@ open class MessagesAdapter(
 
 
                 setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
+
+                holder.avatar?.setOnClickListener {
+                    listener.clickUserAvater(myMsgs[position].user.jid)
+                }
             }
         }
     }

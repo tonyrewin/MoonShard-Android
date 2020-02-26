@@ -29,8 +29,7 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import androidx.core.view.MotionEventCompat.getActionMasked
 import android.R
-
-
+import org.jivesoftware.smack.chat2.Chat
 
 
 class MessagesFragment : MvpAppCompatFragment(), MessagesView {
@@ -127,6 +126,10 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
                 arrayListOf(),
                 messagesRv.layoutManager as LinearLayoutManager,
                 object : PhotoListener{
+                    override fun clickUserAvater(jid: String) {
+                        showProfileUser(jid)
+                    }
+
                     override fun clickPhoto(url: String) {
                         showFullScreen(url)
                     }
@@ -141,6 +144,10 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     private fun showFullScreen(url:String){
         (parentFragment as? ChatFragment)?.showFullScreen(url)
+    }
+
+    private fun showProfileUser(jid:String){
+        (parentFragment as? ChatFragment)?.showProfileUser(jid)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

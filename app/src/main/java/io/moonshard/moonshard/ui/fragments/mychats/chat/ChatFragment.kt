@@ -127,7 +127,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         (parentFragment as? MainChatFragment)?.showChatInfo(chatId)
     }
 
-    private fun showProfileUser(jid: String) {
+     fun showProfileUser(jid: String) {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid,false)
     }
 

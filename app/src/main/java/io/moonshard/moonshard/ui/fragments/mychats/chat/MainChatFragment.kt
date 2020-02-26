@@ -87,7 +87,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val fragment = ProfileUserFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, fragment, "ProfileUserFragment$jid")
+        ft.add(R.id.mainContainer, fragment, "ProfileUserFragment$jid")
             .addToBackStack("ProfileUserFragment:$jid")
             .commit()
     }

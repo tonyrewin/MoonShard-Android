@@ -239,7 +239,12 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     }
 
     override fun showAdminChats(chats: ArrayList<ChatEntity>) {
-        (groupsRv?.adapter as? GroupsAdapter)?.updateGroups(chats)
+        if(chats.isEmpty()){
+            groupsLayout.visibility = View.GONE
+        }else{
+            groupsLayout.visibility = View.VISIBLE
+            (groupsRv?.adapter as? GroupsAdapter)?.updateGroups(chats)
+        }
     }
 
     override fun showMapScreen() {

@@ -224,7 +224,6 @@ open class MessagesAdapter(
                     !!.build()
                 )
 
-
                 if (myMsgs[position].isFile) {
 
                     if (myMsgs[position].isImage) {
@@ -243,6 +242,30 @@ open class MessagesAdapter(
                         holder.mainImage?.visibility = View.GONE
                         holder.nameFile?.text = myMsgs[position].fileNameFromURL
                         getSizeFile(myMsgs[position].text,holder.sizeFile)
+
+
+                        val fileInStorage = myMsgs[position].text.file()
+
+                        if (fileInStorage.isFile) {
+                            holder.statusFileIv?.setImageResource(R.drawable.ic_file)
+
+                            holder.layoutFile?.setOnClickListener {
+                                openFile(fileInStorage, it.context)
+                            }
+                        } else {
+                            holder.statusFileIv?.setImageResource(R.drawable.ic_download_file)
+
+                            holder.layoutFile?.setOnClickListener {
+                                downloadFile(
+                                    myMsgs[position].text,
+                                    holder.sizeFile!!,
+                                    holder.statusFileIv,
+                                    holder.progressBarFile,
+                                    holder.layoutFile
+                                )
+                            }
+                        }
+
                     }
                 } else {
                     holder.bodyText?.text = myMsgs[position].text
@@ -481,10 +504,11 @@ open class MessagesAdapter(
         internal var name: TextView? = view.findViewById(R.id.name)
         internal var bodyText: TextView? = view.findViewById(R.id.message_body)
         internal var mainImage: ShapeableImageView? = view.findViewById(R.id.mainImage)
-
         internal var layoutFile: RelativeLayout? = view.findViewById(R.id.layoutFile)
-        internal var layoutBodyMessage: RelativeLayout? = view.findViewById(R.id.layoutBodyMessage)
+        internal var layoutBodyMessage: LinearLayout? = view.findViewById(R.id.layoutBodyMessage)
         internal var nameFile: TextView? = view.findViewById(R.id.nameFile)
         internal var sizeFile: TextView? = view.findViewById(R.id.sizeFile)
+        internal var statusFileIv: ImageView? = view.findViewById(R.id.statusFileIv)
+        internal var progressBarFile: ProgressBar? = view.findViewById(R.id.progressBarFile)
     }
 }

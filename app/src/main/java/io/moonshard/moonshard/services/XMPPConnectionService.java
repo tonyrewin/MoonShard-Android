@@ -68,14 +68,12 @@ public class XMPPConnectionService extends Service {
         @Override
         public void onProviderDisabled(String provider) {
             String test = "";
-
         }
     };
 
     @Override
     public void onCreate() {
         super.onCreate();
-
 
         if (Build.VERSION.SDK_INT >= 26) {
             String CHANNEL_ID = "my_channel_01";

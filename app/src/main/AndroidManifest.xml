@@ -28,6 +28,11 @@
                 android:enabled="true"
                 android:exported="true" />
 
+        <service
+                android:name=".services.LocationService"
+                android:enabled="true"
+                android:exported="true" />
+
         <activity android:name=".ui.activities.MainActivity"
                 android:screenOrientation="portrait"/>
         <activity android:name=".ui.activities.auth.LoginActivity"

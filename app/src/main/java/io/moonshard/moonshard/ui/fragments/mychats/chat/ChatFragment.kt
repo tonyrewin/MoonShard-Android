@@ -131,6 +131,11 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid,false)
     }
 
+    fun showProfileUserFromMuc(jid: String){
+        val jidUser = presenter.getFullStringUser(jid)
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jidUser,true)
+    }
+
     fun showFullScreen(url:String){
         //toolBar?.visibility = View.GONE
         (parentFragment as? MainChatFragment)?.showFullScreen(url)

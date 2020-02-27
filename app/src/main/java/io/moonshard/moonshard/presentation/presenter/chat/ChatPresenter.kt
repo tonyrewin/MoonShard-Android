@@ -165,4 +165,16 @@ class ChatPresenter : BasePresenter<ChatView>() {
             Logger.d(e)
         }
     }
+
+    fun getFullStringUser(jid:String):String{
+        return try {
+            val groupId = JidCreate.entityBareFrom(chatID)
+            val muc =
+                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    .getMultiUserChat(groupId)
+            muc.getOccupant(JidCreate.entityFullFrom(jid)).jid.asUnescapedString()
+        }catch (e:Exception){
+            ""
+        }
+    }
 }

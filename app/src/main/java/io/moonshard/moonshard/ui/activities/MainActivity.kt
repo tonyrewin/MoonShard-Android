@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.ui.activities
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.services.XMPPConnectionService
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
@@ -51,7 +53,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        showMapScreen()
+        startService(Intent(applicationContext, XMPPConnectionService::class.java))
+
+        android.os.Handler().postDelayed({
+            showMapScreen()
+        }, 500)
     }
 
     override fun onRequestPermissionsResult(
@@ -110,8 +116,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             if (mainChatScreen.childFragmentManager.backStackEntryCount > 0) {
                 mainChatScreen.childFragmentManager.popBackStack()
                 return
-            }else{
-                supportFragmentManager.popBackStack(null,
+            } else {
+                supportFragmentManager.popBackStack(
+                    null,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
             }
@@ -120,20 +127,20 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         supportFragmentManager.popBackStack()
     }
 
-    fun removeAllFragmentsFromStack(){
+    fun removeAllFragmentsFromStack() {
         for (fragment in supportFragmentManager.fragments) {
             supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
         }
     }
 
-     fun showMapScreen() {
+    fun showMapScreen() {
         val newFragment = MapFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, newFragment, "MapScreen").commit()
     }
 
 
-    fun showMapScrenFromCreateNewEventScreen(){
+    fun showMapScrenFromCreateNewEventScreen() {
         supportFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -153,12 +160,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         fragmentTransaction.replace(R.id.container, fragment).commit()
     }
 
-    fun showMainChatScreen(chatId: String, fromMap: Boolean = false, stateChat: String = "join",fromCreateNewChat:Boolean = false) {
+    fun showMainChatScreen(
+        chatId: String,
+        fromMap: Boolean = false,
+        stateChat: String = "join",
+        fromCreateNewChat: Boolean = false
+    ) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
-        bundle.putBoolean("fromCreateNewChat",fromCreateNewChat)
+        bundle.putBoolean("fromCreateNewChat", fromCreateNewChat)
         val mainChatFragment = MainChatFragment()
         mainChatFragment.arguments = bundle
         val ft = supportFragmentManager.beginTransaction()
@@ -167,9 +179,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showCreateNewEventScreen(fromEventsFragment:Boolean=false){
+    fun showCreateNewEventScreen(fromEventsFragment: Boolean = false) {
         val bundle = Bundle()
-        bundle.putBoolean("fromEventsFragment",fromEventsFragment)
+        bundle.putBoolean("fromEventsFragment", fromEventsFragment)
         val chatFragment =
             CreateNewEventFragment()
         chatFragment.arguments = bundle
@@ -179,7 +191,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showCreateGroupScreen(){
+    fun showCreateGroupScreen() {
         val newFragment = CreateGroupFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, newFragment, "CreateGroupFragment")
@@ -187,22 +199,22 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showCreateNewChatScreen(){
+    fun showCreateNewChatScreen() {
         val chatFragment =
             CreateNewChatFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, chatFragment, "CreateNewChatFragment").
-            addToBackStack("CreateNewChatFragment").commit()
+        ft.replace(R.id.container, chatFragment, "CreateNewChatFragment")
+            .addToBackStack("CreateNewChatFragment").commit()
     }
 
-    fun showChooseMapScreen(){
+    fun showChooseMapScreen() {
         val chatFragment = ChooseMapFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, chatFragment, "ChooseMapFragment")
             .addToBackStack("ChooseMapFragment").commit()
     }
 
-    fun showTimeEventScreen(){
+    fun showTimeEventScreen() {
         val chatFragment =
             TimeEventFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -216,15 +228,4 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         MainApplication.setMainActivity(null)
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
 }

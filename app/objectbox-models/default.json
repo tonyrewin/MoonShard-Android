@@ -134,7 +134,7 @@
     },
     {
       "id": "3:2632880248119381374",
-      "lastPropertyId": "5:8802092276171269288",
+      "lastPropertyId": "6:6932953257759382166",
       "name": "ChatUser",
       "properties": [
         {
@@ -172,15 +172,18 @@
     }
   ],
   "lastEntityId": "3:2632880248119381374",
-  "lastIndexId": "6:3491688466644478439",
+  "lastIndexId": "7:3924661846650674495",
   "lastRelationId": "2:5994661834050608599",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    3924661846650674495
+  ],
   "retiredPropertyUids": [
-    8314083653095750993
+    8314083653095750993,
+    6932953257759382166
   ],
   "retiredRelationUids": [
     5994661834050608599

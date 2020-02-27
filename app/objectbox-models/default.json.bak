@@ -49,7 +49,7 @@
     },
     {
       "id": "2:6800849399877525902",
-      "lastPropertyId": "12:7287327998997445115",
+      "lastPropertyId": "13:231772987896365152",
       "name": "MessageEntity",
       "properties": [
         {
@@ -122,13 +122,19 @@
           "indexId": "6:3491688466644478439",
           "type": 9,
           "flags": 2080
+        },
+        {
+          "id": "13:231772987896365152",
+          "name": "isFile",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []
     },
     {
       "id": "3:2632880248119381374",
-      "lastPropertyId": "5:8802092276171269288",
+      "lastPropertyId": "6:6932953257759382166",
       "name": "ChatUser",
       "properties": [
         {
@@ -160,13 +166,20 @@
           "name": "isOnline",
           "type": 1,
           "flags": 4
+        },
+        {
+          "id": "6:6932953257759382166",
+          "name": "fullJid",
+          "indexId": "7:3924661846650674495",
+          "type": 9,
+          "flags": 2080
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "3:2632880248119381374",
-  "lastIndexId": "6:3491688466644478439",
+  "lastIndexId": "7:3924661846650674495",
   "lastRelationId": "2:5994661834050608599",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

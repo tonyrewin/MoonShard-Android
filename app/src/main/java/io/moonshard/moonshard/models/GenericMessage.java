@@ -54,6 +54,10 @@ public class GenericMessage {
         return isImageFile(messageEntity.getText());
     }
 
+    public String getFullUserJid(){
+        return messageEntity.sender.getTarget().getJid();
+    }
+
     public static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
         return mimeType != null && mimeType.startsWith("image");

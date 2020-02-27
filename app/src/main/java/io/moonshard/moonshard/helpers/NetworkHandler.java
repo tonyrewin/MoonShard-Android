@@ -12,7 +12,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Build;
 import android.webkit.URLUtil;
 
@@ -98,7 +97,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
              */
 
             String nickNameParticipant = participant.asUnescapedString().split("/")[1];
-            String messageText = "Администратор" + " удалил "+ nickNameParticipant + " из чата";
+            String messageText = "Администратор" + " удалил " + nickNameParticipant + " из чата";
 
             MessageEntity messageEntity = new MessageEntity(
                     0,
@@ -109,7 +108,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     true,
                     false,
                     false,
-                    true,false
+                    true, false
             );
 
             ChatListRepository.INSTANCE.getChatByJid(chatJid.asBareJid())
@@ -123,7 +122,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     }, e -> {
 
                     });
-        }catch (Exception e){
+        } catch (Exception e) {
             Logger.d(e);
         }
     }
@@ -136,7 +135,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
                     ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()),
-                            chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+                            chatEntity.getUnreadMessagesCount() + 1).subscribe(() -> {
 
                     }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
@@ -214,12 +213,11 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 });
     }
 
-
     @SuppressLint("CheckResult")
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
         MessageEntity messageEntity;
-        if(URLUtil.isValidUrl(message.getBody())){
-             messageEntity = new MessageEntity(
+        if (URLUtil.isValidUrl(message.getBody())) {
+            messageEntity = new MessageEntity(
                     0,
                     UUID.randomUUID().toString(),
                     message.getStanzaId(),
@@ -229,10 +227,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     false,
                     false,
                     false,
-                     true
+                    true
             );
-        }else{
-             messageEntity = new MessageEntity(
+        } else {
+            messageEntity = new MessageEntity(
                     0,
                     UUID.randomUUID().toString(),
                     message.getStanzaId(),
@@ -242,7 +240,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     false,
                     false,
                     false,
-                     false
+                    false
             );
         }
 
@@ -283,7 +281,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(() -> {
 
                     }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
@@ -537,7 +535,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         try {
             String chatJid = participant.asUnescapedString().split("/")[0];
 
-            if(chatJid.equals("support@conference.moonshard.tech")) return;
+            if (chatJid.equals("support@conference.moonshard.tech")) return;
 
             String jidAuthor = participant.asUnescapedString().split("/")[1];
 
@@ -551,19 +549,19 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                 .subscribe(user -> {
                                             return;
                                         }, throwable -> {
-                                    if(throwable instanceof NotFoundException){
-                                            MultiUserChat muc = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
-                                                    .getMultiUserChat(JidCreate.entityBareFrom(chatEntity.getJid()));
+                                            if (throwable instanceof NotFoundException) {
+                                                MultiUserChat muc = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                                                        .getMultiUserChat(JidCreate.entityBareFrom(chatEntity.getJid()));
 
-                                            Occupant occupantUser = muc.getOccupant(participant.asEntityFullJidIfPossible());
+                                                Occupant occupantUser = muc.getOccupant(participant.asEntityFullJidIfPossible());
 
-                                            Logger.d(throwable);
-                                            ChatUser user = new ChatUser(0, participant.asUnescapedString(), jidAuthor, -1, false);
-                                            chatEntity.users.add(user);
-                                            ChatUserRepository.INSTANCE.saveUser(user);
-                                            onIncomingMessageJoin(chatEntity, chatJid, participant.asUnescapedString(), user, occupantUser.getJid().asBareJid());
+                                                Logger.d(throwable);
+                                                ChatUser user = new ChatUser(0, participant.asUnescapedString(), jidAuthor, -1, false);
+                                                chatEntity.users.add(user);
+                                                ChatUserRepository.INSTANCE.saveUser(user);
+                                                onIncomingMessageJoin(chatEntity, chatJid, participant.asUnescapedString(), user, occupantUser.getJid().asBareJid());
+                                            }
                                         }
-                                }
                                 );
 
                     }, e -> {
@@ -588,7 +586,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 true,
                 false,
                 false,
-                true,false
+                true, false
         );
         messageEntity.chat.setTarget(chatEntity);
         messageEntity.sender.setTarget(chatUser);
@@ -601,7 +599,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     messagePubsub.onNext(messageEntity);
-                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(()->{
+                    ChatListRepository.INSTANCE.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chatEntity.getJid()), chatEntity.getUnreadMessagesCount() + 1).subscribe(() -> {
 
                     }, Logger::d);
                     if (!MainApplication.getCurrentChatActivity().equals(chatJid)) {
@@ -725,9 +723,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @Override
     public void fileTransferRequest(FileTransferRequest request) {
         try {
-            IncomingFileTransfer kek =  request.accept();
+            IncomingFileTransfer kek = request.accept();
             Bitmap bitmap = BitmapFactory.decodeStream(kek.receiveFile());
-        }catch (Exception e){
+        } catch (Exception e) {
             String kek = e.getLocalizedMessage();
         }
     }

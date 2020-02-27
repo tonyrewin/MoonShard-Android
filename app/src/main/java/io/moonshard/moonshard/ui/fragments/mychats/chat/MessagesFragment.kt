@@ -128,7 +128,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
                 messagesRv.layoutManager as LinearLayoutManager,
                 object : PhotoListener{
                     override fun clickUserAvater(jid: String) {
-                        showProfileUser(jid)
+                       // showProfileUser(jid)
                     }
 
                     override fun clickPhoto(url: String) {
@@ -153,7 +153,7 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
     }
 
     private fun showProfileUser(jid:String){
-        (parentFragment as? ChatFragment)?.showProfileUser(jid)
+        (parentFragment as? ChatFragment)?.showProfileUserFromMuc(jid)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

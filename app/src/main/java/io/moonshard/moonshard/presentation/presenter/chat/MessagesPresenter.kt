@@ -29,8 +29,10 @@ import org.jivesoftware.smack.XMPPException
 import org.jivesoftware.smackx.forward.packet.Forwarded
 import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException

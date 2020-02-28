@@ -161,6 +161,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     if (muc.isJoined) {
+                                        viewState?.hideJoinButtonsBottomSheet()
                                         viewState?.showChatScreens(jid,"join")
                                     }
                                 }, { throwable ->

@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.instacart.library.truetime.TrueTime;
+import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.MessageListener;
@@ -103,7 +104,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     0,
                     UUID.randomUUID().toString(),
                     null,
-                    TrueTime.now().getTime(),
+                    TrueTimeRx.now().getTime(),
                     messageText,
                     true,
                     false,
@@ -221,7 +222,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     0,
                     UUID.randomUUID().toString(),
                     message.getStanzaId(),
-                    TrueTime.now().getTime(),
+                    TrueTimeRx.now().getTime(),
                     message.getBody(),
                     true,
                     false,
@@ -234,7 +235,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     0,
                     UUID.randomUUID().toString(),
                     message.getStanzaId(),
-                    TrueTime.now().getTime(),
+                    TrueTimeRx.now().getTime(),
                     message.getBody(),
                     true,
                     false,
@@ -581,7 +582,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 0,
                 UUID.randomUUID().toString(),
                 null,
-                TrueTime.now().getTime(),
+                TrueTimeRx.now().getTime(),
                 messageText,
                 true,
                 false,

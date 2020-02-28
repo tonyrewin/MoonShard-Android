@@ -2,6 +2,7 @@ package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.annotation.SuppressLint
 import com.instacart.library.truetime.TrueTime
+import com.instacart.library.truetime.TrueTimeRx
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
@@ -136,7 +137,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
 
             val timestamp = try {
-                TrueTime.now().time
+                TrueTimeRx.now().time
             } catch (e: Exception) {
                 // Fallback to Plain Old Java CurrentTimeMillis
                 System.currentTimeMillis()

@@ -150,6 +150,11 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
+    override fun hideJoinButtonsBottomSheet(){
+        joinBtn?.visibility = View.GONE
+        joinBtn2?.visibility = View.GONE
+    }
+
     private fun getZoomCenter() {
         if (MainApplication.getCurrentLocation() != null) {
             val latLng = LatLng(
@@ -454,7 +459,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         })
     }
 
-
     fun clearCategoryAdapter() {
         val fragment =
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
@@ -499,7 +503,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
         }
     }
-
 
     fun updateListRooms() {
         val fragment =

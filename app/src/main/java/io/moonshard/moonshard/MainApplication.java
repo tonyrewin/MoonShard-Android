@@ -47,7 +47,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
-    public final static String DEFAULT_NTP_SERVER = "showTimeDays.apple.com";
+    public final static String DEFAULT_NTP_SERVER = "0.ru.pool.ntp.org";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
     private static String jid;
@@ -144,7 +144,7 @@ public class MainApplication extends Application {
         ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
-        initTrueTime();
+        //initTrueTime();
         loadLoginCredentials();
 
         CaocConfig.Builder.create()
@@ -263,7 +263,7 @@ public class MainApplication extends Application {
     }
 
     void initTime(){
-        TrueTimeRx.build().initializeRx("time.apple.com")
+        TrueTimeRx.build().initializeRx(DEFAULT_NTP_SERVER)
                 .subscribeOn(Schedulers.io())
                 .subscribe(date -> {
                     Log.d("time", "TrueTime was initialized at: %s" + date);

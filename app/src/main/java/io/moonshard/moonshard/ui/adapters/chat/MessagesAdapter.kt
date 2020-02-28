@@ -285,11 +285,9 @@ open class MessagesAdapter(
                 }
 
                 holder.name?.text = name
-//JidCreate.entityFullFrom("146add78-b8ea-4885-b2df-9a77cfa30869-event@conference.moonshard.tech/Komar")
                 setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
-//146add78-b8ea-4885-b2df-9a77cfa30869-event@conference.moonshard.tech
                 holder.avatar?.setOnClickListener {
-                    listener.clickUserAvater(myMsgs[position].user.jid)
+                    //listener.clickUserAvater(myMsgs[position].user.jid)
                 }
             }
             2 -> {
@@ -310,7 +308,7 @@ open class MessagesAdapter(
                 setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
 
                 holder.avatar?.setOnClickListener {
-                    listener.clickUserAvater(myMsgs[position].user.jid)
+                    //listener.clickUserAvater(myMsgs[position].user.jid)
                 }
             }
         }

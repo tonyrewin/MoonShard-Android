@@ -30,7 +30,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
 
     private var latLngInterestPoint: PointOfInterest? = null
 
-    private val defaultZoom: Float = 9F
+    private val defaultZoom: Float = 11F
 
     private var defaultMoscowlatitude: Double = 55.751244
     private var defaultMoscowlongitude: Double = 37.618423
@@ -60,6 +60,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         myLocationBtn?.setSafeOnClickListener {
             getMyLocation()
         }
+        getZoomCenter()
     }
 
     override fun onCreateView(

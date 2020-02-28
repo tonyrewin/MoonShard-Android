@@ -55,7 +55,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     var sheetBehavior: BottomSheetBehavior<View>? = null
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
 
-    private val defaultZoom: Float = 9F
+    private val defaultZoom: Float = 11F
 
     private var defaultMoscowlatitude: Double = 55.751244
     private var defaultMoscowlongitude: Double = 37.618423

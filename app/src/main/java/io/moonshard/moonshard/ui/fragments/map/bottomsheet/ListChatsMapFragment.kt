@@ -47,7 +47,8 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         groupsRv?.layoutManager = LinearLayoutManager(context)
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
             override fun clickChat(room: RoomPin) {
-                presenter.joinChat(room.roomId.toString())
+                (parentFragment as? MapFragment)?.showMarkerBottomSheet(room)
+                //presenter.joinChat(room.roomId.toString())
             }
         }, arrayListOf())
     }

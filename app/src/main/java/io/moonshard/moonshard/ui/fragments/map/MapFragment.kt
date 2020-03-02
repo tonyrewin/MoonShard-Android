@@ -1,12 +1,12 @@
 package io.moonshard.moonshard.ui.fragments.map
 
-import android.graphics.Canvas
-import android.graphics.Outline
-import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import biz.laenger.android.vpbs.BottomSheetUtils
@@ -40,7 +40,6 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -150,7 +149,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         return true
     }
 
-    override fun hideJoinButtonsBottomSheet(){
+    override fun hideJoinButtonsBottomSheet() {
         joinBtn?.visibility = View.GONE
         joinBtn2?.visibility = View.GONE
     }
@@ -314,7 +313,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     //todo maybe change on childFragmentManager ?
     private fun setupBottomSheet() {
         val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
-            activity!!.supportFragmentManager,
+            childFragmentManager,
             context,
             io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST,
             io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.CATEGORY
@@ -475,6 +474,63 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 CameraUpdateFactory.newLatLngZoom(latLng, 8f)
             mMap?.animateCamera(cameraUpdate)
         }
+    }
+
+    fun showMarkerBottomSheet(roomPin: RoomPin) {
+        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        getLocationMarker(LatLng(roomPin.latitude, roomPin.longitude))
+
+        defaultBottomSheet?.visibility = View.GONE
+        infoBottomSheet?.visibility = View.VISIBLE
+
+        if (presenter.isJoin(roomPin.roomId.toString())) {
+            joinBtn?.visibility = View.GONE
+            joinBtn2?.visibility = View.GONE
+        } else {
+            joinBtn?.visibility = View.VISIBLE
+            joinBtn2?.visibility = View.VISIBLE
+        }
+
+        val roomInfo = presenter.getRoom(roomPin.roomId.toString())
+        val onlineUsers = presenter.getValueOnlineUsers(roomPin.roomId.toString())
+        roomInfo?.let {
+            val distance = (calculationByDistance(
+                roomPin.latitude.toString(),
+                roomPin.longitude.toString()
+            ))
+
+            groupNameInfoContentTv?.text = roomInfo.name
+            valueMembersInfoTv?.text =
+                "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
+            locationValueInfoTv?.text = distance
+            locationInfoTv?.text = getAddress(
+                LatLng(
+                    roomPin.latitude,
+                    roomPin.longitude
+                )
+            )
+            descriptionTv?.text = roomInfo.description
+
+            joinBtn?.setSafeOnClickListener {
+                presenter.joinChat(roomPin.roomId!!, roomInfo.name)
+            }
+            readBtn?.setSafeOnClickListener {
+                presenter.readChat(roomPin.roomId!!, roomInfo.name)
+            }
+
+            joinBtn2?.setSafeOnClickListener {
+                presenter.joinChat(roomPin.roomId!!, roomInfo.name)
+            }
+            readBtn2?.setSafeOnClickListener {
+                presenter.readChat(roomPin.roomId!!, roomInfo.name)
+            }
+        }
+    }
+
+    private fun getLocationMarker(latLng: LatLng) {
+        val cameraUpdate =
+            CameraUpdateFactory.newLatLngZoom(latLng, 12f)
+        mMap?.animateCamera(cameraUpdate)
     }
 
     override fun onResume() {

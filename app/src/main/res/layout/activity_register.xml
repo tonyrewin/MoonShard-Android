@@ -65,7 +65,7 @@
                     android:ems="10"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
-                    android:hint="Ваш логин"
+                    android:hint="Ваш Email"
                     android:inputType="textEmailAddress"
                     android:textSize="7pt" />
 
@@ -119,7 +119,6 @@
 
             <TextView
                     android:textColor="#9B9BB6"
-                    android:textStyle="bold"
                     android:id="@+id/alreadyHaveText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

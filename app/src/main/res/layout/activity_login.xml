@@ -42,6 +42,8 @@
     </LinearLayout>
 
     <TextView
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_bold"
             android:layout_marginTop="75dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,17 +53,18 @@
             android:textSize="17sp" />
 
     <EditText
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/editEmail"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="26dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/edittext_background"
             android:ems="10"
             android:gravity="center"
-            android:hint="Ваш логин"
+            android:hint="Ваш Email"
             android:inputType="textEmailAddress"
             android:textSize="7pt" />
 
@@ -71,10 +74,11 @@
                 android:layout_height="wrap_content">
 
     <EditText
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/editPassword"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/edittext_background"
@@ -97,10 +101,11 @@
         </RelativeLayout>
 
     <Button
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/loginBtn"
             style="@style/Theme.MaterialComponents.Light"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_marginTop="43dp"
@@ -112,20 +117,21 @@
             android:textSize="7pt" />
 
     <TextView
-            android:id="@+id/forgotPassTv"
             android:visibility="gone"
+            android:id="@+id/forgotPassTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Забыли пароль?" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/dontHaveText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="51dp"
             android:gravity="center"
             android:textSize="7pt" />
 

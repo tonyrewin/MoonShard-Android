@@ -23,10 +23,10 @@
                     android:orientation="vertical">
 
                 <ImageView
-                        android:layout_marginTop="40dp"
                         android:id="@+id/imageView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
                         android:contentDescription="TODO"
                         android:padding="16dp"
                         android:src="@drawable/ic_logo_small"
@@ -42,25 +42,28 @@
             </LinearLayout>
 
             <TextView
-                    android:layout_marginTop="75dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="75dp"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Регистрация"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
             <EditText
-                    android:layout_marginBottom="21dp"
                     android:id="@+id/editEmail"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="21dp"
                     android:background="@drawable/edittext_background"
                     android:ems="10"
+                    android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
                     android:hint="Ваш логин"
                     android:inputType="textEmailAddress"
@@ -69,15 +72,17 @@
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                 <EditText
                         android:id="@+id/editPassword"
                         style="@style/Theme.MaterialComponents.Light"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:background="@drawable/edittext_background"
                         android:ems="10"
+                        android:fontFamily="@font/roboto_regular"
                         android:gravity="center"
                         android:hint="Пароль"
                         android:inputType="textPassword"
@@ -85,50 +90,54 @@
 
 
                 <ImageView
-                        android:padding="10dp"
                         android:id="@+id/visiblePassBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="31dp"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_pass_off"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:padding="10dp"
+                        android:src="@drawable/ic_pass_off" />
             </RelativeLayout>
 
 
             <Button
-                    android:layout_marginTop="43dp"
                     android:id="@+id/registerBtn"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="41dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/button_background"
+                    android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
-                    android:text="ДАЛЕЕ"
+                    android:text="РЕГИСТРАЦИЯ"
                     android:textColor="@android:color/background_light"
                     android:textSize="7pt" />
 
             <TextView
+                    android:textColor="#9B9BB6"
+                    android:textStyle="bold"
                     android:id="@+id/alreadyHaveText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
-                    android:text="У вас уже есть аккаунт? Войти"
-                    android:textSize="7pt" />
+                    android:text="УЖЕ ЕСТЬ АККАУНТ? ВОЙТИ"
+                    android:textSize="14sp" />
 
             <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                 <View
                         android:layout_width="140dp"

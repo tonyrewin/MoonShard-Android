@@ -20,7 +20,7 @@ class InviteUserPresenter: MvpPresenter<InviteUserView>() {
 
             val chatJid = JidCreate.entityBareFrom(jidChatString)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(chatJid)
 
             muc.invite(JidCreate.entityBareFrom("$user@moonshard.tech"),"Приглашение в чат")

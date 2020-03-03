@@ -14,7 +14,7 @@ class AdminsPresenter : MvpPresenter<AdminsView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
             viewState?.showAdmins(moderators)

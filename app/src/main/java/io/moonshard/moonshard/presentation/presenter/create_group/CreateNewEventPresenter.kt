@@ -73,7 +73,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
                 val nickName =
@@ -168,7 +168,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             isAdminFromOccupants(muc.moderators)
         } catch (e: Exception) {

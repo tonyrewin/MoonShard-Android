@@ -80,11 +80,11 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
 
 
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
                 val info =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                         .getRoomInfo(muc.room)
                 val roomName = info.name
 

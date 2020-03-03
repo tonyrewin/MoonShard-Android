@@ -19,7 +19,7 @@ class AddAdminPresenter : MvpPresenter<AddAdminView>() {
 
             val groupId = JidCreate.entityBareFrom(jidChatString)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             muc.grantAdmin(JidCreate.from("$user@moonshard.tech"))
             viewState?.showChatScreen()

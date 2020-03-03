@@ -35,11 +35,11 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
 
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(groupId)
 
             val members = muc.occupants
@@ -131,7 +131,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             muc.leave()
             removeChatFromBd(jid)
@@ -163,7 +163,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
             isAdminFromOccupants(moderators)

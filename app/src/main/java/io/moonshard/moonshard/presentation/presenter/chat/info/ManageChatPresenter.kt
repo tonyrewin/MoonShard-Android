@@ -24,11 +24,11 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
     fun getDataInfo(jid: String) {
         try {
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
 
             viewState?.showName(info.name)
@@ -50,7 +50,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         try {
             viewState.showProgressBar()
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
             ChatListRepository.getChatByJidSingle(JidCreate.from(jid))

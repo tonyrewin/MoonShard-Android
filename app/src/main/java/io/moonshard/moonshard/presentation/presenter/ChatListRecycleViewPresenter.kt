@@ -144,7 +144,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
     fun joinChat(jid: String) {
         try {
             val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             //todo nickname must be fix( cardV)

@@ -80,11 +80,11 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         return Single.create {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
 
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
 
             it.onSuccess(info)
@@ -107,7 +107,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                 val groupId = JidCreate.entityBareFrom(jid)
 
                 val muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                         .getMultiUserChat(groupId)
                 val members = muc.occupants
 

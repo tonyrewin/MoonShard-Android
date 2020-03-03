@@ -17,7 +17,7 @@ class MembersChatPresenter : MvpPresenter<MembersChatView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val members = muc.occupants
             val occupants = arrayListOf<Occupant>()
@@ -48,7 +48,7 @@ class MembersChatPresenter : MvpPresenter<MembersChatView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jidChat)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             muc.kickParticipant(jidUserInChat.resourceOrEmpty, "Without reason")
             muc.revokeMembership(jidUserInChat)

@@ -75,10 +75,10 @@ class ChatPresenter : BasePresenter<ChatView>() {
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(groupId)
 
             //we can optimization
@@ -157,7 +157,7 @@ class ChatPresenter : BasePresenter<ChatView>() {
         try {
             if(state=="read") {
                 val muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                         .getMultiUserChat(JidCreate.entityBareFrom(chatID))
                 muc.leave()
             }
@@ -170,7 +170,7 @@ class ChatPresenter : BasePresenter<ChatView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             muc.getOccupant(JidCreate.entityFullFrom(jid)).jid.asUnescapedString()
         }catch (e:Exception){

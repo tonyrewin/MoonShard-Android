@@ -38,11 +38,11 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
     fun getInfoChat(jid: String) {
         val muc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            MainApplication.getXmppConnection().multiUserChatManager
                 .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
         infoEventMuc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            MainApplication.getXmppConnection().multiUserChatManager
                 .getRoomInfo(muc.room)
 
 
@@ -87,7 +87,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         try {
             viewState.showProgressBar()
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(idChat))
 
             ChatListRepository.getChatByJidSingle(JidCreate.from(idChat))

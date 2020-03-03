@@ -90,8 +90,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             EntityBareJid chatJid = participant.asEntityBareJidIfPossible();
 
             /*
-            MultiUserChat muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+            MultiUserChat muc = MainApplication.getXmppConnection().multiUserChatManager
                             .getMultiUserChat(chatJid);
 
             String nickNameAdmin = muc.getOccupant(actor.asEntityFullJidIfPossible()).getNick().toString();
@@ -155,11 +154,12 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             EntityBareJid groupId = JidCreate.entityBareFrom(chatJid);
 
             MultiUserChat muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                    MainApplication.getXmppConnection().multiUserChatManager
                             .getMultiUserChat(groupId);
 
             if (!myJid.equals(adminJid)) {
-                String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
+                String nickNameChat =                                     MainApplication.getXmppConnection().multiUserChatManager
+                        .getRoomInfo(muc.getRoom()).getName();
                 MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -308,13 +308,14 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
 
                 MultiUserChat muc =
-                        MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                        MainApplication.getXmppConnection().multiUserChatManager
                                 .getMultiUserChat(groupId);
 
                 String jidFrom = muc.getOccupant(message.getFrom().asEntityFullJidIfPossible()).getJid().asBareJid().asUnescapedString();
 
                 if (!myJid.equals(jidFrom)) {
-                    String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
+                    String nickNameChat =                                     MainApplication.getXmppConnection().multiUserChatManager
+                            .getRoomInfo(muc.getRoom()).getName();
                     MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -500,7 +501,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                             room.join(nickname); //while get invitation you need to join that room
 
                             RoomInfo info =
-                                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                                    MainApplication.getXmppConnection().multiUserChatManager
                                             .getRoomInfo(room.getRoom());
 
                             ChatEntity chatEntity = new ChatEntity(
@@ -551,7 +552,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                             return;
                                         }, throwable -> {
                                             if (throwable instanceof NotFoundException) {
-                                                MultiUserChat muc = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                                                MultiUserChat muc = MainApplication.getXmppConnection().multiUserChatManager
                                                         .getMultiUserChat(JidCreate.entityBareFrom(chatEntity.getJid()));
 
                                                 Occupant occupantUser = muc.getOccupant(participant.asEntityFullJidIfPossible());
@@ -619,11 +620,12 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             EntityBareJid groupId = JidCreate.entityBareFrom(chatJid);
 
             MultiUserChat muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                    MainApplication.getXmppConnection().multiUserChatManager
                             .getMultiUserChat(groupId);
 
             if (!myJid.equals(jidUser)) {
-                String nickNameChat = MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection()).getRoomInfo(muc.getRoom()).getName();
+                String nickNameChat =                                     MainApplication.getXmppConnection().multiUserChatManager
+                        .getRoomInfo(muc.getRoom()).getName();
                 MainApplication.getXmppConnection().loadAvatar(chatJid, nickNameChat)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

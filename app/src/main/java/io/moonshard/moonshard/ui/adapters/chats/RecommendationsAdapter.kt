@@ -72,12 +72,12 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
         return Single.create {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             Logger.d(groupId.asUnescapedString())
 
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
 
             it.onSuccess(info)
@@ -100,7 +100,7 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
                 val groupId = JidCreate.entityBareFrom(jid)
 
                 val muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                         .getMultiUserChat(groupId)
                 val members = muc.occupants
 

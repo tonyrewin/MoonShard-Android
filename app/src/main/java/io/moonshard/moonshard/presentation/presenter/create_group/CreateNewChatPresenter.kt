@@ -41,7 +41,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
 
@@ -95,7 +95,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
     private fun joinChat(jid: String) {
         try {
             val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
 

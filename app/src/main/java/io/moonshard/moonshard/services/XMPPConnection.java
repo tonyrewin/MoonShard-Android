@@ -25,9 +25,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.disco.packet.DiscoverItems;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
-import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -44,9 +42,7 @@ import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -62,7 +58,6 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -656,7 +651,7 @@ public class XMPPConnection implements ConnectionListener {
         try {
             EntityBareJid groupId = JidCreate.entityBareFrom(jid);
             MultiUserChat muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                    multiUserChatManager
                             .getMultiUserChat(groupId);
 
             muc.addParticipantStatusListener(networkHandler);
@@ -665,11 +660,11 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
-    public void addKickBlBla(String jid) {
+    public void addKickListener(String jid) {
         try {
             EntityBareJid groupId = JidCreate.entityBareFrom(jid);
             MultiUserChat muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().getConnection())
+                    multiUserChatManager
                             .getMultiUserChat(groupId);
 
             muc.addUserStatusListener(networkHandler);
@@ -686,7 +681,7 @@ public class XMPPConnection implements ConnectionListener {
                     try {
                         for (int i = 0; i < chats.size(); i++) {
                             addChatStatusListener(chats.get(i).getJid());
-                            addKickBlBla(chats.get(i).getJid());
+                            addKickListener(chats.get(i).getJid());
                             if (chats.get(i).isGroupChat()) {
                                 joinChat(chats.get(i).getJid());
                             } else {
@@ -701,10 +696,8 @@ public class XMPPConnection implements ConnectionListener {
 
     private void joinChat(String jid) {
         try {
-            MultiUserChatManager manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             EntityBareJid entityBareJid = JidCreate.entityBareFrom(jid);
-            MultiUserChat muc = manager.getMultiUserChat(entityBareJid);
+            MultiUserChat muc = multiUserChatManager.getMultiUserChat(entityBareJid);
 
             VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection);
             VCard card = vm.loadVCard();

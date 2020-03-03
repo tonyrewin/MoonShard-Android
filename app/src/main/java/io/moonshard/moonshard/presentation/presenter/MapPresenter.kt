@@ -79,7 +79,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         val groupId = JidCreate.entityBareFrom(jid)
 
         val muc =
-            MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            MainApplication.getXmppConnection().multiUserChatManager
                 .getMultiUserChat(groupId)
         val members = muc.occupants
 
@@ -98,10 +98,10 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
             return info
         } catch (e: java.lang.Exception) {
@@ -113,7 +113,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     fun isJoin(jid:String):Boolean{
         return try {
             val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             muc.isJoined
@@ -128,7 +128,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         nameRoom?.let {
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
 
@@ -179,7 +179,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         nameRoom?.let {
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
 

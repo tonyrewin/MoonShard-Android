@@ -45,11 +45,11 @@ class EventAdapter(
         try {
             val jid = JidCreate.entityBareFrom(events[position].roomId)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(jid)
 
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(jid)
 
             holder.nameEvent?.text = roomInfo.name ?: "Информация отсутствует"

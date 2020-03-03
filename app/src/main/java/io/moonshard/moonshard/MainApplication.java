@@ -208,6 +208,7 @@ public class MainApplication extends Application {
         SecurePreferences.removeValue("jid");
         SecurePreferences.removeValue("pass");
         SecurePreferences.removeValue("logged_in");
+        SecurePreferences.removeValue("inviteInChats");
     }
 
     private static void initTrueTime() {

@@ -4,6 +4,7 @@ package io.moonshard.moonshard.presentation.presenter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.orhanobut.logger.Logger
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.SettingsView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -101,9 +102,11 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     fun disableInviteInChats(){
         MainApplication.getXmppConnection().disableInvitionInChats()
+        SecurePreferences.setValue("inviteInChats", false)
     }
 
     fun enableInvitionInChats() {
         MainApplication.getXmppConnection().enableInvitionInChats()
+        SecurePreferences.setValue("inviteInChats", true)
     }
 }

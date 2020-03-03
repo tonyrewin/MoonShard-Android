@@ -171,8 +171,12 @@ public class XMPPConnection implements ConnectionListener {
             // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
-        multiUserChatManager.addInvitationListener(networkHandler);
 
+        if(SecurePreferences.getBooleanValue("inviteInChats", true)){
+            enableInvitionInChats();
+        }else{
+            disableInvitionInChats();
+        }
 
         setStatus(true, "ONLINE");
     }

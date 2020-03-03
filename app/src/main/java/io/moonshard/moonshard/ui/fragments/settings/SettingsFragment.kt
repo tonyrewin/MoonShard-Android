@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -35,6 +36,8 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).showBottomNavigationBar()
+
+        disableInviteSwitch?.isChecked = !SecurePreferences.getBooleanValue("inviteInChats", true)
 
         presenter.getAvatar()
         presenter.getName()

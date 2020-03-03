@@ -51,6 +51,10 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         securityLayout?.setSafeOnClickListener {
             showSecurityScreen()
         }
+
+        disableInviteSwitch?.setOnCheckedChangeListener { swichView, isChecked ->
+            if(isChecked) presenter.disableInviteInChats() else presenter.enableInvitionInChats()
+        }
     }
 
     override fun setData(nickName: String?, jidPart: String?) {

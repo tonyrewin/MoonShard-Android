@@ -98,4 +98,12 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
                 Logger.d(it)
             })
     }
+
+    fun disableInviteInChats(){
+        MainApplication.getXmppConnection().disableInvitionInChats()
+    }
+
+    fun enableInvitionInChats() {
+        MainApplication.getXmppConnection().enableInvitionInChats()
+    }
 }

@@ -168,10 +168,44 @@
                         android:background="#F5F5F5" />
 
                 <RelativeLayout
-                        android:id="@+id/securityLayout"
+                        android:id="@+id/disableInviteLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/lineTwo"
+                        android:layout_marginTop="12dp">
+
+                    <TextView
+                            android:id="@+id/disableInviteTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Запретить добавлять в чаты"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                            android:checked="false"
+                            android:id="@+id/disableInviteSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/disableInviteTv"
+                            android:layout_alignParentEnd="true"
+                            android:theme="@style/SCBSwitch" />
+
+                </RelativeLayout>
+
+                <View
+                        android:id="@+id/lineThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/disableInviteLayout"
+                        android:layout_marginTop="12dp"
+                        android:background="#F5F5F5" />
+
+                <RelativeLayout
+                        android:id="@+id/securityLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lineThree"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="15dp">
 

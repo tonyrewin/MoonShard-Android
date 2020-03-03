@@ -747,4 +747,13 @@ public class XMPPConnection implements ConnectionListener {
 
         }
     }
+
+
+    public void disableInvitionInChats(){
+        multiUserChatManager.removeInvitationListener(networkHandler);
+    }
+
+    public void enableInvitionInChats(){
+        multiUserChatManager.addInvitationListener(networkHandler);
+    }
 }

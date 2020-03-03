@@ -100,7 +100,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         for (i in RoomsMap.rooms.indices) {
             if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
                 RoomsMap.rooms[i].roomId?.let {
-
                     if (presenter.isJoin(it)) {
                         joinBtn?.visibility = View.GONE
                         joinBtn2?.visibility = View.GONE
@@ -452,7 +451,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         swipeBtn?.setImageResource(R.drawable.ic_bottom_sheet_up)
                         buttonsTop?.visibility = View.VISIBLE
                     }
-
                 }
             }
         })
@@ -477,6 +475,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun showMarkerBottomSheet(roomPin: RoomPin) {
+        buttonsTop?.visibility = View.VISIBLE //for removing freeze
+
         sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         getLocationMarker(LatLng(roomPin.latitude, roomPin.longitude))
 

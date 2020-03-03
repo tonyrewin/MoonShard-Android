@@ -118,15 +118,15 @@
                     android:textSize="7pt" />
 
             <TextView
-                    android:textColor="#9B9BB6"
+                    android:fontFamily="@font/roboto_regular"
                     android:id="@+id/alreadyHaveText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
-                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
-                    android:text="УЖЕ ЕСТЬ АККАУНТ? ВОЙТИ"
+                    android:text="Уже есть аккаунт? Войти"
+                    android:textColor="#9B9BB6"
                     android:textSize="14sp" />
 
             <LinearLayout

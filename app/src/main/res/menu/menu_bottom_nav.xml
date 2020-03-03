@@ -8,7 +8,7 @@
     <item
             android:id="@+id/find_chats_map_bottom_nav_item"
             android:icon="@drawable/ic_map_nav_selector"
-            android:title="Поиск чатов"/>
+            android:title="Поиск мероприятий"/>
     <item
             android:id="@+id/settings_bottom_nav_item"
             android:icon="@drawable/ic_settings_nav_selector"

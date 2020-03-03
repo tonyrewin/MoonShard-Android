@@ -126,6 +126,7 @@
             android:text="Забыли пароль?" />
 
     <TextView
+            android:textColor="#9B9BB6"
             android:fontFamily="@font/roboto_regular"
             android:id="@+id/dontHaveText"
             android:layout_width="match_parent"
@@ -133,7 +134,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="51dp"
             android:gravity="center"
-            android:textSize="7pt" />
+            android:textSize="14sp" />
 
     <LinearLayout
             android:visibility="gone"

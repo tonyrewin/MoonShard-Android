@@ -49,6 +49,7 @@
                 android:src="@drawable/ic_users" />
 
         <TextView
+                android:fontFamily="@font/montserrat_bold"
                 android:id="@+id/groupNameInfoContentTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
                 android:textSize="17sp" />
 
         <TextView
+                android:fontFamily="@font/roboto_regular"
                 android:id="@+id/valueMembersInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,13 +71,13 @@
                 android:textSize="14sp" />
 
         <TextView
+                android:fontFamily="@font/roboto_regular"
                 android:id="@+id/locationValueInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
                 android:text="130 m away" />
-
 
         <View
                 android:layout_width="match_parent"
@@ -96,6 +98,7 @@
                 android:orientation="horizontal">
 
             <Button
+                    android:fontFamily="@font/roboto_medium"
                     android:background="@drawable/button_background_transparent"
                     android:textColor="#0075FF"
                     android:id="@+id/readBtn2"
@@ -107,6 +110,7 @@
                     android:text="Читать" />
 
             <Button
+                    android:fontFamily="@font/roboto_medium"
                     android:layout_marginStart="8dp"
                     android:layout_toRightOf="@+id/readBtn"
                     android:layout_below="@+id/mainLayout"
@@ -123,8 +127,75 @@
 
         </LinearLayout>
 
-    <TextView
-            android:layout_width="wrap_content"
+        <View
+                android:layout_marginBottom="15dp"
+                android:background="#EFEFF4"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <TextView
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="14sp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginStart="15dp"
+                android:textColor="#333333"
+                android:text="О событии"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="7dp"
+                android:text="Начало"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
+
+        <RelativeLayout
+                android:layout_marginBottom="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+        <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginEnd="3dp"
+                android:layout_toStartOf="@+id/iconStartDate"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/startDateEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                tools:text="13 декабря 2019 г. в 18:00"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/iconStartDate"
+                    android:layout_marginEnd="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_start_date_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <View
+                android:layout_marginBottom="14dp"
+                android:background="#EFEFF4"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginBottom="7dp"
@@ -133,6 +204,7 @@
             android:textSize="14sp" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/locationInfoTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -149,6 +221,7 @@
             android:background="#EFEFF4" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -159,6 +232,7 @@
 
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/descriptionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,6 +252,7 @@
             android:orientation="horizontal">
 
         <Button
+                android:fontFamily="@font/roboto_medium"
                 android:background="@drawable/button_background_transparent"
                 android:textColor="#0075FF"
                 android:id="@+id/readBtn"
@@ -189,6 +264,7 @@
                 android:text="Читать" />
 
         <Button
+                android:fontFamily="@font/roboto_medium"
                 android:layout_marginStart="8dp"
                 android:layout_toRightOf="@+id/readBtn"
                 android:layout_below="@+id/mainLayout"

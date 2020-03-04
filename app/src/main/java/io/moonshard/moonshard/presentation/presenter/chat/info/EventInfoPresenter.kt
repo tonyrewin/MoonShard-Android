@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -86,9 +87,6 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             val calendar =
                 convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
 
-
-
-
             location = LatLng(
                 ChangeEventRepository.event!!.latitude,
                 ChangeEventRepository.event!!.longitude
@@ -111,10 +109,10 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 roomInfo.description
             )
 
-            viewState?.setStartDate(
-                calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.MONTH)
-            )
+            val date = DateHolder(ChangeEventRepository.event?.eventStartDate!!)
+            //if(date.alreadyComeDate()){ iconStartDate.visibility = View.VISIBLE } else{ iconStartDate.visibility = View.GONE}
+            viewState.setStartDate("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
+
 
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()

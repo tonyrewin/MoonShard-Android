@@ -151,50 +151,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
     }
 
-    override fun setStartDate(dayOfMonth: Int, month: Int) {
-        when (month) {
-            0 -> {
-                startDateEvent.text = "$dayOfMonth января"
-            }
-            1 -> {
-                startDateEvent.text = "$dayOfMonth февраля"
-
-            }
-            2 -> {
-                startDateEvent.text = "$dayOfMonth марта"
-
-            }
-            3 -> {
-                startDateEvent.text = "$dayOfMonth апреля"
-
-            }
-            4 -> {
-                startDateEvent.text = "$dayOfMonth мая"
-
-            }
-            5 -> {
-                startDateEvent.text = "$dayOfMonth июня"
-
-            }
-            6 -> {
-                startDateEvent.text = "$dayOfMonth июля"
-            }
-            7 -> {
-                startDateEvent.text = "$dayOfMonth августа"
-            }
-            8 -> {
-                startDateEvent.text = "$dayOfMonth сенятбря"
-            }
-            9 -> {
-                startDateEvent.text = "$dayOfMonth октября"
-            }
-            10 -> {
-                startDateEvent.text = "$dayOfMonth ноября"
-            }
-            11 -> {
-                startDateEvent.text = "$dayOfMonth декабря"
-            }
-        }
+    override fun setStartDate(date:String) {
+                startDateEvent.text = date
     }
 
     override fun setAvatar(avatar: Bitmap?) {

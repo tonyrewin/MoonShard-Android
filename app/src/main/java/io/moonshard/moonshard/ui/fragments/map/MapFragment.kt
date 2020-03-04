@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.common.utils.Utils.convertDpToPixel
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.Category
@@ -40,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -122,11 +124,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         locationValueInfoTv?.text = distance
                         locationInfoTv?.text = getAddress(
                             LatLng(
-                                RoomsMap.rooms[i].latitude.toDouble(),
-                                RoomsMap.rooms[i].longitude.toDouble()
+                                RoomsMap.rooms[i].latitude,
+                                RoomsMap.rooms[i].longitude
                             )
                         )
                         descriptionTv?.text = roomInfo.description
+
+                        val date = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                        if(date.alreadyComeDate()) iconStartDate.visibility = View.VISIBLE else iconStartDate.visibility = View.GONE
+                        startDateEvent?.text = "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
 
                         joinBtn?.setSafeOnClickListener {
                             presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
@@ -307,7 +313,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
         }
     }
-
 
     //todo maybe change on childFragmentManager ?
     private fun setupBottomSheet() {
@@ -510,6 +515,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 )
             )
             descriptionTv?.text = roomInfo.description
+            val date = DateHolder(roomPin.eventStartDate!!)
+            if(date.alreadyComeDate()) iconStartDate.visibility = View.VISIBLE else iconStartDate.visibility = View.GONE
+            startDateEvent?.text = "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
 
             joinBtn?.setSafeOnClickListener {
                 presenter.joinChat(roomPin.roomId!!, roomInfo.name)
@@ -564,5 +572,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         val fragment =
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
+    }
+
+    private fun convertUnixTimeStampToCalendar(newStartDate: Long): Calendar {
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date(newStartDate * 1000L)
+        sdf.format(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        return calendar
     }
 }

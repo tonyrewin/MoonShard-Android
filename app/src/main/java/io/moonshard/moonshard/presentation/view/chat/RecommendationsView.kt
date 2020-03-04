@@ -6,4 +6,5 @@ import moxy.MvpView
 interface RecommendationsView: MvpView {
     fun showRecommendations(recommendations:List<ChatEntity>)
     fun showChatScreen(chatId: String)
+    fun onDataChange()
 }

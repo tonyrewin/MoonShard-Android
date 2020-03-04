@@ -56,4 +56,11 @@ class RecommendationsFragment : MvpAppCompatFragment(), RecommendationsView {
         )
     }
 
+    fun setFilter(text: String) {
+        presenter.setFilter(text)
+    }
+
+   override fun onDataChange(){
+        (recommendationsRv?.adapter as? RecommendationsAdapter)?.notifyDataSetChanged()
+    }
 }

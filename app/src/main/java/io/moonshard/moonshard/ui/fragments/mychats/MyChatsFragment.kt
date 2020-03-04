@@ -80,8 +80,11 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
             ?.subscribe {
                 try {
                     val chatsFragment =
-                        childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + viewPager?.currentItem)
+                        childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + 0)
                     (chatsFragment as? ChatsFragment)?.setFilter(it.editable?.toString() ?: "")
+
+                    val recommendationsFragment = childFragmentManager.findFragmentByTag("android:switcher:" + viewPager.id + ":" + 1)
+                    (recommendationsFragment as? RecommendationsFragment)?.setFilter(it.editable?.toString() ?: "")
                 } catch (e: Exception) {
                     com.orhanobut.logger.Logger.d(e)
                 }
@@ -127,6 +130,10 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        for (fragment in childFragmentManager.fragments) {
+            childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
+        }
     }
 
     override fun onResume() {

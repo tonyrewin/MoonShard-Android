@@ -40,32 +40,6 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
 
         initViewPager()
 
-        try {
-            val search = UserSearchManager(MainApplication.getXmppConnection().connection)
-            val j =
-                JidCreate.domainBareFrom("search." + MainApplication.getXmppConnection().connection.xmppServiceDomain)
-            val searchForm = search.getSearchForm(j)
-            val answerForm = searchForm.createAnswerForm()
-            answerForm.setAnswer("nick", "qwe")
-            var data = search.getSearchResults(answerForm, j)
-
-            if (data.rows != null) {
-                val it = data.rows as Iterator<ReportedData.Row>
-                while (it.hasNext()) {
-                    val row = it.next()
-                    val iterator = row.getValues("jid") as Iterator<ReportedData.Row>
-                    if (iterator.hasNext()) {
-                        val value = iterator.next().toString()
-                        com.orhanobut.logger.Logger.i("Iteartor values......", " $value")
-                    }
-                    //Log.i("Iteartor values......"," "+value);
-                }
-            }
-            var kek = ""
-        } catch (e: Exception) {
-            var kek = ""
-        }
-
 
         (activity!!.supportFragmentManager.findFragmentByTag("CreatedChatScreen"))?.let {
             activity!!.supportFragmentManager.beginTransaction().remove(it).commit()

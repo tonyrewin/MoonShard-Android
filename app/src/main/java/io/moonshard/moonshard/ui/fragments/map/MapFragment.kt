@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.map
 
+import android.accounts.AccountManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
@@ -32,6 +34,8 @@ import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.CategoriesFragment
 import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*
@@ -40,6 +44,10 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.search.ReportedData
+import org.jivesoftware.smackx.search.UserSearch
+import org.jivesoftware.smackx.search.UserSearchManager
+import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,6 +68,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     private var defaultMoscowlatitude: Double = 55.751244
     private var defaultMoscowlongitude: Double = 37.618423
+
+    private var disposible: Disposable? = null
+
 
 
     override fun onMapReady(map: GoogleMap?) {
@@ -347,6 +358,88 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         mapView?.getMapAsync(this)
         (activity as MainActivity).showBottomNavigationBar()
         (activity as? MainActivity)?.setMapActiveBottomBar()
+
+        /*
+        disposible = searchEventEt?.afterTextChangeEvents()
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe {
+                try {
+                    val fragment =
+                        fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
+                    (fragment as? ListChatsMapFragment)?.updateChats()
+                } catch (e: Exception) {
+                    com.orhanobut.logger.Logger.d(e)
+                }
+            }
+
+         */
+
+
+
+/*
+        try {
+            val search = UserSearchManager(MainApplication.getXmppConnection().connection)
+            val j =
+                JidCreate.domainBareFrom("search." + MainApplication.getXmppConnection().connection.xmppServiceDomain)
+            val searchForm = search.getSearchForm(j)
+            val answerForm = searchForm.createAnswerForm()
+            answerForm.setAnswer("nick", "mykek")
+            var data = search.getSearchResults(answerForm, j)
+
+            val dsa = UserSearch()
+            if (data.rows != null) {
+                val it = data.rows as Iterator<ReportedData.Row>
+                while (it.hasNext()) {
+                    val row = it.next()
+                    val iterator = row.getValues("jid") as Iterator<ReportedData.Row>
+                    if (iterator.hasNext()) {
+                        val value = iterator.next().toString()
+                        com.orhanobut.logger.Logger.i("Iteartor values......", " $value")
+                    }
+                    //Log.i("Iteartor values......"," "+value);
+                }
+            }
+            var kek = ""
+        } catch (e: Exception) {
+            var kek = ""
+        }
+
+
+
+
+
+        try {
+            val search = UserSearchManager(MainApplication.getXmppConnection().connection)
+            val j =
+                JidCreate.domainBareFrom(search.searchServices.get(0))
+            val searchForm = search.getSearchForm(j)
+            val answerForm = searchForm.createAnswerForm()
+
+            val userSearch = UserSearch()
+            answerForm.setAnswer("nick", "mykek")
+            // answerForm.setAnswer("nick", "qwe")
+            var data = search.getSearchResults(answerForm, j)
+
+               val results = userSearch.sendSearchForm(MainApplication.getXmppConnection().connection, answerForm, j)
+
+            if (data.rows != null) {
+                val it = data.rows as Iterator<ReportedData.Row>
+                while (it.hasNext()) {
+                    val row = it.next()
+                    val iterator = row.getValues("jid") as Iterator<ReportedData.Row>
+                    if (iterator.hasNext()) {
+                        val value = iterator.next().toString()
+                        com.orhanobut.logger.Logger.i("Iteartor values......", " $value")
+                    }
+                    //Log.i("Iteartor values......"," "+value);
+                }
+            }
+            var kek = ""
+        } catch (e: Exception) {
+            var kek = ""
+        }
+
+*/
 
 
 /*

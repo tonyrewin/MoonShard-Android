@@ -201,4 +201,12 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         }
         return ""
     }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
 }

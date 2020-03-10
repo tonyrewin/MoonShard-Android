@@ -45,6 +45,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             }
         }
 
+        viewState?.showProgressBar()
         eventId?.let {
             compositeDisposable.add(useCase!!.getRoom(
                 it
@@ -130,6 +131,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             }
 
             viewState?.showMembers(occupants)
+            viewState?.hideProgressBar()
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

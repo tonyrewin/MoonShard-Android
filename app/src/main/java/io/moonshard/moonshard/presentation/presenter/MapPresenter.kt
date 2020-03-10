@@ -1,15 +1,23 @@
 package io.moonshard.moonshard.presentation.presenter
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.ImageView
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
+import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
+import io.moonshard.moonshard.usecase.MucUseCase
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,10 +35,12 @@ import org.jxmpp.jid.parts.Resourcepart
 @InjectViewState
 class MapPresenter : MvpPresenter<MapMainView>() {
     private var useCase: RoomsUseCase? = null
+    private var mucUseCase:MucUseCase?=null
     private val compositeDisposable = CompositeDisposable()
 
     init {
         useCase = RoomsUseCase()
+        mucUseCase = MucUseCase()
     }
 
     fun getRooms(lat: String, lng: String, radius: String, category: Category?) {
@@ -94,20 +104,68 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         return onlineValue
     }
 
-    fun getRoom(jid: String): RoomInfo? {
-        try {
-            val groupId = JidCreate.entityBareFrom(jid)
-            val muc =
-                MainApplication.getXmppConnection().multiUserChatManager
-                    .getMultiUserChat(groupId)
-            val info =
-                MainApplication.getXmppConnection().multiUserChatManager
-                    .getRoomInfo(muc.room)
-            return info
-        } catch (e: java.lang.Exception) {
-            val kek = ""
+    fun getCardInfo(event: RoomPin) {
+        mucUseCase?.getRoomInfo(event.roomId!!)?.
+            subscribeOn(Schedulers.io())?.
+            observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe ({
+                viewState?.showEventName(it.name)
+                viewState?.showDescriptionEvent(it.description
+                )
+                val onlineUsers = getValueOnlineUsers(event.roomId!!)
+                viewState?.showOnlineUserRoomInfo( "${it.occupantsCount} человек, $onlineUsers онлайн")
+
+                val distance = (calculationByDistance(
+                    event.latitude.toString(),
+                    event.longitude.toString()
+                ))
+                viewState?.showDistance(distance)
+
+                setAvatar(event.roomId!!,it.name)
+            },{
+                Logger.d(it)
+            })
+    }
+
+    private fun setAvatar(jid: String, nameChat: String) {
+        if (MainApplication.getCurrentChatActivity() != jid) {
+            MainApplication.getXmppConnection().loadAvatar(jid, nameChat)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ bytes ->
+                    val avatar: Bitmap?
+                    if (bytes != null) {
+                        avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        viewState?.showAvatar(avatar)
+                    }
+                }, { throwable -> trikita.log.Log.e(throwable.message) })
         }
-        return null
+    }
+
+    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
+        MainApplication.getCurrentLocation()?.let {
+            val myLat = MainApplication.getCurrentLocation().latitude
+            val myLng = MainApplication.getCurrentLocation().longitude
+
+            val km = SphericalUtil.computeDistanceBetween(
+                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                LatLng(myLat, myLng)
+            ).toInt() / 1000
+            return if (km < 1) {
+                (SphericalUtil.computeDistanceBetween(
+                    LatLng(
+                        latRoom.toDouble(),
+                        lngRoom.toDouble()
+                    ), LatLng(myLat, myLng)
+                ).toInt()).toString() + " метрах"
+            } else {
+                (SphericalUtil.computeDistanceBetween(
+                    LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                    LatLng(myLat, myLng)
+                ).toInt() / 1000).toString() + " км"
+            }
+        }
+        return ""
     }
 
     fun isJoin(jid:String):Boolean{
@@ -124,13 +182,15 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     @SuppressLint("CheckResult")
-    fun joinChat(jid: String, nameRoom: String?) {
-        nameRoom?.let {
+    fun joinChat(jid: String) {
             try {
                 val manager =
                     MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jid)
                 val muc = manager.getMultiUserChat(entityBareJid)
+                val nameRoom =
+                    MainApplication.getXmppConnection().multiUserChatManager
+                        .getRoomInfo(muc.room).name
 
                 val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val card = vm.loadVCard()
@@ -171,12 +231,10 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     })
             } catch (e: Exception) {
                 e.message?.let { viewState?.showError(it) }
-            }
         } ?: viewState?.showError("Ошибка")
     }
 
-    fun readChat(jid: String, nameRoom: String?) {
-        nameRoom?.let {
+    fun readChat(jid: String) {
             try {
                 val manager =
                     MainApplication.getXmppConnection().multiUserChatManager
@@ -195,6 +253,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             } catch (e: Exception) {
                 e.message?.let { viewState?.showError(it) }
             }
-        } ?: viewState?.showError("Ошибка")
+         ?: viewState?.showError("Ошибка")
     }
 }

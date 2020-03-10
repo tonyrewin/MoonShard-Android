@@ -82,7 +82,7 @@ public class VCardCustomManager extends Manager {
      * @throws InterruptedException
      */
     public void saveVCard(VCard vcard) throws SmackException.NoResponseException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, InterruptedException {
-        // XEP-54 § 3.2 "A user may publish or update his or her vCard by sending an IQ of type "set" with no 'to' address…"
+        // XEP-54 § 3.2 "A user may publish or updateRooms his or her vCard by sending an IQ of type "set" with no 'to' address…"
         vcard.setTo((Jid) null);
         vcard.setType(IQ.Type.set);
         // Also make sure to generate a new stanza id (the given vcard could be a vcard result), in which case we don't

@@ -7,6 +7,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.common.NotFoundException2
 import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -29,6 +30,9 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
     private var useCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
+    private var events = ArrayList<RoomPin>()
+    private var fullEvents = ArrayList<RoomPin>()
+
     init {
         useCase = RoomsUseCase()
     }
@@ -45,6 +49,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                     if (throwable == null) {
                         RoomsMap.clean()
                         RoomsMap.rooms = rooms
+                        events = rooms
+                        fullEvents = rooms
                         Log.d("rooms", rooms.size.toString())
                         viewState?.setChats(rooms)
                     } else {
@@ -62,6 +68,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 if (throwable == null) {
                     RoomsMap.clean()
                     RoomsMap.rooms = rooms
+                    events = rooms
+                    fullEvents = rooms
                     Log.d("rooms", rooms.size.toString())
                     viewState?.setChats(rooms)
                 } else {
@@ -104,7 +112,7 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         if (muc.isJoined) {
-                            viewState?.showChatScreens(jid)
+                            //viewState?.showChatScreens(jid)
                         }
                     },{
                         if(it is NotFoundException) {
@@ -113,7 +121,7 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     if (muc.isJoined) {
-                                        viewState?.showChatScreens(jid)
+                                      //  viewState?.showChatScreens(jid)
                                     }
                                 }, { throwable ->
                                     Logger.d(throwable.message)
@@ -125,4 +133,23 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 Logger.d(e.message)
             }
     }
+
+    /*
+    fun setFilter(filter: String) {
+        if(filter.isBlank()){
+            events.clear()
+            events.addAll(fullEvents)
+
+            viewState.onDataChange()
+        }else{
+            val list = fullEvents.filter {
+                it.name.contains(filter, true)
+            }
+            events.clear()
+            events.addAll(list)
+            viewState.onDataChange()
+        }
+    }
+
+     */
 }

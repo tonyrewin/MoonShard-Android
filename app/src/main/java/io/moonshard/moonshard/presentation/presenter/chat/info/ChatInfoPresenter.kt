@@ -33,6 +33,8 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
     fun getMembers(jid: String) {
         try {
+            viewState?.showProgressBar()
+
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
@@ -94,6 +96,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             }
 
             viewState?.showMembers(occupants)
+            viewState?.hideProgressBar()
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

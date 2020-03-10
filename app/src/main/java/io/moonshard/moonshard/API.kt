@@ -35,7 +35,7 @@ interface API {
     ): Single<ArrayList<RoomPin>>
 
     @Headers("Accept: application/json", "Content-type:application/json")
-    @PUT("/rooms/update")
+    @PUT("/rooms/updateRooms")
     fun changeRoom(@Body room:RoomPin):Single<RoomPin>
 
     @GET("rooms/{eventId}")

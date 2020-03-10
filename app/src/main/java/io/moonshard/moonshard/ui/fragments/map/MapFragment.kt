@@ -1,6 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.map
 
-import android.accounts.AccountManager
+import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.SphericalUtil
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
@@ -44,12 +45,7 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smackx.search.ReportedData
-import org.jivesoftware.smackx.search.UserSearch
-import org.jivesoftware.smackx.search.UserSearchManager
-import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -71,309 +67,30 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     private var disposible: Disposable? = null
 
-
-
-    override fun onMapReady(map: GoogleMap?) {
-        mMap = map
-        map?.isMyLocationEnabled = true
-        map?.uiSettings?.isMyLocationButtonEnabled = false
-        map?.uiSettings?.isCompassEnabled = false
-        mMap?.setOnMarkerClickListener(this)
-
-        mMap?.setOnMapClickListener {
-            defaultBottomSheet?.visibility = View.VISIBLE
-            infoBottomSheet?.visibility = View.GONE
-        }
-
-        zoomPlus?.setSafeOnClickListener {
-            mMap?.animateCamera(CameraUpdateFactory.zoomIn())
-        }
-
-        zoomMinus?.setSafeOnClickListener {
-            mMap?.animateCamera(CameraUpdateFactory.zoomOut())
-        }
-
-        myLocationBtn?.setSafeOnClickListener {
-            getMyLocation()
-        }
-
-        presenter.getRooms("", "", "", null)
-        getZoomCenter()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        defaultBottomSheet?.visibility = View.GONE
-        infoBottomSheet?.visibility = View.VISIBLE
-        for (i in RoomsMap.rooms.indices) {
-            if (RoomsMap.rooms[i].latitude.toDouble() == marker?.position?.latitude) {
-                RoomsMap.rooms[i].roomId?.let {
-                    if (presenter.isJoin(it)) {
-                        joinBtn?.visibility = View.GONE
-                        joinBtn2?.visibility = View.GONE
-                    } else {
-                        joinBtn?.visibility = View.VISIBLE
-                        joinBtn2?.visibility = View.VISIBLE
-                    }
-
-                    val roomInfo = presenter.getRoom(it)
-                    val onlineUsers = presenter.getValueOnlineUsers(it)
-                    roomInfo?.let {
-                        val distance = (calculationByDistance(
-                            RoomsMap.rooms[i].latitude.toString(),
-                            RoomsMap.rooms[i].longitude.toString()
-                        ))
-
-                        groupNameInfoContentTv?.text = roomInfo.name
-                        valueMembersInfoTv?.text =
-                            "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
-                        locationValueInfoTv?.text = distance
-                        locationInfoTv?.text = getAddress(
-                            LatLng(
-                                RoomsMap.rooms[i].latitude,
-                                RoomsMap.rooms[i].longitude
-                            )
-                        )
-                        descriptionTv?.text = roomInfo.description
-
-                        val date = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
-                        if(date.alreadyComeDate()) iconStartDate.visibility = View.VISIBLE else iconStartDate.visibility = View.GONE
-                        startDateEvent?.text = "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
-
-                        joinBtn?.setSafeOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
-                        }
-                        readBtn?.setSafeOnClickListener {
-                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
-                        }
-
-                        joinBtn2?.setSafeOnClickListener {
-                            presenter.joinChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
-                        }
-                        readBtn2?.setSafeOnClickListener {
-                            presenter.readChat(RoomsMap.rooms[i].roomId!!, roomInfo.name)
-                        }
-                    }
-                }
-            }
-        }
-        return true
-    }
-
-    override fun hideJoinButtonsBottomSheet() {
-        joinBtn?.visibility = View.GONE
-        joinBtn2?.visibility = View.GONE
-    }
-
-    private fun getZoomCenter() {
-        if (MainApplication.getCurrentLocation() != null) {
-            val latLng = LatLng(
-                MainApplication.getCurrentLocation().latitude,
-                MainApplication.getCurrentLocation().longitude
-            )
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
-            mMap?.animateCamera(cameraUpdate)
-        } else {
-            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
-            mMap?.animateCamera(cameraUpdate)
-        }
-    }
-
-    fun update(category: Category) {
-        presenter.getRooms("", "", "", category)
-    }
-
-    //hide
-    fun collapsedBottomSheet() {
-        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    fun showBottomSheet() {
-        defaultBottomSheet?.visibility = View.VISIBLE
-    }
-
-    override fun showChatScreens(chatId: String, stateChat: String) {
-        MainApplication.getMainUIThread().post {
-            val bundle = Bundle()
-            bundle.putString("chatId", chatId)
-            bundle.putBoolean("fromMap", true)
-            bundle.putString("stateChat", stateChat)
-            val mainChatFragment =
-                MainChatFragment()
-            mainChatFragment.arguments = bundle
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
-                ?.commit()
-        }
-    }
-
-    fun getAddress(location: LatLng): String {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address>
-
-        try {
-            addresses = geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1
-            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            if (addresses.isNotEmpty()) {
-                return addresses[0].getAddressLine(0)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return "Информация отсутствует"
-    }
-
-    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
-        MainApplication.getCurrentLocation()?.let {
-            val myLat = MainApplication.getCurrentLocation().latitude
-            val myLng = MainApplication.getCurrentLocation().longitude
-
-            val km = SphericalUtil.computeDistanceBetween(
-                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                LatLng(myLat, myLng)
-            ).toInt() / 1000
-            return if (km < 1) {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(
-                        latRoom.toDouble(),
-                        lngRoom.toDouble()
-                    ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
-            } else {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                    LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
-            }
-        }
-        return ""
-    }
-
-    override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
-        mMap?.clear()
-        for (i in rooms.indices) {
-            when {
-                rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(
-                    MarkerOptions()
-                        .position(
-                            LatLng(
-                                rooms[i].latitude.toDouble(),
-                                rooms[i].longitude.toDouble()
-                            )
-                        )
-                        .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
-                        )
-                )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Бизнес ивенты" -> mMap?.addMarker(
-                    MarkerOptions()
-                        .position(
-                            LatLng(
-                                rooms[i].latitude.toDouble(),
-                                rooms[i].longitude.toDouble()
-                            )
-                        )
-                        .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
-                        )
-                )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Кружок по интересам" -> mMap?.addMarker(
-                    MarkerOptions()
-                        .position(
-                            LatLng(
-                                rooms[i].latitude.toDouble(),
-                                rooms[i].longitude.toDouble()
-                            )
-                        )
-                        .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
-                        )
-                )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Культурные мероприятия" -> mMap?.addMarker(
-                    MarkerOptions()
-                        .position(
-                            LatLng(
-                                rooms[i].latitude.toDouble(),
-                                rooms[i].longitude.toDouble()
-                            )
-                        )
-                        .icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_culture)
-                        )
-                )
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        try {
-            super.onDestroyView()
-            for (fragment in activity?.supportFragmentManager!!.fragments) {
-                activity?.supportFragmentManager?.beginTransaction()?.remove(fragment)?.commit()
-            }
-        } catch (e: Exception) {
-
-        }
-    }
-
-    //todo maybe change on childFragmentManager ?
-    private fun setupBottomSheet() {
-        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
-            childFragmentManager,
-            context,
-            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST,
-            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.CATEGORY
-        )
-        bottomSheetViewPager?.offscreenPageLimit = 1
-        bottomSheetViewPager?.adapter = sectionsPagerAdapter
-        bottomSheetTabs?.setupWithViewPager(bottomSheetViewPager)
-        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
-    }
-
-    fun showCategoryBottomSheet() {
-        bottomSheetCategory?.visibility = View.VISIBLE
-        bottomSheetFind?.visibility = View.GONE
-        categoryFilterName?.text = "Категория: " + RoomsMap.category?.categoryName
-        sheetBehavior?.setPeekHeight(convertDpToPixel(100F, context), false)
-    }
-
-    fun hideCategoryBottomSheet() {
-        bottomSheetCategory?.visibility = View.GONE
-        bottomSheetFind?.visibility = View.VISIBLE
-        sheetBehavior?.setPeekHeight(convertDpToPixel(85F, context), false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync(this)
-        (activity as MainActivity).showBottomNavigationBar()
+        (activity as? MainActivity)?.showBottomNavigationBar()
         (activity as? MainActivity)?.setMapActiveBottomBar()
 
-        /*
         disposible = searchEventEt?.afterTextChangeEvents()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
                 try {
                     val fragment =
-                        fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
-                    (fragment as? ListChatsMapFragment)?.updateChats()
+                        fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+                    (fragment as? ListChatsMapFragment)?.setFilter(it.editable?.toString() ?: "")
                 } catch (e: Exception) {
-                    com.orhanobut.logger.Logger.d(e)
+                    Logger.d(e)
                 }
             }
-
-         */
-
 
 
 /*
@@ -441,36 +158,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
 */
 
-
-/*
-
-        val canvas = Canvas()
-       canvas.drawRoundRect()
-
-        fileIv.outlineProvider = object : ViewOutlineProvider() {
-
-            override fun getOutline(view: View?, outline: Outline?) {
-                outline?.setRoundRect(0, 0, view!!.width, view!!.height, 16F)
-                outline?.setRect(view!!.width/2, 0, view.width, view.height/2)
-            }
-        }
-
-
-        fileIv.clipToOutline = true
-
-
-
- */
-
         // MainApplication.getXmppConnection().addUserToGroup2("myTestUser@moonshard.tech","myGroup")
         //  MainApplication.getXmppConnection().getGroup("myGroup")
         //ServiceDiscoveryManager.getInstanceFor(MainApplication.getXmppConnection().connection).discoverItems(JidCreate.from("conference.moonshard.tech"))
-
-
-        var hashMap = hashMapOf<String, String>()
-        hashMap.values.forEach {
-            it
-        }
 
         setupBottomSheet()
 
@@ -554,6 +244,268 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         })
     }
 
+    override fun onMapReady(map: GoogleMap?) {
+        mMap = map
+        map?.isMyLocationEnabled = true
+        map?.uiSettings?.isMyLocationButtonEnabled = false
+        map?.uiSettings?.isCompassEnabled = false
+        mMap?.setOnMarkerClickListener(this)
+
+        mMap?.setOnMapClickListener {
+            defaultBottomSheet?.visibility = View.VISIBLE
+            infoBottomSheet?.visibility = View.GONE
+        }
+
+        zoomPlus?.setSafeOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+
+        zoomMinus?.setSafeOnClickListener {
+            mMap?.animateCamera(CameraUpdateFactory.zoomOut())
+        }
+
+        myLocationBtn?.setSafeOnClickListener {
+            getMyLocation()
+        }
+
+        presenter.getRooms("", "", "", null)
+        getZoomCenter()
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        defaultBottomSheet?.visibility = View.GONE
+        infoBottomSheet?.visibility = View.VISIBLE
+        for (i in RoomsMap.rooms.indices) {
+            if (RoomsMap.rooms[i].latitude == marker?.position?.latitude) {
+                RoomsMap.rooms[i].roomId?.let {
+
+                    if (presenter.isJoin(it)) {
+                        joinBtn?.visibility = View.GONE
+                        joinBtn2?.visibility = View.GONE
+                    } else {
+                        joinBtn?.visibility = View.VISIBLE
+                        joinBtn2?.visibility = View.VISIBLE
+                    }
+
+                    presenter.getCardInfo(RoomsMap.rooms[i])
+
+                    locationInfoTv?.text =
+                        getAddress(LatLng(RoomsMap.rooms[i].latitude, RoomsMap.rooms[i].longitude))
+
+                    val date = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if (date.alreadyComeDate()) iconStartDate.visibility =
+                        View.VISIBLE else iconStartDate.visibility = View.GONE
+
+                    startDateEvent?.text =
+                        "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
+
+                    joinBtn?.setSafeOnClickListener {
+                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                    }
+                    readBtn?.setSafeOnClickListener {
+                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                    }
+
+                    joinBtn2?.setSafeOnClickListener {
+                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                    }
+                    readBtn2?.setSafeOnClickListener {
+                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    override fun showOnlineUserRoomInfo(onlineUser: String) {
+        valueMembersInfoTv?.text = onlineUser
+    }
+
+    override fun showEventName(name: String) {
+        groupNameInfoContentTv?.text = name
+    }
+
+    override fun showDistance(distance: String) {
+        locationValueInfoTv?.text = distance
+    }
+
+    override fun showDescriptionEvent(description: String) {
+        descriptionTv?.text = description
+    }
+
+    override fun hideJoinButtonsBottomSheet() {
+        joinBtn?.visibility = View.GONE
+        joinBtn2?.visibility = View.GONE
+    }
+
+    override fun showAvatar(avatar: Bitmap){
+        MainApplication.getMainUIThread().post {
+            profileImageСard.setImageBitmap(avatar)
+        }
+    }
+
+    private fun getZoomCenter() {
+        if (MainApplication.getCurrentLocation() != null) {
+            val latLng = LatLng(
+                MainApplication.getCurrentLocation().latitude,
+                MainApplication.getCurrentLocation().longitude
+            )
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        } else {
+            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
+            mMap?.animateCamera(cameraUpdate)
+        }
+    }
+
+    fun updateRooms(category: Category) {
+        presenter.getRooms("", "", "", category)
+    }
+
+    override fun showChatScreens(chatId: String, stateChat: String) {
+        MainApplication.getMainUIThread().post {
+            val bundle = Bundle()
+            bundle.putString("chatId", chatId)
+            bundle.putBoolean("fromMap", true)
+            bundle.putString("stateChat", stateChat)
+            val mainChatFragment =
+                MainChatFragment()
+            mainChatFragment.arguments = bundle
+            val ft = activity?.supportFragmentManager?.beginTransaction()
+            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
+                ?.commit()
+        }
+    }
+
+    private fun getAddress(location: LatLng): String {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addresses: List<Address>
+
+        try {
+            addresses = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1
+            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            if (addresses.isNotEmpty()) {
+                return addresses[0].getAddressLine(0)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return "Информация отсутствует"
+    }
+
+    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
+        MainApplication.getCurrentLocation()?.let {
+            val myLat = MainApplication.getCurrentLocation().latitude
+            val myLng = MainApplication.getCurrentLocation().longitude
+
+            val km = SphericalUtil.computeDistanceBetween(
+                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                LatLng(myLat, myLng)
+            ).toInt() / 1000
+            return if (km < 1) {
+                (SphericalUtil.computeDistanceBetween(
+                    LatLng(
+                        latRoom.toDouble(),
+                        lngRoom.toDouble()
+                    ), LatLng(myLat, myLng)
+                ).toInt()).toString() + " метрах"
+            } else {
+                (SphericalUtil.computeDistanceBetween(
+                    LatLng(latRoom.toDouble(), lngRoom.toDouble()),
+                    LatLng(myLat, myLng)
+                ).toInt() / 1000).toString() + " км"
+            }
+        }
+        return ""
+    }
+
+    override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
+        mMap?.clear()
+        for (i in rooms.indices) {
+            when {
+                rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude,
+                                rooms[i].longitude
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
+                        )
+                )
+                rooms[i].category?.get(0)?.categoryName.toString() == "Бизнес ивенты" -> mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude,
+                                rooms[i].longitude
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
+                        )
+                )
+                rooms[i].category?.get(0)?.categoryName.toString() == "Кружок по интересам" -> mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude,
+                                rooms[i].longitude
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
+                        )
+                )
+                rooms[i].category?.get(0)?.categoryName.toString() == "Культурные мероприятия" -> mMap?.addMarker(
+                    MarkerOptions()
+                        .position(
+                            LatLng(
+                                rooms[i].latitude,
+                                rooms[i].longitude
+                            )
+                        )
+                        .icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_culture)
+                        )
+                )
+            }
+        }
+    }
+
+    private fun setupBottomSheet() {
+        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
+            childFragmentManager,
+            context,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.CATEGORY
+        )
+        bottomSheetViewPager?.offscreenPageLimit = 1
+        bottomSheetViewPager?.adapter = sectionsPagerAdapter
+        bottomSheetTabs?.setupWithViewPager(bottomSheetViewPager)
+        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
+    }
+
+    fun showCategoryBottomSheet() {
+        bottomSheetCategory?.visibility = View.VISIBLE
+        bottomSheetFind?.visibility = View.GONE
+        categoryFilterName?.text = "Категория: " + RoomsMap.category?.categoryName
+        sheetBehavior?.setPeekHeight(convertDpToPixel(100F, context), false)
+    }
+
+    fun hideCategoryBottomSheet() {
+        bottomSheetCategory?.visibility = View.GONE
+        bottomSheetFind?.visibility = View.VISIBLE
+        sheetBehavior?.setPeekHeight(convertDpToPixel(85F, context), false)
+    }
+
     fun clearCategoryAdapter() {
         val fragment =
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
@@ -581,7 +533,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         defaultBottomSheet?.visibility = View.GONE
         infoBottomSheet?.visibility = View.VISIBLE
 
-        if (presenter.isJoin(roomPin.roomId.toString())) {
+        if (presenter.isJoin(roomPin.roomId!!)) {
             joinBtn?.visibility = View.GONE
             joinBtn2?.visibility = View.GONE
         } else {
@@ -589,42 +541,30 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             joinBtn2?.visibility = View.VISIBLE
         }
 
-        val roomInfo = presenter.getRoom(roomPin.roomId.toString())
-        val onlineUsers = presenter.getValueOnlineUsers(roomPin.roomId.toString())
-        roomInfo?.let {
-            val distance = (calculationByDistance(
-                roomPin.latitude.toString(),
-                roomPin.longitude.toString()
-            ))
+        presenter.getCardInfo(roomPin)
 
-            groupNameInfoContentTv?.text = roomInfo.name
-            valueMembersInfoTv?.text =
-                "${roomInfo.occupantsCount} человек, $onlineUsers онлайн"
-            locationValueInfoTv?.text = distance
-            locationInfoTv?.text = getAddress(
-                LatLng(
-                    roomPin.latitude,
-                    roomPin.longitude
-                )
-            )
-            descriptionTv?.text = roomInfo.description
-            val date = DateHolder(roomPin.eventStartDate!!)
-            if(date.alreadyComeDate()) iconStartDate.visibility = View.VISIBLE else iconStartDate.visibility = View.GONE
-            startDateEvent?.text = "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
+        locationInfoTv?.text =
+            getAddress(LatLng(roomPin.latitude, roomPin.longitude))
 
-            joinBtn?.setSafeOnClickListener {
-                presenter.joinChat(roomPin.roomId!!, roomInfo.name)
-            }
-            readBtn?.setSafeOnClickListener {
-                presenter.readChat(roomPin.roomId!!, roomInfo.name)
-            }
+        val date = DateHolder(roomPin.eventStartDate!!)
+        if (date.alreadyComeDate()) iconStartDate.visibility =
+            View.VISIBLE else iconStartDate.visibility = View.GONE
 
-            joinBtn2?.setSafeOnClickListener {
-                presenter.joinChat(roomPin.roomId!!, roomInfo.name)
-            }
-            readBtn2?.setSafeOnClickListener {
-                presenter.readChat(roomPin.roomId!!, roomInfo.name)
-            }
+        startDateEvent?.text =
+            "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
+
+        joinBtn?.setSafeOnClickListener {
+            presenter.joinChat(roomPin.roomId!!)
+        }
+        readBtn?.setSafeOnClickListener {
+            presenter.readChat(roomPin.roomId!!)
+        }
+
+        joinBtn2?.setSafeOnClickListener {
+            presenter.joinChat(roomPin.roomId!!)
+        }
+        readBtn2?.setSafeOnClickListener {
+            presenter.readChat(roomPin.roomId!!)
         }
     }
 
@@ -667,12 +607,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
 
-    private fun convertUnixTimeStampToCalendar(newStartDate: Long): Calendar {
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
-        val date = Date(newStartDate * 1000L)
-        sdf.format(date)
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        return calendar
+    override fun onDestroyView() {
+        try {
+            super.onDestroyView()
+            for (fragment in activity?.supportFragmentManager!!.fragments) {
+                activity?.supportFragmentManager?.beginTransaction()?.remove(fragment)?.commit()
+            }
+        } catch (e: Exception) {
+            Logger.d(e)
+        }
     }
 }

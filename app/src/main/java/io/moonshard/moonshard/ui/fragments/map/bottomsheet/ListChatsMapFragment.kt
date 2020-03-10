@@ -48,32 +48,19 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
             override fun clickChat(room: RoomPin) {
                 (parentFragment as? MapFragment)?.showMarkerBottomSheet(room)
-                //presenter.joinChat(room.roomId.toString())
             }
         }, arrayListOf())
     }
 
-    override fun showChatScreens(chatId: String) {
-        var fragment: Fragment? = null
-        MainApplication.getMainUIThread().post {
-            for(i in fragmentManager!!.fragments.indices){
-                if(fragmentManager!!.fragments[i].tag == "MapScreen"){
-                    fragment = (fragmentManager!!.fragments[i] as? MapFragment)
-                }
-            }
-
-            val bundle = Bundle()
-            bundle.putString("chatId", chatId)
-            bundle.putBoolean("fromMap", true)
-            val mainChatFragment = MainChatFragment()
-            mainChatFragment.arguments = bundle
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, mainChatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack("chatScreen")
-                ?.commit()
-        }
-    }
-
     fun updateChats(){
         presenter.getChats()
+    }
+
+    fun setFilter(text: String) {
+        //presenter.setFilter(text)
+    }
+
+    override fun onDataChange(){
+        (groupsRv?.adapter as? ListChatMapAdapter)?.notifyDataSetChanged()
     }
 }

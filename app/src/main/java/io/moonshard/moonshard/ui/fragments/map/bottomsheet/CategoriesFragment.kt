@@ -46,7 +46,7 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
 
 
     fun getRoomsById(category: Category) {
-        (parentFragment as? MapFragment)?.update(category)
+        (parentFragment as? MapFragment)?.updateRooms(category)
         (parentFragment as? MapFragment)?.showCategoryBottomSheet()
         (parentFragment as? MapFragment)?.updateListRooms()
 
@@ -54,7 +54,7 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
         for (i in fragmentManager!!.fragments.indices) {
             if (fragmentManager!!.fragments[i].tag == "MapScreen") {
                 //(fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
-                (fragmentManager!!.fragments[i] as? MapFragment)?.update(category)
+                (fragmentManager!!.fragments[i] as? MapFragment)?.updateRooms(category)
                 (fragmentManager!!.fragments[i] as MapFragment).showCategoryBottomSheet()
                 (fragmentManager!!.fragments[i] as MapFragment).updateListRooms()
             }

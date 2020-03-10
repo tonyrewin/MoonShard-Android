@@ -5,5 +5,5 @@ import moxy.MvpView
 
 interface ListChatMapView: MvpView {
     fun setChats(chats:ArrayList<RoomPin>)
-    fun showChatScreens(chatId: String)
+    fun onDataChange()
 }

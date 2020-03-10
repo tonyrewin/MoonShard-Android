@@ -25,4 +25,6 @@ interface EventInfoView: MvpView {
     fun hideLine()
     fun hideDescription()
     fun setStartDate(date:String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

@@ -37,7 +37,7 @@ class ChatPresenter : BasePresenter<ChatView>() {
 
     fun setChatId(chatId: String) {
         chatID = chatId
-        ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME update unread messages count on each message read
+        ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME updateRooms unread messages count on each message read
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

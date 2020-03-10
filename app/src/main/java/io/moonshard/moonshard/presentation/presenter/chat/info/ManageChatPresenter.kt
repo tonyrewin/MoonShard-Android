@@ -23,6 +23,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
 
     fun getDataInfo(jid: String) {
         try {
+            viewState?.showProgressBar()
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
@@ -35,7 +36,10 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             viewState?.showDescription(info.description)
             viewState?.showOccupantsCount(info.occupantsCount.toString())
             viewState?.showAdminsCount(muc.moderators.size.toString())
+            viewState?.hideProgressBar()
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
+            viewState?.showToast("Произошла ошибка")
             Logger.d(e)
         }
     }
@@ -48,7 +52,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         mimeType: String?
     ) {
         try {
-            viewState.showProgressBar()
+            viewState?.showProgressBar()
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
@@ -65,6 +69,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
 
                 })
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState.showToast(it) }
         }
     }
@@ -100,6 +105,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
                 viewState?.hideProgressBar()
                 viewState.showChatInfo()
             }, {
+                viewState?.hideProgressBar()
                 Logger.d(it)
             })
     }

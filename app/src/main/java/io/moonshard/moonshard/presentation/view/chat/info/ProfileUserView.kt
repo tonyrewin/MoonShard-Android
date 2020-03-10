@@ -8,4 +8,6 @@ interface ProfileUserView: MvpView {
     fun setAvatar(avatar: Bitmap?)
     fun showError(error: String)
     fun showChatScreen(chatId: String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

@@ -85,4 +85,12 @@ class AdminsFragment : MvpAppCompatFragment(),
             }
         }, arrayListOf())
     }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
 }

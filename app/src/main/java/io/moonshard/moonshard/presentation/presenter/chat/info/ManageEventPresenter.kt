@@ -37,34 +37,41 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     }
 
     fun getInfoChat(jid: String) {
-        val muc =
-            MainApplication.getXmppConnection().multiUserChatManager
-                .getMultiUserChat(JidCreate.entityBareFrom(jid))
+        try {
+            viewState?.showProgressBar()
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
-        infoEventMuc =
-            MainApplication.getXmppConnection().multiUserChatManager
-                .getRoomInfo(muc.room)
+            infoEventMuc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getRoomInfo(muc.room)
 
 
-        viewState?.showName(ChangeEventRepository.name)
-        viewState?.showDescription(ChangeEventRepository.description)
-        viewState?.showOccupantsCount(infoEventMuc?.occupantsCount.toString())
-        viewState?.showAdminsCount(muc.moderators.size.toString())
-        viewState?.showTimeDays(ChangeEventRepository.event?.ttl!!)
-        viewState?.showAdress(
-            LatLng(
-                ChangeEventRepository.event!!.latitude,
-                ChangeEventRepository.event!!.longitude
+            viewState?.showName(ChangeEventRepository.name)
+            viewState?.showDescription(ChangeEventRepository.description)
+            viewState?.showOccupantsCount(infoEventMuc?.occupantsCount.toString())
+            viewState?.showAdminsCount(muc.moderators.size.toString())
+            viewState?.showTimeDays(ChangeEventRepository.event?.ttl!!)
+            viewState?.showAdress(
+                LatLng(
+                    ChangeEventRepository.event!!.latitude,
+                    ChangeEventRepository.event!!.longitude
+                )
             )
-        )
 
-        val calendar =
-            convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
+            val calendar =
+                convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
 
-        viewState?.setStartDate(
-            calendar.get(Calendar.DAY_OF_MONTH),
-            calendar.get(Calendar.MONTH)
-        )
+            viewState?.setStartDate(
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.MONTH)
+            )
+            viewState?.hideProgressBar()
+        }catch (e:Exception){
+            viewState?.hideProgressBar()
+            viewState?.showToast("Произошла ошибка")
+        }
     }
 
     private fun convertUnixTimeStampToCalendar(newStartDate: Long): Calendar {
@@ -98,8 +105,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                     setAvatarServer(muc, bytes, mimeType)
                     changeDescription(muc, description)
                     changeChatNameServer(muc, it)
-                    changeEventServer(event
-                    )
+                    changeEventServer(event)
                 }, {
 
                 })
@@ -112,12 +118,6 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     fun changeEventServer(
         event: RoomPin
     ) {
-
-        val gson = Gson()
-        var test = gson.toJson(
-           event
-        )
-
         compositeDisposable.add(useCase!!.changeRoom(
             event
         )
@@ -126,8 +126,11 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             .subscribe { event, throwable ->
                 if (throwable == null) {
                     viewState.showChatInfo()
+                    viewState?.hideProgressBar()
                 } else {
-                    viewState?.showToast("Ошибка: ${throwable.message}")
+                    Logger.d(throwable)
+                    viewState?.showToast("Произошла ошибка")
+                    viewState?.hideProgressBar()
                 }
             })
     }
@@ -161,7 +164,6 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                viewState?.hideProgressBar()
                 // viewState.showChatInfo()
             }, {
                 Logger.d(it)

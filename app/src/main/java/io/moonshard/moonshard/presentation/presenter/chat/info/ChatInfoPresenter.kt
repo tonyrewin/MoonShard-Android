@@ -98,6 +98,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             viewState?.showMembers(occupants)
             viewState?.hideProgressBar()
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState?.showError(it) }
         }
     }

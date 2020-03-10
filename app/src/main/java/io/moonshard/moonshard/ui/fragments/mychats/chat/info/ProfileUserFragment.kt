@@ -85,4 +85,12 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
     override fun showChatScreen(chatId: String) {
         (parentFragment as? MainChatFragment)?.showChatWithStack(chatId)
     }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
 }

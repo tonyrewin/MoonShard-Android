@@ -112,4 +112,13 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
     override fun removeMember(member:Occupant){
         (membersRv?.adapter as MembersAdapter).removeMember(member)
     }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+
+    }
 }

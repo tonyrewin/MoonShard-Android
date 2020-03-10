@@ -57,6 +57,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                         ChangeEventRepository.event = event
                         getMembers(jid)
                     } else {
+                        viewState?.hideProgressBar()
                         Logger.d(throwable)
                     }
                 })
@@ -133,6 +134,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             viewState?.showMembers(occupants)
             viewState?.hideProgressBar()
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState?.showError(it) }
         }
     }

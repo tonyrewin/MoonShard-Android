@@ -46,6 +46,7 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
 
 
     fun getRoomsById(category: Category) {
+        (parentFragment as? MapFragment)?.clearSearch()
         (parentFragment as? MapFragment)?.updateRooms(category)
         (parentFragment as? MapFragment)?.showCategoryBottomSheet()
         (parentFragment as? MapFragment)?.updateListRooms()

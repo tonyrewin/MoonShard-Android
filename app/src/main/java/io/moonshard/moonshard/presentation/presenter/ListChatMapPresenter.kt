@@ -6,6 +6,7 @@ import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.common.NotFoundException2
+import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -49,10 +50,10 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                     if (throwable == null) {
                         RoomsMap.clean()
                         RoomsMap.rooms = rooms
-                        events = rooms
-                        fullEvents = rooms
+                        events.addAll(rooms)
+                        fullEvents.addAll(rooms)
                         Log.d("rooms", rooms.size.toString())
-                        viewState?.setChats(rooms)
+                        viewState?.setChats(events)
                     } else {
                         val error = ""
                     }
@@ -68,88 +69,32 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 if (throwable == null) {
                     RoomsMap.clean()
                     RoomsMap.rooms = rooms
-                    events = rooms
-                    fullEvents = rooms
+                    events.addAll(rooms)
+                    fullEvents.addAll(rooms)
                     Log.d("rooms", rooms.size.toString())
-                    viewState?.setChats(rooms)
+                    viewState?.setChats(events)
                 } else {
                     val error = ""
                 }
             })
     }
 
-    @SuppressLint("CheckResult")
-    fun joinChat(jid: String) {
-            try {
-
-                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                val card = vm.loadVCard()
-                val nickName = Resourcepart.from(card.nickName)
-
-
-                val manager =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                val entityBareJid = JidCreate.entityBareFrom(jid)
-                val muc = manager.getMultiUserChat(entityBareJid)
-                val info =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                        .getRoomInfo(muc.room)
-                val roomName = info.name
-
-                if(!muc.isJoined){
-                    muc.join(nickName)
-                }
-
-                val chatEntity = ChatEntity(
-                    jid = jid,
-                    chatName = roomName,
-                    isGroupChat = true,
-                    unreadMessagesCount = 0
-                )
-
-                ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        if (muc.isJoined) {
-                            //viewState?.showChatScreens(jid)
-                        }
-                    },{
-                        if(it is NotFoundException) {
-                            ChatListRepository.addChat(chatEntity)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    if (muc.isJoined) {
-                                      //  viewState?.showChatScreens(jid)
-                                    }
-                                }, { throwable ->
-                                    Logger.d(throwable.message)
-                                })
-                        }
-                    })
-
-            } catch (e: Exception) {
-                Logger.d(e.message)
-            }
-    }
-
-    /*
     fun setFilter(filter: String) {
         if(filter.isBlank()){
             events.clear()
             events.addAll(fullEvents)
-
-            viewState.onDataChange()
+            RoomsMap.rooms = events
+            viewState.setChats(events)
+            viewState?.updatePinsOnMap(events)
         }else{
             val list = fullEvents.filter {
-                it.name.contains(filter, true)
+                it.name!!.contains(filter, true)
             }
             events.clear()
             events.addAll(list)
-            viewState.onDataChange()
+            RoomsMap.rooms = events
+            viewState.setChats(events)
+            viewState?.updatePinsOnMap(events)
         }
     }
-
-     */
 }

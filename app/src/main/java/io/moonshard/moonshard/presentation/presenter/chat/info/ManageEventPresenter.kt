@@ -47,7 +47,6 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
 
-
             viewState?.showName(ChangeEventRepository.name)
             viewState?.showDescription(ChangeEventRepository.description)
             viewState?.showOccupantsCount(infoEventMuc?.occupantsCount.toString())

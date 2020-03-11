@@ -29,7 +29,6 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list_chats_map, container, false)
     }
 
@@ -57,10 +56,14 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     }
 
     fun setFilter(text: String) {
-        //presenter.setFilter(text)
+        presenter.setFilter(text)
     }
 
     override fun onDataChange(){
         (groupsRv?.adapter as? ListChatMapAdapter)?.notifyDataSetChanged()
+    }
+
+    override fun updatePinsOnMap( events:ArrayList<RoomPin>) {
+        (parentFragment as MapFragment).updateRoomsLocale(events)
     }
 }

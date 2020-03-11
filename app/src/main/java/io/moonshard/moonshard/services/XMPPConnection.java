@@ -166,6 +166,8 @@ public class XMPPConnection implements ConnectionListener {
             // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
+        Log.d("myXuy2",multiUserChatManager);
+
 
         if(SecurePreferences.getBooleanValue("inviteInChats", true)){
             enableInvitionInChats();
@@ -245,8 +247,6 @@ public class XMPPConnection implements ConnectionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // syncConferenceChats();
     }
 
     @Override

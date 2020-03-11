@@ -26,6 +26,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
+import java.util.concurrent.TimeUnit
 
 //todo need add presenter
 interface ListChatMapListener {
@@ -49,6 +50,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             getRoomInfo(chats[position].roomId.toString())
+                .delaySubscription(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -78,16 +80,20 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
 
     fun getRoomInfo(jid: String): Single<RoomInfo> {
         return Single.create {
-            val groupId = JidCreate.entityBareFrom(jid)
-            val muc =
-                MainApplication.getXmppConnection().multiUserChatManager
-                    .getMultiUserChat(groupId)
+            try {
+                val groupId = JidCreate.entityBareFrom(jid)
+                val muc =
+                    MainApplication.getXmppConnection().multiUserChatManager
+                        .getMultiUserChat(groupId)
+                val info =
+                    MainApplication.getXmppConnection().multiUserChatManager
+                        .getRoomInfo(muc.room)
 
-            val info =
-                MainApplication.getXmppConnection().multiUserChatManager
-                    .getRoomInfo(muc.room)
-
-            it.onSuccess(info)
+                it.onSuccess(info)
+            }catch (e:Exception){
+                Log.d(e.message)
+                it.onError(e)
+            }
         }
     }
 

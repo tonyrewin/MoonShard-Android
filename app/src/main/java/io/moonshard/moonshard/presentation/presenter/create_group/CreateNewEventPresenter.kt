@@ -13,13 +13,11 @@ import io.moonshard.moonshard.presentation.view.CreateNewEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.usecase.RoomsUseCase
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.packet.VCard
 import org.jxmpp.jid.impl.JidCreate
@@ -54,7 +52,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        username: String, latitude: Double?, longitude: Double?,
+        nameEvent: String, latitude: Double?, longitude: Double?,
         ttl: Int,
         category: Category?,
         group: ChatEntity?, eventStartDate: Long
@@ -64,11 +62,11 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             val actualUserName: String
             val jidRoomString = UUID.randomUUID().toString()+"-event" + "@conference.moonshard.tech"
 
-            if (username.contains("@")) {
+            if (nameEvent.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
                 return
             } else {
-                actualUserName = username.split("@")[0]
+                actualUserName = nameEvent.split("@")[0]
             }
 
             try {
@@ -114,7 +112,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                             jidRoomString,
                             category,
                             group,
-                            eventStartDate
+                            eventStartDate,nameEvent
                         )
                     },{
                         Logger.d(it)
@@ -206,7 +204,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     private fun createRoomOnServer(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
-        category: Category, group: ChatEntity?, eventStartDate: Long
+        category: Category, group: ChatEntity?, eventStartDate: Long,name:String
     ) {
         val categories = arrayListOf<Category>()
         categories.add(category)
@@ -217,7 +215,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             roomId,
             categories,
             group?.jid,
-            eventStartDate
+            eventStartDate,name
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

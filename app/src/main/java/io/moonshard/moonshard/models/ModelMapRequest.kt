@@ -18,5 +18,7 @@ data class ModelMapRequest(
     @SerializedName("parentGroupId")
     private val groupdId: String? = null,
     @SerializedName("eventStartDate")
-    var eventStartDate:Long?=null
+    var eventStartDate:Long?=null,
+    @SerializedName("name")
+    var name:String?=null
 )

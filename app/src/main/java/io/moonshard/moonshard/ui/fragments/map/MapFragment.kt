@@ -47,6 +47,7 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
@@ -85,7 +86,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             ?.subscribe {
                 try {
                     val fragment =
-                        fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+                        childFragmentManager.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
                     (fragment as? ListChatsMapFragment)?.setFilter(it.editable?.toString() ?: "")
                 } catch (e: Exception) {
                     Logger.d(e)
@@ -364,6 +365,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         presenter.getRooms("", "", "", category)
     }
 
+    fun updateRoomsLocale(events:ArrayList<RoomPin>){
+        showRoomsOnMap(events)
+    }
+
     override fun showChatScreens(chatId: String, stateChat: String) {
         MainApplication.getMainUIThread().post {
             val bundle = Bundle()
@@ -396,32 +401,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             e.printStackTrace()
         }
         return "Информация отсутствует"
-    }
-
-    private fun calculationByDistance(latRoom: String, lngRoom: String): String {
-        MainApplication.getCurrentLocation()?.let {
-            val myLat = MainApplication.getCurrentLocation().latitude
-            val myLng = MainApplication.getCurrentLocation().longitude
-
-            val km = SphericalUtil.computeDistanceBetween(
-                LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                LatLng(myLat, myLng)
-            ).toInt() / 1000
-            return if (km < 1) {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(
-                        latRoom.toDouble(),
-                        lngRoom.toDouble()
-                    ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
-            } else {
-                (SphericalUtil.computeDistanceBetween(
-                    LatLng(latRoom.toDouble(), lngRoom.toDouble()),
-                    LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
-            }
-        }
-        return ""
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
@@ -508,8 +487,12 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     fun clearCategoryAdapter() {
         val fragment =
-            fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
+            childFragmentManager.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 1)
         (fragment as? CategoriesFragment)?.clearCategories()
+    }
+
+    fun clearSearch(){
+        searchEventEt.text.clear()
     }
 
     private fun getMyLocation() {

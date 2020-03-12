@@ -56,7 +56,13 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         }
 
         disableInviteSwitch?.setOnCheckedChangeListener { swichView, isChecked ->
-            if(isChecked) presenter.disableInviteInChats() else presenter.enableInvitionInChats()
+            if(!MainApplication.getXmppConnection().isConnectionReady){
+                swichView.isChecked = !isChecked
+                disableInviteSwitch.isClickable = false
+            }else{
+                disableInviteSwitch.isClickable = false
+                if(isChecked) presenter.disableInviteInChats() else presenter.enableInvitionInChats()
+            }
         }
     }
 

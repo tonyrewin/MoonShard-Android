@@ -55,15 +55,14 @@ class RecommendationsPresenter : MvpPresenter<RecommendationsView>() {
         if(filter.isBlank()){
             recommendations.clear()
             recommendations.addAll(fullRecommendations)
-
-            viewState.onDataChange()
+            viewState?.onDataChange()
         }else{
             val list = fullRecommendations.filter {
                 it.chatName.contains(filter, true)
             }
             recommendations.clear()
             recommendations.addAll(list)
-            viewState.onDataChange()
+            viewState?.onDataChange()
         }
     }
 }

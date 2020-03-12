@@ -41,7 +41,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
             startService() // if we want open this screen when logout we must use handle 5 sec
-            auth()
+                //auth()
             alreadyHaveText?.setSafeOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
@@ -104,6 +104,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
+            auth()
+            /*
             when (e) {
                 is XMPPException -> {
                     showError("Произошла ошибка на сервере")
@@ -118,6 +120,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
                     e.message?.let { showError(it) } ?: showError("Произошла ошибка")
                 }
             }
+
+             */
         }
     }
 

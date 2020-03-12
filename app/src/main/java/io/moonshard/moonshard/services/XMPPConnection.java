@@ -166,13 +166,13 @@ public class XMPPConnection implements ConnectionListener {
             // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
-        Log.d("myXuy2",multiUserChatManager);
+        Log.d("myMainTest: ","multiUserChatManager");
 
 
         if(SecurePreferences.getBooleanValue("inviteInChats", true)){
-            enableInvitionInChats();
+            enableInviteInChats();
         }else{
-            disableInvitionInChats();
+            disableInviteInChats();
         }
 
         setStatus(true, "ONLINE");
@@ -180,13 +180,6 @@ public class XMPPConnection implements ConnectionListener {
 
     public void disconnect() {
         SecurePreferences.setValue("logged_in", false);
-        if (connection != null) {
-            connection.disconnect();
-            connection = null;
-        }
-    }
-
-    public void disconnectMain() {
         if (connection != null) {
             connection.disconnect();
             connection = null;
@@ -216,6 +209,7 @@ public class XMPPConnection implements ConnectionListener {
 
     @Override
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
+        Log.d("myMainTest: ","authenticated");
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
         try {
@@ -259,10 +253,14 @@ public class XMPPConnection implements ConnectionListener {
     @Override
     public void connectionClosedOnError(Exception e) {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.DISCONNECTED;
+        /*
+        XMPPConnectionService.CONNECTION_STATE = ConnectionState.DISCONNECTED;
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_OUT;
         SecurePreferences.setValue("logged_in", false);
         Log.e(LOG_TAG, "Connection closed, exception occurred");
         e.printStackTrace();
+
+         */
     }
 
     public String sendMessage(EntityBareJid recipientJid, String messageText) {
@@ -579,46 +577,6 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
-    public void addUserToGroup2(String userName, String groupName) {
-        try {
-            BareJid bareJid = JidCreate.bareFrom(userName);
-
-            RosterGroup group = roster.getGroup(groupName);
-            if (null == group) {
-                group = roster.createGroup(groupName);
-            }
-
-            String[] arr = new String[]{group.getName()};
-            roster.createEntry(bareJid, "kek", arr);
-
-            RosterEntry entry = roster.getEntry(bareJid);
-            if (entry != null) {
-                try {
-                    group.addEntry(entry);
-                } catch (XMPPException e) {
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (SmackException.NoResponseException e) {
-                    e.printStackTrace();
-                } catch (SmackException.NotConnectedException e) {
-                    if (connectAndLogin()) {
-                        addUserToGroup(userName, groupName);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getGroup(String groupName) {
-        RosterGroup gr = roster.getGroup(groupName);
-        String test = "";
-
-    }
-
-
     public void sendUserPresence(Presence presence) {
         if (connection != null) {
             if (isConnectionReady()) {
@@ -745,12 +703,21 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
+    public void disableInviteInChats(){
+        //if(multiUserChatManager!=null) multiUserChatManager.removeInvitationListener(networkHandler);
+        if(multiUserChatManager!=null){
 
-    public void disableInvitionInChats(){
+        }else{
+            Logger.d("multiUserChatManager is null: disableInviteInChats");
+        }
         multiUserChatManager.removeInvitationListener(networkHandler);
     }
 
-    public void enableInvitionInChats(){
-        multiUserChatManager.addInvitationListener(networkHandler);
+    public void enableInviteInChats(){
+        if(multiUserChatManager!=null){
+            multiUserChatManager.addInvitationListener(networkHandler);
+        }else{
+            Logger.d("multiUserChatManager is null: enableInviteInChats ");
+        }
     }
 }

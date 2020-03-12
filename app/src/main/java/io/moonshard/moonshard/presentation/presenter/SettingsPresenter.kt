@@ -101,12 +101,12 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     }
 
     fun disableInviteInChats(){
-        MainApplication.getXmppConnection().disableInvitionInChats()
+        MainApplication.getXmppConnection().disableInviteInChats()
         SecurePreferences.setValue("inviteInChats", false)
     }
 
     fun enableInvitionInChats() {
-        MainApplication.getXmppConnection().enableInvitionInChats()
+        MainApplication.getXmppConnection().enableInviteInChats()
         SecurePreferences.setValue("inviteInChats", true)
     }
 }

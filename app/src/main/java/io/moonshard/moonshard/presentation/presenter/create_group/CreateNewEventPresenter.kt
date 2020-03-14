@@ -55,7 +55,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         nameEvent: String, latitude: Double?, longitude: Double?,
         ttl: Int,
         category: Category?,
-        group: ChatEntity?, eventStartDate: Long
+        group: ChatEntity?, eventStartDate: Long,address:String
     ) {
 
         if (latitude != null && longitude != null && category != null) {
@@ -112,7 +112,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                             jidRoomString,
                             category,
                             group,
-                            eventStartDate,nameEvent
+                            eventStartDate,nameEvent,address
                         )
                     },{
                         Logger.d(it)
@@ -204,7 +204,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     private fun createRoomOnServer(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
-        category: Category, group: ChatEntity?, eventStartDate: Long,name:String
+        category: Category, group: ChatEntity?, eventStartDate: Long,name:String,address:String
     ) {
         val categories = arrayListOf<Category>()
         categories.add(category)
@@ -215,7 +215,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             roomId,
             categories,
             group?.jid,
-            eventStartDate,name
+            eventStartDate,name,address
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

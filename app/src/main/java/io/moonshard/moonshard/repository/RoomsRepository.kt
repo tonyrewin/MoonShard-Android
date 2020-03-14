@@ -22,7 +22,7 @@ class RoomsRepository {
         categories: ArrayList<Category>,
         idGroup: String?,
         eventStartDate: Long,
-        name: String
+        name: String,address:String
     ): Single<RoomPin> {
         val request = ModelMapRequest(
             latitude,
@@ -32,7 +32,8 @@ class RoomsRepository {
             categories,
             idGroup,
             eventStartDate,
-            name
+            name,
+            address
         )
         return api.putRoom(request)
     }

@@ -114,7 +114,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 ChooseChatRepository.getTimeSec(),
                 ChooseChatRepository.category,
                 ChooseChatRepository.group,
-                ChooseChatRepository.getEventStartDate()
+                ChooseChatRepository.getEventStartDate(),
+                ChooseChatRepository.address
             )
         }
 

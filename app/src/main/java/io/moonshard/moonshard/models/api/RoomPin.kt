@@ -21,4 +21,6 @@ data class RoomPin(@SerializedName("id")
                    @SerializedName("eventStartDate")
                    var eventStartDate:Long?,
                    @SerializedName("name")
-                   var name:String?)
+                   var name:String?,
+                   @SerializedName("address")
+                   var address:String?)

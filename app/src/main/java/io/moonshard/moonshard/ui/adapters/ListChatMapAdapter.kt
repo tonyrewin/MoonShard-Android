@@ -49,14 +49,18 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            getRoomInfo(chats[position].roomId.toString())
-                .delaySubscription(2, TimeUnit.SECONDS)
+            getRoomInfo(chats[position].roomId!!)
+                //.delaySubscription(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    setValueMembersTv(it, chats[position].roomId.toString(), holder.valueMembersTv)
-                    setAvatar(chats[position].roomId.toString(), holder.groupIv!!, it.name!!)
-                    holder.groupNameTv?.text = it.name.toString()
+                    try {
+                        setValueMembersTv(it, chats[position].roomId!!, holder.valueMembersTv)
+                        setAvatar(chats[position].roomId!!, holder.groupIv!!, it.name!!)
+                        holder.groupNameTv?.text = it.name.toString()
+                    }catch (e:Exception){
+                        Logger.d(e)
+                    }
                 }, {
                     Logger.d(it)
                 })

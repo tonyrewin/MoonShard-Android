@@ -36,13 +36,21 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                setValueMembersTv(it, recommendations[position].jid, holder.valueMembersTv)
+                try {
+                    setValueMembersTv(it, recommendations[position].jid, holder.valueMembersTv)
+                }catch (e:Exception){
+                    Logger.d(e)
+                }
             }, {
                 Logger.d(it)
             })
 
-        holder.eventNameTv?.text = recommendations[position].chatName
-        setAvatar(recommendations[position].jid, recommendations[position].chatName, holder.avatarEvent)
+        try {
+            holder.eventNameTv?.text = recommendations[position].chatName
+            setAvatar(recommendations[position].jid, recommendations[position].chatName, holder.avatarEvent)
+        }catch (e:Exception){
+            Logger.d(e)
+        }
 
         holder.itemView.setOnClickListener {
             listener.recommendationsClick(recommendations[position].jid)

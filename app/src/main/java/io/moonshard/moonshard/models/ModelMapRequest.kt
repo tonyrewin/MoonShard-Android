@@ -20,5 +20,7 @@ data class ModelMapRequest(
     @SerializedName("eventStartDate")
     var eventStartDate:Long?=null,
     @SerializedName("name")
-    var name:String?=null
+    var name:String?=null,
+    @SerializedName("address")
+    var address:String?=null
 )

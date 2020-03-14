@@ -21,9 +21,9 @@ class RoomsUseCase {
         categories: ArrayList<Category>,
         idGroup: String?,
         eventStartDate: Long,
-        name:String
+        name:String,address:String
     ): Single<RoomPin> {
-        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate,name)
+        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate,name,address)
     }
 
     fun getRooms(

@@ -88,7 +88,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
             viewState?.updatePinsOnMap(events)
         }else{
             val list = fullEvents.filter {
-                it.name!!.contains(filter, true)
+                val myString = it.name!! + "" + it.address
+                myString.contains(filter, true)
             }
             events.clear()
             events.addAll(list)

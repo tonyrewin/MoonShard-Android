@@ -74,5 +74,4 @@
     <style name="ScrollItem.B">
         <item name="android:background">?attr/colorAccent</item>
     </style>
-
 </resources>

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.android.gms.common.api.internal.RemoteCall;
 import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -43,6 +44,7 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -242,6 +244,25 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
     }
+/*
+    public String[] getTicketSale(String event_jid){
+        String[] result;
+        try {
+            RemoteCall<BigInteger> event_id_call = ticketfactory.getEventIdByJid(event_jid);
+
+            BigInteger event_id = event_id_call.send();
+
+            RemoteCall<List> SaleInstancesCall = ticket.getTicketSales(event_id);
+            List SaleInstancesList = SaleInstancesCall.send();
+            String[] SaleInstances = new String[SaleInstancesList.size()];
+            SaleInstancesList.toArray(SaleInstances);
+            return SaleInstances;
+        } catch (Exception e) {
+            return null;
+            Log.e("error","error in transaction remote call: " + e);
+        }
+    }
+ */
 
     @Override
     public void connectionClosed() {

@@ -20,9 +20,11 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFr
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jivesoftware.smack.packet.Message
+import org.jivesoftware.smackx.muc.MultiUserChat
 import pub.devrel.easypermissions.EasyPermissions
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -228,4 +230,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         MainApplication.setMainActivity(null)
     }
 
+    override fun onInvitationReceivedForMuc(room: MultiUserChat, inviter: String, reason: String, password: String, message: Message) {
+
+    }
 }

@@ -244,25 +244,6 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
     }
-/*
-    public String[] getTicketSale(String event_jid){
-        String[] result;
-        try {
-            RemoteCall<BigInteger> event_id_call = ticketfactory.getEventIdByJid(event_jid);
-
-            BigInteger event_id = event_id_call.send();
-
-            RemoteCall<List> SaleInstancesCall = ticket.getTicketSales(event_id);
-            List SaleInstancesList = SaleInstancesCall.send();
-            String[] SaleInstances = new String[SaleInstancesList.size()];
-            SaleInstancesList.toArray(SaleInstances);
-            return SaleInstances;
-        } catch (Exception e) {
-            return null;
-            Log.e("error","error in transaction remote call: " + e);
-        }
-    }
- */
 
     @Override
     public void connectionClosed() {

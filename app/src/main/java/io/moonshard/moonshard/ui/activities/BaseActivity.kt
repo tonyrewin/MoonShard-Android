@@ -41,7 +41,7 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     open fun onSuccess(){}
 
-    fun onInvitationReceivedForMuc(
+    open fun onInvitationReceivedForMuc(
         room: MultiUserChat, inviter: String,
         reason: String, password: String, message: Message
     ) {

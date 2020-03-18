@@ -209,7 +209,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
    }
 
     override fun onDestroy() {
-        onNewMessageDisposable?.dispose()
+       // onNewMessageDisposable?.dispose()
     }
 
     override fun onFirstViewAttach() {
@@ -221,7 +221,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         return object : Observer<MessageEntity> {
 
             override fun onSubscribe(d: Disposable) {
-                onNewMessageDisposable = d
+                //onNewMessageDisposable = d
             }
 
             override fun onNext(message: MessageEntity) {
@@ -232,9 +232,13 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 viewState.addToStart(GenericMessage(message), true)
             }
 
-            override fun onError(e: Throwable) {}
+            override fun onError(e: Throwable) {
+                Logger.d(e)
+            }
 
-            override fun onComplete() {}
+            override fun onComplete() {
+                val complete = ""
+            }
         }
     }
 

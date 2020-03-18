@@ -35,6 +35,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         if(intent.getStringExtra("screen")=="chat"){
             val chatId = intent.getStringExtra("chatId")
+            showMyChatsFragment()
             showMainChatScreen(chatId)
         }else{
             methodRequiresTwoPermission()
@@ -107,6 +108,9 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onBackPressed() {
+
+        if(intent.getStringExtra("screen")=="chat")
+
         if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             return

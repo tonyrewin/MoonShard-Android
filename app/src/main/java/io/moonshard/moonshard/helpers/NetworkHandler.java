@@ -78,7 +78,7 @@ import trikita.log.Log;
 public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener, UserStatusListener, FileTransferListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
-    private PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
+    PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
     private NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainApplication.getContext());
 
     public NetworkHandler() {

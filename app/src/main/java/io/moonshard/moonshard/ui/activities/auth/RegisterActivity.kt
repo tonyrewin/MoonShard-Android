@@ -32,16 +32,17 @@ class RegisterActivity : BaseActivity(), RegisterView {
     var isRegistration = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         if (checkFirstStart()) {
+            setTheme(R.style.AppTheme)
             startIntro()
         } else {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
             startService() // if we want open this screen when logout we must use handle 5 sec
                 //auth()
+            isAuth()
             alreadyHaveText?.setSafeOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
@@ -103,6 +104,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
     override fun onError(e: Exception) {
         runOnUiThread {
+            setTheme(R.style.AppTheme)
             hideLoader()
             auth()
             /*
@@ -148,6 +150,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     }
 
     override fun onAuthenticated() {
+        setTheme(R.style.AppTheme)
         runOnUiThread {
             hideLoader()
             if (isRegistration) {
@@ -168,5 +171,13 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
     override fun hideLoader() {
         progressBarReg?.visibility = View.GONE
+    }
+
+    fun isAuth(){
+        setTheme(R.style.AppTheme)
+        val logged = SecurePreferences.getBooleanValue("logged_in", false)
+        if (!logged) {
+            setContentView(R.layout.activity_register)
+        }
     }
 }

@@ -30,9 +30,15 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        methodRequiresTwoPermission()
         mainBottomNav?.selectedItemId = R.id.find_chats_map_bottom_nav_item
         MainApplication.setMainActivity(this)
+
+        if(intent.getStringExtra("screen")=="chat"){
+            val chatId = intent.getStringExtra("chatId")
+            showMainChatScreen(chatId)
+        }else{
+            methodRequiresTwoPermission()
+        }
 
         mainBottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {

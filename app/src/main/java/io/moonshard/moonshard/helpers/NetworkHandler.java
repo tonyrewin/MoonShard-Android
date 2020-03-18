@@ -328,10 +328,18 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                         if (bytes != null) {
                                             avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                         }
+
+                                Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
+                                intent.putExtra("screen","chat");
+                                intent.putExtra("chatId",chatJid);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, 0);
+
                                         NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
                                                 .setSmallIcon(R.drawable.amu_bubble_mask)
                                                 .setContentTitle(nickNameChat)
                                                 .setContentText(message.getBody())
+                                                .setContentIntent(pendingIntent)
                                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                                         if (avatar != null) {
                                             notification.setLargeIcon(getCircleBitmap(avatar));
@@ -551,8 +559,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(bytes -> {
                         Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
+                        intent.putExtra("screen","chat");
+                        intent.putExtra("chatId",chatJid);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, 0);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                 Bitmap avatar = null;
                                 if (bytes != null) {
@@ -683,10 +693,18 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                     if (bytes != null) {
                                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                     }
+
+                            Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
+                            intent.putExtra("screen","chat");
+                            intent.putExtra("chatId",chatJid);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, 0);
+
                                     NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
                                             .setSmallIcon(R.drawable.amu_bubble_mask)
                                             .setContentTitle(nickNameChat)
                                             .setContentText(message)
+                                            .setContentIntent(pendingIntent)
                                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                                     if (avatar != null) {
                                         notification.setLargeIcon(getCircleBitmap(avatar));

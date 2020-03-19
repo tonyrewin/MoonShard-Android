@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/usersIv"
-                android:text="Group name"
+                tools:text="Group name"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/groupNameInfoContentTv"
                 android:layout_alignStart="@+id/usersIv"
-                android:text="666 members, 30 online"
+                android:text="Нет подключения к интернету"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
-                android:text="130 m away" />
+                tools:text="130 m away" />
 
         <View
                 android:layout_width="match_parent"
@@ -237,7 +237,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:text="Бухаем пивас у памятника Грибоедову. Скидываемся по сотке на трехлитровую сиську!"
+            tools:text="Бухаем пивас у памятника Грибоедову. Скидываемся по сотке на трехлитровую сиську!"
             android:textColor="#333333"
             android:textSize="16sp" />
 

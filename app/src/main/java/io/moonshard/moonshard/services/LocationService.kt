@@ -109,7 +109,7 @@ class LocationService : Service() {
             val country = addresses[0].countryName
             val postalCode = addresses[0].postalCode
             val knownName = addresses[0].featureName // Only if available else return NULL
-            MainApplication.setAdress(address)
+            MainApplication.setAddress(address)
         } catch (e: IOException) {
             e.printStackTrace()
         }

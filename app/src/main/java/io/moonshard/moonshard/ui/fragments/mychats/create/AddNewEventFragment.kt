@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.moonshard.moonshard.MainApplication
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -26,11 +27,13 @@ class AddNewEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        yourGeolocation?.text = MainApplication.getAddress()
+
         startLocalGroup?.setSafeOnClickListener {
             showCreateNewChatScreen()
         }
     }
-    fun showCreateNewChatScreen(){
+    private fun showCreateNewChatScreen(){
         (activity as? MainActivity)?.showCreateNewEventScreen()
     }
 }

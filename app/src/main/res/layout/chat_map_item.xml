@@ -30,6 +30,7 @@
             android:src="@drawable/ic_users" />
 
     <TextView
+            android:fontFamily="@font/montserrat_bold"
             android:maxLines="1"
             android:id="@+id/groupNameTv"
             android:layout_width="wrap_content"
@@ -41,23 +42,24 @@
             android:textSize="17sp" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/valueMembersTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/groupNameTv"
             android:layout_alignStart="@+id/usersIv"
-            tools:text="666 members, 30 online"
+            android:text="Нет подключения к интернету"
             android:textColor="#9B9BB6"
             android:textSize="14sp" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/locationValueTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/valueMembersTv"
             android:layout_alignStart="@+id/usersIv"
             tools:text="130 m away" />
-
 
     <View
             android:layout_width="match_parent"

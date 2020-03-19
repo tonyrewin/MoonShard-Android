@@ -34,8 +34,9 @@ import org.jxmpp.jid.parts.Resourcepart
 
 @InjectViewState
 class MapPresenter : MvpPresenter<MapMainView>() {
+
     private var useCase: RoomsUseCase? = null
-    private var mucUseCase:MucUseCase?=null
+    private var mucUseCase: MucUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
@@ -105,26 +106,30 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     fun getCardInfo(event: RoomPin) {
-        mucUseCase?.getRoomInfo(event.roomId!!)?.
-            subscribeOn(Schedulers.io())?.
-            observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
-                viewState?.showEventName(it.name)
-                viewState?.showDescriptionEvent(it.description
-                )
-                val onlineUsers = getValueOnlineUsers(event.roomId!!)
-                viewState?.showOnlineUserRoomInfo( "${it.occupantsCount} человек, $onlineUsers онлайн")
-
-                val distance = (calculationByDistance(
-                    event.latitude.toString(),
-                    event.longitude.toString()
-                ))
-                viewState?.showDistance(distance)
-
-                setAvatar(event.roomId!!,it.name)
-            },{
+        mucUseCase?.getRoomInfo(event.roomId!!)?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                try {
+                    viewState?.showEventName(it.name)
+                    viewState?.showDescriptionEvent(
+                        it.description
+                    )
+                    val onlineUsers = getValueOnlineUsers(it.room.asUnescapedString())
+                    viewState?.showOnlineUserRoomInfo("${it.occupantsCount} человек, $onlineUsers онлайн")
+                    setAvatar(it.room.asUnescapedString(), it.name)
+                }catch (e:Exception){
+                    Logger.d(e)
+                }
+            }, {
+                viewState?.showEventName(event.name!!)
+                setAvatar(event.roomId!!, event.name!!)
                 Logger.d(it)
             })
+        val distance = (calculationByDistance(
+            event.latitude.toString(),
+            event.longitude.toString()
+        ))
+        viewState?.showDistance(distance)
     }
 
     private fun setAvatar(jid: String, nameChat: String) {
@@ -138,7 +143,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                         viewState?.showAvatar(avatar)
                     }
-                }, { throwable -> trikita.log.Log.e(throwable.message) })
+                }, { throwable -> Logger.d(throwable) })
         }
     }
 
@@ -168,14 +173,14 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         return ""
     }
 
-    fun isJoin(jid:String):Boolean{
+    fun isJoin(jid: String): Boolean {
         return try {
             val manager =
                 MainApplication.getXmppConnection().multiUserChatManager
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             muc.isJoined
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Logger.d(e.message)
             false
         }
@@ -183,76 +188,76 @@ class MapPresenter : MvpPresenter<MapMainView>() {
 
     @SuppressLint("CheckResult")
     fun joinChat(jid: String) {
-            try {
-                val manager =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                val entityBareJid = JidCreate.entityBareFrom(jid)
-                val muc = manager.getMultiUserChat(entityBareJid)
-                val nameRoom =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                        .getRoomInfo(muc.room).name
+        try {
+            val manager =
+                MainApplication.getXmppConnection().multiUserChatManager
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
+            val nameRoom =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getRoomInfo(muc.room).name
 
-                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                val card = vm.loadVCard()
-                val nickName = Resourcepart.from(card.nickName)
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
 
-                if (!muc.isJoined) {
-                    muc.join(nickName)
-                }
+            if (!muc.isJoined) {
+                muc.join(nickName)
+            }
 
-                val chatEntity = ChatEntity(
-                    jid = jid,
-                    chatName = nameRoom,
-                    isGroupChat = true,
-                    unreadMessagesCount = 0
-                )
+            val chatEntity = ChatEntity(
+                jid = jid,
+                chatName = nameRoom,
+                isGroupChat = true,
+                unreadMessagesCount = 0
+            )
 
-                ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        if (muc.isJoined) {
-                            viewState?.showChatScreens(jid,"join")
-                        }
-                    }, {
-                        if (it is NotFoundException) {
-                            ChatListRepository.addChat(chatEntity)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    if (muc.isJoined) {
-                                        viewState?.hideJoinButtonsBottomSheet()
-                                        viewState?.showChatScreens(jid,"join")
-                                    }
-                                }, { throwable ->
-                                    throwable.message?.let { it1 -> viewState?.showError(it1) }
-                                })
-                        }
-                    })
-            } catch (e: Exception) {
-                e.message?.let { viewState?.showError(it) }
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (muc.isJoined) {
+                        viewState?.showChatScreens(jid, "join")
+                    }
+                }, {
+                    if (it is NotFoundException) {
+                        ChatListRepository.addChat(chatEntity)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                if (muc.isJoined) {
+                                    viewState?.hideJoinButtonsBottomSheet()
+                                    viewState?.showChatScreens(jid, "join")
+                                }
+                            }, { throwable ->
+                                throwable.message?.let { it1 -> viewState?.showError(it1) }
+                            })
+                    }
+                })
+        } catch (e: Exception) {
+            e.message?.let { viewState?.showError(it) }
         } ?: viewState?.showError("Ошибка")
     }
 
     fun readChat(jid: String) {
-            try {
-                val manager =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                val entityBareJid = JidCreate.entityBareFrom(jid)
-                val muc = manager.getMultiUserChat(entityBareJid)
+        try {
+            val manager =
+                MainApplication.getXmppConnection().multiUserChatManager
+            val entityBareJid = JidCreate.entityBareFrom(jid)
+            val muc = manager.getMultiUserChat(entityBareJid)
 
-                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                val card = vm.loadVCard()
-                val nickName = Resourcepart.from(card.nickName)
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard()
+            val nickName = Resourcepart.from(card.nickName)
 
-                if (!muc.isJoined) {
-                    muc.join(nickName)
-                }
-
-                viewState?.showChatScreens(jid,"read")
-            } catch (e: Exception) {
-                e.message?.let { viewState?.showError(it) }
+            if (!muc.isJoined) {
+                muc.join(nickName)
             }
-         ?: viewState?.showError("Ошибка")
+
+            viewState?.showChatScreens(jid, "read")
+        } catch (e: Exception) {
+            e.message?.let { viewState?.showError(it) }
+        }
+            ?: viewState?.showError("Ошибка")
     }
 }

@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.util.Log;
 
 
@@ -25,7 +24,6 @@ import androidx.core.app.NotificationCompat;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +49,7 @@ public class XMPPConnectionService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             MainApplication.setCurrentLocation(location);
-            getAddress(location);
+            setAddress(location);
         }
 
         @Override
@@ -91,7 +89,7 @@ public class XMPPConnectionService extends Service {
         }
     }
 
-    void getAddress(Location location){
+    void setAddress(Location location){
        Geocoder geocoder;
        List<Address> addresses;
        geocoder = new Geocoder(this, Locale.getDefault());
@@ -104,7 +102,7 @@ public class XMPPConnectionService extends Service {
            String country = addresses.get(0).getCountryName();
            String postalCode = addresses.get(0).getPostalCode();
            String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-           MainApplication.setAdress(address);
+           MainApplication.setAddress(address);
        } catch (IOException e) {
            e.printStackTrace();
        }

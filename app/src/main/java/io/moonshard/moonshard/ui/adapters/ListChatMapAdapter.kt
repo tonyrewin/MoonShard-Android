@@ -95,7 +95,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
 
                 it.onSuccess(info)
             }catch (e:Exception){
-                Log.d(e.message)
+                Logger.d(e)
                 it.onError(e)
             }
         }
@@ -107,7 +107,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
             .subscribe({
                 valueMembersTv?.text = "${roomInfo.occupantsCount} человек, $it онлайн"
             }, {
-
+                Logger.d(it)
             })
     }
 
@@ -139,7 +139,6 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     private fun calculationByDistance(latRoom: String?, lngRoom: String?): Single<String> {
         return Single.create {
             if (latRoom != null && lngRoom != null) {
-
                 MainApplication.getCurrentLocation()?.let { location ->
                     val myLat = MainApplication.getCurrentLocation().latitude
                     val myLng = MainApplication.getCurrentLocation().longitude

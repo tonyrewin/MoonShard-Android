@@ -39,7 +39,7 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     }
 
     override fun setChats(chats: ArrayList<RoomPin>) {
-        (groupsRv?.adapter as ListChatMapAdapter).setChats(chats)
+        (groupsRv?.adapter as? ListChatMapAdapter)?.setChats(chats)
     }
 
     private fun initAdapter() {

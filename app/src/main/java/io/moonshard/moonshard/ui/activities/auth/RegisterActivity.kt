@@ -173,6 +173,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
         progressBarReg?.visibility = View.GONE
     }
 
+    //need made refactor
     fun isAuth(){
         setTheme(R.style.AppTheme)
         val logged = SecurePreferences.getBooleanValue("logged_in", false)

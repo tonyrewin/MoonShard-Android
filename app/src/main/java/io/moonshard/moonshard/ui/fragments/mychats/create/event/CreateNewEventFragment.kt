@@ -19,7 +19,6 @@ import io.moonshard.moonshard.ui.adapters.CategoriesAdapter
 import io.moonshard.moonshard.ui.adapters.CategoryListener
 import io.moonshard.moonshard.ui.adapters.create.GroupsAdapter
 import io.moonshard.moonshard.ui.adapters.create.GroupsListener
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_create_new_event.*
 import moxy.MvpAppCompatFragment
@@ -71,7 +70,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         initAdapter()
 
         if (ChooseChatRepository.address.isEmpty()) {
-            address?.text = MainApplication.getAdress()
+            address?.text = MainApplication.getAddress()
             ChooseChatRepository.lat = MainApplication.getCurrentLocation()?.latitude
             ChooseChatRepository.lng = MainApplication.getCurrentLocation()?.longitude
         } else {

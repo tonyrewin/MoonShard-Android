@@ -6,6 +6,8 @@
         android:orientation="vertical">
 
     <TextView
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
             android:layout_marginLeft="14dp"
             android:textColor="#333333"
             android:text="12 hours"
@@ -22,7 +24,7 @@
             android:layout_marginBottom="14dp"
             android:id="@+id/checkIv"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_check_circle"
+            android:background="@drawable/ic_check_circle_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

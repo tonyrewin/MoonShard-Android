@@ -41,12 +41,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="Новый групповой чат"
+                            android:text="Создать событие"
                             android:textColor="#333333"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:fontFamily="@font/montserrat_bold" />
 
                     <TextView
+                            android:fontFamily="@font/montserrat_bold"
                             android:id="@+id/newChat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -56,8 +57,7 @@
                             android:src="@drawable/ic_new_chat"
                             android:text="Готово"
                             android:textColor="#0075FF"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textSize="14sp" />
 
                 </RelativeLayout>
             </com.google.android.material.appbar.AppBarLayout>
@@ -74,23 +74,25 @@
                     android:orientation="vertical">
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:textSize="14sp"
                         android:textColor="#9B9BB6"
                         android:layout_marginTop="8dp"
-                        android:layout_marginStart="11dp"
+                        android:layout_marginStart="10dp"
                         android:text="Название"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                 <EditText
+                        android:layout_marginEnd="13dp"
                         android:textColorHint="#DDDDDD"
                         android:textSize="16sp"
                         android:hint="Введите название"
                         android:layout_marginBottom="20dp"
                         android:id="@+id/nameTv"
-                        android:layout_width="249dp"
+                        android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginStart="11dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="7dp"
                         android:background="@drawable/rounded_edittext"
                         android:inputType="text"
@@ -116,6 +118,7 @@
 
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -124,6 +127,7 @@
                         android:textSize="14sp" />
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:id="@+id/address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -132,10 +136,11 @@
                         android:textSize="16sp" />
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="7dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Изменить"
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
@@ -160,6 +165,7 @@
 
 
                     <TextView
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
@@ -171,6 +177,7 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:fontFamily="@font/roboto_regular"
                             android:id="@+id/dateTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -193,6 +200,7 @@
                     android:layout_height="wrap_content">
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_marginTop="15dp"
                         android:id="@+id/longEvenTv"
                         android:layout_width="wrap_content"
@@ -203,6 +211,7 @@
                         android:textSize="16sp" />
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:id="@+id/timeTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -230,9 +239,10 @@
                     android:orientation="vertical">
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="9dp"
                         android:layout_marginTop="8dp"
                         android:text="Выберете категорию"
                         android:textColor="#9B9BB6"
@@ -259,9 +269,10 @@
                     android:orientation="vertical">
 
                 <TextView
+                        android:fontFamily="@font/roboto_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="9dp"
                         android:layout_marginTop="8dp"
                         android:text="Привязать к"
                         android:textColor="#9B9BB6"

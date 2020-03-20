@@ -6,20 +6,17 @@
         tools:context=".ui.fragments.mychats.create.AddChatFragment"
         android:orientation="vertical">
 
-
     <ImageView
             android:src="@drawable/ic_new_group_chat"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="31dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="171dp"
-            android:layout_height="171dp"
-            />
-
+            android:layout_height="171dp"/>
 
     <TextView
-            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="23dp"
             android:gravity="center_horizontal|bottom"
             android:textColor="#000000"
             android:lineSpacingExtra="3sp"
@@ -30,8 +27,9 @@
             android:layout_height="wrap_content"/>
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="5dp"
             android:lineSpacingExtra="1sp"
             android:translationY="0.62sp"
             android:gravity="center_horizontal|bottom"
@@ -42,8 +40,9 @@
             android:layout_height="wrap_content"/>
 
     <Button
+            android:layout_marginTop="65dp"
+            android:fontFamily="@font/roboto_medium"
             android:id="@+id/startLocalGroup"
-            android:layout_marginTop="22dp"
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#0075FF"
             android:textColor="@android:color/white"

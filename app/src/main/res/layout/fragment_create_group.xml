@@ -29,13 +29,13 @@
                     android:src="@drawable/ic_arrow_back" />
 
             <TextView
+                    android:fontFamily="@font/montserrat_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:text="Cоздать групповой чат"
                     android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp"/>
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>

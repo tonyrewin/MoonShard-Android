@@ -61,7 +61,6 @@
     <include
             layout="@layout/fragment_bottom_sheet"
             android:visibility="visible" />
-
     <include
             android:id="@+id/infoBottomSheet"
             layout="@layout/fragment_bottom_sheet_info"

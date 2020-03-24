@@ -50,17 +50,6 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
         (parentFragment as? MapFragment)?.updateRooms(category)
         (parentFragment as? MapFragment)?.showCategoryBottomSheet()
         (parentFragment as? MapFragment)?.updateListRooms()
-
-        /*
-        for (i in fragmentManager!!.fragments.indices) {
-            if (fragmentManager!!.fragments[i].tag == "MapScreen") {
-                //(fragmentManager!!.fragments[i] as? MapFragment)?.collapsedBottomSheet()
-                (fragmentManager!!.fragments[i] as? MapFragment)?.updateRooms(category)
-                (fragmentManager!!.fragments[i] as MapFragment).showCategoryBottomSheet()
-                (fragmentManager!!.fragments[i] as MapFragment).updateListRooms()
-            }
-        }
-         */
     }
 
     override fun showCategories(categories: ArrayList<Category>) {

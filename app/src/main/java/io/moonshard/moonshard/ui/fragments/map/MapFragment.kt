@@ -84,6 +84,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         disposible = searchEventEt?.afterTextChangeEvents()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
+
+                if(it.editable.toString().isEmpty()){
+                    clearSearch?.visibility = View.GONE
+                }else{
+                    clearSearch?.visibility = View.VISIBLE
+                }
+
                 try {
                     val fragment =
                         childFragmentManager.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
@@ -340,7 +347,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         joinBtn2?.visibility = View.GONE
     }
 
-    override fun showAvatar(avatar: Bitmap){
+    override fun showAvatar(avatar: Bitmap) {
         MainApplication.getMainUIThread().post {
             profileImageСard.setImageBitmap(avatar)
         }
@@ -365,7 +372,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         presenter.getRooms("", "", "", category)
     }
 
-    fun updateRoomsLocale(events:ArrayList<RoomPin>){
+    fun updateRoomsLocale(events: ArrayList<RoomPin>) {
         showRoomsOnMap(events)
     }
 
@@ -482,7 +489,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     fun hideCategoryBottomSheet() {
         bottomSheetCategory?.visibility = View.GONE
         bottomSheetFind?.visibility = View.VISIBLE
-        sheetBehavior?.setPeekHeight(convertDpToPixel(85F, context), false)
+        sheetBehavior?.setPeekHeight(convertDpToPixel(120F, context), false)
     }
 
     fun clearCategoryAdapter() {
@@ -491,7 +498,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         (fragment as? CategoriesFragment)?.clearCategories()
     }
 
-    fun clearSearch(){
+    fun clearSearch() {
         searchEventEt.text.clear()
     }
 
@@ -589,6 +596,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
+
+
 
     override fun onDestroyView() {
         try {

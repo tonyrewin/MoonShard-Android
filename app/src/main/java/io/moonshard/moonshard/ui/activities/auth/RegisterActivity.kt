@@ -103,7 +103,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
     override fun onError(e: Exception) {
         runOnUiThread {
-            setTheme(R.style.AppTheme)
             hideLoader()
             auth()
             /*
@@ -142,9 +141,11 @@ class RegisterActivity : BaseActivity(), RegisterView {
     private fun auth() {
         val logged = SecurePreferences.getBooleanValue("logged_in", false)
         if (logged) {
+            setTheme(R.style.AppTheme)
             showContactsScreen()
         } else {
-            setContentView(R.layout.activity_register)
+            //setTheme(R.style.AppTheme)
+            //setContentView(R.layout.activity_register)
         }
     }
 
@@ -176,6 +177,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     fun isAuth(){
         val logged = SecurePreferences.getBooleanValue("logged_in", false)
         if (!logged) {
+            setTheme(R.style.AppTheme)
             setContentView(R.layout.activity_register)
         }
     }

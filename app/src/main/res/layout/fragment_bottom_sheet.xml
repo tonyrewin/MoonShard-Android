@@ -17,6 +17,9 @@
     <include
         layout="@layout/bottom_sheet_category"/>
 
+    <include
+            layout="@layout/bottom_sheet_time"/>
+
     <!-- include main content -->
     <include layout="@layout/activity_bottom_sheet_content" />
 

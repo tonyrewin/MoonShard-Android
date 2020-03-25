@@ -30,6 +30,7 @@ import org.jivesoftware.smackx.muc.RoomInfo
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
+import java.util.*
 
 
 @InjectViewState
@@ -117,7 +118,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     val onlineUsers = getValueOnlineUsers(it.room.asUnescapedString())
                     viewState?.showOnlineUserRoomInfo("${it.occupantsCount} человек, $onlineUsers онлайн")
                     setAvatar(it.room.asUnescapedString(), it.name)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     Logger.d(e)
                 }
             }, {
@@ -259,5 +260,14 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             e.message?.let { viewState?.showError(it) }
         }
             ?: viewState?.showError("Ошибка")
+    }
+
+    fun setDateFilter(date:String){
+        val today = Calendar.getInstance()
+        for (i in RoomsMap.rooms.indices){
+            val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+
+           // if(today.get())
+        }
     }
 }

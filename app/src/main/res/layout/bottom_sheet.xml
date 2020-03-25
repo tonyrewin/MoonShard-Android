@@ -53,6 +53,7 @@
                 android:src="@drawable/ic_remove_category_filter" />
 
         <ImageView
+                android:id="@+id/calendarBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

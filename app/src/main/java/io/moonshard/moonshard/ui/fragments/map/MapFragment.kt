@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.maps.android.SphericalUtil
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
@@ -41,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_bottom_sheet_content.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_category.*
 import kotlinx.android.synthetic.main.bottom_sheet_info_content.*
+import kotlinx.android.synthetic.main.bottom_sheet_time.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
@@ -63,8 +63,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     private val defaultZoom: Float = 11F
 
-    private var defaultMoscowlatitude: Double = 55.751244
-    private var defaultMoscowlongitude: Double = 37.618423
+    private var defaultMoscowLatitude: Double = 55.751244
+    private var defaultMoscowLongitude: Double = 37.618423
 
     private var disposible: Disposable? = null
 
@@ -180,6 +180,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         val llInfoBottomSheet = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
+
+
         if (RoomsMap.isFilter) {
             showCategoryBottomSheet()
         } else {
@@ -250,6 +252,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 }
             }
         })
+
+        calendarBtn?.setOnClickListener {
+            if(sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED){
+                showDateBottomSheet()
+            }else{
+                //hideDateBottomSheet()
+            }
+        }
     }
 
     override fun onMapReady(map: GoogleMap?) {
@@ -362,7 +372,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
             mMap?.animateCamera(cameraUpdate)
         } else {
-            val latLng = LatLng(defaultMoscowlatitude, defaultMoscowlongitude)
+            val latLng = LatLng(defaultMoscowLatitude, defaultMoscowLongitude)
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom)
             mMap?.animateCamera(cameraUpdate)
         }
@@ -490,6 +500,36 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         bottomSheetCategory?.visibility = View.GONE
         bottomSheetFind?.visibility = View.VISIBLE
         sheetBehavior?.setPeekHeight(convertDpToPixel(120F, context), false)
+    }
+
+    fun showDateBottomSheet(){
+        sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetTime?.visibility = View.VISIBLE
+        activityBottomSheetContent?.visibility = View.GONE
+    }
+
+    fun hideDateBottomSheet(){
+        sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetTime?.visibility = View.GONE
+        activityBottomSheetContent?.visibility = View.VISIBLE
+    }
+
+    fun initDateBottomSheet(){
+        todayTv?.setOnClickListener {
+
+        }
+
+        tomorrowTv?.setOnClickListener {
+
+        }
+
+        weekendTv?.setOnClickListener {
+
+        }
+
+        chooseDateTv?.setOnClickListener {
+
+        }
     }
 
     fun clearCategoryAdapter() {

@@ -80,22 +80,24 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
     }
 
     fun setFilter(filter: String) {
-        if(filter.isBlank()){
-            events.clear()
-            events.addAll(fullEvents)
-            RoomsMap.rooms = events
-            viewState.setChats(events)
-            viewState?.updatePinsOnMap(events)
-        }else{
-            val list = fullEvents.filter {
-                val myString = it.name!! + "" + it.address
-                myString.contains(filter, true)
+        if(!RoomsMap.isFilter){
+            if(filter.isBlank()){
+                events.clear()
+                events.addAll(fullEvents)
+                RoomsMap.rooms = events
+                viewState.setChats(events)
+                viewState?.updatePinsOnMap(events)
+            }else{
+                val list = fullEvents.filter {
+                    val myString = it.name!! + "" + it.address
+                    myString.contains(filter, true)
+                }
+                events.clear()
+                events.addAll(list)
+                RoomsMap.rooms = events
+                viewState.setChats(events)
+                viewState?.updatePinsOnMap(events)
             }
-            events.clear()
-            events.addAll(list)
-            RoomsMap.rooms = events
-            viewState.setChats(events)
-            viewState?.updatePinsOnMap(events)
         }
     }
 }

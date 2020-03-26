@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.map
 
+import android.app.DatePickerDialog
 import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
@@ -68,6 +69,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     private var disposible: Disposable? = null
 
+    val dateAndTime = Calendar.getInstance()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -85,9 +89,10 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
 
-                if(it.editable.toString().isEmpty()){
+                if(!RoomsMap.isFilter){
+                if (it.editable.toString().isEmpty()) {
                     clearSearch?.visibility = View.GONE
-                }else{
+                } else {
                     clearSearch?.visibility = View.VISIBLE
                 }
 
@@ -98,6 +103,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 } catch (e: Exception) {
                     Logger.d(e)
                 }
+            }
             }
 
 
@@ -204,7 +210,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             }
         }
 
-        removeFilterBtn?.setSafeOnClickListener {
+        removeCategoryFilterBtn?.setSafeOnClickListener {
             RoomsMap.clearFilters()
             presenter.getRooms("", "", "", null)
             hideCategoryBottomSheet()
@@ -254,10 +260,24 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         })
 
         calendarBtn?.setOnClickListener {
-            if(sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED){
+            if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 showDateBottomSheet()
+            } else {
+                hideDateBottomSheet()
+            }
+        }
+        initDateBottomSheet()
+
+
+        clearSearch?.setOnClickListener {
+            if(RoomsMap.isFilter){
+                RoomsMap.clearFilters()
+                presenter.getRooms("", "", "", null)
+                hideDateBottomSheet()
+                updateListRooms()
+                clearSearch()
             }else{
-                //hideDateBottomSheet()
+                clearSearch()
             }
         }
     }
@@ -502,33 +522,112 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         sheetBehavior?.setPeekHeight(convertDpToPixel(120F, context), false)
     }
 
-    fun showDateBottomSheet(){
+    fun showDateBottomSheet() {
+        searchEventEt.isEnabled = false
         sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         bottomSheetTime?.visibility = View.VISIBLE
         activityBottomSheetContent?.visibility = View.GONE
     }
 
-    fun hideDateBottomSheet(){
-        sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED
+    fun hideDateBottomSheet() {
+        searchEventEt.isEnabled = true
+        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetTime?.visibility = View.GONE
         activityBottomSheetContent?.visibility = View.VISIBLE
     }
 
-    fun initDateBottomSheet(){
+    fun initDateBottomSheet() {
         todayTv?.setOnClickListener {
-
+            searchEventEt.setText(todayTv.text.toString())
+            presenter.setDateFilter(todayTv.text.toString())
+            clearSearch.visibility = View.VISIBLE
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         tomorrowTv?.setOnClickListener {
-
+            searchEventEt.setText(tomorrowTv.text.toString())
+            presenter.setDateFilter(tomorrowTv.text.toString())
+            clearSearch.visibility = View.VISIBLE
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         weekendTv?.setOnClickListener {
-
+            searchEventEt.setText(weekendTv.text.toString())
+            presenter.setDateFilter(weekendTv.text.toString())
+            clearSearch.visibility = View.VISIBLE
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         chooseDateTv?.setOnClickListener {
+            DatePickerDialog(
+                activity!!, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH)
+            )
+                .show()
+        }
+    }
 
+    // установка обработчика выбора даты
+    var d: DatePickerDialog.OnDateSetListener =
+        DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            dateAndTime.set(Calendar.YEAR, year)
+            dateAndTime.set(Calendar.MONTH, monthOfYear)
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
+            presenter.setDateFilter("Выбрать дату",dateAndTime)
+            clearSearch.visibility = View.VISIBLE
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+    private fun setDate(dayOfMonth: Int, month: Int) {
+        when (month) {
+            0 -> {
+                searchEventEt.setText("$dayOfMonth января")
+            }
+            1 -> {
+                searchEventEt.setText("$dayOfMonth февраля")
+
+            }
+            2 -> {
+                searchEventEt.setText("$dayOfMonth марта")
+
+            }
+            3 -> {
+                searchEventEt.setText("$dayOfMonth апреля")
+
+            }
+            4 -> {
+                searchEventEt.setText("$dayOfMonth мая")
+
+            }
+            5 -> {
+                searchEventEt.setText( "$dayOfMonth июня")
+
+            }
+            6 -> {
+                searchEventEt.setText("$dayOfMonth июля")
+
+            }
+            7 -> {
+                searchEventEt.setText("$dayOfMonth августа")
+
+            }
+            8 -> {
+                searchEventEt.setText("$dayOfMonth сенятбря")
+
+            }
+            9 -> {
+                searchEventEt.setText( "$dayOfMonth октября")
+
+            }
+            10 -> {
+                searchEventEt.setText("$dayOfMonth ноября")
+            }
+            11 -> {
+                searchEventEt.setText("$dayOfMonth декабря")
+            }
         }
     }
 
@@ -636,7 +735,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
-
 
 
     override fun onDestroyView() {

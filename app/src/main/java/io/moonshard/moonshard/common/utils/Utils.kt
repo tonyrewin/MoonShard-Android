@@ -13,6 +13,10 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.io.ByteArrayOutputStream
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
+import java.util.*
 
 
 object Utils {
@@ -88,5 +92,22 @@ object Utils {
             e.message
             return null
         }
+    }
+
+    fun getNextSundayDate(): Calendar {
+        val calendar = Calendar.getInstance();
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            calendar.add(Calendar.DATE, 1)
+        }
+        return calendar
+    }
+
+
+     fun getNextSaturdayDate(): Calendar {
+         val calendar = Calendar.getInstance();
+         while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+             calendar.add(Calendar.DATE, 1)
+         }
+         return calendar
     }
 }

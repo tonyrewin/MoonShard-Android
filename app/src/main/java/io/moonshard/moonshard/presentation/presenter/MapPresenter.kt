@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import android.widget.ImageView
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.common.utils.DateHolder
+import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -25,8 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
-import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.muc.RoomInfo
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
@@ -262,12 +260,58 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             ?: viewState?.showError("Ошибка")
     }
 
-    fun setDateFilter(date:String){
+    fun setDateFilter(date:String,calendar: Calendar?=null){
         val today = Calendar.getInstance()
-        for (i in RoomsMap.rooms.indices){
-            val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+        val filteredRooms = arrayListOf<RoomPin>()
 
-           // if(today.get())
+        when (date) {
+            "Сегодня" -> {
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==today.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState?.showRoomsOnMap(filteredRooms)
+            }
+            "Завтра" -> {
+                val tomorrow = Calendar.getInstance()
+                tomorrow.add(Calendar.DATE, 1)
+
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==tomorrow.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState?.showRoomsOnMap(filteredRooms)
+            }
+            "В выходные" -> {
+                val saturday = Utils.getNextSaturdayDate()
+                val sunday = Utils.getNextSundayDate()
+
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==saturday.get(Calendar.DAY_OF_MONTH) || time.dayOfMonth==sunday.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState?.showRoomsOnMap(filteredRooms)
+            }
+            "Выбрать дату" -> {
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==calendar!!.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState?.showRoomsOnMap(filteredRooms)
+            }
         }
+        RoomsMap.isFilter = true
     }
 }

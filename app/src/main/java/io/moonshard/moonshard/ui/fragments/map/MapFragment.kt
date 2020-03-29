@@ -88,7 +88,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         disposible = searchEventEt?.afterTextChangeEvents()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
-
                 if(!RoomsMap.isFilter){
                 if (it.editable.toString().isEmpty()) {
                     clearSearch?.visibility = View.GONE
@@ -186,8 +185,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         val llInfoBottomSheet = view.findViewById<LinearLayout>(R.id.infoBottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
-
-
         if (RoomsMap.isFilter) {
             showCategoryBottomSheet()
         } else {
@@ -266,8 +263,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                 hideDateBottomSheet()
             }
         }
-        initDateBottomSheet()
 
+        initDateBottomSheet()
 
         clearSearch?.setOnClickListener {
             if(RoomsMap.isFilter){

@@ -71,6 +71,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
 
         if (ChooseChatRepository.address.isEmpty()) {
             address?.text = MainApplication.getAddress()
+            ChooseChatRepository.address = MainApplication.getAddress()
             ChooseChatRepository.lat = MainApplication.getCurrentLocation()?.latitude
             ChooseChatRepository.lng = MainApplication.getCurrentLocation()?.longitude
         } else {

@@ -377,6 +377,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                    android:id="@+id/destroyRoom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -392,7 +393,7 @@
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="14dp"
                         android:layout_marginBottom="13dp"
-                        android:text="Покинуть группу"
+                        android:text="Удалить группу"
                         android:textColor="#FF6060"
                         android:textSize="16sp" />
 

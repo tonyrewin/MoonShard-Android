@@ -1,17 +1,15 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
 import com.orhanobut.logger.Logger
+import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.db.ChangeEventRepository
-import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
-import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,8 +17,8 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.RoomInfo
+import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,7 +65,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                 calendar.get(Calendar.MONTH)
             )
             viewState?.hideProgressBar()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             viewState?.hideProgressBar()
             viewState?.showToast("Произошла ошибка")
         }
@@ -88,7 +86,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         idChat: String,
         bytes: ByteArray?,
         mimeType: String?,
-        event:RoomPin
+        event: RoomPin
     ) {
         try {
             viewState.showProgressBar()
@@ -184,5 +182,20 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         super.onDestroy()
         compositeDisposable.clear()
         //ChangeEventRepository.clean()
+    }
+
+    fun destroyRoom(jid: String) {
+        try {
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
+            val myJid = MainApplication.getXmppConnection().jid.asUnescapedString()
+            val roomJid = JidCreate.entityBareFrom(jid)
+            muc.destroy(myJid, roomJid)
+            viewState?.showChatsScreen()
+        } catch (e: Exception) {
+            Logger.d(e)
+            viewState?.showToast("Произошла ошибка на сервере")
+        }
     }
 }

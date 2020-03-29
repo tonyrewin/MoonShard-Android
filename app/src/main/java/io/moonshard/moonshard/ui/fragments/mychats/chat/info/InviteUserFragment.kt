@@ -50,6 +50,6 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
     }
 
     override fun showChatScreen() {
-        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
     }
 }

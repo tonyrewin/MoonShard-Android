@@ -17,4 +17,5 @@ interface ManageEventView: MvpView {
     fun showAdress(location:LatLng)
     fun showProgressBar()
     fun hideProgressBar()
+    fun showChatsScreen()
 }

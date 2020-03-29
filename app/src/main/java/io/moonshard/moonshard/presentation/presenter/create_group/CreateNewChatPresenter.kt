@@ -94,16 +94,9 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
     private fun joinChat(jid: String) {
         try {
-            val manager =
-                MainApplication.getXmppConnection().multiUserChatManager
-            val entityBareJid = JidCreate.entityBareFrom(jid)
-            val muc = manager.getMultiUserChat(entityBareJid)
-
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard()
-            val nickName = Resourcepart.from(card.nickName)
-
-            muc.join(nickName)
+            MainApplication.getXmppConnection().addUserStatusListener(jid)
+            MainApplication.getXmppConnection().addChatStatusListener(jid)
+            MainApplication.getXmppConnection().joinChat(jid)
 
             viewState?.hideProgressBar()
             viewState?.showChatScreen(jid)

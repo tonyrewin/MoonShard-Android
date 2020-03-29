@@ -115,6 +115,10 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             ChangeEventRepository.description = descriptionEt?.text.toString()
             showTimesScreen()
         }
+
+        destroyRoom?.setOnClickListener {
+            presenter.destroyRoom(idChat)
+        }
     }
 
     override fun showTimeDays(timeDays: Long) {
@@ -324,6 +328,10 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             e.printStackTrace()
         }
         return "Информация отсутствует"
+    }
+
+    override fun showChatsScreen(){
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 
     override fun onDestroyView() {

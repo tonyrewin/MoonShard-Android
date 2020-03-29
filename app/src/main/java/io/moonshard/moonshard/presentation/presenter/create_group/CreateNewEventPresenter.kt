@@ -123,6 +123,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         } else {
             viewState?.showToast("Заполните поля")
         }
+
+
     }
 
     private fun getGroups() {
@@ -223,6 +225,11 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 if (throwable == null) {
                     viewState?.showMapScreen()
                     ChooseChatRepository.clean()
+
+                    //important
+                    MainApplication.getXmppConnection().addUserStatusListener(roomId)
+                    MainApplication.getXmppConnection().addChatStatusListener(roomId)
+                    MainApplication.getXmppConnection().joinChat(roomId)
                 } else {
                     viewState?.showToast("Ошибка: ${throwable.message}")
                 }

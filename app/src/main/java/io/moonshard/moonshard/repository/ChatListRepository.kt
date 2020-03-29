@@ -43,7 +43,7 @@ object ChatListRepository {
                 }
             }
             MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
-                if (it.isDisposed) {
+                if (!it.isDisposed) {
                     it.onComplete()
                 }
             }

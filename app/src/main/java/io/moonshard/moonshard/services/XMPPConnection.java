@@ -1,12 +1,12 @@
 package io.moonshard.moonshard.services;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.google.android.gms.common.api.internal.RemoteCall;
 import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -19,6 +19,7 @@ import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.StanzaError;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
@@ -44,7 +45,6 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -615,12 +615,16 @@ public class XMPPConnection implements ConnectionListener {
                             .getMultiUserChat(groupId);
 
             muc.addParticipantStatusListener(networkHandler);
-        } catch (XmppStringprepException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+                removeChatFromBd(jid);
+            }
+            Logger.d(e.getMessage());
         }
     }
 
-    public void addKickListener(String jid) {
+    //kicked user or room destroy or banned user etc
+    public void addUserStatusListener(String jid) {
         try {
             EntityBareJid groupId = JidCreate.entityBareFrom(jid);
             MultiUserChat muc =
@@ -628,11 +632,15 @@ public class XMPPConnection implements ConnectionListener {
                             .getMultiUserChat(groupId);
 
             muc.addUserStatusListener(networkHandler);
-        } catch (XmppStringprepException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+                removeChatFromBd(jid);
+            }
+            Logger.d(e.getMessage());
         }
     }
 
+    @SuppressLint("CheckResult")
     public void joinAllChats() {
         ChatListRepository.INSTANCE.getChats()
                 .subscribeOn(Schedulers.io())
@@ -641,7 +649,7 @@ public class XMPPConnection implements ConnectionListener {
                     try {
                         for (int i = 0; i < chats.size(); i++) {
                             addChatStatusListener(chats.get(i).getJid());
-                            addKickListener(chats.get(i).getJid());
+                            addUserStatusListener(chats.get(i).getJid());
                             if (chats.get(i).isGroupChat()) {
                                 joinChat(chats.get(i).getJid());
                             } else {
@@ -654,7 +662,7 @@ public class XMPPConnection implements ConnectionListener {
                 });
     }
 
-    private void joinChat(String jid) {
+    public void joinChat(String jid) {
         try {
             EntityBareJid entityBareJid = JidCreate.entityBareFrom(jid);
             MultiUserChat muc = multiUserChatManager.getMultiUserChat(entityBareJid);
@@ -668,7 +676,30 @@ public class XMPPConnection implements ConnectionListener {
                 muc.addMessageListener(MainApplication.getXmppConnection().getNetwork());
             }
         } catch (Exception e) {
+            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+                removeChatFromBd(jid);
+            }
             Logger.d(e.getMessage());
+        }
+    }
+
+    private void removeChatFromBd(String chatJid){
+        try {
+            ChatListRepository.INSTANCE.getChatByJidSingle(JidCreate.from(chatJid))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(chat -> {
+                        ChatListRepository.INSTANCE.removeChat(chat)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {}, throwable ->{
+                                    Logger.d(throwable);
+                                });
+                    }, error ->{
+                        Logger.d(error);
+                    });
+        }catch (Exception e){
+            Logger.d(e);
         }
     }
 

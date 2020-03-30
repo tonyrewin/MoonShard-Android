@@ -13,4 +13,5 @@ interface ManageChatView: MvpView {
     fun showAdminsCount(text: String)
     fun showProgressBar()
     fun hideProgressBar()
+    fun showChatsScreen()
 }

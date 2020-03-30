@@ -120,4 +120,19 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             Logger.d(e.message)
         }
     }
+
+    fun destroyRoom(jid: String) {
+        try {
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
+            val myJid = MainApplication.getXmppConnection().jid.asUnescapedString()
+            val roomJid = JidCreate.entityBareFrom(jid)
+            muc.destroy(myJid, roomJid)
+            viewState?.showChatsScreen()
+        } catch (e: Exception) {
+            Logger.d(e)
+            viewState?.showToast("Произошла ошибка на сервере")
+        }
+    }
 }

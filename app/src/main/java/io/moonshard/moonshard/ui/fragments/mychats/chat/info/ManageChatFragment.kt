@@ -65,6 +65,10 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
         avatarIv?.setSafeOnClickListener {
             chooseFile()
         }
+
+        destroyRoom?.setOnClickListener {
+            presenter.destroyRoom(idChat)
+        }
     }
 
     private fun showAdminsScreen() {
@@ -147,5 +151,9 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
     override fun hideProgressBar() {
         progressBar?.visibility = View.GONE
+    }
+
+    override fun showChatsScreen(){
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 }

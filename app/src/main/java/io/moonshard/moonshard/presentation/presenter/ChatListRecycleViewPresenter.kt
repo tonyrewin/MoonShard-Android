@@ -152,6 +152,11 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
 
             if (!muc.isJoined) {
                 muc.join(nickName)
+                android.os.Handler().postDelayed({
+                    MainApplication.getXmppConnection().addChatStatusListener(jid)
+                    MainApplication.getXmppConnection().addUserStatusListener(jid)
+                }, 2000)
+
             }
         } catch (e: Exception) {
             Log.d(e.message)

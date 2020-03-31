@@ -202,7 +202,14 @@ class MapPresenter : MvpPresenter<MapMainView>() {
 
             if (!muc.isJoined) {
                 muc.join(nickName)
+
+                android.os.Handler().postDelayed({
+                    MainApplication.getXmppConnection().addChatStatusListener(jid)
+                    MainApplication.getXmppConnection().addUserStatusListener(jid)
+                }, 2000)
             }
+
+
 
             val chatEntity = ChatEntity(
                 jid = jid,
@@ -252,6 +259,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             if (!muc.isJoined) {
                 muc.join(nickName)
             }
+
 
             viewState?.showChatScreens(jid, "read")
         } catch (e: Exception) {

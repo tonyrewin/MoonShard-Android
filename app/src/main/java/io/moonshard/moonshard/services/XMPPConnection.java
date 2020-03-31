@@ -648,10 +648,10 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribe(chats -> {
                     try {
                         for (int i = 0; i < chats.size(); i++) {
-                            addChatStatusListener(chats.get(i).getJid());
-                            addUserStatusListener(chats.get(i).getJid());
                             if (chats.get(i).isGroupChat()) {
                                 joinChat(chats.get(i).getJid());
+                                addChatStatusListener(chats.get(i).getJid());
+                                addUserStatusListener(chats.get(i).getJid());
                             } else {
                                 MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chats.get(i).getJid()));
                             }
@@ -700,39 +700,6 @@ public class XMPPConnection implements ConnectionListener {
                     });
         }catch (Exception e){
             Logger.d(e);
-        }
-    }
-
-    void syncConferenceChats() {
-        try {
-            List<DiscoverItems.Item> chats = getServiceDiscoveryManager().discoverItems(JidCreate.from("conference.moonshard.tech")).getItems();
-
-            for (DiscoverItems.Item chat : chats) {
-                ChatListRepository.INSTANCE.getChatByJidSingle(chat.getEntityID())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {
-
-                        }, e -> {
-                            if (e instanceof NotFoundException) {
-                                ChatEntity chatEntity = new ChatEntity(
-                                        0,
-                                        chat.getEntityID().asUnescapedString(),
-                                        chat.getName(),
-                                        true,
-                                        0
-                                );
-
-                                ChatListRepository.INSTANCE.addChat(chatEntity)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe();
-
-                            }
-                        });
-            }
-        } catch (Exception e) {
-
         }
     }
 

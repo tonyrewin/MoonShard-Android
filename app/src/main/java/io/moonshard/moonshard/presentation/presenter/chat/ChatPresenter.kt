@@ -87,6 +87,11 @@ class ChatPresenter : BasePresenter<ChatView>() {
                 val card = vm.loadVCard()
                 val nickName = Resourcepart.from(card.nickName)
                 muc.join(nickName)
+
+                android.os.Handler().postDelayed({
+                    MainApplication.getXmppConnection().addChatStatusListener(chatID)
+                    MainApplication.getXmppConnection().addUserStatusListener(chatID)
+                }, 2000)
             }
 
             val occupants = muc.occupants
@@ -151,19 +156,6 @@ class ChatPresenter : BasePresenter<ChatView>() {
                 }
             }
             .autoDispose(this)
-    }
-
-    fun disconnectFromChat(state:String){
-        try {
-            if(state=="read") {
-                val muc =
-                    MainApplication.getXmppConnection().multiUserChatManager
-                        .getMultiUserChat(JidCreate.entityBareFrom(chatID))
-                muc.leave()
-            }
-        }catch (e:Exception){
-            Logger.d(e)
-        }
     }
 
     fun getFullStringUser(jid:String):String{

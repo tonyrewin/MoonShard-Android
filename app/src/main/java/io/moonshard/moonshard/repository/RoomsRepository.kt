@@ -5,6 +5,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -63,5 +64,9 @@ class RoomsRepository {
 
     fun getRoom(eventId: Long): Single<RoomPin> {
         return api.getRoom(eventId)
+    }
+
+    fun deleteRoom(eventId: Long):Completable{
+        return api.deleteRoom(eventId.toString())
     }
 }

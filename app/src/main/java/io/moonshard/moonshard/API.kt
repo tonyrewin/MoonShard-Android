@@ -3,6 +3,7 @@ package io.moonshard.moonshard
 import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
+import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -40,4 +41,7 @@ interface API {
 
     @GET("rooms/{eventId}")
     fun getRoom(@Path("eventId") eventId:Long):Single<RoomPin>
+
+    @DELETE("rooms/{eventId}")
+    fun deleteRoom(@Path("eventId") eventId:String):Completable
 }

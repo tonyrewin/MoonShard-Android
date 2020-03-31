@@ -4,6 +4,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.repository.RoomsRepository
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -48,4 +49,7 @@ class RoomsUseCase {
         return roomsRepository.getRoom(eventId)
     }
 
+    fun deleteRoom(eventId:Long):Completable{
+        return roomsRepository.deleteRoom(eventId)
+    }
 }

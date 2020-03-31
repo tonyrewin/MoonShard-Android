@@ -10,6 +10,7 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
+import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -191,8 +192,28 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
             val myJid = MainApplication.getXmppConnection().jid.asUnescapedString()
             val roomJid = JidCreate.entityBareFrom(jid)
-            muc.destroy(myJid, roomJid)
-            viewState?.showChatsScreen()
+
+            var eventId: Long? = null
+            for (i in RoomsMap.rooms.indices) {
+                if (jid == RoomsMap.rooms[i].roomId) {
+                    eventId = RoomsMap.rooms[i].id
+                }
+            }
+
+
+            compositeDisposable.add(useCase!!.deleteRoom(
+                eventId!!
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    muc.destroy(myJid, roomJid)
+                    viewState?.showChatsScreen()
+                }, {
+                    Logger.d(it)
+                    viewState?.showToast("Произошла ошибка на сервере")
+                })
+            )
         } catch (e: Exception) {
             Logger.d(e)
             viewState?.showToast("Произошла ошибка на сервере")

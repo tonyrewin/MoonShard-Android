@@ -43,11 +43,11 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         mainBottomNav?.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.my_chats_bottom_nav_item -> {
-                    showMyChatsFragment()
-                }
                 R.id.find_chats_map_bottom_nav_item -> {
                     methodRequiresTwoPermission()
+                }
+                R.id.my_chats_bottom_nav_item -> {
+                    showMyChatsFragment()
                 }
                 R.id.profile_bottom_nav_item -> {
                     showProfileFragment()
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     fun setMapActiveBottomBar() {
-        mainBottomNav?.menu?.getItem(1)?.isChecked = true
+        mainBottomNav?.menu?.getItem(0)?.isChecked = true
     }
 
     override fun onBackPressed() {

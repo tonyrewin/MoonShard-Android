@@ -4,11 +4,17 @@
             android:id="@+id/my_chats_bottom_nav_item"
             android:checked="true"
             android:icon="@drawable/ic_chat_map_selector"
-            android:title="Мои чаты"/>
+            android:title="Чаты"/>
     <item
             android:id="@+id/find_chats_map_bottom_nav_item"
             android:icon="@drawable/ic_map_nav_selector"
-            android:title="Поиск мероприятий"/>
+            android:title="Мероприятия"/>
+
+    <item
+            android:id="@+id/profile_bottom_nav_item"
+            android:icon="@drawable/ic_profile_nav_selector"
+            android:title="Профиль"/>
+
     <item
             android:id="@+id/settings_bottom_nav_item"
             android:icon="@drawable/ic_settings_nav_selector"

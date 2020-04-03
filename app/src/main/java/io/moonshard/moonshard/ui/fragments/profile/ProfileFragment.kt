@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.settings
+package io.moonshard.moonshard.ui.fragments.profile
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -11,6 +11,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.settings.ProfileView
+import io.moonshard.moonshard.ui.fragments.settings.ChangeProfileFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -41,25 +42,27 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView {
             fragmentManager?.popBackStack()
         }
 
-        editIv?.setSafeOnClickListener {
+        profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
         }
     }
 
-    fun showChangeProfileScreen() {
-        val fragment = ChangeProfileFragment()
+    private fun showChangeProfileScreen() {
+        val fragment =
+            ChangeProfileFragment()
         val ft = activity?.supportFragmentManager?.beginTransaction()
         ft?.replace(R.id.container, fragment, "ChangeProfileFragment")
             ?.addToBackStack("ChangeProfileFragment")
             ?.commit()
     }
 
-    override fun setData(nickName: String?, description: String?) {
+    override fun setData(nickName: String?, description: String?,jidPart:String?) {
         MainApplication.getMainUIThread().post {
-            if (nickName != null) {
-                nickNameTv?.text = nickName.toString()
-            } else {
-                nickNameTv?.text = "Имя"
+            nameTv?.text = nickName ?: "Имя"
+            if(!jidPart.isNullOrBlank()){
+                myJid?.text = "@$jidPart"
+            }else{
+                myJid?.text = "jid"
             }
 
             if (description != null) {

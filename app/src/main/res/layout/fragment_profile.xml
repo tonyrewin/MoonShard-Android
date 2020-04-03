@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.settings.ProfileFragment">
+        android:orientation="vertical"
+        tools:context=".ui.fragments.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -53,8 +53,71 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <RelativeLayout
+            android:id="@+id/profileSettingsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/layout_settings_bg">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/avatarIv"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_add_photo" />
+
+        <TextView
+                android:fontFamily="@font/montserrat_bold"
+                android:id="@+id/nameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="17dp"
+                android:layout_toRightOf="@+id/avatarIv"
+                android:textColor="#333333"
+                android:textSize="17sp"
+                tools:text="Kanaevsky" />
+
+        <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/myJid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTv"
+                android:layout_alignLeft="@+id/nameTv"
+                android:layout_marginTop="1dp"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp"
+                tools:text="'@'kanaevsky1989" />
+
+        <TextView
+                android:id="@+id/emailTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneTv"
+                android:layout_alignLeft="@+id/phoneTv"
+                android:text="user@example.com"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="14dp"
+                android:src="@drawable/ic_next_gray" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -65,115 +128,159 @@
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="17dp"
-                android:id="@+id/avatarIv"
-                android:src="@drawable/ic_add_photo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"/>
-
         <TextView
-                android:layout_marginTop="20dp"
-                android:id="@+id/nickNameTv"
-                android:layout_toEndOf="@+id/avatarIv"
-                android:text="Kanaevsky"
-                android:textColor="#DE000000"
-                android:textStyle="bold"
-                android:textSize="17sp"
+                android:fontFamily="@font/roboto_regular"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <TextView
-                android:layout_below="@+id/nickNameTv"
-                android:layout_alignStart="@+id/nickNameTv"
-                android:text="Онлайн"
-                android:textColor="#0075FF"
-                android:textSize="14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <ImageView
-                android:id="@+id/editIv"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="18dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_edit_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-    </RelativeLayout>
-
-
-
-    <LinearLayout
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/layout_settings_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-                android:layout_marginTop="17dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:textSize="14sp"
-                android:textColor="#9B9BB6"
+                android:layout_marginTop="17dp"
                 android:text="О себе"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
 
         <TextView
-                android:layout_marginEnd="40dp"
-                android:layout_marginBottom="16dp"
-                android:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
-                android:layout_marginStart="10dp"
-                android:textSize="16sp"
-                android:textColor="#333333"
-                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_regular"
                 android:id="@+id/descriptionTv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="16dp"
+                tools:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
+                android:textColor="#333333"
+                android:textSize="16sp" />
 
     </LinearLayout>
 
 
-    <RelativeLayout
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry"
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
-
-        <TextView
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="15dp"
-                android:id="@+id/notificationsTv"
-                android:text="Уведомления"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-
-        <androidx.appcompat.widget.SwitchCompat
-                android:checked="true"
-                android:layout_marginEnd="14dp"
-                android:id="@+id/switchNotifications"
+        <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/notificationsTv"
-                android:layout_alignParentEnd="true"
-                android:theme="@style/SCBSwitch" />
+                android:layout_marginBottom="18dp">
 
-    </RelativeLayout>
+            <ImageView
+                    android:id="@+id/presentIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_wallet" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/presentIcon"
+                    android:text="Кошелек" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+        <View
+                android:layout_marginEnd="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F5F5F5" />
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp">
+
+
+            <ImageView
+                    android:id="@+id/ticketIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_ticket" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/ticketIcon"
+                    android:text="Мои билеты" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+        <View
+                android:layout_marginEnd="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F5F5F5" />
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+            <ImageView
+                    android:id="@+id/walletIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_present" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/walletIcon"
+                    android:text="Подарить билет" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 </LinearLayout>

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
@@ -18,6 +17,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.chat.CreateNewChatFrag
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
+import io.moonshard.moonshard.ui.fragments.profile.ProfileFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
@@ -33,11 +33,11 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         mainBottomNav?.selectedItemId = R.id.find_chats_map_bottom_nav_item
         MainApplication.setMainActivity(this)
 
-        if(intent.getStringExtra("screen")=="chat"){
+        if (intent.getStringExtra("screen") == "chat") {
             val chatId = intent.getStringExtra("chatId")
             showMyChatsFragment()
             showMainChatScreen(chatId)
-        }else{
+        } else {
             methodRequiresTwoPermission()
         }
 
@@ -48,6 +48,9 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 }
                 R.id.find_chats_map_bottom_nav_item -> {
                     methodRequiresTwoPermission()
+                }
+                R.id.profile_bottom_nav_item -> {
+                    showProfileFragment()
                 }
                 R.id.settings_bottom_nav_item -> {
                     showSettingsFragment()
@@ -109,12 +112,12 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onBackPressed() {
 
-        if(intent.getStringExtra("screen")=="chat")
+        if (intent.getStringExtra("screen") == "chat")
 
-        if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            return
-        }
+            if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                return
+            }
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
@@ -168,6 +171,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     fun showSettingsFragment() {
         val fragment = SettingsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, fragment).commit()
+    }
+
+    fun showProfileFragment(){
+        val fragment =
+            ProfileFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment).commit()
     }
@@ -240,7 +250,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         MainApplication.setMainActivity(null)
     }
 
-    override fun onInvitationReceivedForMuc(room: MultiUserChat, inviter: String, reason: String, password: String, message: Message) {
+    override fun onInvitationReceivedForMuc(
+        room: MultiUserChat,
+        inviter: String,
+        reason: String,
+        password: String,
+        message: Message
+    ) {
 
     }
 }

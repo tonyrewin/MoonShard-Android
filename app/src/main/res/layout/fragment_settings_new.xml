@@ -44,71 +44,10 @@
                 android:orientation="vertical">
 
             <RelativeLayout
-                    android:id="@+id/profileSettingsLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="82dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="6dp"
-                    android:background="@drawable/layout_settings_bg">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/avatarIv"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="14dp"
-                        android:src="@drawable/ic_add_photo" />
-
-                <TextView
-                        android:id="@+id/nameTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="11dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_toRightOf="@+id/avatarIv"
-                        tools:text="Kanaevsky"
-                        android:textColor="#333333"
-                        android:textSize="17sp" />
-
-                <TextView
-                        android:id="@+id/phoneTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/nameTv"
-                        android:layout_alignLeft="@+id/nameTv"
-                        android:layout_marginTop="1dp"
-                        tools:text="kanaevsky1989"
-                        android:textColor="#9B9BB6"
-                        android:textSize="14sp" />
-
-                <TextView
-                        android:visibility="gone"
-                        android:id="@+id/emailTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/phoneTv"
-                        android:layout_alignLeft="@+id/phoneTv"
-                        android:text="user@example.com"
-                        android:textColor="#9B9BB6"
-                        android:textSize="14sp" />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginRight="14dp"
-                        android:src="@drawable/ic_next_gray" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="13dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/layout_settings_bg"
                     android:paddingStart="10dp"
@@ -118,11 +57,11 @@
                         android:id="@+id/generalTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_bold"
                         android:text="Основные"
                         android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
 
                 <View
                         android:id="@+id/lineOne"
@@ -143,21 +82,21 @@
                             android:id="@+id/notificationsTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
                             android:text="Уведомления"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
                     <androidx.appcompat.widget.SwitchCompat
-                            android:checked="true"
                             android:id="@+id/switchNotifications"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignTop="@+id/notificationsTv"
                             android:layout_alignParentEnd="true"
+                            android:checked="true"
                             android:theme="@style/SCBSwitch" />
 
                 </RelativeLayout>
-
 
                 <View
                         android:id="@+id/lineTwo"
@@ -178,17 +117,18 @@
                             android:id="@+id/disableInviteTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
                             android:text="Запретить добавлять в чаты"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
                     <androidx.appcompat.widget.SwitchCompat
-                            android:checked="false"
                             android:id="@+id/disableInviteSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignTop="@+id/disableInviteTv"
                             android:layout_alignParentEnd="true"
+                            android:checked="false"
                             android:theme="@style/SCBSwitch" />
 
                 </RelativeLayout>
@@ -213,6 +153,7 @@
                             android:id="@+id/securityTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
                             android:text="Безопасность"
                             android:textColor="#333333"
                             android:textSize="16sp" />
@@ -226,10 +167,7 @@
                             android:src="@drawable/ic_next_gray" />
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
-
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -242,16 +180,15 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="8dp">
 
-
                 <TextView
                         android:id="@+id/otherTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="11dp"
+                        android:fontFamily="@font/montserrat_bold"
                         android:text="Другие"
                         android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
 
                 <View
                         android:id="@+id/lineSeven"
@@ -262,17 +199,16 @@
                         android:background="#F5F5F5" />
 
 
-                    <TextView
-                            android:layout_below="@+id/lineSeven"
-                            android:layout_marginTop="12dp"
-                            android:id="@+id/faqTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="FAQ"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-
+                <TextView
+                        android:id="@+id/faqTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lineSeven"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="FAQ"
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
 
                 <View
                         android:id="@+id/lineEight"
@@ -284,16 +220,16 @@
 
                 <RelativeLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/lineEight"
                         android:layout_marginTop="12dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp">
-
 
                     <TextView
                             android:id="@+id/logOut"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
                             android:text="Выйти"
                             android:textColor="#FF6161"
                             android:textSize="16sp" />
@@ -306,8 +242,6 @@
                             android:src="@drawable/ic_next_gray" />
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

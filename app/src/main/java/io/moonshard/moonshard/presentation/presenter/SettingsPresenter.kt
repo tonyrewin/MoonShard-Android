@@ -37,54 +37,6 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         }.start()
     }
 
-    fun getAvatar() {
-        getAvatarBitmap().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                viewState?.setAvatar(it)
-            }, {
-                it.message?.let { it1 -> viewState?.showError(it1) }
-            })
-    }
-
-    private fun getAvatarBitmap(): Observable<Bitmap> {
-        return Observable.create {
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard()
-            val avatarBytes = card.avatar
-
-            if (avatarBytes != null) {
-                val bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.size)
-                it.onNext(bitmap)
-            } else {
-                it.onError(Throwable())
-            }
-        }
-    }
-
-    fun getName() {
-        getNameFromVCard().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                viewState?.setData(it["nickName"], it["jidPart"])
-            }, {
-                it.message?.let { it1 -> viewState?.showError(it1) }
-            })
-    }
-
-    private fun getNameFromVCard(): Observable<HashMap<String, String>> {
-        return Observable.create {
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard()
-            val nickName = card.nickName
-            val jidPart = card.to.asBareJid().localpartOrNull.toString()
-            val hashMapData = hashMapOf<String, String>()
-            hashMapData["nickName"] = nickName
-            hashMapData["jidPart"] = jidPart
-            it.onNext(hashMapData)
-        }
-    }
-
     private fun clearBaseDate() {
         Completable.mergeArray(
             ChatListRepository.clearChats(),
@@ -105,7 +57,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         SecurePreferences.setValue("inviteInChats", false)
     }
 
-    fun enableInvitionInChats() {
+    fun enableInviteInChats() {
         MainApplication.getXmppConnection().enableInviteInChats()
         SecurePreferences.setValue("inviteInChats", true)
     }

@@ -19,7 +19,7 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
         getInfoFromVCard().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                viewState?.setData(it["nickName"], it["description"])
+                viewState?.setData(it["nickName"], it["description"],it["jidPart"])
             }, {
                 it.message?.let { it1 -> viewState?.showError(it1) }
             })
@@ -35,6 +35,7 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             val hashMapData = hashMapOf<String, String>()
             hashMapData["nickName"] = nickName
             hashMapData["description"] = description
+            hashMapData["jidPart"] = card.to.asBareJid().localpartOrNull.toString()
             it.onNext(hashMapData)
         }
     }

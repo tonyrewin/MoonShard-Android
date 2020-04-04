@@ -9,14 +9,15 @@ import android.widget.Toast
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
-import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
-import io.moonshard.moonshard.presentation.view.settings.ProfileView
+import io.moonshard.moonshard.presentation.presenter.profile.ProfilePresenter
+import io.moonshard.moonshard.presentation.view.profile.ProfileView
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
 
-class ProfileFragment : MvpAppCompatFragment(), ProfileView {
+class ProfileFragment : MvpAppCompatFragment(),
+    ProfileView {
 
     @InjectPresenter
     lateinit var presenter: ProfilePresenter

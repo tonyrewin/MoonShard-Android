@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.presentation.view.settings
+package io.moonshard.moonshard.presentation.view.profile
 
 import android.graphics.Bitmap
 import moxy.MvpView

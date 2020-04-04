@@ -116,8 +116,12 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             showTimesScreen()
         }
 
-        destroyRoom?.setOnClickListener {
+        destroyRoom?.setSafeOnClickListener {
             presenter.destroyRoom(idChat)
+        }
+
+        manageTicketsBtn?.setSafeOnClickListener {
+            //todo
         }
     }
 

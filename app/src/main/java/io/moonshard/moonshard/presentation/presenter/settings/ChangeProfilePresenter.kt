@@ -16,11 +16,14 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 class ChangeProfilePresenter : MvpPresenter<ChangeProfileView>() {
 
     fun setData(nickName: String, description: String, bytes: ByteArray?, mimeType: String?) {
+        viewState?.showProgressBar()
         setDataInVCard(nickName,description,bytes,mimeType).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                viewState?.hideProgressBar()
                 viewState?.showProfile()
             }, {
+                viewState?.hideProgressBar()
                 it.message?.let { it1 -> viewState?.showError(it1) }
             })
     }

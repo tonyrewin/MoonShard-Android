@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.settings
+package io.moonshard.moonshard.ui.fragments.profile
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -28,15 +28,6 @@ class ChangeProfileFragment : MvpAppCompatFragment(), ChangeProfileView {
 
     var bytes: ByteArray? = null
     var mimeType: String? = null
-
-    override fun setData(nickName: String?, description: String?) {
-        nameTv?.setText(nickName ?: "")
-        descriptionTv?.setText(description ?: "")
-    }
-
-    override fun setAvatar(avatar: Bitmap?) {
-        avatarIv?.setImageBitmap(avatar)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +97,15 @@ class ChangeProfileFragment : MvpAppCompatFragment(), ChangeProfileView {
         }catch (e:Exception){
             null
         }
+    }
+
+    override fun setData(nickName: String?, description: String?) {
+        nameTv?.setText(nickName ?: "")
+        descriptionTv?.setText(description ?: "")
+    }
+
+    override fun setAvatar(avatar: Bitmap?) {
+        avatarIv?.setImageBitmap(avatar)
     }
 
     override fun showProfile() {

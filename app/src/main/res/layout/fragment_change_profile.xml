@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.fragments.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -32,10 +32,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Изменить профиль"
                     android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp" />
 
             <TextView
                     android:id="@+id/readyBtn"
@@ -44,11 +44,11 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
+                    android:fontFamily="@font/montserrat_bold"
                     android:src="@drawable/ic_new_chat"
                     android:text="Готово"
                     android:textColor="#0075FF"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp" />
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -66,92 +66,94 @@
             tools:ignore="RtlSymmetry">
 
         <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_marginEnd="15dp"
+                android:id="@+id/avatarIv"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="17dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="17dp"
-                android:id="@+id/avatarIv"
-                android:src="@drawable/ic_add_photo"
-                android:layout_width="56dp"
-                android:layout_height="56dp"/>
+                android:src="@drawable/ic_add_photo" />
 
         <TextView
-                android:layout_alignTop="@+id/avatarIv"
                 android:id="@+id/nickNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/avatarIv"
                 android:layout_toEndOf="@+id/avatarIv"
+                android:fontFamily="@font/roboto_regular"
                 android:text="Имя"
                 android:textColor="#9B9BB6"
-                android:textSize="14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="14sp" />
 
         <EditText
-                android:layout_below="@+id/nickNameTv"
-                android:layout_alignStart="@+id/nickNameTv"
                 android:id="@+id/nameTv"
-                android:maxLength="255"
                 android:layout_width="260dp"
                 android:layout_height="40dp"
+                android:layout_below="@+id/nickNameTv"
+                android:layout_alignStart="@+id/nickNameTv"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/rounded_edittext"
+                android:fontFamily="@font/roboto_regular"
                 android:inputType="text"
+                android:maxLength="255"
                 android:maxLines="1"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp" />
+                android:paddingStart="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="5dp"
+                android:textSize="16sp"
+                tools:text="Kanaevsky" />
 
     </RelativeLayout>
 
 
-
     <LinearLayout
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
         <TextView
-                android:layout_marginTop="17dp"
-                android:layout_marginStart="10dp"
-                android:textSize="14sp"
-                android:textColor="#9B9BB6"
-                android:text="О себе"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="17dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="О себе"
+                android:textColor="#9B9BB6"
+                android:textSize="14sp" />
 
         <EditText
-                android:layout_marginBottom="30dp"
                 android:id="@+id/descriptionTv"
                 android:layout_width="wrap_content"
-                android:minWidth="249dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="18dp"
                 android:background="@drawable/rounded_edittext"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp" />
-
-        <TextView
-                android:visibility="gone"
-                android:layout_marginStart="12dp"
-                android:textSize="14sp"
-                android:textColor="#9B9BB6"
-                android:text="ID (имя пользователя)"
-                android:layout_marginTop="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:fontFamily="@font/roboto_regular"
+                android:minWidth="249dp"
+                android:minHeight="40dp"
+                android:paddingStart="12dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="7dp"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                tools:text="Любые подробности, например: возраст, род занятий или город." />
 
     </LinearLayout>
 
     <ProgressBar
-            android:visibility="gone"
             android:id="@+id/progressBar"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
 </LinearLayout>

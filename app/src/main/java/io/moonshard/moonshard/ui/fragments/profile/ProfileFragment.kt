@@ -11,7 +11,6 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.settings.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.settings.ProfileView
-import io.moonshard.moonshard.ui.fragments.settings.ChangeProfileFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter

@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#F9F9F9"
-        tools:context=".ui.fragments.mychats.chat.info.ChatInfoFragment">
+        tools:context=".ui.fragments.mychats.chat.info.chat.ChatInfoFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"

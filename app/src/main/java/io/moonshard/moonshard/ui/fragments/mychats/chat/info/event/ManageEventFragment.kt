@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.chat.info
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info.event
 
 import android.Manifest
 import android.app.DatePickerDialog

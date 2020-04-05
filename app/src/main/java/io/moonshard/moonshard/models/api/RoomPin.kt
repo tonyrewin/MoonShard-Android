@@ -17,7 +17,7 @@ data class RoomPin(@SerializedName("id")
                    @SerializedName("roomId")
                    var roomId: String?,
                    @SerializedName("parentGroupId")
-                   var groupId: String?,
+                   var parentGroupId: String?,
                    @SerializedName("eventStartDate")
                    var eventStartDate:Long?,
                    @SerializedName("name")

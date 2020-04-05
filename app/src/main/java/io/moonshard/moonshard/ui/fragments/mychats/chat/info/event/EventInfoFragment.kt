@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.chat.info
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info.event
 
 import android.graphics.Bitmap
 import android.location.Address
@@ -49,6 +49,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.getRoomInfo(idChat)
+            presenter.getOrganizerInfo(idChat)
         }
 
         backBtn?.setSafeOnClickListener {
@@ -208,6 +209,20 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             }
         }
         return ""
+    }
+
+    override fun showDataOrganizer(organizerName: String) {
+        nameOrganization?.text = organizerName
+    }
+
+    override fun setAvatarOrganizer(avatar: Bitmap?) {
+        MainApplication.getMainUIThread().post {
+            avatarOrganization?.setImageBitmap(avatar)
+        }
+    }
+
+    override fun hideOrganizerLayout() {
+        organizationLayout?.visibility = View.GONE
     }
 
     override fun showProgressBar() {

@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ChatInfoFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
-import kotlinx.android.synthetic.main.fragment_main_chat.*
 import moxy.MvpAppCompatFragment
 
 
@@ -72,7 +74,8 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     fun showChatInfo(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
-        val chatFragment = ChatInfoFragment()
+        val chatFragment =
+            ChatInfoFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, chatFragment, "ChatInfoFragment:$chatId")
@@ -95,7 +98,8 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     fun showEventInfo(chatId: String) {
         val bundle = Bundle()
         bundle.putString("chatId", chatId)
-        val eventFragment = EventInfoFragment()
+        val eventFragment =
+            EventInfoFragment()
         eventFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, eventFragment, "EventInfoFragment")

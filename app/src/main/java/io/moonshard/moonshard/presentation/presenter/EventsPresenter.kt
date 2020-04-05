@@ -16,7 +16,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
@@ -48,7 +47,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
         jidChat?.let {
             val myEvents = arrayListOf<RoomPin>()
             for (i in events.indices) {
-                if (jidChat == events[i].groupId) {
+                if (jidChat == events[i].parentGroupId) {
                     myEvents.add(events[i])
                 }
             }

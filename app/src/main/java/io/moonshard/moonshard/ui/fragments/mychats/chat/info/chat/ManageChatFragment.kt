@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.chat.info
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat
 
 import android.content.Intent
 import android.graphics.Bitmap

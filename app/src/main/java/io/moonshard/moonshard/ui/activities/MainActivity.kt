@@ -37,6 +37,8 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             val chatId = intent.getStringExtra("chatId")
             showMyChatsFragment()
             showMainChatScreen(chatId)
+        } else if (intent.getStringExtra("screen") == "my_chats") {
+            showMyChatsFragment()
         } else {
             methodRequiresTwoPermission()
         }
@@ -175,7 +177,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         fragmentTransaction.replace(R.id.container, fragment).commit()
     }
 
-    fun showProfileFragment(){
+    fun showProfileFragment() {
         val fragment =
             ProfileFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()

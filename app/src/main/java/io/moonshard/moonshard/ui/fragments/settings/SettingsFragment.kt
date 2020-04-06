@@ -37,6 +37,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         (activity as MainActivity).showBottomNavigationBar()
 
         disableInviteSwitch?.isChecked = !SecurePreferences.getBooleanValue("inviteInChats", true)
+        switchNotifications?.isChecked =  SecurePreferences.getBooleanValue("notification_state", true)
 
         logOut?.setSafeOnClickListener {
             MainApplication.resetLoginCredentials()
@@ -55,6 +56,14 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
             }else{
                 disableInviteSwitch.isClickable = false
                 if(isChecked) presenter.disableInviteInChats() else presenter.enableInviteInChats()
+            }
+        }
+
+        switchNotifications?.setOnCheckedChangeListener { swichView, isChecked ->
+            if(isChecked){
+                SecurePreferences.setValue("notification_state", true)
+            }else{
+                SecurePreferences.setValue("notification_state", false)
             }
         }
     }

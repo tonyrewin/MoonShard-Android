@@ -231,8 +231,6 @@ public class XMPPConnection implements ConnectionListener {
         ReconnectionManager.setEnabledPerDefault(true);
         reconnectionManager.enableAutomaticReconnection();
 
-        joinAllChats();
-
         mamManager = MamManager.getInstanceFor(this.connection);
         try {
             if (mamManager.isSupported()) {
@@ -240,6 +238,7 @@ public class XMPPConnection implements ConnectionListener {
             } else {
                 mamManager = null;
             }
+            joinAllChats();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -695,22 +694,18 @@ public class XMPPConnection implements ConnectionListener {
                                 .subscribe(() -> {}, throwable ->{
                                     Logger.d(throwable);
                                 });
-                    }, error ->{
-                        Logger.d(error);
-                    });
+                    }, error -> Logger.d(error));
         }catch (Exception e){
             Logger.d(e);
         }
     }
 
     public void disableInviteInChats(){
-        //if(multiUserChatManager!=null) multiUserChatManager.removeInvitationListener(networkHandler);
         if(multiUserChatManager!=null){
-
+            multiUserChatManager.removeInvitationListener(networkHandler);
         }else{
             Logger.d("multiUserChatManager is null: disableInviteInChats");
         }
-        multiUserChatManager.removeInvitationListener(networkHandler);
     }
 
     public void enableInviteInChats(){

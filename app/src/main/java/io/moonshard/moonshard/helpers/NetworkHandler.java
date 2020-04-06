@@ -224,6 +224,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
 
     @SuppressLint("CheckResult")
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
+        try {
         MessageEntity messageEntity;
         if (URLUtil.isValidUrl(message.getBody())) {
             messageEntity = new MessageEntity(
@@ -263,7 +264,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             messageAuthorNickname = fromJid.split("@")[0];
         }
 
-        try {
+
             Jid jidFrom = JidCreate.from(fromJid);
 
             ChatUserRepository.INSTANCE.getUserAsSingle(jidFrom)
@@ -513,20 +514,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                 }, e -> {
                     if (e.getClass() == NotFoundException.class) {
                         try {
-                            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
-                            VCard card = vm.loadVCard();
-                            Resourcepart nickname = Resourcepart.from(card.getNickName());
-
-                            room.join(nickname); //while get invitation you need to join that room
-
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    MainApplication.getXmppConnection().addUserStatusListener(room.getRoom().asUnescapedString());
-                                    MainApplication.getXmppConnection().addChatStatusListener(room.getRoom().asUnescapedString());
-                                }
-                            }, 2000); //specify the number of milliseconds
-
+                            MainApplication.getXmppConnection().joinChat(room.getRoom().asUnescapedString());
+                            MainApplication.getXmppConnection().addUserStatusListener(room.getRoom().asUnescapedString());
+                            MainApplication.getXmppConnection().addChatStatusListener(room.getRoom().asUnescapedString());
 
                             RoomInfo info =
                                     MainApplication.getXmppConnection().multiUserChatManager
@@ -540,6 +530,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                     0
                             );
                             addChat(chatEntity);
+
+                            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
 
                             VCard cardInviter = vm.loadVCard(inviter.asEntityBareJid());
                             Resourcepart nickNameInviter = Resourcepart.from(cardInviter.getNickName());
@@ -860,10 +852,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(bytes -> {
-                                Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
-                                intent.putExtra("screen", "my_chats");
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, 0);
+                                        Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
+                                        intent.putExtra("screen", "my_chats");
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, 0);
 
                                         Bitmap avatar = null;
                                         if (bytes != null) {

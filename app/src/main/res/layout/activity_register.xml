@@ -53,6 +53,7 @@
                     android:textStyle="bold" />
 
             <EditText
+                    android:textColorHint="#9B9BB6"
                     android:id="@+id/editEmail"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="match_parent"
@@ -67,13 +68,14 @@
                     android:gravity="center"
                     android:hint="Ваш Email"
                     android:inputType="textEmailAddress"
-                    android:textSize="7pt" />
+                    android:textSize="16sp" />
 
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                 <EditText
+                        android:textColorHint="#9B9BB6"
                         android:id="@+id/editPassword"
                         style="@style/Theme.MaterialComponents.Light"
                         android:layout_width="match_parent"
@@ -86,7 +88,7 @@
                         android:gravity="center"
                         android:hint="Пароль"
                         android:inputType="textPassword"
-                        android:textSize="7pt" />
+                        android:textSize="16sp" />
 
 
                 <ImageView
@@ -111,7 +113,7 @@
                     android:layout_marginTop="41dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/button_background"
-                    android:fontFamily="@font/roboto_regular"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="РЕГИСТРАЦИЯ"
                     android:textColor="@android:color/background_light"

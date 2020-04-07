@@ -33,9 +33,13 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val content = SpannableString("Еще нет аккаунта? Регистрация")
-        content.setSpan(UnderlineSpan(), 18, content.length, 0)
-        dontHaveText.text = content
+        val contentNotHaveText = SpannableString("Еще нет аккаунта? Регистрация")
+        contentNotHaveText.setSpan(UnderlineSpan(), 18, contentNotHaveText.length, 0)
+        dontHaveText.text = contentNotHaveText
+
+        val contentForgotPass= SpannableString("Забыли пароль?")
+        contentForgotPass.setSpan(UnderlineSpan(), 0, contentForgotPass.length, 0)
+        forgotPassTv.text = contentForgotPass
 
         var isSecurity = true
         visiblePassBtn?.setSafeOnClickListener {
@@ -68,7 +72,7 @@ class LoginActivity : BaseActivity(), LoginView {
         }
 
         forgotPassTv?.setSafeOnClickListener {
-
+            startActivity(Intent(this, PasswordRecoveryActivity::class.java))
         }
     }
 

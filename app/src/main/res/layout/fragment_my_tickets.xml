@@ -12,7 +12,4 @@
  <include
          layout="@layout/my_ticket_item"/>
 
-
-
-
 </LinearLayout>

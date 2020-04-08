@@ -135,43 +135,7 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/layout_settings_bg"
-                    android:orientation="horizontal"
-                    tools:ignore="RtlSymmetry">
 
-                <TextView
-                        android:id="@+id/ticketCost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="12dp"
-                        android:fontFamily="@font/montserrat_bold"
-                        android:text="Билеты от 300 Р, VIP от 900 Р"
-                        android:textColor="#333333"
-                        android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/ticketCost"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="#0075FF"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="Купить билет"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp" />
-
-            </RelativeLayout>
 
             <LinearLayout
                     android:id="@+id/location"
@@ -467,5 +431,26 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone" />
+
+    <RelativeLayout
+            android:background="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#0075FF"
+                android:fontFamily="@font/roboto_regular"
+                android:text="БИЛЕТЫ ОТ 300 ₽"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

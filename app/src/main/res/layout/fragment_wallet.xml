@@ -35,7 +35,8 @@
                     android:text="Твой кошелек"
                     android:textColor="#333333"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/montserrat_bold"
+                    />
 
 
         </RelativeLayout>

@@ -27,8 +27,11 @@ class WalletFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initFilterBtn()
-    }
 
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
 
     fun initFilterBtn(){
         topUpWalletBtn?.setOnClickListener {

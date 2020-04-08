@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketsView
+import io.moonshard.moonshard.ui.activities.MainActivity
+import kotlinx.android.synthetic.main.fragment_my_tickets.*
 import kotlinx.android.synthetic.main.my_ticket_item.*
 import moxy.InjectViewState
 import moxy.MvpAppCompatFragment
@@ -28,5 +30,23 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_tickets, container, false)
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideBottomNavigationBar()
+
+
+        ticket1?.setOnClickListener {
+            (activity as MainActivity).showTypeTicketsFragment()
+        }
+
+        ticket2?.setOnClickListener {
+            (activity as MainActivity).showMyTicketInfoFragment()
+        }
+
+        backBtn?.setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 }

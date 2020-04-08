@@ -32,6 +32,7 @@ class ProfileFragment : MvpAppCompatFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).showBottomNavigationBar()
         presenter.getInfoProfile()
         presenter.getAvatar()
 
@@ -53,6 +54,9 @@ class ProfileFragment : MvpAppCompatFragment(),
 
         myTicketBtn?.setSafeOnClickListener {
             (activity as MainActivity).showMyTicketsFragment()
+        }
+        presentTicketLayout?.setSafeOnClickListener {
+            (activity as MainActivity).showPresentTicketFragment()
         }
     }
 

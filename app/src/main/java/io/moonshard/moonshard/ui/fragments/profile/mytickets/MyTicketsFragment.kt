@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketsView
+import kotlinx.android.synthetic.main.my_ticket_item.*
 import moxy.InjectViewState
 import moxy.MvpAppCompatFragment
 import moxy.MvpPresenter
@@ -26,5 +27,6 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_tickets, container, false)
+
     }
 }

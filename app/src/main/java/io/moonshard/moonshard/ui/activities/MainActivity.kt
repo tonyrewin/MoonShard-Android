@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
+import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
 import io.moonshard.moonshard.services.XMPPConnectionService
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
@@ -18,6 +19,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragmen
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.ProfileFragment
+import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -252,6 +254,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = WalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "WalletFragment").addToBackStack("WalletFragment")
+            .commit()
+    }
+
+    fun showMyTicketsFragment(){
+        val fragment = MyTicketsFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "MyTicketsFragment").addToBackStack("MyTicketsFragment")
             .commit()
     }
 

@@ -50,6 +50,10 @@ class ProfileFragment : MvpAppCompatFragment(),
         walletBtn?.setSafeOnClickListener {
             (activity as MainActivity).showWalletFragment()
         }
+
+        myTicketBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showMyTicketsFragment()
+        }
     }
 
     private fun showChangeProfileScreen() {
@@ -61,12 +65,12 @@ class ProfileFragment : MvpAppCompatFragment(),
             ?.commit()
     }
 
-    override fun setData(nickName: String?, description: String?,jidPart:String?) {
+    override fun setData(nickName: String?, description: String?, jidPart: String?) {
         MainApplication.getMainUIThread().post {
             nameTv?.text = nickName ?: "Имя"
-            if(!jidPart.isNullOrBlank()){
+            if (!jidPart.isNullOrBlank()) {
                 myJid?.text = "@$jidPart"
-            }else{
+            } else {
                 myJid?.text = "jid"
             }
 

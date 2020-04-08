@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="264dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/layout_settings_bg"
+        app:cardCornerRadius="16dp">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/avatarTicket"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:background="@drawable/bck_rounded"
+                android:scaleType="centerCrop"
+                android:src="@drawable/party_test" />
+
+        <TextView
+                android:id="@+id/labelTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatarTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Валерий Меладзе"
+                android:textColor="#333333"
+                android:textSize="17sp" />
+
+        <TextView
+                android:id="@+id/startDateTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/labelTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="4.5dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="1 июля 2020 г. в 23:00"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+        <TextView
+                android:id="@+id/locationTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/startDateTicket"
+                android:layout_marginStart="9dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Москва. Mutabor club."
+                android:textColor="#0075FF"
+                android:textSize="14sp" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatarTicket"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="19dp"
+                android:src="@drawable/ic_check_circle" />
+
+        <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/locationTicket"
+                android:layout_marginTop="14dp"
+                android:background="#F5F5F5" />
+
+        <TextView
+                android:id="@+id/typeTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="11dp"
+                android:layout_below="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Ввходной билет"
+                android:textColor="#333333"
+                android:textSize="17sp"/>
+
+        <TextView
+                android:id="@+id/placeTicket"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp"
+                android:layout_marginStart="9dp"
+                android:layout_below="@+id/typeTicket"
+                android:text="Партер"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_alignParentEnd="true"
+                android:id="@+id/numberTicketTv"
+                android:layout_marginEnd="25dp"
+                android:layout_below="@+id/view"
+                android:layout_alignTop="@+id/typeTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="№ заказа"
+                android:textColor="#333333"
+                android:textSize="17sp"/>
+
+        <TextView
+                android:layout_alignTop="@+id/placeTicket"
+                android:layout_alignLeft="@+id/numberTicketTv"
+                android:text="021457859710"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/numberTicketTv"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

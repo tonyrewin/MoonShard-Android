@@ -11,6 +11,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -44,6 +45,10 @@ class ProfileFragment : MvpAppCompatFragment(),
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
+        }
+
+        walletBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showWalletFragment()
         }
     }
 

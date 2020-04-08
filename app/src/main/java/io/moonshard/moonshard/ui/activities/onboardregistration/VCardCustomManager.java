@@ -91,6 +91,18 @@ public class VCardCustomManager extends Manager {
         connection().createStanzaCollectorAndSend(vcard).nextResultOrThrow();
     }
 
+    /**
+     * Save this vCard for the room.
+     *
+     *
+     * @param vcard VCard.
+     * @param jidMuc Jid.
+     *
+     * @throws XMPPException.XMPPErrorException thrown if there was an issue setting the VCard in the server.
+     * @throws SmackException.NoResponseException if there was no response from the server.
+     * @throws SmackException.NotConnectedException
+     * @throws InterruptedException
+     */
     public void saveVCard(VCard vcard,Jid jidMuc) throws SmackException.NoResponseException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, InterruptedException {
         vcard.setTo(jidMuc);
         vcard.setType(IQ.Type.set);

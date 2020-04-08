@@ -18,6 +18,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragmen
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.ProfileFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
@@ -244,6 +245,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, chatFragment, "TimeEventFragment")
             .addToBackStack("TimeEventFragment")
+            .commit()
+    }
+
+     fun showWalletFragment(){
+        val fragment = WalletFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "WalletFragment").addToBackStack("WalletFragment")
             .commit()
     }
 

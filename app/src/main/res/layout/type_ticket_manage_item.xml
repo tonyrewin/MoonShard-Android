@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="16dp">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/costTv"
+                android:id="@+id/titleType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Абонемент"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+        <TextView
+                android:layout_marginEnd="9dp"
+                android:id="@+id/costTv"
+                android:layout_alignTop="@+id/titleType"
+                android:layout_alignParentEnd="true"
+                android:text="300 ₽"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#333333"
+                android:textSize="16sp"/>
+
+        <TextView
+                android:layout_marginEnd="11dp"
+                android:layout_alignTop="@+id/descriptionTv"
+                android:id="@+id/quantityTv"
+                android:layout_alignParentEnd="true"
+                android:text="1000 билетов"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp"/>
+
+        <TextView
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/quantityTv"
+                android:id="@+id/descriptionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleType"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Билет на все дни фестиваля"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp" />
+
+        <ImageView
+                android:id="@+id/arrowImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="13dp"
+                android:src="@drawable/ic_jump_arrow_right"
+                android:visibility="gone" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

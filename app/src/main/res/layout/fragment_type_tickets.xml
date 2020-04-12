@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Твои билеты"
+                    android:text="@strings/your_tickets"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold" />

@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Твой кошелек"
+                    android:text="@strings/your_wallet"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"
@@ -61,7 +61,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:textColor="#333333"
                 android:textSize="34sp"
-                android:text="0 ₽" />
+                android:text="@strings/wallet_text252" />
 
         <TextView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Текущий баланс"
+                android:text="@strings/current_balance"
                 android:textColor="#6F6F6F"
                 android:textSize="14sp" />
 
@@ -109,7 +109,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="1sp"
-                    android:text="Пополнить кошелек"
+                    android:text="@strings/fill_up_a_purse"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -152,7 +152,7 @@
                     android:layout_toRightOf="@+id/ticketIcon"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
-                    android:text="Вывести средства"
+                    android:text="@strings/withdraw_funds"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -194,7 +194,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Движение средств"
+                android:text="@strings/cash_flow"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -216,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Пополнение"
+                    android:text="@strings/replenishment"
                     android:textColor="#333333" />
 
         </RelativeLayout>
@@ -239,7 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Списание"
+                    android:text="@strings/writeoff"
                     android:textColor="#333333" />
 
         </RelativeLayout>

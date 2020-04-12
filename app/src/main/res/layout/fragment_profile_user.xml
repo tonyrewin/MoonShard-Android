@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Информация"
+                    android:text="@strings/information"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -76,7 +76,7 @@
                 android:layout_marginTop="20dp"
                 android:id="@+id/nickNameTv"
                 android:layout_toEndOf="@+id/avatarIv"
-                android:text="Kanaevsky"
+                android:text="@strings/kanaevsky"
                 android:textColor="#DE000000"
                 android:textStyle="bold"
                 android:textSize="17sp"
@@ -86,7 +86,7 @@
         <TextView
                 android:layout_below="@+id/nickNameTv"
                 android:layout_alignStart="@+id/nickNameTv"
-                android:text="Онлайн"
+                android:text="@strings/online"
                 android:textColor="#0075FF"
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="15dp"
-                android:text="Отправить сообщение"
+                android:text="@strings/send_a_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -134,14 +134,14 @@
                 android:layout_marginStart="10dp"
                 android:textSize="14sp"
                 android:textColor="#9B9BB6"
-                android:text="О себе"
+                android:text="@strings/about_myself"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="16dp"
-                android:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
+                android:text="@strings/save_the_festival_anticipated_outline"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="#333333"
@@ -170,7 +170,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="15dp"
                 android:id="@+id/notificationsTv"
-                android:text="Уведомления"
+                android:text="@strings/notifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -206,7 +206,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="15dp"
-                android:text="Заблокировать пользователя"
+                android:text="@strings/block_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

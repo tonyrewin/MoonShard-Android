@@ -12,7 +12,8 @@ class DateHolder(var unixTimestamp: Long) {
     val minute: Int
 
     val calendar: Calendar = Calendar.getInstance()
-
+    val locale = Locale.getDefault()
+    
     init {
         calendar.timeInMillis = unixTimestamp*1000L
         year = calendar.get(Calendar.YEAR)
@@ -25,45 +26,9 @@ class DateHolder(var unixTimestamp: Long) {
     }
 
     fun getMonthString(month: Int):String {
-       return when (month) {
-            0 -> {
-                "января"
-            }
-            1 -> {
-                "февраля"
-            }
-            2 -> {
-                "марта"
-            }
-            3 -> {
-                "апреля"
-            }
-            4 -> {
-                "мая"
-            }
-            5 -> {
-                "июня"
-            }
-            6 -> {
-                "июля"
-            }
-            7 -> {
-                "августа"
-            }
-            8 -> {
-                "сенятбря"
-            }
-            9 -> {
-               "октября"
-            }
-            10 -> {
-                "ноября"
-            }
-            11 -> {
-                "декабря"
-            }
-           else -> ""
-       }
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, month)
+        return calendar.getDisplayName(Calendar.MONTH, Calendar.LONG_FORMAT, locale)
     }
 
     fun alreadyComeDate():Boolean{

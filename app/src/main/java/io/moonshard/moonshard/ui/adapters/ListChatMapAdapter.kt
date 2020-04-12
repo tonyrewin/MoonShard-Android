@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.adapters
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -28,12 +29,12 @@ import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 import java.util.concurrent.TimeUnit
 
-//todo need add presenter
+
 interface ListChatMapListener {
     fun clickChat(room: RoomPin)
 }
 
-class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: ArrayList<RoomPin>) :
+class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: ArrayList<RoomPin>, private var context: Context?) :
     RecyclerView.Adapter<ListChatMapAdapter.ViewHolder>() {
 
     var focusedItem = -1
@@ -50,7 +51,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             getRoomInfo(chats[position].roomId!!)
-                //.delaySubscription(2, TimeUnit.SECONDS)
+                
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -105,7 +106,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                valueMembersTv?.text = "${roomInfo.occupantsCount} человек, $it онлайн"
+                valueMembersTv?.text = "${roomInfo.occupantsCount} " + context?.getString(R.string.members) + ", $it" + context?.getString(R.string.online)
             }, {
                 Logger.d(it)
             })
@@ -154,14 +155,14 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                                     latRoom.toDouble(),
                                     lngRoom.toDouble()
                                 ), LatLng(myLat, myLng)
-                            ).toInt().toString() + " метрах"
+                            ).toInt().toString() + context?.getString(R.string.meters)
                         )
                     } else {
                         it.onSuccess(
                             (SphericalUtil.computeDistanceBetween(
                                 LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                                 LatLng(myLat, myLng)
-                            ).toInt() / 1000).toString() + " км"
+                            ).toInt() / 1000).toString() + context?.getString(R.string.km)
                         )
                     }
                 }

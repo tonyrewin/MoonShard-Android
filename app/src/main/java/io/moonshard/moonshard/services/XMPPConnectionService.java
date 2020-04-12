@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.R;
 
 
 public class XMPPConnectionService extends Service {
@@ -82,8 +83,8 @@ public class XMPPConnectionService extends Service {
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("привет")
-                    .setContentText("как дела").build();
+                    .setContentTitle(context.getString(R.string.hi))
+                    .setContentText(context.getString(R.string.how_are_you)).build();
 
             startForeground(1, notification);
         }
@@ -95,13 +96,13 @@ public class XMPPConnectionService extends Service {
        geocoder = new Geocoder(this, Locale.getDefault());
 
        try {
-           addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-           String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+           addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); 
+           String address = addresses.get(0).getAddressLine(0); 
            String city = addresses.get(0).getLocality();
            String state = addresses.get(0).getAdminArea();
            String country = addresses.get(0).getCountryName();
            String postalCode = addresses.get(0).getPostalCode();
-           String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+           String knownName = addresses.get(0).getFeatureName(); 
            MainApplication.setAddress(address);
        } catch (IOException e) {
            e.printStackTrace();
@@ -120,24 +121,7 @@ public class XMPPConnectionService extends Service {
         createLocationListener();
 
         new XMPPConnectionDelayedCheckAndStartThread().start();
-/*
-        if (!isThreadAlive) {
-            isThreadAlive = true;
-            if (thread == null || !thread.isAlive()) {
-                thread = new Thread(() -> {
-                    createConnection();
-                    Looper.prepare();
-                    threadHandler = new Handler();
-                    //createConnection();
-                    Looper.loop();
-                });
-                thread.start();
-            }
 
-
-        }
-
- */
     }
 
     class XMPPConnectionDelayedCheckAndStartThread extends Thread{
@@ -151,7 +135,7 @@ public class XMPPConnectionService extends Service {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            //setAlarmToReconnect();
+            
         }
     }
 
@@ -189,13 +173,13 @@ public class XMPPConnectionService extends Service {
         try {
             connection.connect();
         } catch (IOException | SmackException e) {
-            // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.NETWORK_ERROR));
+            
             e.printStackTrace();
             onServiceStop();
             stopSelf();
         } catch (XMPPException e) {
-            // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.INCORRECT_LOGIN_OR_PASSWORD));
-            // e.printStackTrace();
+            
+            
             onServiceStop();
             stopSelf();
         } catch (EmptyLoginCredentialsException e) {

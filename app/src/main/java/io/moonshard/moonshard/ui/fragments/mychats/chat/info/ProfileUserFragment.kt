@@ -64,13 +64,13 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
         if (nickName != null) {
             nickNameTv?.text = nickName.toString()
         } else {
-            nickNameTv?.text = "Имя"
+            nickNameTv?.text = "" + getString(R.string.name) + ""
         }
 
         if (description != null) {
             descriptionTv?.text = description.toString()
         } else {
-            descriptionTv?.text = "Информация о пользователе не заполнена"
+            descriptionTv?.text = "" + getString(R.string.user_information_is_not_filled) + ""
         }
     }
 

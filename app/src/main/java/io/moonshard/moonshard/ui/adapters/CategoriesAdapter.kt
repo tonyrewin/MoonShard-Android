@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.adapters
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,7 @@ interface CategoryListener {
     fun clickChat(categoryName: Category)
 }
 
-class CategoriesAdapter(val listener: CategoryListener, private var categories: ArrayList<Category>) :
+class CategoriesAdapter(val listener: CategoryListener, private var categories: ArrayList<Category>, private var context: Context?) :
     RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     var focusedItem = -1
@@ -74,18 +75,18 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
 
     private fun setDrawable(imageView:ImageView, category:Category){
         when {
-            category.categoryName=="Тусовки" -> {
+            category.categoryName== context?.getString(R.string.party) -> {
                 imageView.setImageResource(R.drawable.ic_star_category)
             }
-            category.categoryName=="Бизнес ивенты" -> {
+            category.categoryName== context?.getString(R.string.business_events) -> {
                 imageView.setImageResource(R.drawable.ic_case_category)
 
             }
-            category.categoryName=="Кружок по интересам" -> {
+            category.categoryName== context?.getString(R.string.hobby_group) -> {
                 imageView.setImageResource(R.drawable.ic_heart_category)
 
             }
-            category.categoryName=="Культурные мероприятия" -> {
+            category.categoryName== context?.getString(R.string.cultural_activities)  -> {
                 imageView.setImageResource(R.drawable.ic_culture_category)
             }
         }

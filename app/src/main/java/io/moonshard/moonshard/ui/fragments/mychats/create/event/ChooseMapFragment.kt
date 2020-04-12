@@ -186,7 +186,7 @@ class ChooseMapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnCameraMove
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Информация отсутствует"
+        return "" + getString(R.string.no_information_available) + ""
     }
 
     override fun onResume() {

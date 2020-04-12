@@ -20,6 +20,7 @@ import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageEventPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
+import io.moonshard.moonshard.common.utils.DateHolder
 import kotlinx.android.synthetic.main.fragment_manage_event.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -130,65 +131,20 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     override fun setStartDate(dayOfMonth: Int, month: Int) {
-        when (month) {
-            0 -> {
-                dateTv.text = "$dayOfMonth января"
-            }
-            1 -> {
-                dateTv.text = "$dayOfMonth февраля"
-
-            }
-            2 -> {
-                dateTv.text = "$dayOfMonth марта"
-
-            }
-            3 -> {
-                dateTv.text = "$dayOfMonth апреля"
-
-            }
-            4 -> {
-                dateTv.text = "$dayOfMonth мая"
-
-            }
-            5 -> {
-                dateTv.text = "$dayOfMonth июня"
-
-            }
-            6 -> {
-                dateTv.text = "$dayOfMonth июля"
-
-            }
-            7 -> {
-                dateTv.text = "$dayOfMonth августа"
-
-            }
-            8 -> {
-                dateTv.text = "$dayOfMonth сенятбря"
-
-            }
-            9 -> {
-                dateTv.text = "$dayOfMonth октября"
-
-            }
-            10 -> {
-                dateTv.text = "$dayOfMonth ноября"
-            }
-            11 -> {
-                dateTv.text = "$dayOfMonth декабря"
-            }
-        }
+        val date = DateHolder(System.currentTimeMillis())
+        dateTv.text = "$dayOfMonth " + date.getMonthString(month)
     }
 
     fun getTtlToDays(ttl:Long):String{
         var time =""
         when(ttl){
-            (60*60*24).toLong() -> time = "1 день"
-            (60*60*48).toLong() -> time = "2 дня"
-            (60*60*(24*3)).toLong() -> time = "3 дня"
-            (60*60*(24*4)).toLong() -> time = "4 дня"
-            (60*60*(24*5)).toLong() -> time = "5 дней"
-            (60*60*(24*6)).toLong() -> time = "6 дней"
-            (60*60*(24*7)).toLong() -> time = "Неделя"
+            (60*60*24).toLong() -> time = "1 " + getString(R.string.day) + ""
+            (60*60*48).toLong() -> time = "2 " + getString(R.string.days234) + ""
+            (60*60*(24*3)).toLong() -> time = "3 " + getString(R.string.days234) + ""
+            (60*60*(24*4)).toLong() -> time = "4 " + getString(R.string.days234) + ""
+            (60*60*(24*5)).toLong() -> time = "5 " + getString(R.string.days) + ""
+            (60*60*(24*6)).toLong() -> time = "6 " + getString(R.string.days) + ""
+            (60*60*(24*7)).toLong() -> time = "" + getString(R.string.a_week) + ""
         }
         return time
     }
@@ -214,7 +170,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(
                 this,
-                "This app needs access to your location",
+                getString(R.string.this_app_needs_location_access),
                 2,
                 coarseLocation,
                 fineLocation
@@ -264,7 +220,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     private fun chooseFile() {
         var choosePhoto = Intent(Intent.ACTION_GET_CONTENT)
         choosePhoto.type = "image/*"
-        choosePhoto = Intent.createChooser(choosePhoto, "Select Picture")
+        choosePhoto = Intent.createChooser(choosePhoto, getString(R.string.select_picture))
         startActivityForResult(choosePhoto, 1)
     }
 
@@ -314,7 +270,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     private fun getAddress(location: LatLng?): String {
-        if (location == null) return "Информация отсутствует"
+        if (location == null) return "" + getString(R.string.no_information_available) + ""
 
         val geocoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address>
@@ -331,7 +287,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Информация отсутствует"
+        return "" + getString(R.string.no_information_available) + ""
     }
 
     override fun showChatsScreen(){

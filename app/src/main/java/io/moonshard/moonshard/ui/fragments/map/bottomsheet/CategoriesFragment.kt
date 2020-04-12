@@ -41,7 +41,7 @@ class CategoriesFragment : MvpAppCompatFragment(), CategoriesMapView {
             override fun clickChat(category: Category) {
                 getRoomsById(category)
             }
-        }, arrayListOf())
+        }, arrayListOf(), context)
     }
 
 

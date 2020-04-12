@@ -14,7 +14,8 @@ class InviteUserPresenter: MvpPresenter<InviteUserView>() {
     fun inviteUser(user:String,jidChatString:String){
         try {
             if(user.contains("@")){
-                viewState.showError("Вы ввели недопустимый символ")
+                // TODO: move message code to InviteUserView
+                viewState.showError("Invalid character")
                 return
             }
 
@@ -22,8 +23,8 @@ class InviteUserPresenter: MvpPresenter<InviteUserView>() {
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(chatJid)
-
-            muc.invite(JidCreate.entityBareFrom("$user@moonshard.tech"),"Приглашение в чат")
+            // TODO: move message code ...
+            muc.invite(JidCreate.entityBareFrom("$user@moonshard.tech"),"Invitation")
 
             viewState?.showChatScreen()
         }catch (e:Exception){

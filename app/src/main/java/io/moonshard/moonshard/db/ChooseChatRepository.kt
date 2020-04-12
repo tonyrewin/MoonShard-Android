@@ -29,17 +29,4 @@ object ChooseChatRepository {
        return date!!.timeInMillis / 1000
     }
 
-    fun getTimeSec():Int{
-        var ttl = 60*60*24
-        when (time) {
-            "1 день" -> ttl = 60*60*24
-            "2 дня" -> ttl = 60*60*48
-            "3 дня" -> ttl = 60*60*(24*3)
-            "4 дня" -> ttl = 60*60*(24*4)
-            "5 дней" -> ttl = 60*60*(24*5)
-            "6 дней" -> ttl = 60*60*(24*6)
-            "Неделя" -> ttl = 60*60*(24*7)
-        }
-        return ttl
-    }
 }

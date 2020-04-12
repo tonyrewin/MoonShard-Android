@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/userAdminAvatar"
-            android:text="Oleg Petrov"
+            android:text="@strings/oleg_petrov"
             android:textColor="#DE000000"
             android:textSize="16sp" />
 
@@ -30,7 +30,7 @@
             android:layout_below="@+id/nameAdminTv"
             android:layout_alignStart="@+id/nameAdminTv"
             android:layout_marginTop="4dp"
-            android:text="Создатель"
+            android:text="@strings/creator"
             android:textColor="#9B9BB6" />
 
     <ImageView

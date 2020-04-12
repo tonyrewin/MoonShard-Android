@@ -33,11 +33,11 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val contentNotHaveText = SpannableString("Еще нет аккаунта? Регистрация")
+        val contentNotHaveText = SpannableString("" + getString(R.string.dont_have_an_account_yet) + "")
         contentNotHaveText.setSpan(UnderlineSpan(), 18, contentNotHaveText.length, 0)
         dontHaveText.text = contentNotHaveText
 
-        val contentForgotPass= SpannableString("Забыли пароль?")
+        val contentForgotPass= SpannableString("" + getString(R.string.forgot_your_password) + "")
         contentForgotPass.setSpan(UnderlineSpan(), 0, contentForgotPass.length, 0)
         forgotPassTv.text = contentForgotPass
 
@@ -57,7 +57,7 @@ class LoginActivity : BaseActivity(), LoginView {
         loginBtn?.setSafeOnClickListener {
             val actualUserName: String
             if (editEmail?.text.toString().contains("@")) {
-                showError("Вы ввели недопустимый символ")
+                showError("" + getString(R.string.you_entered_an_invalid_character) + "")
             } else {
                 actualUserName = editEmail.text.toString() + "@moonshard.tech"
                 showLoader()
@@ -119,16 +119,16 @@ class LoginActivity : BaseActivity(), LoginView {
 
             when (e) {
                 is XMPPException -> {
-                    showError("Произошла ошибка на сервере")
+                    showError("" + getString(R.string.server_error_occurred) + "")
                 }
                 is SmackException.NoResponseException -> {
-                    showError("Время ожидания ответа от сервера истекло")
+                    showError("" + getString(R.string.server_response_timed_out) + "")
                 }
                 is SmackException.NotConnectedException -> {
-                    showError("Отсутствует интернет-соединение")
+                    showError("" + getString(R.string.no_internet_connection) + "")
                 }
                 else -> {
-                    e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+                    e.message?.let { showError(it) } ?: showError("" + getString(R.string.an_error_has_occurred) + "")
                 }
             }
         }

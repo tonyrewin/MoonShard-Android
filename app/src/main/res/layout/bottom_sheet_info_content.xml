@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/usersIv"
-                tools:text="Group name"
+                tools:text="@strings/group_name"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/groupNameInfoContentTv"
                 android:layout_alignStart="@+id/usersIv"
-                android:text="Нет подключения к интернету"
+                android:text="@strings/no_internet_connection"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
-                tools:text="130 m away" />
+                tools:text="@strings/info_content_text110" />
 
         <View
                 android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Читать" />
+                    android:text="@strings/to_read" />
 
             <Button
                     android:fontFamily="@font/roboto_medium"
@@ -121,7 +121,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/button_background"
                     android:gravity="center"
-                    android:text="Присоединиться"
+                    android:text="@strings/join"
                     android:textColor="@android:color/background_light"
                     android:textSize="7pt" />
 
@@ -141,7 +141,7 @@
                 android:layout_marginBottom="7dp"
                 android:layout_marginStart="15dp"
                 android:textColor="#333333"
-                android:text="О событии"
+                android:text="@strings/about_event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="7dp"
-                android:text="Начало"
+                android:text="@strings/start"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                tools:text="13 декабря 2019 г. в 18:00"
+                tools:text="@strings/december_13_2019_at_1800"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginBottom="7dp"
-            android:text="Местоположение"
+            android:text="@strings/location"
             android:textColor="#9B9BB6"
             android:textSize="14sp" />
 
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginBottom="13dp"
-            tools:text="Улица Парковая, Одинцово, Московская область"
+            tools:text="@strings/parkovaya_street_odintsovo_moscow_region"
             android:textColor="#333333"
             android:textSize="16sp" />
 
@@ -226,7 +226,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginBottom="5dp"
-            android:text="О чате"
+            android:text="@strings/about_chat"
             android:textColor="#9B9BB6"
             android:textSize="14sp" />
 
@@ -237,7 +237,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            tools:text="Бухаем пивас у памятника Грибоедову. Скидываемся по сотке на трехлитровую сиську!"
+            tools:text="@strings/we_are_drinking_pivas_at"
             android:textColor="#333333"
             android:textSize="16sp" />
 
@@ -261,7 +261,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Читать" />
+                android:text="@strings/to_read" />
 
         <Button
                 android:fontFamily="@font/roboto_medium"
@@ -275,7 +275,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/button_background"
                 android:gravity="center"
-                android:text="Присоединиться"
+                android:text="@strings/join"
                 android:textColor="@android:color/background_light"
                 android:textSize="7pt" />
 

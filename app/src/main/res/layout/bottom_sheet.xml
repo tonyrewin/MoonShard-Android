@@ -24,7 +24,7 @@
         <EditText
                 android:textSize="14sp"
                 android:fontFamily="@font/roboto_regular"
-                android:hint="Поиск по месту или названию"
+                android:hint="@strings/search_by_place_or_name"
                 android:id="@+id/searchEventEt"
                 android:layout_width="297dp"
                 android:layout_height="32dp"

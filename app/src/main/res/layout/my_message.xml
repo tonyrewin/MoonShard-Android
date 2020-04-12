@@ -39,7 +39,7 @@
             android:textColor="#333333"
             android:padding="10dp"
             android:textSize="16sp"
-            tools:text="P"
+            tools:text="@strings/p"
             />
 
     </LinearLayout>
@@ -115,7 +115,7 @@
                 android:textColor="#333333"
                 android:lineSpacingExtra="0sp"
                 android:gravity="top"
-                tools:text="App-release"
+                tools:text="@strings/apprelease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -132,7 +132,7 @@
                 android:layout_below="@+id/nameFile"
                 android:layout_toRightOf="@+id/iconLayout"
                 android:gravity="top"
-                tools:text="105 MB APK"
+                tools:text="105 MB A@strings/pK"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

@@ -32,7 +32,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             val jidRoomString = UUID.randomUUID().toString()+"-chat" + "@conference.moonshard.tech"
 
             if (chatName.contains("@")) {
-                viewState?.showToast("Вы ввели недопустимый символ")
+                // TODO: move this code to CreateNewChatView
+                viewState?.showToast("You have entered an invalid character")
                 viewState?.hideProgressBar()
                 return
             } else {
@@ -88,7 +89,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
             }
         } else {
             viewState?.hideProgressBar()
-            viewState?.showToast("Заполните поле")
+            // TODO: move this code to view
+            viewState?.showToast("Fill the field")
         }
     }
 

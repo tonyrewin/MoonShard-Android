@@ -157,9 +157,10 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 roomInfo.description
             )
 
+            // TODO: move this code to EventInfoView
             val date = DateHolder(ChangeEventRepository.event?.eventStartDate!!)
             //if(date.alreadyComeDate()){ iconStartDate.visibility = View.VISIBLE } else{ iconStartDate.visibility = View.GONE}
-            viewState.setStartDate("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
+            viewState.setStartDate("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} @ ${date.hour}:${date.minute}")
 
 
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)

@@ -51,7 +51,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
                 presenter.register(editEmail.text.toString(), editPassword.text.toString())
             }
 
-            val content = SpannableString("Уже есть аккаунт? Войти")
+            val content = SpannableString("" + getString(R.string.already_have_an_account_to) + "")
             content.setSpan(UnderlineSpan(), 18, content.length, 0)
             alreadyHaveText?.text = content
 

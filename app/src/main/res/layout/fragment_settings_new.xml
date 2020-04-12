@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Настройки"
+                    android:text="@strings/settings"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Основные"
+                        android:text="@strings/the_main"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -83,7 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Уведомления"
+                            android:text="@strings/notifications"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Запретить добавлять в чаты"
+                            android:text="@strings/prevent_add_to_chats"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
@@ -154,7 +154,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Безопасность"
+                            android:text="@strings/security"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="11dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Другие"
+                        android:text="@strings/other"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -206,7 +206,7 @@
                         android:layout_below="@+id/lineSeven"
                         android:layout_marginTop="12dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="FAQ"
+                        android:text="@strings/faq"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -230,7 +230,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Выйти"
+                            android:text="@strings/go_out"
                             android:textColor="#FF6161"
                             android:textSize="16sp" />
 

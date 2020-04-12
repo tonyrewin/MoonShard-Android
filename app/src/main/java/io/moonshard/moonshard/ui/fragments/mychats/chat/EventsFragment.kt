@@ -61,7 +61,7 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
             override fun eventClick(event: RoomPin) {
                 event.roomId?.let { showChatScreen(it) }
             }
-        }, arrayListOf())
+        }, arrayListOf(), context)
     }
 
     override fun setEvents(events: ArrayList<RoomPin>) {

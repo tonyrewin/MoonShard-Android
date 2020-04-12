@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -79,6 +80,7 @@ import trikita.log.Log;
 public class NetworkHandler extends DefaultParticipantStatusListener implements IncomingChatMessageListener, PresenceEventListener, MessageListener, InvitationListener, UserStatusListener, FileTransferListener {
     private final static String LOG_TAG = "NetworkHandler";
     private final static String NOTIFICATION_CHANNEL_ID = "InfluenceNotificationsChannel";
+    private Context context = MainApplication.getContext();
     PublishSubject<MessageEntity> messagePubsub = PublishSubject.create();
     private NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainApplication.getContext());
 
@@ -102,7 +104,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
              */
 
             String nickNameParticipant = participant.asUnescapedString().split("/")[1];
-            String messageText = "Администратор" + " удалил " + nickNameParticipant + " из чата";
+            String messageText = context.getString(R.string.administrator_deleted_username_from_chat, nickNameParticipant);
 
             MessageEntity messageEntity = new MessageEntity(
                     0,
@@ -567,19 +569,19 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(bytes -> {
-                                    Intent intent = new Intent(MainApplication.getContext(), MainActivity.class);
+                                    Intent intent = new Intent(context, MainActivity.class);
                                     intent.putExtra("screen", "chat");
                                     intent.putExtra("chatId", chatJid);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    PendingIntent pendingIntent = PendingIntent.getActivity(MainApplication.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     Bitmap avatar = null;
                                     if (bytes != null) {
                                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                     }
-                                    NotificationCompat.Builder notification = new NotificationCompat.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID)
+                                    NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                             .setSmallIcon(R.drawable.amu_bubble_mask)
-                                            .setContentTitle("Вас пригласили в чат")
+                                            .setContentTitle(context.getString(R.string.you_were_invited_to_chat))
                                             .setContentText(message)
                                             .setContentIntent(pendingIntent)
                                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -643,7 +645,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     private void onIncomingMessageJoin(ChatEntity chatEntity, String chatJid, String fromJid, ChatUser chatUser, BareJid fullJidUser) {
         try {
             String author = fromJid.split("/")[1];
-            String messageText = author + " присоединился к чату";
+            String messageText = author + context.getString(R.string.joined_the_chat);
 
             MessageEntity messageEntity = new MessageEntity(
                     0,
@@ -809,8 +811,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
             VCard card = vm.loadVCard();
             String nickname = card.getNickName();
             String chatJid = alternateMUC.getRoom().asUnescapedString();
-
-            String messageText = nickname + " удалил чат";
+            String messageText = nickname + context.getString(R.string.deleted_chat);
 
             removeChatFromBd(chatJid, messageText, reason);
         } catch (Exception e) {

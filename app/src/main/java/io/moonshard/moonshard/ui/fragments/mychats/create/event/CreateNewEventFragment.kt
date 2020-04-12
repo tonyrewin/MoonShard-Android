@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
@@ -79,8 +81,8 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         }
 
         if (ChooseChatRepository.time.isEmpty()) {
-            timeTv?.text = "1 день"
-            ChooseChatRepository.time = "1 день"
+            timeTv?.text = "1 " + getString(R.string.day)
+            ChooseChatRepository.time = "1 " + getString(R.string.day)
         } else {
             timeTv?.text = ChooseChatRepository.time
         }
@@ -111,7 +113,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 nameTv?.text.toString(),
                 ChooseChatRepository.lat,
                 ChooseChatRepository.lng,
-                ChooseChatRepository.getTimeSec(),
+                60*60*24, // TODO: start with default value?
                 ChooseChatRepository.category,
                 ChooseChatRepository.group,
                 ChooseChatRepository.getEventStartDate(),
@@ -130,54 +132,22 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     }
 
     fun setDate(dayOfMonth: Int, month: Int) {
-        when (month) {
-            0 -> {
-                dateTv.text = "$dayOfMonth января"
-            }
-            1 -> {
-                dateTv.text = "$dayOfMonth февраля"
+        val date = DateHolder(System.currentTimeMillis())
+        dateTv.text = "$dayOfMonth " + date.getMonthString(month)
+    }
 
-            }
-            2 -> {
-                dateTv.text = "$dayOfMonth марта"
-
-            }
-            3 -> {
-                dateTv.text = "$dayOfMonth апреля"
-
-            }
-            4 -> {
-                dateTv.text = "$dayOfMonth мая"
-
-            }
-            5 -> {
-                dateTv.text = "$dayOfMonth июня"
-
-            }
-            6 -> {
-                dateTv.text = "$dayOfMonth июля"
-
-            }
-            7 -> {
-                dateTv.text = "$dayOfMonth августа"
-
-            }
-            8 -> {
-                dateTv.text = "$dayOfMonth сенятбря"
-
-            }
-            9 -> {
-                dateTv.text = "$dayOfMonth октября"
-
-            }
-            10 -> {
-                dateTv.text = "$dayOfMonth ноября"
-            }
-            11 -> {
-                dateTv.text = "$dayOfMonth декабря"
-
-            }
+    fun getTtlToDays(ttl:Long):String{
+        var time =""
+        when(ttl){
+            (60*60*24).toLong() -> time = "1 " + getString(R.string.day) + ""
+            (60*60*48).toLong() -> time = "2 " + getString(R.string.days234) + ""
+            (60*60*(24*3)).toLong() -> time = "3 " + getString(R.string.days234) + ""
+            (60*60*(24*4)).toLong() -> time = "4 " + getString(R.string.days234) + ""
+            (60*60*(24*5)).toLong() -> time = "5 " + getString(R.string.days) + ""
+            (60*60*(24*6)).toLong() -> time = "6 " + getString(R.string.days) + ""
+            (60*60*(24*7)).toLong() -> time = "" + getString(R.string.a_week) + ""
         }
+        return time
     }
 
     private fun methodRequiresTwoPermission() {
@@ -189,7 +159,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(
                 this,
-                "This app needs access to your location",
+                getString(R.string.this_app_needs_location_access),
                 2,
                 coarseLocation,
                 fineLocation
@@ -224,7 +194,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             override fun clickChat(categoryName: io.moonshard.moonshard.models.api.Category) {
                 ChooseChatRepository.category = categoryName
             }
-        }, arrayListOf())
+        }, arrayListOf(), context)
 
 
         groupsRv?.layoutManager = LinearLayoutManager(context)

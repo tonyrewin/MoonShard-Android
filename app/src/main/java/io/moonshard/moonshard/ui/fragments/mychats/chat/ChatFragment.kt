@@ -145,7 +145,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
         name: String, valueOccupants: Int, valueOnlineMembers: Int
     ) {
         nameChatTv?.text = name
-        valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
+        valueMembersChatTv.text = "$valueOccupants " + getString(R.string.members) + ", $valueOnlineMembers" + getString(R.string.online)
     }
 
     override fun setNameUser(name: String) {

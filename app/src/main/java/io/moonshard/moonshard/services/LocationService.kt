@@ -13,11 +13,12 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.R
 import java.io.IOException
 import java.util.*
 
 class LocationService : Service() {
-
+    private val context = MainApplication.getContext()
     private val locationListener = object : LocationListener {
 
         override fun onLocationChanged(location: Location) {
@@ -84,8 +85,8 @@ class LocationService : Service() {
             )
 
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("привет")
-                .setContentText("как дела").build()
+                .setContentTitle(context.getString(R.string.hi))
+                .setContentText(context.getString(R.string.how_are_you)).build()
 
             startForeground(1, notification)
         }

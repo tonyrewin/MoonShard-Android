@@ -141,7 +141,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         val distance = calculationByDistance(latLngLocation)
 
         groupNameInfoContentTv?.text = name
-        valueMembersInfoTv?.text = "$occupantsCount участников, $onlineMembersValue онлайн"
+        valueMembersInfoTv?.text = "$occupantsCount " + getString(R.string.members) + ", $onlineMembersValue" + getString(R.string.online)
         locationValueInfoTv?.text = distance
         address?.text = getAddress(latLngLocation)
         //categoryInfoTv?.text = category
@@ -163,7 +163,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     private fun getAddress(location: LatLng?): String {
-        if (location == null) return "Информация отсутствует"
+        if (location == null) return "" + getString(R.string.no_information_available) + ""
 
         val geocoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address>
@@ -183,7 +183,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Информация отсутствует"
+        return "" + getString(R.string.no_information_available) + ""
     }
 
     private fun calculationByDistance(latLng: LatLng?): String {
@@ -200,12 +200,12 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             return if (km < 1) {
                 (SphericalUtil.computeDistanceBetween(
                     latLng, LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
+                ).toInt()).toString() + "" + getString(R.string.meters) + ""
             } else {
                 (SphericalUtil.computeDistanceBetween(
                     latLng,
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
+                ).toInt() / 1000).toString() + "" + getString(R.string.km) + ""
             }
         }
         return ""

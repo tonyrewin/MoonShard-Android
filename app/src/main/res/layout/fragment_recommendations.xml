@@ -28,7 +28,7 @@
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:textColor="#333333"
-                android:text="Упс! Тут пусто"
+                android:text="@strings/oops_its_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

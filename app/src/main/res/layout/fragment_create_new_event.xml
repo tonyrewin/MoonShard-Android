@@ -41,7 +41,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="Создать событие"
+                            android:text="@strings/create_event"
                             android:textColor="#333333"
                             android:textSize="14sp"
                             android:fontFamily="@font/montserrat_bold" />
@@ -55,7 +55,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="14dp"
                             android:src="@drawable/ic_new_chat"
-                            android:text="Готово"
+                            android:text="@strings/done"
                             android:textColor="#0075FF"
                             android:textSize="14sp" />
 
@@ -79,7 +79,7 @@
                         android:textColor="#9B9BB6"
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="10dp"
-                        android:text="Название"
+                        android:text="@strings/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -87,7 +87,7 @@
                         android:layout_marginEnd="13dp"
                         android:textColorHint="#DDDDDD"
                         android:textSize="16sp"
-                        android:hint="Введите название"
+                        android:hint="@strings/enter_the_title"
                         android:layout_marginBottom="20dp"
                         android:id="@+id/nameTv"
                         android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Местоположение"
+                        android:text="@strings/location"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 
@@ -131,7 +131,7 @@
                         android:id="@+id/address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Улица Парковая, Одинцово, Россия"
+                        android:text="@strings/parkovaya_street_odintsovo_russia"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -141,7 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Изменить"
+                        android:text="@strings/edit"
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
             </LinearLayout>
@@ -172,7 +172,7 @@
                             android:layout_marginStart="13dp"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="16dp"
-                            android:text="Дата начала"
+                            android:text="@strings/the_date_of_the_beginning"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 
@@ -186,7 +186,7 @@
                             android:layout_marginTop="19dp"
                             android:layout_marginEnd="14dp"
                             android:layout_marginBottom="15dp"
-                            android:text="13 декабря"
+                            android:text="@strings/december_13th"
                             android:textColor="#8A000000"
                             android:textSize="14sp" />
 
@@ -206,7 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="13dp"
-                        android:text="Длительность события"
+                        android:text="@strings/event_duration"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -220,7 +220,7 @@
                         android:layout_gravity="right"
                         android:layout_marginEnd="14dp"
                         android:layout_marginBottom="15dp"
-                        android:text="3 дня"
+                        android:text="@strings/create_new_event_text173"
                         android:textColor="#8A000000"
                         android:textSize="14sp" />
 
@@ -244,7 +244,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="9dp"
                         android:layout_marginTop="8dp"
-                        android:text="Выберете категорию"
+                        android:text="@strings/choose_a_category"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 
@@ -274,7 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="9dp"
                         android:layout_marginTop="8dp"
-                        android:text="Привязать к"
+                        android:text="@strings/link_to"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 

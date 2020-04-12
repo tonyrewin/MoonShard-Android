@@ -33,7 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Подарить билет"
+                    android:text="@strings/give_a_ticket"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold" />
@@ -75,7 +75,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#333333"
                 android:textSize="14sp"
-                android:text="Просто выбери билет в подарок\n и затем выбери получателя."
+                android:text="@strings/just_pick_a_ticket_as"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

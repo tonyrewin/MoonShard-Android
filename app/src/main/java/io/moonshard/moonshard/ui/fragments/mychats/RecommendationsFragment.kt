@@ -42,7 +42,7 @@ class RecommendationsFragment : MvpAppCompatFragment(), RecommendationsView {
             override fun recommendationsClick(jid: String) {
                 showChatScreen(jid)
             }
-        }, arrayListOf())
+        }, arrayListOf(), getActivity()?.getApplicationContext())
     }
 
     override fun showChatScreen(chatId: String) {

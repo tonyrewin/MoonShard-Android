@@ -20,7 +20,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Абонемент"
+                android:text="@strings/subscription"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -31,7 +31,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Билет на все дни фестиваля"
+                android:text="@strings/ticket_for_all_days_of"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp" />
 

@@ -26,8 +26,7 @@ interface EventListener {
 
 class EventAdapter(
     val listener: EventListener,
-    private var events: ArrayList<RoomPin>,
-    private var context: Context?
+    private var events: ArrayList<RoomPin>
 ) :
     RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
@@ -52,7 +51,7 @@ class EventAdapter(
             val roomInfo =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(jid)
-
+            var context = holder.nameEvent?.getContext()
             holder.nameEvent?.text = roomInfo.name ?: context?.getString(R.string.no_information_available)
             holder.descriptionTv?.text = roomInfo.description ?: context?.getString(R.string.no_information_available)
             setAvatar(events[position].parentGroupId, roomInfo.name, holder.avatarEvent)

@@ -194,7 +194,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             override fun clickChat(categoryName: io.moonshard.moonshard.models.api.Category) {
                 ChooseChatRepository.category = categoryName
             }
-        }, arrayListOf(), context)
+        }, arrayListOf())
 
 
         groupsRv?.layoutManager = LinearLayoutManager(context)

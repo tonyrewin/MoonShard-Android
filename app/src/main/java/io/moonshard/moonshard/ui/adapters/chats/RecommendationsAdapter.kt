@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.ui.adapters.chats
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -29,8 +28,7 @@ interface RecommendationsListener {
 }
 
 class RecommendationsAdapter(val listener: RecommendationsListener,
-                             private var recommendations: List<ChatEntity>,
-                             private var context: Context?) :
+                             private var recommendations: List<ChatEntity>) :
     RecyclerView.Adapter<RecommendationsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -95,6 +93,7 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
     }
 
     private fun setValueMembersTv(roomInfo: RoomInfo, jid: String, valueMembersTv: TextView?) {
+        var context = valueMembersTv?.getContext()
         getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

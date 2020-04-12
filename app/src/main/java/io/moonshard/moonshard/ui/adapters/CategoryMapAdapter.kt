@@ -20,7 +20,7 @@ interface CategoryMapListener {
     fun clickChat(category: Category)
 }
 
-class CategoryMapAdapter(val listener: CategoryMapListener, private var categories: ArrayList<Category>, private var context: Context?) :
+class CategoryMapAdapter(val listener: CategoryMapListener, private var categories: ArrayList<Category>) :
     RecyclerView.Adapter<CategoryMapAdapter.ViewHolder>() {
 
     var focusedItem = -1
@@ -62,19 +62,20 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
     }
 
     private fun setDrawable(imageView:ImageView, category:Category){
+        var context = imageView.getContext()
         when {
-            category.categoryName== context?.getString(R.string.party) -> {
+            category.categoryName== context.getString(R.string.party) -> {
                 imageView.setImageResource(R.drawable.ic_star_category)
             }
-            category.categoryName== context?.getString(R.string.business_events) -> {
+            category.categoryName== context.getString(R.string.business_events) -> {
                 imageView.setImageResource(R.drawable.ic_case_category)
 
             }
-            category.categoryName== context?.getString(R.string.hobby_group) -> {
+            category.categoryName== context.getString(R.string.hobby_group) -> {
                 imageView.setImageResource(R.drawable.ic_heart_category)
 
             }
-            category.categoryName== context?.getString(R.string.cultural_activities) -> {
+            category.categoryName== context.getString(R.string.cultural_activities) -> {
                 imageView.setImageResource(R.drawable.ic_culture_category)
             }
         }

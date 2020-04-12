@@ -48,7 +48,7 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
             override fun clickChat(room: RoomPin) {
                 (parentFragment as? MapFragment)?.showMarkerBottomSheet(room)
             }
-        }, arrayListOf(), context)
+        }, arrayListOf())
     }
 
     fun updateChats(){

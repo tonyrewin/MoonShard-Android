@@ -34,12 +34,12 @@
     <string name="notification_channel_desc">MoonShard chat notifications</string>
     <string name="copied_to_clipboard">Message is copied to clipboard</string>
 
-    <string name="list">Списком</string>
-    <string name="recommendations">Рекомендации</string>
-    <string name="chats">Чаты</string>
-    <string name="chat">Чат</string>
-    <string name="events">Мероприятия</string>
-    <string name="create_chat">Создать чат</string>
+    <string name="as_list">As list</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="chats">Chats</string>
+    <string name="chat">Chat</string>
+    <string name="events">Events</string>
+    <string name="create_chat">Create chat</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -136,7 +136,7 @@
     <string name="enter_your_name_if_desired">Enter your name if desired and add a profile photo. You can return to this later in the “Settings” menu.</string>
     <string name="you_can_choose_an_avatar">You can choose an avatar</string>
     <string name="edit">Edit</string>
-    <string name="want_to_change_your_nickname">Want to change your nickname or \ n use this?</string>
+    <string name="want_to_change_your_nickname">Want to change your nickname or \n use this?</string>
     <string name="reset">Reset</string>
 
     <!-- /admin_item.xml -->
@@ -198,8 +198,6 @@
     <string name="group_chat">Group chat</string>
     <string name="you_can_create_chats_by">You can create chats by category in any location. Any user will be able to join him.</string>
     <string name="create">Create</string>
-    <string name="conferencemoonshardtech">conference.moonshard.tech</string>
-    <string name="moonshardtech">moonshard.tech</string>
 
     <!-- /fragment_add_new_event.xml -->
     <string name="create_event">Create event</string>
@@ -314,7 +312,7 @@
     <string name="we_have_collected_the_best">We have collected the best events and events of your city in one application</string>
 
     <!-- /fragment_present_ticket.xml -->
-    <string name="just_pick_a_ticket_as">Just pick a ticket as a gift \ n and then pick a recipient.</string>
+    <string name="just_pick_a_ticket_as">Just pick a ticket as a gift \n and then pick a recipient.</string>
 
     <!-- /fragment_profile.xml -->
     <string name="kanaevsky1989">@kanaevsky1989</string>
@@ -335,7 +333,7 @@
     <string name="password_confirmation">Password confirmation</string>
     <string name="lock_code">Lock code</string>
     <string name="change_code">Change code</string>
-    <string name="set_an_additional_password_to">Set an additional password to block chats. Forgotten code cannot be recovered.</string>
+    <string name="set_an_additional_password_to">Set an additional code to block chats. Forgotten code cannot be recovered.</string>
 
     <!-- /fragment_settings.xml -->
     <string name="settings">Settings</string>
@@ -359,7 +357,7 @@
 
     <!-- /fragment_time_group_chat.xml -->
     <string name="show_on_map">Show on map</string>
-    <string name="your_chat_pin_will_be">Your chat pin will be visible on the map \ n for a limited time</string>
+    <string name="your_chat_pin_will_be">Your chat pin will be visible on the map \n for a limited time</string>
 
     <!-- /fragment_type_ticket_present.xml -->
     <string name="give_tickets">Give tickets</string>
@@ -413,7 +411,6 @@
     <string name="time_item_text274">12 hours</string>
 
     <!-- /fragment_add_new_type_ticket.xml -->
-    <string name="ticket_management">Ticket management</string>
     <string name="entrance_ticket_save_2019">Entrance Ticket Save 2019</string>
     <string name="ticket_type">Ticket type</string>
     <string name="enter_type">Enter type</string>
@@ -436,11 +433,10 @@
     <string name="go_to_wallet">Go to wallet</string>
 
     <!-- /my_message.xml -->
-    <string name="my_message_text18">105 MB A@strings/pK</string>
+    <string name="my_message_text18">105 MB APK</string>
 
     <!-- /type_ticket_manage_item.xml -->
-    <string name="subscription">Subscription</string>
+    <string name="season_ticket">Season ticket</string>
     <string name="type_ticket_manage_item_text20">300 ₽</string>
     <string name="type_ticket_manage_item_text21">1000 tickets</string>
-    <string name="ticket_for_all_days_of">Ticket for all days of the festival</string>
 </resources>

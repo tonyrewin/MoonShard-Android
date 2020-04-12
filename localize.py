@@ -17,6 +17,8 @@ var_rx = re.compile(r'[\$\{\}]', re.IGNORECASE | re.UNICODE)
 id_rx = re.compile(r'[^a-z0-9_]', re.IGNORECASE)
 snames = []
 
+curdir = os.path.dirname(os.path.realpath(__file__))
+
 def _translate(to_translate, src='ru', dst='en'):
 	# based on code from https://github.com/rishabhdugar/android-localization-helper
 
@@ -39,7 +41,6 @@ def _translate(to_translate, src='ru', dst='en'):
 	return html.unescape(parsed2)
 
 def print_translated(directory, string_rx, replacement, comment_rx):
-	curdir = os.path.dirname(os.path.realpath(__file__))
 	path = curdir + directory
 	# walk activities
 	for (dirpath, dirnames, filenames) in os.walk(path):
@@ -94,7 +95,7 @@ def print_translated(directory, string_rx, replacement, comment_rx):
 					print("")
 
 if __name__ == "__main__":
-	print("<resources>\n")
+	#print("<resources>\n")
 	#print_translated(
 	#	"/app/src/main/java/io/moonshard/moonshard/", 
 	#	"/test",
@@ -102,10 +103,18 @@ if __name__ == "__main__":
 	#	"\" + getString(R.string.%s) + \"",
 	#	src_comment_rx
 	#	)
-	print_translated(
-		"/app/src/main/res/layout", 
+	#print_translated(
+	#	"/app/src/main/res/layout", 
 	#	"/test",
-		xml_string_rx, 
-		"@strings/%s", 
-		xml_comment_rx)
-	print("</resources>")
+	#	xml_string_rx, 
+	#	"@strings/%s", 
+	#	xml_comment_rx)
+	for s in open(curdir + '/app/src/main/res/values/strings.xml').readlines():
+		sparts = s.split('>', 1)
+		if len(sparts)>1:
+			svalue = sparts[1].replace('</string>', '')
+			translated = _translate(svalue, 'en', 'ru')
+			if len(translated)>1 and '>' not in translated:
+				s = sparts[0] +'>' + translated + '</string>'
+		print(s)
+	#print("</resources>")

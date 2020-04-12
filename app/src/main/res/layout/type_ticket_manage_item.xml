@@ -23,7 +23,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="@strings/subscription"
+                android:text="@strings/season_ticket"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 

@@ -29,7 +29,7 @@ import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 import java.util.concurrent.TimeUnit
 
-
+//todo need add presenter
 interface ListChatMapListener {
     fun clickChat(room: RoomPin)
 }
@@ -51,7 +51,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             getRoomInfo(chats[position].roomId!!)
-                
+                //.delaySubscription(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

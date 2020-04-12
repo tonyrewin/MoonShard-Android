@@ -228,7 +228,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                     viewState?.showMapScreen()
                     ChooseChatRepository.clean()
 
-                    
+                    //important
                     MainApplication.getXmppConnection().addUserStatusListener(roomId)
                     MainApplication.getXmppConnection().addChatStatusListener(roomId)
                     MainApplication.getXmppConnection().joinChat(roomId)

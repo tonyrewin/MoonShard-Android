@@ -113,7 +113,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         }
     }
 
-    
+    //ttl - it days in millisec
     fun changeEventServer(
         event: RoomPin
     ) {
@@ -164,7 +164,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                
+                // viewState.showChatInfo()
             }, {
                 Logger.d(it)
             })
@@ -184,7 +184,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
-        
+        //ChangeEventRepository.clean()
     }
 
     fun destroyRoom(jid: String) {

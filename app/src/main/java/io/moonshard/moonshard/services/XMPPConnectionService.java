@@ -121,7 +121,23 @@ public class XMPPConnectionService extends Service {
         createLocationListener();
 
         new XMPPConnectionDelayedCheckAndStartThread().start();
+/*	
+        if (!isThreadAlive) {	
+            isThreadAlive = true;	
+            if (thread == null || !thread.isAlive()) {	
+                thread = new Thread(() -> {	
+                    createConnection();	
+                    Looper.prepare();	
+                    threadHandler = new Handler();	
+                    //createConnection();	
+                    Looper.loop();	
+                });	
+                thread.start();	
+            }	
 
+
+        }	
+ */
     }
 
     class XMPPConnectionDelayedCheckAndStartThread extends Thread{

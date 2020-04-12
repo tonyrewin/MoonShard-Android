@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/usersIv"
-            tools:text="@strings/we_are_walking"
+            tools:text="@string/we_are_walking"
             android:textColor="#333333"
             android:textSize="17sp" />
 
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/groupNameTv"
             android:layout_alignStart="@+id/usersIv"
-            tools:text="@strings/party"
+            tools:text="@string/party"
             android:textColor="#535353"
             android:textSize="14sp" />
 
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/categoryTv"
             android:layout_alignStart="@+id/categoryTv"
-            tools:text="@strings/recommendation_item_text268"
+            tools:text="@string/recommendation_item_text268"
             />
 
     <View

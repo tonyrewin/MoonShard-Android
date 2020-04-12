@@ -107,7 +107,7 @@ if __name__ == "__main__":
 	#	"/app/src/main/res/layout", 
 	#	"/test",
 	#	xml_string_rx, 
-	#	"@strings/%s", 
+	#	"@string/%s", 
 	#	xml_comment_rx)
 	for s in open(curdir + '/app/src/main/res/values/strings.xml').readlines():
 		sparts = s.split('>', 1)

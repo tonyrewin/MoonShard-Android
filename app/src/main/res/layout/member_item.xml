@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/userMemberAvatar"
-            android:text="@strings/oleg_petrov"
+            android:text="@string/oleg_petrov"
             android:textColor="#DE000000"
             android:textSize="16sp" />
 
@@ -30,7 +30,7 @@
             android:layout_below="@+id/nameMemberTv"
             android:layout_alignStart="@+id/nameMemberTv"
             android:layout_marginTop="4dp"
-            android:text="@strings/online"
+            android:text="@string/online"
             android:textColor="#0075FF" />
 
     <ImageView

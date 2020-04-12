@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@strings/create_group_chat"
+                    android:text="@string/create_group_chat"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"/>
@@ -45,7 +45,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
-                    android:text="@strings/done"
+                    android:text="@string/done"
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
@@ -67,13 +67,13 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="11dp"
-                android:text="@strings/title"
+                android:text="@string/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="@strings/enter_the_title"
+                android:hint="@string/enter_the_title"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/nameTv"
@@ -107,13 +107,13 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="11dp"
-                android:text="@strings/chat_description"
+                android:text="@string/chat_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="@strings/enter_a_description"
+                android:hint="@string/enter_a_description"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"

@@ -10,7 +10,7 @@
             android:id="@+id/kek"
             android:textColor="@android:color/black"
             android:layout_gravity="center"
-            android:text="@strings/cock"
+            android:text="@string/cock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

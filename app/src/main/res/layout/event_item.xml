@@ -15,7 +15,7 @@
             android:id="@+id/nameEvent"
             android:textSize="17sp"
             android:textColor="#333333"
-            android:text="@strings/cuddle_party_17dec"
+            android:text="@string/cuddle_party_17dec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -24,7 +24,7 @@
             android:layout_alignLeft="@+id/nameEvent"
             android:layout_toLeftOf="@+id/avatarEvent"
             android:layout_marginBottom="10dp"
-            android:text="@strings/hugging_party_december_17_at"
+            android:text="@string/hugging_party_december_17_at"
             android:id="@+id/descriptionTv"
             android:layout_below="@+id/nameEvent"
             android:textSize="14sp"
@@ -54,6 +54,6 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@strings/view_group" />
+            android:text="@string/view_group" />
 
 </RelativeLayout>

@@ -23,7 +23,7 @@
             android:lineSpacingExtra="3sp"
             android:translationY="1.64sp"
             android:textSize="17sp"
-            android:text="@strings/create_event"
+            android:text="@string/create_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -37,7 +37,7 @@
             android:gravity="center_horizontal|bottom"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:text="@strings/organize_a_concert_conference_or"
+            android:text="@string/organize_a_concert_conference_or"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -47,7 +47,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
-            android:text="@strings/your_location"
+            android:text="@string/your_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -63,7 +63,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
-            android:text="@strings/parkovaya_street_odintsovo_russia"
+            android:text="@string/parkovaya_street_odintsovo_russia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -73,7 +73,7 @@
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#0075FF"
             android:textColor="@android:color/white"
-            android:text="@strings/create"
+            android:text="@string/create"
             android:layout_width="190dp"
             android:layout_height="wrap_content"/>
 

@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
-                tools:text="@strings/rose" />
+                tools:text="@string/rose" />
 
         <LinearLayout
                 android:layout_marginEnd="32dp"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#333333"
                     android:textSize="16sp"
-                    tools:text="@strings/h" />
+                    tools:text="@string/h" />
 
         </LinearLayout>
 
@@ -134,7 +134,7 @@
                     android:textColor="#333333"
                     android:lineSpacingExtra="0sp"
                     android:gravity="top"
-                    tools:text="@strings/apprelease"
+                    tools:text="@string/apprelease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -151,7 +151,7 @@
                     android:layout_below="@+id/nameFile"
                     android:layout_toRightOf="@+id/iconLayout"
                     android:gravity="top"
-                    tools:text="@strings/their_message_text273"
+                    tools:text="@string/their_message_text273"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

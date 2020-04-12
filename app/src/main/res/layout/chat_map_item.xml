@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/usersIv"
-            tools:text="@strings/group_name"
+            tools:text="@string/group_name"
             android:textColor="#333333"
             android:textSize="17sp" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/groupNameTv"
             android:layout_alignStart="@+id/usersIv"
-            android:text="@strings/no_internet_connection"
+            android:text="@string/no_internet_connection"
             android:textColor="#9B9BB6"
             android:textSize="14sp" />
 
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/valueMembersTv"
             android:layout_alignStart="@+id/usersIv"
-            tools:text="@strings/chat_map_item_text126" />
+            tools:text="@string/chat_map_item_text126" />
 
     <View
             android:layout_width="match_parent"

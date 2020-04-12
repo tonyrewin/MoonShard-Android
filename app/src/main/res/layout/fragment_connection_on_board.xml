@@ -13,7 +13,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="14dp"
             android:paddingEnd="15dp"
-            android:text="@strings/skip"
+            android:text="@string/skip"
             android:textColor="#0075FF"
             android:textSize="16sp" />
 
@@ -31,7 +31,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/image"
             android:textSize="20sp"
-            android:text="@strings/always_stay_in_touch"
+            android:text="@string/always_stay_in_touch"
             android:textColor="#333333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -48,7 +48,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/textViewBold"
             android:textSize="16sp"
-            android:text="@strings/even_if_you_dont_have"
+            android:text="@string/even_if_you_dont_have"
             android:textColor="#333333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -65,7 +65,7 @@
             android:layout_gravity="center"
             android:background="@drawable/button_background"
             android:gravity="center"
-            android:text="@strings/next"
+            android:text="@string/next"
             android:textColor="@android:color/background_light"
             android:textSize="7pt" />
 

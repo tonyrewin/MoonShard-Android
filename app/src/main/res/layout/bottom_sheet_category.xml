@@ -21,7 +21,7 @@
             android:id="@+id/categoryFilterName"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/categorySwipeBtn"
-            android:text="@strings/interest_category"
+            android:text="@string/interest_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

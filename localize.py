@@ -6,7 +6,7 @@ import re
 import html
 import requests
 
-xml_string_rx = re.compile(r'(?<=:(hint|text)=\")((?!\@string\/)[^\"]+)(?=\")', re.UNICODE)
+xml_string_rx = re.compile(r'(?<=:(hint|text)=\")((?!\@strings\/)[^\"]+)(?=\")', re.UNICODE)
 xml_comment_rx = re.compile(r'\<\!\-\-((?!\-\-\>)[\s\S])*\-\-\>', re.IGNORECASE)
 
 src_string_rx = re.compile(r'(?<=(\"))([^\"]*?[а-яёЁА-Я]+[^\"]*?)(?=\")', re.UNICODE) # need a second group
@@ -95,17 +95,17 @@ def print_translated(directory, string_rx, replacement, comment_rx):
 
 if __name__ == "__main__":
 	print("<resources>\n")
-	print_translated(
-		"/app/src/main/java/io/moonshard/moonshard/", 
+	#print_translated(
+	#	"/app/src/main/java/io/moonshard/moonshard/", 
 	#	"/test",
-		src_string_rx, 
-		"\" + getString(R.string.%s) + \"",
-		src_comment_rx
-		)
+	#	src_string_rx, 
+	#	"\" + getString(R.string.%s) + \"",
+	#	src_comment_rx
+	#	)
 	print_translated(
 		"/app/src/main/res/layout", 
 	#	"/test",
 		xml_string_rx, 
-		"@string/%s", 
+		"@strings/%s", 
 		xml_comment_rx)
 	print("</resources>")

@@ -132,7 +132,7 @@
                 android:layout_below="@+id/nameFile"
                 android:layout_toRightOf="@+id/iconLayout"
                 android:gravity="top"
-                tools:text="105 MB A@strings/pK"
+                tools:text="@strings/my_message_text18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

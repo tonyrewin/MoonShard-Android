@@ -23,7 +23,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Абонемент"
+                android:text="@strings/subscription"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/costTv"
                 android:layout_alignTop="@+id/titleType"
                 android:layout_alignParentEnd="true"
-                android:text="300 ₽"
+                android:text="@strings/type_ticket_manage_item_text20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
@@ -44,7 +44,7 @@
                 android:layout_alignTop="@+id/descriptionTv"
                 android:id="@+id/quantityTv"
                 android:layout_alignParentEnd="true"
-                android:text="1000 билетов"
+                android:text="@strings/type_ticket_manage_item_text21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
@@ -62,7 +62,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Билет на все дни фестиваля"
+                android:text="@strings/ticket_for_all_days_of"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp" />
 

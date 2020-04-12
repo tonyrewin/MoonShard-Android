@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Управление билетами"
+                    android:text="@strings/ticket_management"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Готово"
+                    android:text="@strings/done"
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
@@ -83,7 +83,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="1sp"
-                android:text="Добавить билеты"
+                android:text="@strings/add_tickets"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -126,7 +126,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="1sp"
-                    android:text="Сканировать билеты"
+                    android:text="@strings/scan_tickets"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -172,7 +172,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="1sp"
-                    android:text="Статистика мероприятия"
+                    android:text="@strings/event_statistics"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -215,7 +215,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="1sp"
-                    android:text="Перейти в кошелек"
+                    android:text="@strings/go_to_wallet"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 

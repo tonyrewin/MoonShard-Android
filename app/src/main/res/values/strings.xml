@@ -412,4 +412,35 @@
     <!-- /time_item.xml -->
     <string name="time_item_text274">12 hours</string>
 
+    <!-- /fragment_add_new_type_ticket.xml -->
+    <string name="ticket_management">Ticket management</string>
+    <string name="entrance_ticket_save_2019">Entrance Ticket Save 2019</string>
+    <string name="ticket_type">Ticket type</string>
+    <string name="enter_type">Enter type</string>
+    <string name="explanation">Explanation</string>
+    <string name="enter_an_explanation">Enter an explanation</string>
+    <string name="cost_">Cost, ₽</string>
+    <string name="enter_cost">Enter cost</string>
+    <string name="number_of_tickets">Number of tickets</string>
+    <string name="enter_quantity">Enter quantity</string>
+    <string name="save">SAVE</string>
+    <string name="add_another_type">Add another type</string>
+
+    <!-- /fragment_manage_types_ticket.xml -->
+    <string name="click_on_a_ticket_type">Click on a ticket type to edit it.</string>
+
+    <!-- /fragment_tickets_manage.xml -->
+    <string name="add_tickets">Add tickets</string>
+    <string name="scan_tickets">Scan tickets</string>
+    <string name="event_statistics">Event Statistics</string>
+    <string name="go_to_wallet">Go to wallet</string>
+
+    <!-- /my_message.xml -->
+    <string name="my_message_text18">105 MB A@strings/pK</string>
+
+    <!-- /type_ticket_manage_item.xml -->
+    <string name="subscription">Subscription</string>
+    <string name="type_ticket_manage_item_text20">300 ₽</string>
+    <string name="type_ticket_manage_item_text21">1000 tickets</string>
+    <string name="ticket_for_all_days_of">Ticket for all days of the festival</string>
 </resources>

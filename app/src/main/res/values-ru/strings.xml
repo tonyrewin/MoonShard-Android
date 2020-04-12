@@ -41,6 +41,11 @@
     <string name="events">События</string>
     <string name="create_chat">Создать чат</string>
 
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="on_the_weekend">Выходные</string>
+    <string name="profile">Профиль</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Привет пустой фрагмент</string>
     <string name="snackbar_undo">Отменить</string>

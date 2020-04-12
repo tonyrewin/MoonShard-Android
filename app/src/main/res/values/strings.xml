@@ -41,11 +41,16 @@
     <string name="events">Events</string>
     <string name="create_chat">Create chat</string>
 
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="on_the_weekend">Weekend</string>
+    <string name="profile">Profile</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="snackbar_undo">Undo</string>
     <string name="chatlist_chat_deleted">Chat was deleted</string>
-    <string name="change_txt">Изменить</string>
+    <string name="change_txt">Change</string>
 
     <!-- ui/fragments/mychats/chat/ChatFragment.kt -->
     <string name="members">Members</string>

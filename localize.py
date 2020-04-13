@@ -113,7 +113,7 @@ if __name__ == "__main__":
 		sparts = s.split('>', 1)
 		if len(sparts)>1:
 			svalue = sparts[1].replace('</string>', '')
-			translated = _translate(svalue, 'en', 'ru')
+			translated = _translate(svalue, 'en', 'es')
 			if len(translated)>1 and '>' not in translated:
 				s = sparts[0] +'>' + translated + '</string>'
 		print(s)

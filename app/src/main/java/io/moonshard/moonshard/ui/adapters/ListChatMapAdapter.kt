@@ -107,7 +107,7 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
         getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                valueMembersTv?.text = "${roomInfo.occupantsCount} " + context?.getString(R.string.members) + ", $it" + context?.getString(R.string.online)
+                valueMembersTv?.text = "${roomInfo.occupantsCount} " + context?.getString(R.string.members) + ", $it " + context?.getString(R.string.online)
             }, {
                 Logger.d(it)
             })

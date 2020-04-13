@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="@string/the_main"
+                android:text="@string/general"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />

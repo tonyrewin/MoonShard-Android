@@ -121,8 +121,8 @@
     <string name="cock">Хуй</string>
 
     <!-- /activity_login.xml -->
-    <string name="entrance">Вход</string>
-    <string name="your_email">Ваш адрес электронной почты</string>
+    <string name="login">Вход</string>
+    <string name="your_login">Ваш логин</string>
     <string name="password">Пароль</string>
     <string name="next">Дальше</string>
     <string name="or">или</string>
@@ -183,6 +183,7 @@
     <string name="chat_item_text125">0</string>
 
 
+
     <!-- /chat_map_item.xml -->
     <string name="chat_map_item_text126">130 м</string>
 
@@ -227,7 +228,7 @@
 
     <!-- /fragment_chat_info.xml -->
     <string name="information">Информация</string>
-    <string name="chat_info_text153">666 пользователей, 30 онлайн</string>
+    <string name="chat_info_text153">234 пользователей, 30 онлайн</string>
     <string name="chat_info_text154">130 м</string>
     <string name="description">Описание</string>
     <string name="description_of_vfv_fvfvfv_f">Описание vfv fvfvfv f</string>
@@ -263,7 +264,7 @@
     <string name="link_to">Привязать к</string>
 
     <!-- /fragment_event_info.xml -->
-    <string name="event_info_text176">666 пользователей, 30 онлайн</string>
+    <string name="event_info_text176">234 пользователей, 30 онлайн</string>
     <string name="event_info_text177">130 м</string>
     <string name="notifications">Уведомления</string>
     <string name="we_are_walking">МЫ ИДЁМ</string>
@@ -348,7 +349,7 @@
     <string name="settings">Настройки</string>
     <string name="example_username">Пример имени пользователя</string>
     <string name="settings_text234"> 1 234 567 89 01</string>
-    <string name="the_main">Главный</string>
+    <string name="general">Общие</string>
     <string name="night_theme">Ночная тема</string>
     <string name="language">Язык</string>
     <string name="english">Английский</string>
@@ -361,8 +362,6 @@
 
     <!-- /fragment_settings_new.xml -->
     <string name="prevent_add_to_chats">Запретить добавление в чаты</string>
-    <string name="go_out">Выйти</string>
-
     <!-- /fragment_time_group_chat.xml -->
     <string name="show_on_map">Показать на карте</string>
     <string name="your_chat_pin_will_be">Ваш значок чата будет виден на карте \n в течение ограниченного времени</string>
@@ -402,7 +401,7 @@
     <string name="my_ticket_item_text267">021457859710</string>
 
     <!-- /recommendation_item.xml -->
-    <string name="recommendation_item_text268">666 пользователей, 30 онлайн</string>
+    <string name="recommendation_item_text268">234 пользователей, 30 онлайн</string>
 
     <!-- /system_message.xml -->
     <string name="balto_joined_the_chat">Балто присоединился к чату</string>

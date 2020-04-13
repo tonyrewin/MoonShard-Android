@@ -1,0 +1,446 @@
+<resources>
+
+    <string name="app_name">MoonShard</string>
+
+    <string name="auth_threepid_warning_message">El registro con correo electrónico y número de teléfono a la vez no es compatible hasta que exista la API. Solo se tendrá en cuenta el número de teléfono. \n \nPuede agregar su correo electrónico a su perfil en la configuración.</string>
+    <string name="auth_add_email_message">"Agregue una dirección de correo electrónico a su cuenta para que los usuarios puedan descubrirlo y restablecer la contraseña".</string>
+    <string name="auth_add_phone_message">"Agregue un número de teléfono a su cuenta para que los usuarios lo descubran".</string>
+    <string name="auth_add_email_phone_message">"Agregue una dirección de correo electrónico y / o un número de teléfono a su cuenta para que los usuarios puedan descubrirlo. \n \nLa dirección de correo electrónico también le permitirá restablecer su contraseña".</string>
+    <string name="auth_add_email_and_phone_message">"Agregue una dirección de correo electrónico y un número de teléfono a su cuenta para que los usuarios puedan descubrirlo. \n \nLa dirección de correo electrónico también le permitirá restablecer su contraseña".</string>
+
+    <string name="resources_language">es</string>
+
+    <string name="account_email_validation_title">Verificación pendiente</string>
+    <string name="account_email_validation_message">Por favor revise su correo electrónico y haga clic en el enlace que contiene. Una vez hecho esto, haga clic en continuar.</string>
+    <string name="account_email_validation_error">No se puede verificar la dirección de correo electrónico. Por favor revise su correo electrónico y haga clic en el enlace que contiene. Una vez hecho esto, haga clic en continuar.</string>
+    <string name="account_email_already_used_error">Esta dirección de correo electrónico ya está en uso.</string>
+    <string name="account_email_not_found_error">No se encontró esta dirección de correo electrónico.</string>
+    <string name="account_phone_number_already_used_error">Este número de teléfono ya está en uso.</string>
+    <string name="account_email_error">Se produjo un error al verificar su dirección de correo electrónico.</string>
+    <string name="account_phone_number_error">Se produjo un error al verificar su número de teléfono.</string>
+    <string name="login_mobile_device">Móvil</string>
+    <string name="account_additional_info">Información adicional:% s</string>
+
+    <string name="ok">Okay</string>
+    <string name="cancel">Cancelar</string>
+    <string name="input_companion_username">JID del interlocutor de entrada</string>
+    <string name="hint_enter_a_message">Ingrese el mensaje ...</string>
+    <string name="logout">Cerrar sesión de la cuenta</string>
+    <string name="sign_in_button">Registrarse</string>
+    <string name="invalid_jid_error">JabberID inválido!</string>
+    <string name="offline">Desconectado</string>
+    <string name="online">En línea</string>
+    <string name="clear_chat">Vacie la conversacion</string>
+    <string name="notification_channel_name">Notificaciones MoonShard</string>
+    <string name="notification_channel_desc">Notificaciones de chat MoonShard</string>
+    <string name="copied_to_clipboard">El mensaje se copia al portapapeles</string>
+
+    <string name="as_list">Como lista</string>
+    <string name="recommendations">Recomendaciones</string>
+    <string name="chats">Chats</string>
+    <string name="chat">Charla</string>
+    <string name="events">Eventos</string>
+    <string name="create_chat">Crear chat</string>
+
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+    <string name="on_the_weekend">Fin de semana</string>
+    <string name="profile">Perfil</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="snackbar_undo">Deshacer</string>
+    <string name="chatlist_chat_deleted">El chat fue eliminado</string>
+    <string name="change_txt">Cambio</string>
+
+    <!-- ui/fragments/mychats/chat/ChatFragment.kt -->
+    <string name="members">Miembros</string>
+
+    <!-- ui/fragments/mychats/chat/info/ProfileUserFragment.kt -->
+    <string name="name">Nombre</string>
+    <string name="user_information_is_not_filled">La información del usuario no está llena</string>
+
+    <!-- ui/fragments/mychats/chat/info/chat/ChatInfoFragment.kt -->
+    <string name="no_information_available">no hay información disponible</string>
+    <string name="meters">metros</string>
+    <string name="km">Km</string>
+
+    <!-- ui/fragments/mychats/chat/info/event/EventInfoFragment.kt -->
+
+    <!-- ui/fragments/mychats/chat/info/event/ManageEventFragment.kt -->
+    <string name="day">día</string>
+    <string name="days234">dias</string>
+    <string name="days">dias</string>
+    <string name="a_week">Una semana</string>
+    <string name="select_picture">Seleccionar imagen</string>
+    <string name="this_app_needs_location_access">Esta aplicación necesita acceso a tu ubicación</string>
+
+    <!-- ui/fragments/mychats/create/event/ChooseMapFragment.kt -->
+
+    <!-- ui/fragments/mychats/create/event/CreateNewEventFragment.kt -->
+
+    <!-- ui/fragments/mychats/create/event/TimeEventFragment.kt -->
+
+    <!-- ui/fragments/map/MapFragment.kt -->
+    <string name="at">a</string>
+    <string name="party">Partido</string>
+    <string name="business_events">Eventos empresariales</string>
+    <string name="hobby_group">Grupo de pasatiempos</string>
+    <string name="cultural_activities">Actividades culturales</string>
+    <string name="category">Categoría:</string>
+    <string name="select_date">Seleccione fecha</string>
+
+    <!-- ui/fragments/profile/ProfileFragment.kt -->
+    <string name="information_about_you_is_not">La información sobre usted no está llena</string>
+
+    <!-- ui/activities/auth/LoginActivity.kt -->
+    <string name="dont_have_an_account_yet">¿Aún no tienes una cuenta? registro</string>
+    <string name="forgot_your_password">¿Olvidaste tu contraseña?</string>
+    <string name="you_entered_an_invalid_character">Ingresaste un caracter inválido</string>
+    <string name="server_error_occurred">Se produjo un error del servidor</string>
+    <string name="server_response_timed_out">La respuesta del servidor ha excedido el tiempo de espera</string>
+    <string name="no_internet_connection">Sin conexión a Internet</string>
+    <string name="an_error_has_occurred">Se ha producido un error</string>
+
+    <!-- ui/activities/auth/RegisterActivity.kt -->
+    <string name="already_have_an_account_to">¿Ya tienes una cuenta? Iniciar sesión</string>
+
+    <!-- helpers/NetworkHandler.java -->
+    <string name="administrator_deleted_username_from_chat">El administrador ha eliminado% s del chat</string>
+    <string name="invited_you_to_chat">te invitó a chatear</string>
+    <string name="you_were_invited_to_chat">Fuiste invitado a chatear</string>
+    <string name="joined_the_chat">Únete al chat</string>
+    <string name="deleted_chat">chat eliminado</string>
+
+    <!-- services/LocationService.kt -->
+    <string name="hi">Hola</string>
+    <string name="how_are_you">cómo estás</string>
+
+    <!-- services/XMPPConnectionService.java -->
+
+    <!-- /acquaintance_fragment.xml -->
+    <string name="cock">Polla</string>
+
+    <!-- /activity_login.xml -->
+    <string name="login">Iniciar sesión</string>
+    <string name="your_login">Su nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="next">Próximo</string>
+    <string name="or">o</string>
+
+    <!-- /activity_password_recovery.xml -->
+    <string name="password_recovery">Recuperación de contraseña</string>
+    <string name="to_recover_your_password_enter">Para recuperar su contraseña, ingrese la dirección de correo electrónico proporcionada durante el registro.</string>
+    <string name="enter_email">Ingrese correo electrónico</string>
+    <string name="restore_password">RESTAURAR CONTRASEÑA</string>
+
+    <!-- /activity_register.xml -->
+    <string name="registration">registro</string>
+
+    <!-- /activity_start_profile.xml -->
+    <string name="almost_ready">¡Casi listo!</string>
+    <string name="enter_your_name_if_desired">Ingrese su nombre si lo desea y agregue una foto de perfil. Puede volver a esto más adelante en el menú "Configuración".</string>
+    <string name="you_can_choose_an_avatar">Puedes elegir un avatar</string>
+    <string name="edit">Editar</string>
+    <string name="want_to_change_your_nickname">¿Quieres cambiar tu apodo o \n usar esto?</string>
+    <string name="reset">Reiniciar</string>
+
+    <!-- /admin_item.xml -->
+    <string name="oleg_petrov">Oleg Petrov</string>
+    <string name="creator">Creador</string>
+
+    <!-- /bottom_sheet.xml -->
+    <string name="search_by_place_or_name">Buscar por lugar o nombre</string>
+
+    <!-- /bottom_sheet_category.xml -->
+    <string name="interest_category">Categoría de interés</string>
+
+    <!-- /bottom_sheet_info_content.xml -->
+    <string name="group_name">Nombre del grupo</string>
+    <string name="info_content_text110">130 m de distancia</string>
+    <string name="to_read">Leer</string>
+    <string name="join">Unirse</string>
+    <string name="about_event">Sobre el evento</string>
+    <string name="start">comienzo</string>
+    <string name="december_13_2019_at_1800">13 de diciembre de 2019 a las 18:00</string>
+    <string name="location">Ubicación</string>
+    <string name="parkovaya_street_odintsovo_moscow_region">Parkovaya Street, Odintsovo, Región de Moscú</string>
+    <string name="about_chat">Sobre el chat</string>
+    <string name="we_are_drinking_pivas_at">Estamos bebiendo pivas en el monumento a Griboedov. ¡Dejamos cien partes por unas tetas de tres litros!</string>
+    <!-- /bottom_sheet_time.xml -->
+
+    <!-- /category_item.xml -->
+
+    <!-- /category_map_item.xml -->
+    <string name="night_party">Fiesta nocturna</string>
+    <string name="with_this_it_is_clear">Con esto queda claro techno en la zona, festivales, picadora de carne.</string>
+
+    <!-- /chat_item.xml -->
+    <string name="chatname">Nombre de chat</string>
+    <string name="messagetext">Mensaje de texto</string>
+    <string name="chat_item_text124">14:14</string>
+    <string name="chat_item_text125">0 0</string>
+
+    <!-- /chat_map_item.xml -->
+    <string name="chat_map_item_text126">130 m de distancia</string>
+
+    <!-- /event_item.xml -->
+    <string name="cuddle_party_17dec">MUCHACHA FIESTA 17dec</string>
+    <string name="hugging_party_december_17_at">Fiesta de abrazos 17 de diciembre en el Gazkolder Club</string>
+    <string name="view_group">VER GRUPO</string>
+
+    <!-- /fragment_acquaintance.xml -->
+    <string name="skip">Omitir</string>
+    <string name="meet_new_people">Conocer gente nueva</string>
+    <string name="we_have_created_local_geochats">Hemos creado geo-chats locales basados en intereses, donde todos encontrarán una compañía a su gusto.</string>
+
+    <!-- /fragment_add_admin.xml -->
+    <string name="add_admin">Agregar administrador</string>
+    <string name="to_invite">Invitar</string>
+    <string name="username">Nombre de usuario</string>
+
+    <!-- /fragment_add_chat.xml -->
+    <string name="group_chat">Grupo de chat</string>
+    <string name="you_can_create_chats_by">Puede crear chats por categoría en cualquier ubicación. Cualquier usuario podrá unirse a él.</string>
+    <string name="create">Crear</string>
+
+    <!-- /fragment_add_new_event.xml -->
+    <string name="create_event">Crear evento</string>
+    <string name="organize_a_concert_conference_or">Organizar un concierto, conferencia o noche de poesía. Invita a tus amigos a un cumpleaños, fiesta o reunión</string>
+    <string name="your_location">Tu ubicación:</string>
+    <string name="parkovaya_street_odintsovo_russia">Calle Parkovaya, Odintsovo, Rusia</string>
+
+    <!-- /fragment_admins.xml -->
+    <string name="administrators">Administradores</string>
+
+    <!-- /fragment_change_profile.xml -->
+    <string name="change_profile">Cambiar el perfil</string>
+    <string name="done">Hecho</string>
+    <string name="kanaevsky">Kanaevsky</string>
+    <string name="about_myself">Sobre mí</string>
+    <string name="any_details_for_example_age">Cualquier detalle, por ejemplo: edad, ocupación o ciudad.</string>
+
+    <!-- /fragment_chat.xml -->
+    <string name="name_chat">Chat de nombre</string>
+
+    <!-- /fragment_chat_info.xml -->
+    <string name="information">Información</string>
+    <string name="chat_info_text153">234 miembros, 30 en línea</string>
+    <string name="chat_info_text154">130 m de distancia</string>
+    <string name="description">Descripción</string>
+    <string name="description_of_vfv_fvfvfv_f">Descripción de vfv fvfvfv f</string>
+    <string name="notification">Notificación</string>
+    <string name="add_member">Añadir miembro</string>
+    <string name="leave_group">Dejar grupo</string>
+
+    <!-- /fragment_choose_map.xml -->
+    <string name="chat_location">Ubicación de chat</string>
+    <string name="where_will_the_event_take">¿Dónde tendrá lugar el evento?</string>
+    <string name="sosnichnaya_street_11k1">Calle Sosnichnaya, 11k1</string>
+
+    <!-- /fragment_connection_on_board.xml -->
+    <string name="always_stay_in_touch">Mantente siempre en contacto</string>
+    <string name="even_if_you_dont_have">Incluso si no tiene internet, manténgase actualizado con las últimas noticias y eventos.</string>
+
+    <!-- /fragment_create_group.xml -->
+    <string name="create_group_chat">Crear chat grupal</string>
+
+    <!-- /fragment_create_new_chat.xml -->
+    <string name="title">Título</string>
+    <string name="enter_the_title">Ingrese el título</string>
+    <string name="chat_description">Descripción del chat</string>
+    <string name="enter_a_description">Ingrese una descripción</string>
+
+    <!-- /fragment_create_new_event.xml -->
+    <string name="the_date_of_the_beginning">la fecha del comienzo</string>
+    <string name="december_13th">13 de diciembre</string>
+    <string name="event_duration">Duración del evento</string>
+    <string name="create_new_event_text173">3 días</string>
+    <string name="choose_a_category">Elige una categoría</string>
+    <string name="link_to">Enlace a</string>
+
+    <!-- /fragment_event_info.xml -->
+    <string name="event_info_text176">234 miembros, 30 en línea</string>
+    <string name="event_info_text177">130 m de distancia</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="we_are_walking">ESTAMOS CAMINANDO</string>
+    <string name="organizer">Organizador</string>
+    <string name="tickets_from_300_">BOLETOS DESDE 300 ₽</string>
+
+    <!-- /fragment_events.xml -->
+    <string name="oops_its_empty">¡Uy! Esta vacio</string>
+    <string name="create_your_first_event_and">Crea tu primer evento y aparecerá aquí en la lista</string>
+    <string name="add_event">AÑADIR EVENTO</string>
+
+    <!-- /fragment_invite_user.xml -->
+
+    <!-- /fragment_manage_chat.xml -->
+    <string name="chat_management">Gestión de chat</string>
+    <string name="save_the_festival_anticipated_outline">Save The festival anticipó Outline y lanzó una reacción en cadena de electrónica de masas</string>
+    <string name="member_management">Gerencia de miembros</string>
+    <string name="manage_chat_text190">123</string>
+    <string name="manage_chat_text191">123</string>
+    <string name="delete_group">Eliminar grupo</string>
+
+    <!-- /fragment_manage_event.xml -->
+    <string name="event_management">Gestión de eventos</string>
+    <string name="save_2019">Ahorre 2019</string>
+    <string name="enter_event_description">Ingrese la descripción del evento</string>
+    <string name="manage_event_text196">4 dias</string>
+    <string name="ticket_management">Gestión de entradas</string>
+    <string name="manage_event_text198">123</string>
+    <string name="manage_event_text199">123</string>
+
+    <!-- /fragment_my_chats.xml -->
+    <string name="my_chats">Mis chats</string>
+
+    <!-- /fragment_my_ticket_info.xml -->
+    <string name="your_tickets">Sus entradas</string>
+    <string name="actions">Comportamiento</string>
+    <string name="valeriy_meladze">Valeriy Meladze</string>
+    <string name="july_1_2020_at_2300">1 de julio de 2020 a las 23:00</string>
+    <string name="moscow_mutabor_club">Moscú. Club Mutabor.</string>
+    <string name="admission_ticket">Boleto de admisión</string>
+    <string name="all_day_event_ticket">Boleto para todo el día</string>
+    <string name="order_no">N º de pedido.</string>
+    <string name="my_ticket_info_text210">021457859710</string>
+    <string name="event_ended">Evento terminado</string>
+    <string name="return_ticket">Boleto de regreso</string>
+    <string name="save_as_pdf">Guardar como pdf</string>
+    <string name="give_a_ticket">Dar un boleto</string>
+    <string name="delete_ticket">Eliminar boleto</string>
+    <!-- /fragment_my_tickets.xml -->
+
+    <!-- /fragment_new_place.xml -->
+    <string name="learn_about_new_places">Aprende sobre nuevos lugares</string>
+    <string name="we_have_collected_the_best">Hemos recopilado los mejores eventos y eventos de tu ciudad en una sola aplicación</string>
+
+
+    <!-- /fragment_present_ticket.xml -->
+    <string name="just_pick_a_ticket_as">Simplemente elija un boleto como regalo \n y luego elija un destinatario.</string>
+
+    <!-- /fragment_profile.xml -->
+    <string name="kanaevsky1989">@ kanaevsky1989</string>
+    <string name="userexamplecom">user@example.com</string>
+    <string name="wallet">Billetera</string>
+    <string name="my_tickets">Mis entradas</string>
+
+    <!-- /fragment_profile_user.xml -->
+    <string name="send_a_message">enviar un mensaje</string>
+    <string name="block_user">Bloquear usuario</string>
+
+    <!-- /fragment_recommendations.xml -->
+
+    <!-- /fragment_security.xml -->
+    <string name="security">Seguridad</string>
+    <string name="current_password">contraseña actual</string>
+    <string name="new_password">Nueva contraseña</string>
+    <string name="password_confirmation">confirmación de contraseña</string>
+    <string name="lock_code">Codigo bloqueado</string>
+    <string name="change_code">Cambiar código</string>
+    <string name="set_an_additional_password_to">Establecer un código adicional para bloquear chats. El código olvidado no se puede recuperar.</string>
+
+    <!-- /fragment_settings.xml -->
+    <string name="settings">Configuraciones</string>
+    <string name="example_username">Nombre de usuario de ejemplo</string>
+    <string name="settings_text234">+1 234 567 89 01</string>
+    <string name="general">General</string>
+    <string name="night_theme">Tema de la noche</string>
+    <string name="language">Idioma</string>
+    <string name="english">English</string>
+    <string name="chat_settings">Configuraciones de chat</string>
+    <string name="chat_background">Fondo de chat</string>
+    <string name="choose_a_topic">Escoge un tema</string>
+    <string name="delete_all_chats">Eliminar todos los chats</string>
+    <string name="other">Otro</string>
+    <string name="log_out">Cerrar sesión</string>
+
+    <!-- /fragment_settings_new.xml -->
+    <string name="prevent_add_to_chats">Evitar agregar a chats</string>
+    <string name="faq">Preguntas más frecuentes</string>
+
+    <!-- /fragment_time_group_chat.xml -->
+    <string name="show_on_map">Mostrar en el mapa</string>
+    <string name="your_chat_pin_will_be">Tu pin de chat estará visible en el mapa \n por un tiempo limitado</string>
+
+    <!-- /fragment_type_ticket_present.xml -->
+    <string name="give_tickets">Regalar entradas</string>
+
+    <!-- /fragment_type_tickets.xml -->
+
+    <!-- /fragment_wallet.xml -->
+    <string name="your_wallet">Tu billetera</string>
+    <string name="wallet_text252">0 ₽</string>
+    <string name="current_balance">Saldo actual</string>
+    <string name="fill_up_a_purse">Llenar un bolso</string>
+    <string name="withdraw_funds">Retirar Fondos</string>
+    <string name="cash_flow">Flujo de efectivo</string>
+    <string name="replenishment">Reposición</string>
+    <string name="writeoff">Pedir por escrito</string>
+
+    <!-- /item_test.xml -->
+    <string name="xuy">xuy</string>
+
+    <!-- /little_ticket_item.xml -->
+    <string name="subscription">Suscripción</string>
+    <string name="ticket_for_all_days_of">Entrada para todos los días del festival.</string>
+    
+    <!-- /member_item.xml -->
+
+    <!-- /messages_chat.xml -->
+    <string name="write_a_message">Escribe un mensaje</string>
+
+    <!-- /my_message.xml -->
+    <string name="p">PAGS</string>
+    <string name="apprelease">Lanzamiento de la aplicación</string>
+    <string name="my_message_text265">105 MB APK</string>
+
+    <!-- /my_ticket_item.xml -->
+    <string name="parterre">Patio de butacas</string>
+    <string name="my_ticket_item_text267">021457859710</string>
+
+    <!-- /recommendation_item.xml -->
+    <string name="recommendation_item_text268">234 miembros, 30 en línea</string>
+
+    <!-- /system_message.xml -->
+    <string name="balto_joined_the_chat">Balto se unió al chat</string>
+    <string name="system_message_text270">14:43</string>
+
+    <!-- /their_message.xml -->
+    <string name="rose">Rosa</string>
+    <string name="h">H</string>
+    <string name="their_message_text273">105 MB APK</string>
+
+    <!-- /time_item.xml -->
+    <string name="time_item_text274">12 horas</string>
+
+    <!-- /fragment_add_new_type_ticket.xml -->
+    <string name="entrance_ticket_save_2019">Boleto de entrada Save 2019</string>
+    <string name="ticket_type">Tipo de boleto</string>
+    <string name="enter_type">Ingrese el tipo</string>
+    <string name="explanation">Explicación</string>
+    <string name="enter_an_explanation">Ingrese una explicación</string>
+    <string name="cost_">Costo, ₽</string>
+    <string name="enter_cost">Ingresar costo</string>
+    <string name="number_of_tickets">Numero de entradas</string>
+    <string name="enter_quantity">Introducir cantidad</string>
+    <string name="save">SALVAR</string>
+    <string name="add_another_type">Agregar otro tipo</string>
+
+    <!-- /fragment_manage_types_ticket.xml -->
+    <string name="click_on_a_ticket_type">Haga clic en un tipo de ticket para editarlo.</string>
+
+    <!-- /fragment_tickets_manage.xml -->
+    <string name="add_tickets">Agregar entradas</string>
+    <string name="scan_tickets">Escanear tickets</string>
+    <string name="event_statistics">Estadísticas de eventos</string>
+    <string name="go_to_wallet">Ir a la billetera</string>
+
+    <!-- /my_message.xml -->
+    <string name="my_message_text18">105 MB APK</string>
+
+    <!-- /type_ticket_manage_item.xml -->
+    <string name="season_ticket">Boleto de temporada</string>
+    <string name="type_ticket_manage_item_text20">300 ₽</string>
+    <string name="type_ticket_manage_item_text21">1000 entradas</string>
+</resources>

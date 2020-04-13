@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/entrance"
+            android:text="@string/login"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="17sp" />
 
@@ -65,7 +65,7 @@
             android:background="@drawable/edittext_background"
             android:ems="10"
             android:gravity="center"
-            android:hint="@string/your_email"
+            android:hint="@string/your_login"
             android:inputType="textEmailAddress"
             android:textSize="16sp" />
 

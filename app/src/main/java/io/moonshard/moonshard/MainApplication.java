@@ -61,11 +61,15 @@ public class MainApplication extends Application {
     private static Location currentLocation;
 
     public static String getAddress() {
-        return adress;
+        if (adress == null) {
+            return "";
+        } else {
+            return adress;
+        }
     }
 
-    public static void setAddress(String adress) {
-        MainApplication.adress = adress;
+    public static void setAddress(String address) {
+        MainApplication.adress = address;
     }
 
     private static String adress;
@@ -173,9 +177,13 @@ public class MainApplication extends Application {
         return instance.getApplicationContext();
     }
 
-    public static String getJid() { return jid; }
+    public static String getJid() {
+        return jid;
+    }
 
-    public static void setJid(String jid1) { jid = jid1; }
+    public static void setJid(String jid1) {
+        jid = jid1;
+    }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -186,14 +194,14 @@ public class MainApplication extends Application {
     }
 
     public static void setXmppConnection(XMPPConnection xmppConnection) {
-        MainApplication.xmppConnection =  xmppConnection;
+        MainApplication.xmppConnection = xmppConnection;
     }
 
     public static void loadLoginCredentials() {
         currentLoginCredentials = new LoginCredentials();
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
-        if(jid != null && password != null) {
+        if (jid != null && password != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
             currentLoginCredentials.username = username;
@@ -215,7 +223,7 @@ public class MainApplication extends Application {
         new Thread(() -> {
             boolean isTrueTimeIsOn = false;
             int count = 0;
-            while(!isTrueTimeIsOn && count <= 10) {
+            while (!isTrueTimeIsOn && count <= 10) {
                 try {
                     TrueTime.build().withNtpHost(DEFAULT_NTP_SERVER).initialize();
                     isTrueTimeIsOn = true;
@@ -263,7 +271,7 @@ public class MainApplication extends Application {
         return currentLoginCredentials;
     }
 
-    void initTime(){
+    void initTime() {
         TrueTimeRx.build().initializeRx(DEFAULT_NTP_SERVER)
                 .subscribeOn(Schedulers.io())
                 .subscribe(date -> {

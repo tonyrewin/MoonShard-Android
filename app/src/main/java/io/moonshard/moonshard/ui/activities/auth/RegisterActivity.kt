@@ -50,9 +50,9 @@ class RegisterActivity : BaseActivity(), RegisterView {
             registerBtn?.setSafeOnClickListener {
                 presenter.register(editEmail.text.toString(), editPassword.text.toString())
             }
-
-            val content = SpannableString("" + getString(R.string.already_have_an_account_to) + "")
-            content.setSpan(UnderlineSpan(), 18, content.length, 0)
+            val logintext = getString(R.string.login)
+            val content = SpannableString("" + getString(R.string.already_have_an_account_to) + " " + logintext)
+            content.setSpan(UnderlineSpan(), (content.length - logintext.length), content.length, 0)
             alreadyHaveText?.text = content
 
             var isSecurity = true

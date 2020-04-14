@@ -32,9 +32,9 @@ class LoginActivity : BaseActivity(), LoginView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-
-        val contentNotHaveText = SpannableString("" + getString(R.string.dont_have_an_account_yet) + "")
-        contentNotHaveText.setSpan(UnderlineSpan(), 18, contentNotHaveText.length, 0)
+        val registertext = getString(R.string.register)
+        val contentNotHaveText = SpannableString("" + getString(R.string.dont_have_an_account_yet) + " " + registertext)
+        contentNotHaveText.setSpan(UnderlineSpan(), (contentNotHaveText.length-registertext.length), contentNotHaveText.length, 0)
         dontHaveText.text = contentNotHaveText
 
         val contentForgotPass= SpannableString("" + getString(R.string.forgot_your_password) + "")

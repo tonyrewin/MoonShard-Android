@@ -93,7 +93,7 @@
     <string name="information_about_you_is_not">Information about you is not filled up</string>
 
     <!-- ui/activities/auth/LoginActivity.kt -->
-    <string name="dont_have_an_account_yet">Don\'t have an account yet? registration</string>
+    <string name="dont_have_an_account_yet">Don\'t have an account yet?</string>
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="you_entered_an_invalid_character">You entered an invalid character</string>
     <string name="server_error_occurred">Server error occurred</string>
@@ -102,7 +102,7 @@
     <string name="an_error_has_occurred">An error has occurred</string>
 
     <!-- ui/activities/auth/RegisterActivity.kt -->
-    <string name="already_have_an_account_to">Already have an account? Login</string>
+    <string name="already_have_an_account_to">Already have an account?</string>
 
     <!-- helpers/NetworkHandler.java -->
     <string name="administrator_deleted_username_from_chat">Administrator have deleted %s from chat</string>
@@ -134,7 +134,7 @@
     <string name="restore_password">RESTORE PASSWORD</string>
 
     <!-- /activity_register.xml -->
-    <string name="registration">registration</string>
+    <string name="register">Register</string>
 
     <!-- /activity_start_profile.xml -->
     <string name="almost_ready">Almost ready!</string>

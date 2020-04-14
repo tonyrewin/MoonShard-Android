@@ -105,6 +105,7 @@
                 android:layout_height="1dp"/>
 
         <RelativeLayout
+                android:id="@+id/scanTicketsBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">

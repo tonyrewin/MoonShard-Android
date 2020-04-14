@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
+import com.google.zxing.integration.android.IntentIntegrator
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -121,7 +122,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         }
 
         manageTicketsBtn?.setSafeOnClickListener {
-            //todo
+            showManageTicketsScreen()
         }
     }
 
@@ -199,6 +200,10 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
 
     private fun showMembersScreen() {
         (parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
+    }
+
+    private fun showManageTicketsScreen(){
+        (parentFragment as? MainChatFragment)?.showManageTicketsScreen(idChat)
     }
 
     private fun showTimesScreen() {

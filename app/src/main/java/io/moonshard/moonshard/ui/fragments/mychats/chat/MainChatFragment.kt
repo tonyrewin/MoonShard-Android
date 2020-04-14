@@ -14,6 +14,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ChatInfoFragme
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.TicketsManageFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
@@ -176,6 +177,17 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "MembersChatFragment")
             .addToBackStack("MembersChatFragment")
+            .commit()
+    }
+
+    fun showManageTicketsScreen(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = TicketsManageFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "TicketsManageFragment")
+            .addToBackStack("TicketsManageFragment")
             .commit()
     }
 

@@ -9,6 +9,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.google.zxing.integration.android.IntentIntegrator
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -30,6 +31,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 

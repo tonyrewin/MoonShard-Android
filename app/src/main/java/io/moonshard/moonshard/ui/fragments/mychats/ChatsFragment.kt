@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.ChatListItem
-import io.moonshard.moonshard.models.GenericDialog
 import io.moonshard.moonshard.presentation.presenter.ChatsPresenter
 import io.moonshard.moonshard.presentation.view.ChatsView
 import io.moonshard.moonshard.ui.activities.MainActivity
@@ -67,6 +66,6 @@ class ChatsFragment : MvpAppCompatFragment(), ChatsView {
     }
 
     override fun showError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 }

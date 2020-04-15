@@ -322,4 +322,11 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         }
         RoomsMap.isFilter = true
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // todo
+        //  made clear filter when close map fragment
+        RoomsMap.clearFilters()
+    }
 }

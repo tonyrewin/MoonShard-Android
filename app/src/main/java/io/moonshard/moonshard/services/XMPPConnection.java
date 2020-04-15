@@ -674,10 +674,12 @@ public class XMPPConnection implements ConnectionListener {
                 muc.join(nickName);
                 muc.addMessageListener(MainApplication.getXmppConnection().getNetwork());
             }
-        } catch (Exception e) {
-            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+        }catch (XMPPException.XMPPErrorException e){
+            if(e.getStanzaError().getType() == StanzaError.Type.CANCEL){
                 removeChatFromBd(jid);
             }
+            Logger.d(e.getMessage());
+        } catch (Exception e) {
             Logger.d(e.getMessage());
         }
     }

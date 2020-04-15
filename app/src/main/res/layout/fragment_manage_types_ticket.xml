@@ -69,6 +69,7 @@
 
 
         <RelativeLayout
+                android:id="@+id/addNewTicketBtn"
                 android:layout_below="@+id/ticket"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"

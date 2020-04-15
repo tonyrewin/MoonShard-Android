@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.adapters
+package io.moonshard.moonshard.ui.adapters.tickets
 
 import android.view.LayoutInflater
 import android.view.View

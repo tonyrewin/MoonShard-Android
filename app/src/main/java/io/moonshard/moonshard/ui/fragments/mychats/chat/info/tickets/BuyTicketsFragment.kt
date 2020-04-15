@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.ui.adapters.TicketListener
-import io.moonshard.moonshard.ui.adapters.TicketsAdapter
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
+import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_buy_tickets.*
 
 
 class BuyTicketsFragment : Fragment() {
+
+    var idChat = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,24 +32,36 @@ class BuyTicketsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
 
+        arguments?.let {
+            idChat = it.getString("chatId")
+        }
 
-        backBtn?.setOnClickListener {
+
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        closeBtn?.setOnClickListener {
+        closeBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+
+        nextBtn?.setSafeOnClickListener {
+            (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat)
+
         }
     }
 
     private fun initAdapter() {
         ticketsRv?.layoutManager = LinearLayoutManager(context)
-        ticketsRv?.adapter = TicketsAdapter(object : TicketListener {
-            override fun clickPlus() {
-            }
+        ticketsRv?.adapter =
+            TicketsAdapter(object :
+                TicketListener {
+                override fun clickPlus() {
+                }
 
-            override fun clickMinus() {
-            }
-        }, arrayListOf())
+                override fun clickMinus() {
+                }
+            }, arrayListOf())
     }
 }

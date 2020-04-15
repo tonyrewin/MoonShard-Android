@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/costTicketTv"
+            android:layout_marginTop="9dp"
+            android:id="@+id/typeTicketTv"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="#333333"
+            android:text="Билет на 1 день"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/descriptionTicketTv"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="12dp"
+            android:layout_below="@+id/typeTicketTv"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#9B9BB6"
+            android:text="13 или 14 июля"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/costTicketTv"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="9dp"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#333333"
+            android:text="300 ₽"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <View
+            android:id="@+id/viewLine"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/descriptionTicketTv"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="#F5F5F5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+</RelativeLayout>

@@ -67,6 +67,10 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         addNewMember?.setSafeOnClickListener {
             showInviteNewUserScreen(idChat)
         }
+
+        buyTicketBtn?.setOnClickListener {
+            (parentFragment as? MainChatFragment)?.showBuyTicketsScreen(idChat)
+        }
     }
 
     override fun showChangeChatButton(isShow: Boolean) {

@@ -33,7 +33,7 @@ class ManageTypesTicketFragment : Fragment() {
         }
 
         addNewTicketBtn?.setSafeOnClickListener {
-            (parentFragment as? MainChatFragment)?.addNewTypeTicketScreen(idChat)
+            (parentFragment as? MainChatFragment)?.showAddNewTypeTicketScreen(idChat)
         }
     }
 }

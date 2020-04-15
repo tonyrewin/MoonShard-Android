@@ -15,6 +15,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFrag
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.AddNewTypeTicketFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.BuyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.ManageTypesTicketFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.TicketsManageFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
@@ -205,7 +206,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     }
 
 
-    fun addNewTypeTicketScreen(idChat:String){
+    fun showAddNewTypeTicketScreen(idChat:String){
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = AddNewTypeTicketFragment()
@@ -213,6 +214,17 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "AddNewTypeTicketFragment")
             .addToBackStack("AddNewTypeTicketFragment")
+            .commit()
+    }
+
+    fun showBuyTicketsScreen(idChat:String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = BuyTicketsFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "BuyTicketsFragment")
+            .addToBackStack("BuyTicketsFragment")
             .commit()
     }
 

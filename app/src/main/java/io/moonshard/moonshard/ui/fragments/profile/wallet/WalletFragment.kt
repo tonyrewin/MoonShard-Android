@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_wallet.*
 
 
@@ -25,11 +27,20 @@ class WalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideBottomNavigationBar()
 
         initFilterBtn()
 
-        backBtn?.setOnClickListener {
+        backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        fillUpWalletBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showFillUpWalletFragment()
+        }
+
+        withDrawBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showWithdrawWalletFragment()
         }
     }
 

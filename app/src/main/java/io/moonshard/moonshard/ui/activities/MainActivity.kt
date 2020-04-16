@@ -24,7 +24,9 @@ import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.TypeTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.PresentTicketFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPresentFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.WithdrawWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
@@ -265,6 +267,20 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = MyTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "MyTicketsFragment").addToBackStack("MyTicketsFragment")
+            .commit()
+    }
+
+    fun showFillUpWalletFragment(){
+        val fragment = FillUpWalletFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "FillUpWalletFragment").addToBackStack("FillUpWalletFragment")
+            .commit()
+    }
+
+    fun showWithdrawWalletFragment(){
+        val fragment = WithdrawWalletFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "WithdrawWalletFragment").addToBackStack("WithdrawWalletFragment")
             .commit()
     }
 

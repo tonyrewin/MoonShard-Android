@@ -15,8 +15,8 @@ import io.moonshard.moonshard.ui.fragments.map.bottomsheet.ListChatsMapFragment;
 public class PagerAdapter extends FragmentPagerAdapter {
 
     public enum TabItem {
-        LIST(ListChatsMapFragment.class,  R.string.list),
-        CATEGORY(CategoriesFragment.class,  R.string.category),
+        LIST(ListChatsMapFragment.class, R.string.as_list),
+        CATEGORY(CategoriesFragment.class, R.string.category),
         INFO(InfoPointFragment.class,R.string.category);
 
         private final Class<? extends Fragment> fragmentClass;

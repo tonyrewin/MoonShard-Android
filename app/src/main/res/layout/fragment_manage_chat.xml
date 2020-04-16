@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Управление чатом"
+                    android:text="@string/chat_management"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -50,7 +50,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
                     android:src="@drawable/ic_new_chat"
-                    android:text="Готово"
+                    android:text="@string/done"
                     android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -93,7 +93,7 @@
                 android:layout_marginStart="13dp"
                 android:id="@+id/nameTv"
                 android:layout_toRightOf="@+id/avatarIv"
-                android:text="Название"
+                android:text="@string/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -117,13 +117,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="11dp"
                 android:id="@+id/descriptionTv"
-                android:text="Описание"
+                android:text="@string/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:minHeight="75dp"
-                tools:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
+                tools:text="@string/save_the_festival_anticipated_outline"
                 android:layout_alignLeft="@+id/descriptionTv"
                 android:layout_below="@+id/descriptionTv"
                 android:id="@+id/descriptionEt"
@@ -154,7 +154,7 @@
                 android:id="@+id/manageTv"
                 android:textSize="14sp"
                 android:textColor="#333333"
-                android:text="Управление участниками"
+                android:text="@string/member_management"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -185,7 +185,7 @@
                 android:textSize="16sp"
                 android:textColor="#333333"
                 android:layout_toRightOf="@+id/icMember"
-                android:text="Участники"
+                android:text="@string/members"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -194,7 +194,7 @@
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
                 android:layout_alignParentRight="true"
-                tools:text="123"
+                tools:text="@string/manage_chat_text190"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -230,7 +230,7 @@
                 android:textSize="16sp"
                 android:textColor="#333333"
                 android:layout_toRightOf="@+id/icAdmins"
-                android:text="Администраторы"
+                android:text="@string/administrators"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -239,7 +239,7 @@
                 android:textColor="#333333"
                 android:layout_marginEnd="22dp"
                 android:layout_alignParentRight="true"
-                tools:text="123"
+                tools:text="@string/manage_chat_text190"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -261,7 +261,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginBottom="13dp"
                 android:layout_marginTop="14dp"
-                android:text="Удалить группу"
+                android:text="@string/delete_group"
                 android:textSize="16sp"
                 android:textColor="#FF6060"
                 android:layout_width="wrap_content"

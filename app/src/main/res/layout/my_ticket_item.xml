@@ -29,7 +29,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Валерий Меладзе"
+                android:text="@string/valeriy_meladze"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -41,7 +41,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="4.5dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="1 июля 2020 г. в 23:00"
+                android:text="@string/july_1_2020_at_2300"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -52,7 +52,7 @@
                 android:layout_below="@+id/startDateTicket"
                 android:layout_marginStart="9dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Москва. Mutabor club."
+                android:text="@string/moscow_mutabor_club"
                 android:textColor="#0075FF"
                 android:textSize="14sp" />
 
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Ввходной билет"
+                android:text="@string/admission_ticket"
                 android:textColor="#333333"
                 android:textSize="17sp"/>
 
@@ -93,7 +93,7 @@
                 android:textSize="12sp"
                 android:layout_marginStart="9dp"
                 android:layout_below="@+id/typeTicket"
-                android:text="Партер"
+                android:text="@string/parterre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -106,14 +106,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="№ заказа"
+                android:text="@string/order_no"
                 android:textColor="#333333"
                 android:textSize="17sp"/>
 
         <TextView
                 android:layout_alignTop="@+id/placeTicket"
                 android:layout_alignLeft="@+id/numberTicketTv"
-                android:text="021457859710"
+                android:text="@string/my_ticket_item_text267"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/numberTicketTv"
                 android:fontFamily="@font/roboto_regular"

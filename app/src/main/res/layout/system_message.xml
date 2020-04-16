@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp"
-            android:text="Balto joined the chat"/>
+            android:text="@string/balto_joined_the_chat"/>
 
     <TextView
             android:visibility="gone"
@@ -41,6 +41,6 @@
             android:paddingHorizontal="16dp"
             android:elevation="2dp"
             android:textSize="16sp"
-            android:text="14:43"
+            android:text="@string/system_message_text270"
             />
 </RelativeLayout>

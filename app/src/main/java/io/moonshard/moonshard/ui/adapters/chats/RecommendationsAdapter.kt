@@ -93,10 +93,11 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
     }
 
     private fun setValueMembersTv(roomInfo: RoomInfo, jid: String, valueMembersTv: TextView?) {
+        var context = valueMembersTv?.getContext()
         getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                valueMembersTv?.text = "${roomInfo.occupantsCount} человек, $it онлайн"
+                valueMembersTv?.text = "${roomInfo.occupantsCount} " + context?.getString(R.string.members) + ", $it " + context?.getString(R.string.online)
             }, {
 
             })

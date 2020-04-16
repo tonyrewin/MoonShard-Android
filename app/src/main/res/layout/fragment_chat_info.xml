@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Информация"
+                    android:text="@string/information"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -47,7 +47,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
                     android:src="@drawable/ic_new_chat"
-                    android:text="Изменить"
+                    android:text="@string/edit"
                     android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/usersIv"
-                tools:text="Group name"
+                tools:text="@string/group_name"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/groupNameInfoContentTv"
                 android:layout_alignStart="@+id/usersIv"
-                tools:text="666 members, 30 online"
+                tools:text="@string/chat_info_text153"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
-                tools:text="130 m away" />
+                tools:text="@string/chat_info_text154" />
 
     </RelativeLayout>
 
@@ -150,7 +150,7 @@
                 android:textColor="#333333"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="О чате" />
+                android:text="@string/about_chat" />
 
 
         <TextView
@@ -159,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Местоположение"
+                android:text="@string/location"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -169,7 +169,7 @@
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Улица Парковая, Одинцово, Россия"
+                android:text="@string/parkovaya_street_odintsovo_russia"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -187,7 +187,7 @@
                 android:layout_marginBottom="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Описание"
+                android:text="@string/description"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -196,7 +196,7 @@
                 android:id="@+id/descriptionInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Описание вфыв фвфвфв ф"
+                tools:text="@string/description вфыв фвфвфв ф"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -221,7 +221,7 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="13dp"
-                android:text="Уведомление"
+                android:text="@string/notification"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -266,7 +266,7 @@
 
             <TextView
                     android:layout_marginTop="13dp"
-                    android:text="Добавить участника"
+                    android:text="@string/add_member"
                     android:textSize="16sp"
                     android:textColor="#0075FF"
                     android:layout_width="wrap_content"
@@ -311,7 +311,7 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="13dp"
-                android:text="Покинуть группу"
+                android:text="@string/leave_group"
                 android:textColor="#FF6060"
                 android:textSize="16sp" />
 

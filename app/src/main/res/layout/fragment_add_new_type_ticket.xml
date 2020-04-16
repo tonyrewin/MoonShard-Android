@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Управление билетами"
+                    android:text="@string/ticket_management"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Готово"
+                    android:text="@string/done"
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
@@ -67,7 +67,7 @@
             android:textColor="#333333"
             android:layout_marginStart="12dp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Входной билет Save 2019"
+            android:text="@string/entrance_ticket_save_2019"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -79,13 +79,13 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="14dp"
                 android:layout_marginStart="9.5dp"
-                android:text="Тип билета"
+                android:text="@string/ticket_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="Введите тип"
+                android:hint="@string/enter_type"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/typeEt"
@@ -106,13 +106,13 @@
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginStart="9.5dp"
-                android:text="Пояснение"
+                android:text="@string/explanation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="Введите пояснение"
+                android:hint="@string/enter_an_explanation"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/descriptionEt"
@@ -133,13 +133,13 @@
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginStart="9.5dp"
-                android:text="Стоимость, ₽"
+                android:text="@string/cost_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="Введите стоимость"
+                android:hint="@string/enter_cost"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/costEt"
@@ -160,13 +160,13 @@
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginStart="9.5dp"
-                android:text="Количество билетов"
+                android:text="@string/number_of_tickets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <EditText
                 android:textColorHint="#DDDDDD"
-                android:hint="Введите количество"
+                android:hint="@string/enter_quantity"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/quantityEt"
@@ -191,7 +191,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#0075FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="СОХРАНИТЬ"
+                android:text="@string/save"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 

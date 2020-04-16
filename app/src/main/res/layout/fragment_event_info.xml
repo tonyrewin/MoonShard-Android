@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Информация"
+                    android:text="@string/information"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -48,7 +48,7 @@
                     android:layout_marginEnd="14dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:src="@drawable/ic_new_chat"
-                    android:text="Изменить"
+                    android:text="@string/edit"
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
@@ -109,7 +109,7 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:textColor="#333333"
                         android:textSize="17sp"
-                        tools:text="Group name" />
+                        tools:text="@string/group_name" />
 
                 <TextView
                         android:id="@+id/valueMembersInfoTv"
@@ -120,7 +120,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#535353"
                         android:textSize="14sp"
-                        tools:text="666 members, 30 online" />
+                        tools:text="@string/event_info_text176" />
 
                 <TextView
                         android:id="@+id/locationValueInfoTv"
@@ -131,7 +131,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#9B9BB6"
                         android:textSize="12sp"
-                        tools:text="130 m away" />
+                        tools:text="@string/event_info_text177" />
 
 
             </RelativeLayout>
@@ -157,7 +157,7 @@
                         android:layout_marginTop="13dp"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="О событии"
+                        android:text="@string/about_event"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -167,7 +167,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Начало"
+                        android:text="@string/start"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 
@@ -179,7 +179,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#333333"
                         android:textSize="16sp"
-                        tools:text="13 декабря" />
+                        tools:text="@string/december_13th" />
 
                 <View
                         android:layout_width="match_parent"
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Местоположение"
+                        android:text="@string/location"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 
@@ -205,7 +205,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#0075FF"
                         android:textSize="16sp"
-                        tools:text="Улица Парковая, Одинцово, Россия" />
+                        tools:text="@string/parkovaya_street_odintsovo_russia" />
 
                 <View
                         android:id="@+id/viewDescription"
@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="9dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Описание"
+                        android:text="@string/description"
                         android:textColor="#9B9BB6"
                         android:textSize="14sp" />
 
@@ -233,7 +233,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#333333"
                         android:textSize="16sp"
-                        tools:text="Описание вфыв фвфвфв ф" />
+                        tools:text="@string/description вфыв фвфвфв ф" />
 
 
             </LinearLayout>
@@ -257,7 +257,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="13dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Уведомления"
+                        android:text="@string/notifications"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -302,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/avatarOrganization"
                         android:fontFamily="@font/roboto_regular"
-                        tools:text="МЫ ИДЕМ"
+                        tools:text="@string/we_are_walking"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -315,7 +315,7 @@
                         android:layout_below="@+id/nameOrganization"
                         android:layout_toRightOf="@+id/avatarOrganization"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="online"
+                        android:text="@string/online"
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
 
@@ -326,7 +326,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Организатор"
+                        android:text="@string/organizer"
                         android:textColor="#9B9BB6"
                         android:textSize="12sp" />
 
@@ -364,7 +364,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="13dp"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="Добавить участника"
+                            android:text="@string/add_member"
                             android:textColor="#0075FF"
                             android:textSize="16sp" />
 
@@ -408,7 +408,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="13dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Покинуть группу"
+                        android:text="@string/leave_group"
                         android:textColor="#FF6060"
                         android:textSize="16sp" />
 
@@ -456,7 +456,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#0075FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="БИЛЕТЫ ОТ 300 ₽"
+                android:text="@string/tickets_from_300_"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 

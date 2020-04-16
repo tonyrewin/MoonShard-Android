@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Информация"
+                    android:text="@string/information"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -45,7 +45,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="14dp"
                     android:src="@drawable/ic_new_chat"
-                    android:text="Изменить"
+                    android:text="@string/edit"
                     android:textColor="#0075FF"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -81,7 +81,7 @@
                 android:layout_toRightOf="@+id/avatarIv"
                 android:textColor="#333333"
                 android:textSize="17sp"
-                tools:text="Kanaevsky" />
+                tools:text="@string/kanaevsky" />
 
         <TextView
                 android:fontFamily="@font/roboto_regular"
@@ -93,7 +93,7 @@
                 android:layout_marginTop="1dp"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
-                tools:text="'@'kanaevsky1989" />
+                tools:text="@string/kanaevsky1989" />
 
         <TextView
                 android:id="@+id/emailTv"
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phoneTv"
                 android:layout_alignLeft="@+id/phoneTv"
-                android:text="user@example.com"
+                android:text="@string/userexamplecom"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
                 android:visibility="gone" />
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="17dp"
-                android:text="О себе"
+                android:text="@string/about_myself"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -147,7 +147,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="16dp"
-                tools:text="Save. Фестиваль, предвосхитивший Outline и запустивший цепную реакцию массовых электронных"
+                tools:text="@string/save_the_festival_anticipated_outline"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -188,7 +188,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_toRightOf="@+id/presentIcon"
-                    android:text="Кошелек" />
+                    android:text="@string/wallet" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_toRightOf="@+id/ticketIcon"
-                    android:text="Мои билеты" />
+                    android:text="@string/my_tickets" />
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -273,7 +273,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_toRightOf="@+id/walletIcon"
-                    android:text="Подарить билет" />
+                    android:text="@string/give_a_ticket" />
 
             <ImageView
                     android:layout_width="wrap_content"

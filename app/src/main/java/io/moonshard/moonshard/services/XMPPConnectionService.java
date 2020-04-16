@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.R;
 
 
 public class XMPPConnectionService extends Service {
@@ -82,8 +83,8 @@ public class XMPPConnectionService extends Service {
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("привет")
-                    .setContentText("как дела").build();
+                    .setContentTitle(context.getString(R.string.hi))
+                    .setContentText(context.getString(R.string.how_are_you)).build();
 
             startForeground(1, notification);
         }
@@ -120,23 +121,22 @@ public class XMPPConnectionService extends Service {
         createLocationListener();
 
         new XMPPConnectionDelayedCheckAndStartThread().start();
-/*
-        if (!isThreadAlive) {
-            isThreadAlive = true;
-            if (thread == null || !thread.isAlive()) {
-                thread = new Thread(() -> {
-                    createConnection();
-                    Looper.prepare();
-                    threadHandler = new Handler();
-                    //createConnection();
-                    Looper.loop();
-                });
-                thread.start();
-            }
+/*	
+        if (!isThreadAlive) {	
+            isThreadAlive = true;	
+            if (thread == null || !thread.isAlive()) {	
+                thread = new Thread(() -> {	
+                    createConnection();	
+                    Looper.prepare();	
+                    threadHandler = new Handler();	
+                    //createConnection();	
+                    Looper.loop();	
+                });	
+                thread.start();	
+            }	
 
 
-        }
-
+        }	
  */
     }
 
@@ -189,12 +189,12 @@ public class XMPPConnectionService extends Service {
         try {
             connection.connect();
         } catch (IOException | SmackException e) {
-            // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.NETWORK_ERROR));
+        // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.NETWORK_ERROR));    
             e.printStackTrace();
             onServiceStop();
             stopSelf();
         } catch (XMPPException e) {
-            // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.INCORRECT_LOGIN_OR_PASSWORD));
+            // EventBus.getDefault().post(new AuthenticationStatusEvent(AuthenticationStatusEvent.INCORRECT_LOGIN_OR_PASSWORD));	
             // e.printStackTrace();
             onServiceStop();
             stopSelf();

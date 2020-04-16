@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Вход"
+            android:text="@string/login"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="17sp" />
 
@@ -65,7 +65,7 @@
             android:background="@drawable/edittext_background"
             android:ems="10"
             android:gravity="center"
-            android:hint="Ваш Email"
+            android:hint="@string/your_login"
             android:inputType="textEmailAddress"
             android:textSize="16sp" />
 
@@ -86,7 +86,7 @@
             android:background="@drawable/edittext_background"
             android:ems="10"
             android:gravity="center"
-            android:hint="Пароль"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textSize="16sp" />
 
@@ -114,7 +114,7 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/button_background"
             android:gravity="center"
-            android:text="ДАЛЕЕ"
+            android:text="@string/next"
             android:textColor="@android:color/background_light"
             android:textSize="7pt" />
 
@@ -127,10 +127,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="7dp"
-            tools:text="Забыли пароль?" />
+            tools:text="@string/forgot_your_password" />
 
     <TextView
-            tools:text="Еще нет аккаунта? Регистрация"
+            tools:text="@string/dont_have_an_account_yet"
             android:textColor="#9B9BB6"
             android:fontFamily="@font/roboto_regular"
             android:id="@+id/dontHaveText"
@@ -159,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="или" />
+                android:text="@string/or" />
 
         <View
                 android:layout_width="140dp"

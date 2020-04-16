@@ -11,7 +11,7 @@
             android:fontFamily="@font/montserrat_bold"
             android:textColor="#333333"
             android:textSize="14sp"
-            android:text="Абонемент"
+            android:text="@string/subscription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -23,7 +23,7 @@
             android:fontFamily="@font/roboto_regular"
             android:textColor="#9B9BB6"
             android:textSize="12sp"
-            android:text="Билет на все дни фестиваля"
+            android:text="@string/ticket_for_all_days_of"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -34,7 +34,7 @@
             android:fontFamily="@font/roboto_regular"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:text="300 ₽"
+            android:text="@string/ticket_buy_item_text9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

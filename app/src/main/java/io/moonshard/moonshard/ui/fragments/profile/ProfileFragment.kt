@@ -71,7 +71,7 @@ class ProfileFragment : MvpAppCompatFragment(),
 
     override fun setData(nickName: String?, description: String?, jidPart: String?) {
         MainApplication.getMainUIThread().post {
-            nameTv?.text = nickName ?: "Имя"
+            nameTv?.text = nickName ?: "" + getString(R.string.name) + ""
             if (!jidPart.isNullOrBlank()) {
                 myJid?.text = "@$jidPart"
             } else {
@@ -81,7 +81,7 @@ class ProfileFragment : MvpAppCompatFragment(),
             if (description != null) {
                 descriptionTv?.text = description.toString()
             } else {
-                descriptionTv?.text = "Информация о вас не заполнена"
+                descriptionTv?.text = "" + getString(R.string.information_about_you_is_not) + ""
             }
         }
     }

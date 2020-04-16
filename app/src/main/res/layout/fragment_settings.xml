@@ -27,7 +27,7 @@
                    android:textStyle="bold"
                    android:textSize="14sp"
                    android:textColor="#333333"
-                   android:text="Настройки"
+                   android:text="@string/settings"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"/>
 
@@ -68,7 +68,7 @@
                 android:layout_marginLeft="11dp"
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@+id/avatar"
-                android:text="Example Username"
+                android:text="@string/example_username"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -79,7 +79,7 @@
                 android:layout_below="@+id/nameTv"
                 android:layout_alignLeft="@+id/nameTv"
                 android:layout_marginTop="1dp"
-                android:text="+1 234 567 89 01"
+                android:text="@string/settings_text234"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phoneTv"
                 android:layout_alignLeft="@+id/phoneTv"
-                android:text="user@example.com"
+                android:text="@string/userexamplecom"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="Основные"
+                android:text="@string/general"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -142,7 +142,7 @@
                     android:id="@+id/notificationsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Уведомления"
+                    android:text="@string/notifications"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -176,7 +176,7 @@
                     android:id="@+id/nightThemeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Night theme"
+                    android:text="@string/night_theme"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -211,7 +211,7 @@
                     android:id="@+id/languageTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Language"
+                    android:text="@string/language"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/languageTv"
                     android:layout_alignParentEnd="true"
-                    android:text="English"
+                    android:text="@string/language_selected"
                     android:textColor="#8A000000"
                     android:textSize="14sp" />
 
@@ -244,7 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Chat settings"
+                android:text="@string/chat_settings"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -268,7 +268,7 @@
                     android:id="@+id/chatBackgroundLayoutTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chat background"
+                    android:text="@string/chat_background"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -302,7 +302,7 @@
                     android:id="@+id/chatThemeLayoutTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Выбрать тему"
+                    android:text="@string/choose_a_topic"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -330,7 +330,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lineSix"
                 android:layout_marginTop="12dp"
-                android:text="Удалить все чаты"
+                android:text="@string/delete_all_chats"
                 android:textColor="#FF6161"
                 android:textSize="16sp" />
 
@@ -354,7 +354,7 @@
                 android:id="@+id/otherTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Other"
+                android:text="@string/other"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -378,7 +378,7 @@
                     android:id="@+id/faqTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Выбрать тему"
+                    android:text="@string/choose_a_topic"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -411,7 +411,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log out" />
+                android:text="@string/log_out" />
     </RelativeLayout>
         </LinearLayout>
     </ScrollView>

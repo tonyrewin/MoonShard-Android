@@ -1,0 +1,457 @@
+<resources>
+
+    <string name="app_name">MoonShard</string>
+
+    <string name="auth_threepid_warning_message">Регистрация по электронной почте и номеру телефона не поддерживается, пока не существует API. Будет учитываться только номер телефона. \n\n Вы можете добавить свой адрес электронной почты в свой профиль в настройках.</string>
+    <string name="auth_add_email_message">«Добавьте адрес электронной почты в свою учетную запись, чтобы пользователи могли вас найти, а вы могли сбросить пароль».</string>
+    <string name="auth_add_phone_message">«Добавьте номер телефона в свою учетную запись, чтобы пользователи могли вас найти».</string>
+    <string name="auth_add_email_phone_message">«Добавьте адрес электронной почты и/или номер телефона в свою учетную запись, чтобы пользователи могли вас найти. \n\n Адрес электронной почты также позволит вам сбросить пароль».</string>
+    <string name="auth_add_email_and_phone_message">«Добавьте адрес электронной почты и номер телефона в свою учетную запись, чтобы пользователи могли вас найти. \n\n Адрес электронной почты также позволит вам сбросить пароль».</string>
+
+    <string name="resources_language">ru</string>
+
+    <string name="account_email_validation_title">Ожидание подтверждения</string>
+    <string name="account_email_validation_message">Пожалуйста, проверьте свою электронную почту и нажмите на ссылку из письма. После этого нажмите «Продолжить».</string>
+    <string name="account_email_validation_error">Невозможно подтвердить адрес электронной почты. Пожалуйста, проверьте свою электронную почту и нажмите на ссылку из письма. После этого нажмите «Продолжить».</string>
+    <string name="account_email_already_used_error">Данный почтовый ящик уже используется.</string>
+    <string name="account_email_not_found_error">Этот адрес электронной почты не был найден.</string>
+    <string name="account_phone_number_already_used_error">Этот номер телефона уже используется.</string>
+    <string name="account_email_error">Произошла ошибка при подтверждении вашего адреса электронной почты.</string>
+    <string name="account_phone_number_error">Произошла ошибка при подтверждении вашего номера телефона.</string>
+    <string name="login_mobile_device">мобильный</string>
+    <string name="account_additional_info">Дополнительная информация: %s</string>
+
+    <string name="cancel">Отмена</string>
+    <string name="input_companion_username">Введите JID собеседника</string>
+    <string name="hint_enter_a_message">Введите сообщение...</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="sign_in_button">Войти в систему</string>
+    <string name="invalid_jid_error">Неверный JabberID!</string>
+    <string name="offline">Не в сети</string>
+    <string name="online">В сети</string>
+    <string name="clear_chat">Очистить чат</string>
+    <string name="notification_channel_name">Уведомления MoonShard</string>
+    <string name="notification_channel_desc">Уведомления в чате MoonShard</string>
+    <string name="copied_to_clipboard">Сообщение скопировано в буфер обмена</string>
+
+    <string name="as_list">Списком</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="chats">Чаты</string>
+    <string name="chat">Чат</string>
+    <string name="events">События</string>
+    <string name="create_chat">Создать чат</string>
+
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="on_the_weekend">Выходные</string>
+    <string name="profile">Профиль</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Привет пустой фрагмент</string>
+    <string name="snackbar_undo">Отменить</string>
+    <string name="chatlist_chat_deleted">Чат был удален</string>
+    <string name="change_txt">Изменить</string>
+
+    <!-- ui/fragments/mychats/chat/ChatFragment.kt -->
+    <string name="members">Участники</string>
+
+    <!-- ui/fragments/mychats/chat/info/ProfileUserFragment.kt -->
+    <string name="name">Имя</string>
+    <string name="user_information_is_not_filled">Информация о пользователе не заполнена</string>
+
+    <!-- ui/fragments/mychats/chat/info/chat/ChatInfoFragment.kt -->
+    <string name="no_information_available">Нет доступной информации</string>
+    <string name="meters">м</string>
+    <string name="km">км</string>
+
+    <!-- ui/fragments/mychats/chat/info/event/EventInfoFragment.kt -->
+
+    <!-- ui/fragments/mychats/chat/info/event/ManageEventFragment.kt -->
+    <string name="day">день</string>
+    <string name="days234">дня</string>
+    <string name="days">дней</string>
+    <string name="a_week">Неделя</string>
+    <string name="select_picture">Выберите изображение</string>
+    <string name="this_app_needs_location_access">Это приложение требует доступа к вашему местоположению</string>
+
+    <!-- ui/fragments/mychats/create/event/ChooseMapFragment.kt -->
+
+    <!-- ui/fragments/mychats/create/event/CreateNewEventFragment.kt -->
+
+    <!-- ui/fragments/mychats/create/event/TimeEventFragment.kt -->
+
+    <!-- ui/fragments/map/MapFragment.kt -->
+    <string name="at">в</string>
+    <string name="party">Вечерика</string>
+    <string name="business_events">Бизнес события</string>
+    <string name="hobby_group">Хобби группа</string>
+    <string name="cultural_activities">Культурная активность</string>
+    <string name="category">Категория:</string>
+    <string name="select_date">Выберите дату</string>
+
+    <!-- ui/fragments/profile/ProfileFragment.kt -->
+    <string name="information_about_you_is_not">Информация о вас не заполнена</string>
+
+    <!-- ui/activities/auth/LoginActivity.kt -->
+    <string name="dont_have_an_account_yet">У вас еще нет аккаунта?</string>
+    <string name="forgot_your_password">Забыли свой пароль?</string>
+    <string name="you_entered_an_invalid_character">Вы ввели недопустимый символ</string>
+    <string name="server_error_occurred">Произошла ошибка сервера</string>
+    <string name="server_response_timed_out">Время ожидания ответа сервера</string>
+    <string name="no_internet_connection">Подключение к Интернету отсутствует</string>
+    <string name="an_error_has_occurred">произошла ошибка</string>
+
+    <!-- ui/activities/auth/RegisterActivity.kt -->
+    <string name="already_have_an_account_to">Уже есть аккаунт?</string>
+
+    <!-- helpers/NetworkHandler.java -->
+    <string name="administrator_deleted_username_from_chat">Администратор удалил %s из чата</string>
+    <string name="invited_you_to_chat">пригласил вас в чат</string>
+    <string name="you_were_invited_to_chat">Вас пригласили в чат</string>
+    <string name="joined_the_chat">присоединился к чату</string>
+    <string name="deleted_chat">удалил чат</string>
+
+    <!-- services/LocationService.kt -->
+    <string name="hi">Привет</string>
+    <string name="how_are_you">Как дела?</string>
+
+    <!-- services/XMPPConnectionService.java -->
+
+    <!-- /acquaintance_fragment.xml -->
+    <string name="cock">Хуй</string>
+
+    <!-- /activity_login.xml -->
+    <string name="login">Вход</string>
+    <string name="your_login">Ваш логин</string>
+    <string name="password">Пароль</string>
+    <string name="next">Дальше</string>
+    <string name="or">или</string>
+
+    <!-- /activity_password_recovery.xml -->
+
+    <string name="password_recovery">Восстановление пароля</string>
+    <string name="to_recover_your_password_enter">Чтобы восстановить пароль, введите адрес электронной почты, указанный при регистрации.</string>
+    <string name="enter_email">Введите адрес электронной почты</string>
+    <string name="restore_password">ВОССТАНОВИТЬ ПАРОЛЬ</string>
+
+    <!-- /activity_register.xml -->
+    <string name="register">Регистрация</string>
+
+    <!-- /activity_start_profile.xml -->
+    <string name="almost_ready">Почти готово!</string>
+    <string name="enter_your_name_if_desired">При желании введите свое имя и добавьте фотографию профиля. Вы можете вернуться к этому позже в меню «Настройки».</string>
+    <string name="you_can_choose_an_avatar">Вы можете выбрать аватар</string>
+    <string name="edit">Правка</string>
+    <string name="want_to_change_your_nickname">Хотите изменить свой псевдоним\n или использовать этот?</string>
+    <string name="reset">Сброс настроек</string>
+
+    <!-- /admin_item.xml -->
+    <string name="oleg_petrov">Олег Петров</string>
+    <string name="creator">Создатель</string>
+
+    <!-- /bottom_sheet.xml -->
+    <string name="search_by_place_or_name">Поиск по месту или названию</string>
+
+    <!-- /bottom_sheet_category.xml -->
+    <string name="interest_category">Категория интересов</string>
+
+    <!-- /bottom_sheet_info_content.xml -->
+    <string name="group_name">Имя группы</string>
+    <string name="info_content_text110">130 м</string>
+    <string name="to_read">Читать</string>
+    <string name="join">Присоединиться</string>
+    <string name="about_event">О событии</string>
+    <string name="start">Начало</string>
+    <string name="december_13_2019_at_1800">13 декабря 2019 года в 18:00</string>
+    <string name="location">Местоположение</string>
+    <string name="parkovaya_street_odintsovo_moscow_region">Ул. Парковая, Одинцово, Московская обл.</string>
+    <string name="about_chat">О чате</string>
+    <string name="we_are_drinking_pivas_at">Мы пьем пиву у памятника Грибоедову. Мы снимаем сотню частей для трехлитровых сисек!</string>
+
+    <!-- /bottom_sheet_time.xml -->
+
+    <!-- /category_item.xml -->
+
+    <!-- /category_map_item.xml -->
+    <string name="night_party">Ночная вечеринка</string>
+    <string name="with_this_it_is_clear">С этим понятно техно в области, фестивали, мясорубки.</string>
+
+    <!-- /chat_item.xml -->
+    <string name="chatname">Имя в чате</string>
+    <string name="messagetext">Текст сообщения</string>
+    <string name="chat_item_text124">14:14</string>
+    <string name="chat_item_text125">0</string>
+
+
+
+    <!-- /chat_map_item.xml -->
+    <string name="chat_map_item_text126">130 м</string>
+
+    <!-- /event_item.xml -->
+    <string name="cuddle_party_17dec">CUDDLE PARTY 17dec</string>
+    <string name="hugging_party_december_17_at">Вечеринка обниматься 17 декабря в клубе Газголдер</string>
+    <string name="view_group">ПОСМОТРЕТЬ ГРУППУ</string>
+
+    <!-- /fragment_acquaintance.xml -->
+    <string name="skip">Пропустить</string>
+    <string name="meet_new_people">Знакомьтесь с новыми людьми</string>
+    <string name="we_have_created_local_geochats">Мы создали геочаты на основе интересов, где каждый найдет компанию по своему вкусу</string>
+
+    <!-- /fragment_add_admin.xml -->
+    <string name="add_admin">Добавить админа</string>
+    <string name="to_invite">Пригласить</string>
+    <string name="username">Имя пользователя</string>
+
+    <!-- /fragment_add_chat.xml -->
+    <string name="group_chat">Групповой чат</string>
+    <string name="you_can_create_chats_by">Вы можете создавать чаты по категориям в любом месте. Любой пользователь сможет присоединиться к нему.</string>
+    <string name="create">Создайте</string>
+
+    <!-- /fragment_add_new_event.xml -->
+    <string name="create_event">Создать событие</string>
+    <string name="organize_a_concert_conference_or">Организуйте концерт, конференцию или вечер поэзии. Пригласите своих друзей на день рождения, вечеринку или встречу</string>
+    <string name="your_location">Ваше местоположение:</string>
+    <string name="parkovaya_street_odintsovo_russia">Парковая улица, Одинцово, Россия</string>
+
+    <!-- /fragment_admins.xml -->
+    <string name="administrators">Администраторы</string>
+
+    <!-- /fragment_change_profile.xml -->
+    <string name="change_profile">Изменить профиль</string>
+    <string name="done">Готово</string>
+    <string name="kanaevsky">Kanaevsky</string>
+    <string name="about_myself">Обо мне</string>
+    <string name="any_details_for_example_age">Любые детали, например: возраст, род занятий или город.</string>
+
+    <!-- /fragment_chat.xml -->
+    <string name="name_chat">Название чата</string>
+
+    <!-- /fragment_chat_info.xml -->
+    <string name="information">Информация</string>
+    <string name="chat_info_text153">234 пользователей, 30 онлайн</string>
+    <string name="chat_info_text154">130 м</string>
+    <string name="description">Описание</string>
+    <string name="description_of_vfv_fvfvfv_f">Описание vfv fvfvfv f</string>
+    <string name="notification">Уведомление</string>
+    <string name="add_member">Добавить участника</string>
+    <string name="leave_group">Покинуть группу</string>
+
+
+    <!-- /fragment_choose_map.xml -->
+    <string name="chat_location">Местоположение чата</string>
+    <string name="where_will_the_event_take">Где будет проходить мероприятие?</string>
+    <string name="sosnichnaya_street_11k1">Сосничная улица, 11к1</string>
+
+    <!-- /fragment_connection_on_board.xml -->
+    <string name="always_stay_in_touch">Всегда оставайтесь на связи</string>
+    <string name="even_if_you_dont_have">Будьте в курсе последних новостей и событий даже оффлайн.</string>
+
+    <!-- /fragment_create_group.xml -->
+    <string name="create_group_chat">Создать групповой чат</string>
+
+    <!-- /fragment_create_new_chat.xml -->
+    <string name="title">Название</string>
+    <string name="enter_the_title">Введите название</string>
+    <string name="chat_description">Описание чата</string>
+    <string name="enter_a_description">Введите описание</string>
+
+    <!-- /fragment_create_new_event.xml -->
+    <string name="the_date_of_the_beginning">Дата начала</string>
+    <string name="december_13th">13 декабря</string>
+    <string name="event_duration">Продолжительность</string>
+    <string name="create_new_event_text173">3 дня</string>
+    <string name="choose_a_category">Выберите категорию</string>
+    <string name="link_to">Привязать к</string>
+
+    <!-- /fragment_event_info.xml -->
+    <string name="event_info_text176">234 пользователей, 30 онлайн</string>
+    <string name="event_info_text177">130 м</string>
+    <string name="notifications">Уведомления</string>
+    <string name="we_are_walking">МЫ ИДЁМ</string>
+    <string name="organizer">Организатор</string>
+    <string name="tickets_from_300_">БИЛЕТЫ ОТ 300 ₽</string>
+
+    <!-- /fragment_events.xml -->
+    <string name="oops_its_empty">К сожалению, здесь ничего нет</string>
+    <string name="create_your_first_event_and">Создайте свое первое событие, и оно появится здесь в списке</string>
+    <string name="add_event">ДОБАВИТЬ СОБЫТИЕ</string>
+
+    <!-- /fragment_invite_user.xml -->
+
+    <!-- /fragment_manage_chat.xml -->
+    <string name="chat_management">Управление чатом</string>
+    <string name="save_the_festival_anticipated_outline">Save The Festival предвосхитил Outline и запустил цепную реакцию массовой электроники</string>
+    <string name="member_management">Управление членами</string>
+    <string name="manage_chat_text190">123</string>
+    <string name="manage_chat_text191">123</string>
+    <string name="delete_group">Удалить группу</string>
+
+    <!-- /fragment_manage_event.xml -->
+    <string name="event_management">Управление событиями</string>
+    <string name="save_2019">Save 2019</string>
+    <string name="enter_event_description">Введите описание события</string>
+    <string name="manage_event_text196">4 дня</string>
+    <string name="ticket_management">Управление билетами</string>
+    <string name="manage_event_text198">123</string>
+    <string name="manage_event_text199">123</string>
+
+    <!-- /fragment_my_chats.xml -->
+    <string name="my_chats">Мои чаты</string>
+
+    <!-- /fragment_my_ticket_info.xml -->
+    <string name="your_tickets">Ваши билеты</string>
+    <string name="actions">Действия</string>
+    <string name="valeriy_meladze">Валерий Меладзе</string>
+    <string name="july_1_2020_at_2300">1 июля 2020 года в 23:00</string>
+    <string name="moscow_mutabor_club">Москва. Мутабор.</string>
+    <string name="admission_ticket">Входной билет</string>
+    <string name="all_day_event_ticket">Билет на все дни мероприятия</string>
+    <string name="order_no">№ заказа.</string>
+    <string name="my_ticket_info_text210">021457859710</string>
+    <string name="event_ended">Мероприятие завершилось</string>
+    <string name="return_ticket">Вернуть билет</string>
+    <string name="save_as_pdf">Сохранить как PDF</string>
+    <string name="give_a_ticket">Подарить билет</string>
+    <string name="delete_ticket">Удалить билет</string>
+
+    <!-- /fragment_my_tickets.xml -->
+
+    <!-- /fragment_new_place.xml -->
+    <string name="learn_about_new_places">Узнайте о новых местах</string>
+    <string name="we_have_collected_the_best">Мы собрали лучшие события и события вашего города в одном приложении</string>
+
+    <!-- /fragment_present_ticket.xml -->
+    <string name="just_pick_a_ticket_as">Просто выберите билет как подарок \n, а затем выберите получателя.</string>
+
+    <!-- /fragment_profile.xml -->
+    <string name="kanaevsky1989">@kanaevsky1989</string>
+    <string name="userexamplecom">user@example.com</string>
+
+    <string name="wallet">Кошелек</string>
+    <string name="my_tickets">Мои билеты</string>
+
+    <!-- /fragment_profile_user.xml -->
+    <string name="send_a_message">Отправить сообщение</string>
+    <string name="block_user">Блокировать пользователя</string>
+
+    <!-- /fragment_recommendations.xml -->
+
+    <!-- /fragment_security.xml -->
+    <string name="security">Безопасность</string>
+    <string name="current_password">Текущий пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="password_confirmation">Подтверждение пароля</string>
+    <string name="lock_code">Код блокировки</string>
+    <string name="change_code">Изменить код</string>
+    <string name="set_an_additional_password_to">Установите дополнительный код для блокировки чатов. Забытый код не может быть восстановлен.</string>
+
+    <!-- /fragment_settings.xml -->
+    <string name="settings">Настройки</string>
+    <string name="example_username">Пример имени пользователя</string>
+    <string name="settings_text234"> 1 234 567 89 01</string>
+    <string name="general">Общие</string>
+    <string name="night_theme">Ночная тема</string>
+    <string name="language">Язык</string>
+    <string name="language_selected">Русский</string>
+    <string name="chat_settings">Настройки чата</string>
+    <string name="chat_background">Фон чата</string>
+    <string name="choose_a_topic">Выберите тему</string>
+    <string name="delete_all_chats">Удалить все чаты</string>
+    <string name="other">Другие</string>
+    <string name="log_out">Выйти</string>
+
+    <!-- /fragment_settings_new.xml -->
+    <string name="prevent_add_to_chats">Запретить добавление в чаты</string>
+
+    <!-- /fragment_time_group_chat.xml -->
+    <string name="show_on_map">Показать на карте</string>
+    <string name="your_chat_pin_will_be">Ваш значок чата будет виден на карте \n в течение ограниченного времени</string>
+
+    <!-- /fragment_type_ticket_present.xml -->
+    <string name="give_tickets">Подарить билеты</string>
+
+    <!-- /fragment_type_tickets.xml -->
+
+    <!-- /fragment_wallet.xml -->
+    <string name="your_wallet">Ваш кошелек</string>
+    <string name="wallet_text252">0 ₽</string>
+    <string name="current_balance">Текущий баланс</string>
+    <string name="fill_up_a_purse">Пополнить кошелек</string>
+    <string name="withdraw_funds">Вывести средства</string>
+    <string name="cash_flow">Движение средств</string>
+    <string name="replenishment">Пополнение</string>
+    <string name="writeoff">Списание</string>
+
+    <!-- /item_test.xml -->
+    <string name="xuy">хиу</string>
+
+    <!-- /little_ticket_item.xml -->
+    <string name="season_ticket">Абонемент</string>
+    <string name="ticket_for_all_days_of">Билет на все дни фестиваля</string>
+
+    <!-- /member_item.xml -->
+
+    <!-- /messages_chat.xml -->
+    <string name="write_a_message">Введите сообщение</string>
+
+    <!-- /my_message.xml -->
+    <string name="my_message_text265">105 Мб APK</string>
+
+    <!-- /my_ticket_item.xml -->
+    <string name="parterre">Партер</string>
+    <string name="my_ticket_item_text267">021457859710</string>
+
+    <!-- /recommendation_item.xml -->
+    <string name="recommendation_item_text268">234 пользователей, 30 онлайн</string>
+
+    <!-- /system_message.xml -->
+    <string name="balto_joined_the_chat">Балто присоединился к чату</string>
+    <string name="system_message_text270">14:43</string>
+
+    <!-- /their_message.xml -->
+    <string name="rose">Роза</string>
+    <string name="h">ч</string>
+    <string name="their_message_text273">105Мб APK</string>
+
+    <!-- /time_item.xml -->
+    <string name="time_item_text274">12 часов</string>
+
+    <!-- /fragment_add_new_type_ticket.xml -->
+    <string name="entrance_ticket_save_2019">Входной билет Save 2019</string>
+    <string name="ticket_type">Тип билета</string>
+    <string name="enter_type">Введите тип</string>
+    <string name="explanation">Пояснение</string>
+    <string name="enter_an_explanation">Введите пояснение</string>
+    <string name="cost_">Стоимость, ₽</string>
+    <string name="enter_cost">Введите стоимость</string>
+    <string name="number_of_tickets">Количество билетов</string>
+    <string name="enter_quantity">Введите количество</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="add_another_type">Добавить другой тип</string>
+
+    <!-- /fragment_manage_types_ticket.xml -->
+    <string name="click_on_a_ticket_type">Нажмите на тип билета, чтобы отредактировать его.</string>
+
+    <!-- /fragment_tickets_manage.xml -->
+    <string name="add_tickets">Добавить билеты</string>
+    <string name="scan_tickets">Сканирование билетов</string>
+    <string name="event_statistics">Статистика событий</string>
+    <string name="go_to_wallet">Перейти в кошелек</string>
+
+    <!-- /my_message.xml -->
+    <string name="my_message_text18">105Мб APK</string>
+
+    <!-- /type_ticket_manage_item.xml -->
+    <string name="type_ticket_manage_item_text20">300 ₽</string>
+    <string name="type_ticket_manage_item_text21">1000 билетов</string>
+
+    <!-- /fragment_buy_tickets.xml -->
+    <string name="buy_tickets">Купить билеты</string>
+    <string name="close">Закрыть</string>
+    <string name="tickets_text3">3 билета</string>
+
+    <!-- /ticket_buy_item.xml -->
+    <string name="ticket_buy_item_text9">300 ₽</string>
+    <string name="ticket_buy_item_text10">0</string>
+
+</resources>

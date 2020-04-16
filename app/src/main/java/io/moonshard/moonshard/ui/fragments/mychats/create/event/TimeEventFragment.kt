@@ -40,13 +40,13 @@ class TimeEventFragment : Fragment() {
         }
 
         val times = arrayListOf<String>()
-        times.add("1 день")
-        times.add("2 дня")
-        times.add("3 дня")
-        times.add("4 дня")
-        times.add("5 дней")
-        times.add("6 дней")
-        times.add("Неделя")
+        times.add("1 " + getString(R.string.day) + "")
+        times.add("2 " + getString(R.string.days234) + "")
+        times.add("3 " + getString(R.string.days234) + "")
+        times.add("4 " + getString(R.string.days234) + "")
+        times.add("5 " + getString(R.string.days) + "")
+        times.add("6 " + getString(R.string.days) + "")
+        times.add("" + getString(R.string.a_week) + "")
 
         timesRv?.layoutManager = LinearLayoutManager(view.context)
         timesRv?.adapter = TimeGroupChatAdapter(object : RvTimeListener {
@@ -63,13 +63,13 @@ class TimeEventFragment : Fragment() {
     fun convertDaysToTtl(days:String):Long{
         var ttl:Long = 60*60*24
         when (days) {
-            "1 день" -> ttl = 60*60*24
-            "2 дня" -> ttl = 60*60*48
-            "3 дня" -> ttl = 60*60*(24*3)
-            "4 дня" -> ttl = 60*60*(24*4)
-            "5 дней" -> ttl = 60*60*(24*5)
-            "6 дней" -> ttl = 60*60*(24*6)
-            "Неделя" -> ttl = 60*60*(24*7)
+            "1 " + getString(R.string.day) + "" -> ttl = 60*60*24
+            "2 " + getString(R.string.days234) + "" -> ttl = 60*60*48
+            "3 " + getString(R.string.days234) + "" -> ttl = 60*60*(24*3)
+            "4 " + getString(R.string.days234) + "" -> ttl = 60*60*(24*4)
+            "5 " + getString(R.string.days) + "" -> ttl = 60*60*(24*5)
+            "6 " + getString(R.string.days) + "" -> ttl = 60*60*(24*6)
+            "" + getString(R.string.a_week) + "" -> ttl = 60*60*(24*7)
         }
         return ttl
     }

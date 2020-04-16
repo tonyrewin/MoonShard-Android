@@ -20,7 +20,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/categoryIv"
-            android:text="Ночные тусовки"
+            android:text="@string/night_party"
             android:textColor="#333333"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/nameCategoryTv"
             android:layout_alignStart="@+id/nameCategoryTv"
-            android:text="С этим понятно, техно на районе, фестивали, мясорубка."
+            android:text="@string/with_this_it_is_clear"
             android:textColor="#333333"
             android:textSize="14sp" />
 

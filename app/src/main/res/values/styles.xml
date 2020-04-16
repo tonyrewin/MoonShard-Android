@@ -8,6 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    -<style parent="Theme.AppCompat.Light.DarkActionBar" name="AppTheme2">
+
+    <!-- Customize your theme here. -->
+
+
+    <item name="colorPrimary">@color/colorPrimary</item>
+
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+    <item name="colorAccent">@color/colorAccent</item>
+
+
+    <!--<item name="windowActionBar">false</item>-->
+
+
+    <item name="windowNoTitle">true</item>
+
+    <!--<item name="android:windowFullscreen">true</item>-->
+
+
+    <item name="android:windowAnimationStyle">@null</item>
+
+    <item name="android:statusBarColor">#d9dcde</item>
+
+    <item name="android:windowContentTransitions">true</item>
+
+    <item name="android:windowSharedElementsUseOverlay">true</item>
+
+
+</style>
+
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
         <item name="colorControlActivated">#0075FF</item>

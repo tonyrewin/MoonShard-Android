@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
 import io.moonshard.moonshard.services.XMPPConnectionService
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
@@ -70,6 +70,8 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             true
         }
     }
+
+
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         //Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()

@@ -1,12 +1,11 @@
 package io.moonshard.moonshard.ui.fragments.profile.wallet
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -20,7 +19,14 @@ class FillUpWalletFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fill_up_wallet, container, false)
+        val view =  inflater.inflate(R.layout.fragment_fill_up_wallet, container, false)
+        return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //important for edit text
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,4 +55,5 @@ class FillUpWalletFragment : Fragment() {
             }
         })
     }
+
 }

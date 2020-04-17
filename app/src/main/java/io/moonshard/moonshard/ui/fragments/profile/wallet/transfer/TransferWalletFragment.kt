@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet
+package io.moonshard.moonshard.ui.fragments.profile.wallet.transfer
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,19 +10,10 @@ import android.view.ViewGroup
 import android.view.WindowManager
 
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.common.utils.setSafeOnClickListener
-import kotlinx.android.synthetic.main.fragment_withdraw_wallet.*
+import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
 
 
-class WithdrawWalletFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_withdraw_wallet, container, false)
-    }
+class TransferWalletFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +21,17 @@ class WithdrawWalletFragment : Fragment() {
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_transfer_wallet, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
-        }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
 

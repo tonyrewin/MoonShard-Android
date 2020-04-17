@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.ui.fragments.profile.wallet
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -36,7 +35,7 @@ class FillUpWalletFragment : Fragment() {
             fragmentManager?.popBackStack()
         }
 
-        kekas.addTextChangedListener(object : TextWatcher {
+        moneyValue.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
                 if(s.isEmpty()){

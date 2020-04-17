@@ -8,12 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.LinearLayout
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
+import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
+import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
+import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
+import kotlinx.android.synthetic.main.recipient_bottom_sheet.*
 
 
 class TransferWalletFragment : Fragment() {
+
+    var sheetInfoBehavior: BottomSheetBehavior<View>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,5 +62,34 @@ class TransferWalletFragment : Fragment() {
                                        before: Int, count: Int) {
             }
         })
+
+        val llInfoBottomSheet = view.findViewById<NestedScrollView>(R.id.infoBottomSheet)
+        sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
+
+
+        chooseMember?.setOnClickListener {
+            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        chooseBtn?.setOnClickListener{
+            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        cancelBtn?.setOnClickListener{
+            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        initAdapter()
+    }
+
+    private fun initAdapter() {
+        rv?.layoutManager = LinearLayoutManager(context)
+        rv?.adapter =
+            RecipientWalletAdapter(object :
+                RecipientWalletListener {
+                override fun click() {
+
+                }
+            }, arrayListOf())
     }
 }

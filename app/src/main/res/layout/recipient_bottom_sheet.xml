@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:background="#FFFFFF"
+        android:fillViewport="true"
+        app:behavior_peekHeight="0dp"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:layout_behavior="io.moonshard.moonshard.LockableBottomSheetBehavior">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        <TextView
+                android:layout_marginTop="13dp"
+                android:layout_marginStart="8dp"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="#0075FF"
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Отмена" />
+
+
+        <TextView
+                android:layout_marginTop="13dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выбор получателя" />
+
+
+        <TextView
+                android:layout_marginEnd="7dp"
+                android:layout_marginTop="13dp"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="#0075FF"
+                android:id="@+id/chooseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выбрать" />
+
+        <TextView
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/typeTicket"
+                android:layout_below="@+id/cancelBtn"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Отправить билет «Абонемент»"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:layout_marginTop="23dp"
+                android:layout_below="@+id/typeTicket"
+                android:textColorHint="#9B9BB6"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/editSearch"
+                style="@style/Theme.MaterialComponents.Light"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginEnd="19dp"
+                android:background="@drawable/edittext_confirm_transaction_bg"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Поиск"
+                android:inputType="textPassword"
+                android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_below="@+id/editSearch"
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -42,6 +42,11 @@ class WalletFragment : Fragment() {
         withDrawBtn?.setSafeOnClickListener {
             (activity as MainActivity).showWithdrawWalletFragment()
         }
+
+
+        transferLayout?.setOnClickListener {
+            (activity as MainActivity).showTransferWalletFragment()
+        }
     }
 
     fun initFilterBtn(){

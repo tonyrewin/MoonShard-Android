@@ -1,23 +1,26 @@
-package io.moonshard.moonshard.ui.adapters.tickets
+package io.moonshard.moonshard.ui.adapters.wallet
 
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 
-interface ConfirmTicketsBuyListener {
+
+interface RecipientWalletListener {
     fun click()
 }
 
-class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private var tickets: ArrayList<String>) :
-    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>()  {
+class RecipientWalletAdapter(val listener: RecipientWalletListener, private var tickets: ArrayList<String>) :
+    RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.confirm_ticket_buy_item,
+                R.layout.recipient_item,
                 parent,
                 false
             )
@@ -29,16 +32,15 @@ class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private 
         if(position==9){
             holder.viewLine?.visibility = View.GONE
         }
-
     }
 
     override fun getItemCount(): Int = 10
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)
-        internal var ticketDescriptionTv: TextView? = view.findViewById(R.id.descriptionTicketTv)
-        internal var costTicketTv: TextView? = view.findViewById(R.id.costTicketTv)
+        internal var checkBox:ImageView = view.findViewById(R.id.checkBox)
+        internal var avatar: ImageView? = view.findViewById(R.id.userAdminAvatar)
+        internal var statusTv: TextView? = view.findViewById(R.id.statusTv)
+        internal var nameAdminTv: TextView? = view.findViewById(R.id.nameAdminTv)
         internal var viewLine: View? = view.findViewById(R.id.viewLine)
     }
-
 }

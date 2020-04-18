@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@android:color/white"
+                android:elevation="6dp">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:padding="0dp">
+
+                <ImageView
+                        android:id="@+id/backBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_arrow_back" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Поиск по номеру билета"
+                        android:textColor="#333333"
+                        android:textSize="14sp" />
+
+            </RelativeLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <RelativeLayout
+                android:layout_below="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/layout_settings_bg"
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
+
+
+                <TextView
+                        android:textColor="#333333"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:id="@+id/tv"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Введите уникальный номер билета чтобы \nузнать его статус"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+            <RelativeLayout
+                    android:id="@+id/searchLayout"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <EditText
+                        android:fontFamily="@font/roboto_regular"
+                        android:textSize="14sp"
+                        android:textColor="#333333"
+                        android:id="@+id/findEd"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="@drawable/edit_text_bottom_sheet"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="5dp" />
+
+                <ImageView
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="13dp"
+                        android:src="@drawable/ic_search"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"/>
+
+            </RelativeLayout>
+
+
+            <View
+                    android:layout_marginTop="22dp"
+                    android:layout_below="@+id/searchLayout"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="13dp"
+                    android:id="@+id/lineView"
+                    android:background="#F5F5F5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/lineView"
+                    android:id="@+id/nameTicket"
+                    android:text="Билет в партер"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="12sp"
+                    android:textColor="#9B9BB6"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/nameTicket"
+                    android:id="@+id/numberTicketTv"
+                    android:text="12345879970"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <View
+                    android:layout_marginTop="22dp"
+                    android:layout_below="@+id/numberTicketTv"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="13dp"
+                    android:id="@+id/lineView2"
+                    android:background="#F5F5F5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/lineView2"
+                    android:id="@+id/statusTv"
+                    android:text="Статус билета"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:layout_marginBottom="11dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/statusTv"
+                    android:id="@+id/statusTicketTv"
+                    android:text="Отсканирован "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

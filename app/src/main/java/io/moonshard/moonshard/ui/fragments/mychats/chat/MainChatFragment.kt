@@ -9,12 +9,15 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.SearchTicketFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ChatInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.*
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.StatisticTicketsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
@@ -244,6 +247,40 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "ScanQrTicketFragment")
             .addToBackStack("ScanQrTicketFragment")
+            .commit()
+    }
+
+    fun showStatisticTicketsFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = StatisticTicketsFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "StatisticTicketsFragment")
+            .addToBackStack("StatisticTicketsFragment")
+            .commit()
+    }
+
+    fun showNotUsedTicketsFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = NotUsedTicketsFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "NotUsedTicketsFragment")
+            .addToBackStack("NotUsedTicketsFragment")
+            .commit()
+    }
+
+    fun showSearchTicketFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment =
+            SearchTicketFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "SearchTicketFragment")
+            .addToBackStack("SearchTicketFragment")
             .commit()
     }
 

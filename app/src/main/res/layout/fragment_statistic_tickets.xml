@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.TicketsManageFragment">
+        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.StatisticTicketsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -33,57 +32,45 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Управление билетами"
+                    android:text="Статистика"
                     android:textColor="#333333"
-                    android:textSize="14sp" />
-
-            <TextView
-                    android:layout_marginEnd="17dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="Готово"
-                    android:textColor="#0075FF"
                     android:textSize="14sp" />
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            android:background="@drawable/layout_settings_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
     <RelativeLayout
-            android:id="@+id/addTicketsBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/searchLayout"
+            android:layout_below="@+id/toolBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="13dp">
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
         <ImageView
-                android:id="@+id/presentIcon"
+                android:layout_marginBottom="11dp"
+                android:id="@+id/searchBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_top_up_wallet" />
+                android:src="@drawable/ic_search_black" />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="14dp"
                 android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/presentIcon"
+                android:layout_toRightOf="@+id/searchBtn"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="1sp"
-                android:text="Добавить билеты"
+                android:text="Поиск билета по номеру"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -97,21 +84,83 @@
 
     </RelativeLayout>
 
-        <View
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="#F5F5F5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+    <LinearLayout
+            android:layout_below="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
         <RelativeLayout
-                android:id="@+id/scanTicketsBtn"
+                android:id="@+id/fillUpWalletBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">
 
             <ImageView
-                    android:id="@+id/presentIcon2"
+                    android:id="@+id/presentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_ticket_blue" />
+
+            <TextView
+                    android:id="@+id/salesTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/presentIcon"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="1sp"
+                    android:text="Продано"
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+
+            <ImageView
+                    android:id="@+id/iconNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+            <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNext"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:background="#F5F5F5" />
+
+        <RelativeLayout
+                android:id="@+id/transferLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp">
+
+
+            <ImageView
+                    android:id="@+id/transferIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
@@ -123,105 +172,70 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/presentIcon2"
+                    android:layout_toRightOf="@+id/transferIcon"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="1sp"
-                    android:text="Сканировать билеты"
+                    android:text="Отсканировано"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
             <ImageView
+                    android:id="@+id/iconNextScan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_next_gray" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            android:background="@drawable/layout_settings_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <RelativeLayout
-                android:id="@+id/statisticBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp">
-
-            <ImageView
-                    android:id="@+id/presentIcon3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_statistic_red" />
 
             <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNextScan"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/presentIcon3"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
-                    android:lineSpacingExtra="1sp"
-                    android:text="Статистика мероприятия"
-                    android:textColor="#333333"
-                    android:textSize="16sp" />
-
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginEnd="15dp"
-                    android:src="@drawable/ic_next_gray" />
+                    android:layout_height="wrap_content"/>
 
         </RelativeLayout>
 
         <View
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="#F5F5F5"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:background="#F5F5F5" />
 
         <RelativeLayout
+                android:id="@+id/notUsedTicketsBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">
 
+
             <ImageView
-                    android:id="@+id/presentIcon4"
+                    android:id="@+id/ticketIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_wallet" />
+                    android:src="@drawable/ic_scan_red" />
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/presentIcon4"
+                    android:layout_toRightOf="@+id/ticketIcon"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="1sp"
-                    android:text="Перейти в кошелек"
+                    android:text="Не использовано"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
             <ImageView
+                    android:id="@+id/iconNextNotUsed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -229,9 +243,27 @@
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_next_gray" />
 
+            <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNextNotUsed"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
         </RelativeLayout>
+
+
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:background="#F5F5F5" />
 
     </LinearLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

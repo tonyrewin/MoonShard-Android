@@ -48,23 +48,23 @@ class ScanQrTicketFragment : Fragment() {
     }
 
     private fun alreadyWasScan(barcodeImagePath: String){
-        qrLayout?.visibility = View.VISIBLE
+        //qrLayout?.visibility = View.VISIBLE
         layoutScan?.visibility = View.VISIBLE
         layoutScan?.setBackgroundResource(R.drawable.layout_red_corner_bg)
         nameTicket?.setTextColor(Color.parseColor("#FFFFFF"))
         typeTicket?.setTextColor(Color.parseColor("#FFFFFF"))
         scanOk?.visibility = View.GONE
-        setImageFromImagePath(barcodeImagePath)
+      //  setImageFromImagePath(barcodeImagePath)
     }
 
     private fun successScan(barcodeImagePath: String) {
-        qrLayout?.visibility = View.VISIBLE
+      //  qrLayout?.visibility = View.VISIBLE
         layoutScan?.visibility = View.VISIBLE
         layoutScan?.setBackgroundResource(R.drawable.layout_settings_bg)
         nameTicket?.setTextColor(Color.parseColor("#333333"))
         typeTicket?.setTextColor(Color.parseColor("#9B9BB6"))
         scanOk?.visibility = View.VISIBLE
-        generateQrCode(barcodeImagePath)
+       // generateQrCode(barcodeImagePath)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

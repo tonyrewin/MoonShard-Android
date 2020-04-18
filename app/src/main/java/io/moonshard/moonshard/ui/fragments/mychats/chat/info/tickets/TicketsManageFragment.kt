@@ -35,27 +35,12 @@ class TicketsManageFragment : Fragment() {
         }
 
         scanTicketsBtn?.setOnClickListener {
-            val integrator = IntentIntegrator.forSupportFragment(this)
-            integrator.setBarcodeImageEnabled(true)
-            integrator.initiateScan()
+            (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
+
         }
 
         addTicketsBtn?.setOnClickListener {
             (parentFragment as? MainChatFragment)?.showManageTypesTicketScreen(idChat)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result =
-            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents == null) {
-                Toast.makeText(activity!!, "Cancelled", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(activity!!, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 }

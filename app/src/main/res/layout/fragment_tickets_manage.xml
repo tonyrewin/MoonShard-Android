@@ -48,7 +48,6 @@
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
-
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

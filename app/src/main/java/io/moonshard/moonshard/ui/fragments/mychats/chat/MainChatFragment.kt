@@ -236,6 +236,17 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
+    fun showScanQrTicketFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = ScanQrTicketFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "ScanQrTicketFragment")
+            .addToBackStack("ScanQrTicketFragment")
+            .commit()
+    }
+
     fun showAddAdminScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)

@@ -19,7 +19,8 @@ class AddChatPresenter : MvpPresenter<AddChatView>() {
 
     fun startChatWithPeer(username: String) {
         if (!username.contains("@")) {
-            viewState?.showError("Должен содержать @ host")
+            // TODO: move this code to AddChatView
+            viewState?.showError("Must contain @ host")
             return
         }
         //need  LocalDBWrapper.createChatEntry(username, username.split("@")[0], ArrayList<GenericUser>(),false)

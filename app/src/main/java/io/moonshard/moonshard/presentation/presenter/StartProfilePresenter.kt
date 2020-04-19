@@ -13,7 +13,8 @@ class StartProfilePresenter : MvpPresenter<StartProfileView>() {
     fun setData(nickName: String, bytes: ByteArray?, mimeType: String?) {
 
         if(nickName.isEmpty()){
-            viewState?.showError("Введите ник")
+            // TODO: move this code to StartProfileView
+            viewState?.showError("Enter a nickname")
             return
         }
 

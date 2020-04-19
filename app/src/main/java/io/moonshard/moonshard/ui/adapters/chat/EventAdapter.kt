@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.adapters.chat
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -50,9 +51,9 @@ class EventAdapter(
             val roomInfo =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(jid)
-
-            holder.nameEvent?.text = roomInfo.name ?: "Информация отсутствует"
-            holder.descriptionTv?.text = roomInfo.description ?: "Информация отсутствует"
+            var context = holder.nameEvent?.getContext()
+            holder.nameEvent?.text = roomInfo.name ?: context?.getString(R.string.no_information_available)
+            holder.descriptionTv?.text = roomInfo.description ?: context?.getString(R.string.no_information_available)
             setAvatar(events[position].parentGroupId, roomInfo.name, holder.avatarEvent)
 
         } catch (e: Exception) {

@@ -332,7 +332,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         View.VISIBLE else iconStartDate.visibility = View.GONE
 
                     startDateEvent?.text =
-                        "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
+                        "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} " + getString(R.string.at) + " ${date.hour}:${date.minute}"
 
                     joinBtn?.setSafeOnClickListener {
                         presenter.joinChat(RoomsMap.rooms[i].roomId!!)
@@ -434,14 +434,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return "Информация отсутствует"
+        return "" + getString(R.string.no_information_available) + ""
     }
 
     override fun showRoomsOnMap(rooms: ArrayList<RoomPin>) {
         mMap?.clear()
         for (i in rooms.indices) {
             when {
-                rooms[i].category?.get(0)?.categoryName.toString() == "Тусовки" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.id == 0 -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -453,7 +453,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_star)
                         )
                 )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Бизнес ивенты" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.id == 1 -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -465,7 +465,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_business)
                         )
                 )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Кружок по интересам" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.id == 2 -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -477,7 +477,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                             BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_health)
                         )
                 )
-                rooms[i].category?.get(0)?.categoryName.toString() == "Культурные мероприятия" -> mMap?.addMarker(
+                rooms[i].category?.get(0)?.id == 3 -> mMap?.addMarker(
                     MarkerOptions()
                         .position(
                             LatLng(
@@ -509,7 +509,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     fun showCategoryBottomSheet() {
         bottomSheetCategory?.visibility = View.VISIBLE
         bottomSheetFind?.visibility = View.GONE
-        categoryFilterName?.text = "Категория: " + RoomsMap.category?.categoryName
+        categoryFilterName?.text = "" + getString(R.string.category) + "" + RoomsMap.category?.categoryName
         sheetBehavior?.setPeekHeight(convertDpToPixel(100F, context), false)
     }
 
@@ -573,59 +573,14 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             dateAndTime.set(Calendar.MONTH, monthOfYear)
             dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
-            presenter.setDateFilter("Выбрать дату",dateAndTime)
+            presenter.setDateFilter("" + getString(R.string.select_date) + "",dateAndTime)
             clearSearch.visibility = View.VISIBLE
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
     private fun setDate(dayOfMonth: Int, month: Int) {
-        when (month) {
-            0 -> {
-                searchEventEt.setText("$dayOfMonth января")
-            }
-            1 -> {
-                searchEventEt.setText("$dayOfMonth февраля")
-
-            }
-            2 -> {
-                searchEventEt.setText("$dayOfMonth марта")
-
-            }
-            3 -> {
-                searchEventEt.setText("$dayOfMonth апреля")
-
-            }
-            4 -> {
-                searchEventEt.setText("$dayOfMonth мая")
-
-            }
-            5 -> {
-                searchEventEt.setText( "$dayOfMonth июня")
-
-            }
-            6 -> {
-                searchEventEt.setText("$dayOfMonth июля")
-
-            }
-            7 -> {
-                searchEventEt.setText("$dayOfMonth августа")
-
-            }
-            8 -> {
-                searchEventEt.setText("$dayOfMonth сенятбря")
-
-            }
-            9 -> {
-                searchEventEt.setText( "$dayOfMonth октября")
-
-            }
-            10 -> {
-                searchEventEt.setText("$dayOfMonth ноября")
-            }
-            11 -> {
-                searchEventEt.setText("$dayOfMonth декабря")
-            }
-        }
+        val date = DateHolder(System.currentTimeMillis())
+        searchEventEt.setText("$dayOfMonth " + date.getMonthString(month))
     }
 
     fun clearCategoryAdapter() {

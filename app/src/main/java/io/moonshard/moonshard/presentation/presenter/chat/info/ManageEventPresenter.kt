@@ -68,7 +68,8 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             viewState?.hideProgressBar()
         } catch (e: Exception) {
             viewState?.hideProgressBar()
-            viewState?.showToast("Произошла ошибка")
+            // TODO: move this code to ManageEventView
+            viewState?.showToast("An error has occured")
         }
     }
 
@@ -127,7 +128,8 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                     viewState?.hideProgressBar()
                 } else {
                     Logger.d(throwable)
-                    viewState?.showToast("Произошла ошибка")
+                    // TODO: move this code to view
+                    viewState?.showToast("An error has occured")
                     viewState?.hideProgressBar()
                 }
             })
@@ -211,12 +213,14 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                     viewState?.showChatsScreen()
                 }, {
                     Logger.d(it)
-                    viewState?.showToast("Произошла ошибка на сервере")
+                    // TODO: move this code to view
+                    viewState?.showToast("An error has occured on server")
                 })
             )
         } catch (e: Exception) {
             Logger.d(e)
-            viewState?.showToast("Произошла ошибка на сервере")
+            // TODO: move this code to view
+            viewState?.showToast("An error has occured on server")
         }
     }
 }

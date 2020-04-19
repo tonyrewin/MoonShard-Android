@@ -25,7 +25,7 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
     var focusedItem = -1
     private fun setFocusedItem(){
         for(i in categories.indices){
-            if(categories[i].categoryName== ChooseChatRepository.category?.categoryName){
+            if(categories[i].id == ChooseChatRepository.category?.id){
                 focusedItem = i
             }
         }
@@ -73,19 +73,18 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
     }
 
     private fun setDrawable(imageView:ImageView, category:Category){
+        var context = imageView.getContext()
         when {
-            category.categoryName=="Тусовки" -> {
+            category.id == 0 -> {
                 imageView.setImageResource(R.drawable.ic_star_category)
             }
-            category.categoryName=="Бизнес ивенты" -> {
+            category.id == 1 -> {
                 imageView.setImageResource(R.drawable.ic_case_category)
-
             }
-            category.categoryName=="Кружок по интересам" -> {
+            category.id == 2 -> {
                 imageView.setImageResource(R.drawable.ic_heart_category)
-
             }
-            category.categoryName=="Культурные мероприятия" -> {
+            category.id == 3  -> {
                 imageView.setImageResource(R.drawable.ic_culture_category)
             }
         }

@@ -114,7 +114,8 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                         it.description
                     )
                     val onlineUsers = getValueOnlineUsers(it.room.asUnescapedString())
-                    viewState?.showOnlineUserRoomInfo("${it.occupantsCount} человек, $onlineUsers онлайн")
+                    // TODO: move this code to view
+                    viewState?.showOnlineUserRoomInfo("${it.occupantsCount} members, $onlineUsers online")
                     setAvatar(it.room.asUnescapedString(), it.name)
                 } catch (e: Exception) {
                     Logger.d(e)
@@ -155,18 +156,19 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                 LatLng(myLat, myLng)
             ).toInt() / 1000
+            // TODO: presenter should not contain any localizable strings
             return if (km < 1) {
                 (SphericalUtil.computeDistanceBetween(
                     LatLng(
                         latRoom.toDouble(),
                         lngRoom.toDouble()
                     ), LatLng(myLat, myLng)
-                ).toInt()).toString() + " метрах"
+                ).toInt()).toString() + " meters"
             } else {
                 (SphericalUtil.computeDistanceBetween(
                     LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                     LatLng(myLat, myLng)
-                ).toInt() / 1000).toString() + " км"
+                ).toInt() / 1000).toString() + " km"
             }
         }
         return ""
@@ -242,7 +244,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 })
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
-        } ?: viewState?.showError("Ошибка")
+        } ?: viewState?.showError("Error")
     }
 
     fun readChat(jid: String) {
@@ -265,15 +267,15 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }
-            ?: viewState?.showError("Ошибка")
+            ?: viewState?.showError("Error") // TODO: move this code to view
     }
 
     fun setDateFilter(date:String,calendar: Calendar?=null){
         val today = Calendar.getInstance()
         val filteredRooms = arrayListOf<RoomPin>()
-
+        // TODO: presenter should not contain any localizable strings
         when (date) {
-            "Сегодня" -> {
+            "Today" -> {
                 for (i in RoomsMap.rooms.indices){
                     val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
                     if(time.dayOfMonth==today.get(Calendar.DAY_OF_MONTH)){
@@ -283,7 +285,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 RoomsMap.rooms = filteredRooms
                 viewState?.showRoomsOnMap(filteredRooms)
             }
-            "Завтра" -> {
+            "Tomorrow" -> {
                 val tomorrow = Calendar.getInstance()
                 tomorrow.add(Calendar.DATE, 1)
 
@@ -296,7 +298,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 RoomsMap.rooms = filteredRooms
                 viewState?.showRoomsOnMap(filteredRooms)
             }
-            "В выходные" -> {
+            "Weekend" -> {
                 val saturday = Utils.getNextSaturdayDate()
                 val sunday = Utils.getNextSundayDate()
 
@@ -309,7 +311,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 RoomsMap.rooms = filteredRooms
                 viewState?.showRoomsOnMap(filteredRooms)
             }
-            "Выбрать дату" -> {
+            "Select date" -> {
                 for (i in RoomsMap.rooms.indices){
                     val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
                     if(time.dayOfMonth==calendar!!.get(Calendar.DAY_OF_MONTH)){

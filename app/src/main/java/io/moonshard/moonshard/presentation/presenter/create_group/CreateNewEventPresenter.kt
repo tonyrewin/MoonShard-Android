@@ -64,7 +64,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 UUID.randomUUID().toString() + "-event" + "@conference.moonshard.tech"
 
             if (nameEvent.contains("@")) {
-                viewState?.showToast("Вы ввели недопустимый символ")
+                // TODO: move this code to CreateNewEventView
+                viewState?.showToast("You have entered an invalid character")
                 return
             } else {
                 actualUserName = nameEvent.split("@")[0]
@@ -119,7 +120,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 e.message?.let { viewState?.showToast(it) }
             }
         } else {
-            viewState?.showToast("Заполните поля")
+            // TODO: move this code to view
+            viewState?.showToast("Fill the fields")
         }
 
 

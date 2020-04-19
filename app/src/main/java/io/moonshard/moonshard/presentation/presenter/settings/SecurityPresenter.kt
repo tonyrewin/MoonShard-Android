@@ -17,7 +17,8 @@ class SecurityPresenter : MvpPresenter<SecurityView>() {
         if (newPass == repeatNewPass) {
             changeNewPassword(newPass)
         } else {
-            viewState?.showError("Пароли не совпадают")
+            // TODO: move this code to SecurityView
+            viewState?.showError("An error has occured")
         }
 
         /*

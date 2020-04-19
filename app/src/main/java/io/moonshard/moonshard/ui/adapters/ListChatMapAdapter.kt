@@ -102,10 +102,11 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
     }
 
     private fun setValueMembersTv(roomInfo: RoomInfo, jid: String, valueMembersTv: TextView?) {
+        var context = valueMembersTv?.getContext()
         getValueOnlineUsers(jid).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                valueMembersTv?.text = "${roomInfo.occupantsCount} человек, $it онлайн"
+                valueMembersTv?.text = "${roomInfo.occupantsCount} " + context?.getString(R.string.members) + ", $it " + context?.getString(R.string.online)
             }, {
                 Logger.d(it)
             })
@@ -147,6 +148,9 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                         LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                         LatLng(myLat, myLng)
                     ).toInt() / 1000
+
+                    var context = MainApplication.getContext()
+
                     if (km < 1) {
                         it.onSuccess(
                             SphericalUtil.computeDistanceBetween(
@@ -154,14 +158,14 @@ class ListChatMapAdapter(val listener: ListChatMapListener, private var chats: A
                                     latRoom.toDouble(),
                                     lngRoom.toDouble()
                                 ), LatLng(myLat, myLng)
-                            ).toInt().toString() + " метрах"
+                            ).toInt().toString() + context.getString(R.string.meters)
                         )
                     } else {
                         it.onSuccess(
                             (SphericalUtil.computeDistanceBetween(
                                 LatLng(latRoom.toDouble(), lngRoom.toDouble()),
                                 LatLng(myLat, myLng)
-                            ).toInt() / 1000).toString() + " км"
+                            ).toInt() / 1000).toString() + context.getString(R.string.km)
                         )
                     }
                 }

@@ -362,7 +362,7 @@
 
     <!-- /fragment_settings_new.xml -->
     <string name="prevent_add_to_chats">Запретить добавление в чаты</string>
-
+    
     <!-- /fragment_time_group_chat.xml -->
     <string name="show_on_map">Показать на карте</string>
     <string name="your_chat_pin_will_be">Ваш значок чата будет виден на карте \n в течение ограниченного времени</string>

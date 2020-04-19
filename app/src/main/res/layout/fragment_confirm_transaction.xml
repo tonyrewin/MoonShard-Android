@@ -44,6 +44,7 @@
 
 
     <RelativeLayout
+            android:id="@+id/passLayout"
             android:layout_below="@+id/confTransTv"
             android:layout_marginTop="27dp"
             android:layout_width="match_parent"
@@ -76,6 +77,19 @@
                 android:layout_height="wrap_content"/>
 
     </RelativeLayout>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/notCorrectPassword"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="15dp"
+            android:layout_below="@+id/passLayout"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
+            android:textColor="#FF6060"
+            android:text="Неверный пароль"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buyTicketBtn"

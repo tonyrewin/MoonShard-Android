@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.adapters.tickets
+package io.moonshard.moonshard.ui.adapters.tickets.statistic
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,17 +7,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
 
-interface ConfirmTicketsBuyListener {
+
+interface StatisticTicketsListener {
     fun click()
 }
 
-class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private var tickets: ArrayList<String>) :
-    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>()  {
+class StatisticTicketsAdapter(val listener: StatisticTicketsListener, private var tickets: ArrayList<String>) :
+    RecyclerView.Adapter<StatisticTicketsAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.confirm_ticket_buy_item,
+                R.layout.statistic_ticket_item,
                 parent,
                 false
             )
@@ -35,9 +36,8 @@ class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private 
     override fun getItemCount(): Int = 10
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)
-        internal var ticketDescriptionTv: TextView? = view.findViewById(R.id.descriptionTicketTv)
-        internal var costTicketTv: TextView? = view.findViewById(R.id.costTicketTv)
+        internal var nameTicket: TextView? = view.findViewById(R.id.nameTicket)
+        internal var valueTickets: TextView? = view.findViewById(R.id.valueTickets)
         internal var viewLine: View? = view.findViewById(R.id.viewLine)
     }
 

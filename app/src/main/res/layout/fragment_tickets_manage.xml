@@ -48,7 +48,6 @@
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
-
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -153,6 +152,7 @@
             android:layout_height="wrap_content">
 
         <RelativeLayout
+                android:id="@+id/statisticBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="13dp">

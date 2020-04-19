@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.fragments.profile.wallet.WalletFragment">
+        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.StatisticTicketsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -32,17 +31,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/your_wallet"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold"
-                    />
-
+                    android:text="Статистика"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <RelativeLayout
+            android:id="@+id/searchLayout"
+            android:layout_below="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -53,30 +52,40 @@
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
 
-        <TextView
+        <ImageView
+                android:layout_marginBottom="11dp"
+                android:id="@+id/searchBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="17dp"
-                android:fontFamily="@font/montserrat_bold"
-                android:textColor="#333333"
-                android:textSize="34sp"
-                android:text="@string/wallet_text252" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_search_black" />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/searchBtn"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/current_balance"
-                android:textColor="#6F6F6F"
-                android:textSize="14sp" />
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="1sp"
+                android:text="Поиск билета по номеру"
+                android:textColor="#333333"
+                android:textSize="16sp" />
 
-    </LinearLayout>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_next_gray" />
+
+    </RelativeLayout>
 
     <LinearLayout
+            android:layout_below="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -99,9 +108,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_top_up_wallet" />
+                    android:src="@drawable/ic_ticket_blue" />
 
             <TextView
+                    android:id="@+id/salesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -110,17 +120,28 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="1sp"
-                    android:text="@string/fill_up_a_purse"
+                    android:text="Продано"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
             <ImageView
+                    android:id="@+id/iconNext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_next_gray" />
+
+            <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNext"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
         </RelativeLayout>
 
@@ -144,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_transfer_money" />
+                    android:src="@drawable/ic_scan_yellow" />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -154,11 +175,12 @@
                     android:layout_toRightOf="@+id/transferIcon"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
-                    android:text="Перевести пользователю"
+                    android:text="Отсканировано"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
             <ImageView
+                    android:id="@+id/iconNextScan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -166,10 +188,27 @@
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_next_gray" />
 
+            <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNextScan"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
         </RelativeLayout>
 
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:background="#F5F5F5" />
+
         <RelativeLayout
-                android:id="@+id/withDrawBtn"
+                android:id="@+id/notUsedTicketsBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">
@@ -181,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_output_wallet_red" />
+                    android:src="@drawable/ic_scan_red" />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -191,17 +230,28 @@
                     android:layout_toRightOf="@+id/ticketIcon"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
-                    android:text="@string/withdraw_funds"
+                    android:text="Не использовано"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
             <ImageView
+                    android:id="@+id/iconNextNotUsed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/ic_next_gray" />
+
+            <TextView
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toStartOf="@+id/iconNextNotUsed"
+                    android:textSize="14sp"
+                    android:textColor="#6F6F6F"
+                    android:text="11 000 из 12000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
         </RelativeLayout>
 
@@ -216,76 +266,4 @@
 
     </LinearLayout>
 
-
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/layout_settings_bg"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
-
-        <TextView
-                android:id="@+id/cashFlowTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="13dp"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="@string/cash_flow"
-                android:textColor="#333333"
-                android:textSize="14sp" />
-
-
-        <RelativeLayout
-                android:layout_marginStart="8dp"
-                android:id="@+id/topUpWalletBtn"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/cashFlowTv"
-                android:layout_width="120dp"
-                android:layout_height="32dp"
-                android:background="@drawable/wallet_button_default">
-
-            <TextView
-                    android:id="@+id/topUpWalletTv"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/replenishment"
-                    android:textColor="#333333" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-                android:id="@+id/writeOffBtn"
-                android:layout_marginStart="8dp"
-                android:layout_toRightOf="@+id/topUpWalletBtn"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/cashFlowTv"
-                android:layout_width="120dp"
-                android:layout_height="32dp"
-                android:background="@drawable/wallet_button_default">
-
-            <TextView
-                    android:id="@+id/writeOffTv"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/writeoff"
-                    android:textColor="#333333" />
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

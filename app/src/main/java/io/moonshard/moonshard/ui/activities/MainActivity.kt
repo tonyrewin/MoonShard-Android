@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
-import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
 import io.moonshard.moonshard.services.XMPPConnectionService
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
@@ -27,6 +27,7 @@ import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPres
 import io.moonshard.moonshard.ui.fragments.profile.wallet.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WithdrawWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
@@ -70,6 +71,8 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             true
         }
     }
+
+
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         //Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
@@ -281,6 +284,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = WithdrawWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "WithdrawWalletFragment").addToBackStack("WithdrawWalletFragment")
+            .commit()
+    }
+
+    fun showTransferWalletFragment(){
+        val fragment = TransferWalletFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "TransferWalletFragment").addToBackStack("TransferWalletFragment")
             .commit()
     }
 

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:background="#333333"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.profile.wallet.ConfirmTransactionFragment">
+
+    <ImageView
+            android:padding="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="41dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_close_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_marginTop="210dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/inputPassTv"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Введите пароль"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="21dp"
+            android:id="@+id/confTransTv"
+            android:lineSpacingExtra="2sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/inputPassTv"
+            android:text="Введите свой пароль чтобы подтвердить \nтранзакцию "
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    <RelativeLayout
+            android:id="@+id/passLayout"
+            android:layout_below="@+id/confTransTv"
+            android:layout_marginTop="27dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+                android:textColorHint="#9B9BB6"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/editPassword"
+                style="@style/Theme.MaterialComponents.Light"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/edittext_confirm_transaction_bg"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Пароль"
+                android:inputType="textPassword"
+                android:textSize="16sp" />
+
+        <ImageView
+                android:padding="10dp"
+                android:id="@+id/visiblePassBtn"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="31dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_pass_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/notCorrectPassword"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="15dp"
+            android:layout_below="@+id/passLayout"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
+            android:textColor="#FF6060"
+            android:text="Неверный пароль"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buyTicketBtn"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="42dp"
+            android:backgroundTint="#0075FF"
+            android:fontFamily="@font/roboto_regular"
+            android:text="ПОДТВЕРДИТЬ"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+</RelativeLayout>

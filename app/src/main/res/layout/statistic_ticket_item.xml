@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/withDrawBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:paddingStart="8dp"
+        android:layout_marginEnd="8dp"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+            android:id="@+id/nameTicket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center_vertical"
+            android:text="Билет в партер"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/valueTickets"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="17dp"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:textColor="#6F6F6F"
+            android:text="11 000 из 12000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    <View
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="13dp"
+            android:id="@+id/viewLine"
+            android:layout_below="@+id/nameTicket"
+            android:background="#F5F5F5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+</RelativeLayout>

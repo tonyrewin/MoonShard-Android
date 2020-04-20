@@ -13,10 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-
     <com.google.android.material.appbar.AppBarLayout
-            app:elevation="4dp"
+            android:elevation="4dp"
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -53,23 +51,97 @@
                     android:background="@drawable/my_test"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"/>
+                    android:layout_height="1dp"/>
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/layout_settings_bg"
+                app:cardCornerRadius="16dp">
 
-        <include
-            android:id="@+id/ticket"
-            layout="@layout/my_ticket_item"/>
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-    <include
-            android:id="@+id/littleTicket"
-            layout="@layout/little_ticket_item"/>
+                <ImageView
+                        android:id="@+id/avatarTicket"
+                        android:layout_width="match_parent"
+                        android:layout_height="104dp"
+                        android:background="@drawable/bck_rounded"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/party_test" />
 
+                <TextView
+                        android:id="@+id/labelTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/avatarTicket"
+                        android:layout_marginStart="9dp"
+                        android:layout_marginTop="13dp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Валерий Меладзе"
+                        android:textColor="#333333"
+                        android:textSize="17sp" />
 
+                <TextView
+                        android:id="@+id/startDateTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/labelTicket"
+                        android:layout_marginStart="9dp"
+                        android:layout_marginTop="4.5dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="1 июля 2020 г. в 23:00"
+                        android:textColor="#333333"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:layout_marginBottom="15dp"
+                        android:id="@+id/locationTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/startDateTicket"
+                        android:layout_marginStart="9dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Москва. Mutabor club."
+                        android:textColor="#0075FF"
+                        android:textSize="14sp" />
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/avatarTicket"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="19dp"
+                        android:src="@drawable/ic_check_circle" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/typeTicketPresentRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <include

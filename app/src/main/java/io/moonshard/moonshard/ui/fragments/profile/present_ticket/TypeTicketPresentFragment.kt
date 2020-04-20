@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.Utils
+import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentAdapter
+import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentListener
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_type_ticket_present.*
@@ -42,14 +45,9 @@ class TypeTicketPresentFragment : Fragment() {
         val llInfoBottomSheet = view.findViewById<NestedScrollView>(R.id.bottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
-        littleTicket?.setOnClickListener {
-            toolBarTittle?.text = "Отправить билет"
-            layoutToolbar?.setBackgroundColor(Color.argb(0.05f, 0f, 0f, 0f))
-            mainLayout?.setBackgroundColor(Color.argb(0.05f, 0f, 0f, 0f))
-            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-
         chooseBtn?.setOnClickListener{
+            backBtn.isClickable = true
+            layoutToolbar?.alpha = 1f
             toolBarTittle?.text = "Подарить билеты"
             layoutToolbar?.setBackgroundColor(Color.parseColor("#ffffffff"))
             mainLayout?.setBackgroundColor(Color.parseColor("#FAFAFA"))
@@ -57,23 +55,40 @@ class TypeTicketPresentFragment : Fragment() {
         }
 
         cancelBtn?.setOnClickListener{
+            backBtn.isClickable = true
+            layoutToolbar?.alpha = 1f
             toolBarTittle?.text = "Подарить билеты"
             layoutToolbar?.setBackgroundColor(Color.parseColor("#ffffffff"))
             mainLayout?.setBackgroundColor(Color.parseColor("#FAFAFA"))
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        initTypeTicketPresentAdapter()
         initRecipientAdapter()
-
-        littleTicket?.arrowImageView?.visibility = View.VISIBLE
 
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
     }
 
-    fun convertDpToPixel(dp: Float): Float {
-        return dp * (context!!.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+    private fun initTypeTicketPresentAdapter(){
+        typeTicketPresentRv?.layoutManager = LinearLayoutManager(context)
+        typeTicketPresentRv?.adapter =
+            TypeTicketPresentAdapter(object :
+                TypeTicketPresentListener {
+                override fun click() {
+                    backBtn.isClickable = false
+                    toolBarTittle?.text = "Отправить билет"
+                    toolBar?.setBackgroundColor(Color.rgb(242, 242, 242))
+                    layoutToolbar?.alpha = 0.5f
+                    mainLayout?.setBackgroundColor(Color.rgb(242, 242, 242))
+
+                    //  layoutToolbar?.setBackgroundColor(Color.rgb(242, 242, 242))
+                  //  mainLayout?.setBackgroundColor(Color.rgb(242, 242, 242))
+                    //layoutToolbar?.elevation = Utils.convertDpToPixel(4F,context).toFloat()
+                    sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }, arrayListOf())
     }
 
     private fun initRecipientAdapter() {

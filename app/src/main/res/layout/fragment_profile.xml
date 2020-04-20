@@ -235,6 +235,7 @@
             
             
             <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/ticketsCount"
                     android:layout_marginTop="13dp"
                     android:layout_marginRight="14dp"

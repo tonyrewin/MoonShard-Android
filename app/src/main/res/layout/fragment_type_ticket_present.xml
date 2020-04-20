@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        android:id="@+id/mainLayout"
         tools:context=".ui.fragments.profile.mytickets.TypeTicketsFragment">
 
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
     <com.google.android.material.appbar.AppBarLayout
+            app:elevation="4dp"
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@android:color/white"
-            android:elevation="6dp">
+            android:background="@android:color/white">
 
         <RelativeLayout
+                android:id="@+id/layoutToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="0dp"
@@ -36,11 +46,21 @@
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:fontFamily="@font/montserrat_bold" />
+            
+            <View
+                    android:visibility="gone"
+                    android:background="@drawable/my_test"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"/>
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
+
+
+
+        <include
             android:id="@+id/ticket"
             layout="@layout/my_ticket_item"/>
 
@@ -48,4 +68,11 @@
             android:id="@+id/littleTicket"
             layout="@layout/little_ticket_item"/>
 
-</LinearLayout>
+
+    </LinearLayout>
+
+    <include
+            android:id="@+id/bottomSheet"
+            layout="@layout/recipient_bottom_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

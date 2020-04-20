@@ -43,18 +43,21 @@ class TypeTicketPresentFragment : Fragment() {
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
         littleTicket?.setOnClickListener {
+            toolBarTittle?.text = "Отправить билет"
             layoutToolbar?.setBackgroundColor(Color.argb(0.05f, 0f, 0f, 0f))
             mainLayout?.setBackgroundColor(Color.argb(0.05f, 0f, 0f, 0f))
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
         chooseBtn?.setOnClickListener{
+            toolBarTittle?.text = "Подарить билеты"
             layoutToolbar?.setBackgroundColor(Color.parseColor("#ffffffff"))
             mainLayout?.setBackgroundColor(Color.parseColor("#FAFAFA"))
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         cancelBtn?.setOnClickListener{
+            toolBarTittle?.text = "Подарить билеты"
             layoutToolbar?.setBackgroundColor(Color.parseColor("#ffffffff"))
             mainLayout?.setBackgroundColor(Color.parseColor("#FAFAFA"))
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED

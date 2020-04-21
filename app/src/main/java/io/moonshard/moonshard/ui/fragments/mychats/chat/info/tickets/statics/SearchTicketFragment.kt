@@ -31,7 +31,6 @@ class SearchTicketFragment : Fragment() {
             idChat = it.getString("chatId")
         }
 
-
         backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }

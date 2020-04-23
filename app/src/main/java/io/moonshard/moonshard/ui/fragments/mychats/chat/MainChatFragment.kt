@@ -9,15 +9,13 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.SearchTicketFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.*
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ChatInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.*
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.StatisticTicketsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
@@ -271,6 +269,29 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .addToBackStack("NotUsedTicketsFragment")
             .commit()
     }
+
+    fun showSalesTicketFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = SalesTicketFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "SalesTicketFragment")
+            .addToBackStack("SalesTicketFragment")
+            .commit()
+    }
+
+    fun showScannedTicketFragment(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = ScannedTicketFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "ScannedTicketFragment")
+            .addToBackStack("ScannedTicketFragment")
+            .commit()
+    }
+
 
     fun showSearchTicketFragment(idChat: String){
         val bundle = Bundle()

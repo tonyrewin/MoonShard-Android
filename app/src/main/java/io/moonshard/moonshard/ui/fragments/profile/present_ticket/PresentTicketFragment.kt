@@ -22,6 +22,8 @@ class PresentTicketFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.hideBottomNavigationBar()
+
         ticket?.setOnClickListener {
             (activity as MainActivity).showTypeTicketsPresentFragment()
         }

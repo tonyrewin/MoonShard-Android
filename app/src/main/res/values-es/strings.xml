@@ -370,12 +370,13 @@
 
     <!-- /fragment_wallet.xml -->
     <string name="your_wallet">Tu billetera</string>
-    <string name="wallet_text252">0 ₽</string>
+    <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Saldo actual</string>
-    <string name="fill_up_a_purse">Llenar un bolso</string>
+    <string name="refill_a_wallet">Llenar un bolso</string>
     <string name="withdraw_funds">Retirar Fondos</string>
+    <string name="withdraw">Retirar</string>
     <string name="cash_flow">Flujo de efectivo</string>
-    <string name="replenishment">Reposición</string>
+    <string name="refill">Reposición</string>
     <string name="writeoff">Pedir por escrito</string>
 
     <!-- /item_test.xml -->

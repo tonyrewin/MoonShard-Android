@@ -16,7 +16,6 @@ class StatisticTicketsFragment : Fragment() {
 
     var idChat = ""
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +31,6 @@ class StatisticTicketsFragment : Fragment() {
             idChat = it.getString("chatId")
         }
 
-
         notUsedTicketsBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showNotUsedTicketsFragment(idChat)
         }
@@ -43,6 +41,14 @@ class StatisticTicketsFragment : Fragment() {
 
         backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        fillUpWalletBtn?.setSafeOnClickListener {
+            (parentFragment as? MainChatFragment)?.showSalesTicketFragment(idChat)
+        }
+
+        scannedTicketsBtn?.setSafeOnClickListener {
+            (parentFragment as? MainChatFragment)?.showScannedTicketFragment(idChat)
         }
     }
 }

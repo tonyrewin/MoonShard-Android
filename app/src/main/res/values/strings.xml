@@ -370,12 +370,14 @@
 
     <!-- /fragment_wallet.xml -->
     <string name="your_wallet">Your wallet</string>
-    <string name="wallet_text252">0 ₽</string>
+    <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Current balance</string>
-    <string name="fill_up_a_purse">Fill up a purse</string>
+    <string name="refill_a_wallet">Refill a wallet</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="transfer_to_user">Transfer to user</string>
     <string name="withdraw_funds">Withdraw funds</string>
     <string name="cash_flow">Cash flow</string>
-    <string name="replenishment">Replenishment</string>
+    <string name="refill">Refill</string>
     <string name="writeoff">Write-off</string>
 
     <!-- /item_test.xml -->

@@ -374,12 +374,13 @@
 
     <!-- /fragment_wallet.xml -->
     <string name="your_wallet">Ваш кошелек</string>
-    <string name="wallet_text252">0 ₽</string>
+    <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Текущий баланс</string>
-    <string name="fill_up_a_purse">Пополнить кошелек</string>
+    <string name="refill_a_wallet">Пополнить кошелек</string>
+    <string name="refill">Пополнение</string>
     <string name="withdraw_funds">Вывести средства</string>
+    <string name="withdraw">Снять</string>
     <string name="cash_flow">Движение средств</string>
-    <string name="replenishment">Пополнение</string>
     <string name="writeoff">Списание</string>
 
     <!-- /item_test.xml -->

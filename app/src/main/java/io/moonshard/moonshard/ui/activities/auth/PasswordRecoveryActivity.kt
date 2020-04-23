@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.ui.activities.auth
 
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Toast
 import io.moonshard.moonshard.R
@@ -21,7 +22,20 @@ class PasswordRecoveryActivity : MvpAppCompatActivity(), PasswordRecoveryView {
         setContentView(R.layout.activity_password_recovery)
 
         recoveryPassBtn?.setSafeOnClickListener{
+            presenter.recoveryPassword(editEmail.text.toString(),editPassword.text.toString())
+        }
 
+        var isSecurity = true
+        visiblePassBtn?.setSafeOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
         }
     }
 

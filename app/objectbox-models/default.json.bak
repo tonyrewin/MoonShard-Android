@@ -166,13 +166,6 @@
           "name": "isOnline",
           "type": 1,
           "flags": 4
-        },
-        {
-          "id": "6:6932953257759382166",
-          "name": "fullJid",
-          "indexId": "7:3924661846650674495",
-          "type": 9,
-          "flags": 2080
         }
       ],
       "relations": []
@@ -185,9 +178,12 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    3924661846650674495
+  ],
   "retiredPropertyUids": [
-    8314083653095750993
+    8314083653095750993,
+    6932953257759382166
   ],
   "retiredRelationUids": [
     5994661834050608599

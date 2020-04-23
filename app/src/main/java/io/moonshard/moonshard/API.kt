@@ -3,8 +3,13 @@ package io.moonshard.moonshard
 import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.models.api.auth.request.*
+import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
+import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
+import io.moonshard.moonshard.models.api.auth.response.PrivateKeyAuthResponse
 import io.reactivex.Completable
 import io.reactivex.Single
+import okhttp3.Response
 import retrofit2.http.*
 
 
@@ -37,11 +42,35 @@ interface API {
 
     @Headers("Accept: application/json", "Content-type:application/json")
     @PUT("/rooms/updateRooms")
-    fun changeRoom(@Body room:RoomPin):Single<RoomPin>
+    fun changeRoom(@Body room: RoomPin): Single<RoomPin>
 
     @GET("rooms/{eventId}")
-    fun getRoom(@Path("eventId") eventId:Long):Single<RoomPin>
+    fun getRoom(@Path("eventId") eventId: Long): Single<RoomPin>
 
     @DELETE("rooms/{eventId}")
-    fun deleteRoom(@Path("eventId") eventId:String):Completable
+    fun deleteRoom(@Path("eventId") eventId: String): Completable
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun resetPassword(@Url url: String, @Body request: RecoveryPassRequestModel): Single<Response>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun login(@Url url: String, @Body request: LoginRequestModel): Single<TokenModelResponse>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun register(@Url url: String, @Body request: RegisterRequestModel): Single<GeneralResponseAuth>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun logout(@Url url: String, @Body request: TokenRequestModel): Single<GeneralResponseAuth>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun refreshToken(@Url url: String, @Body request: TokenRequestModel): Single<TokenModelResponse>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun savePrivateKey(@Url url: String, @Body request: PrivateKeyRequestModel, @Header("Authorization") authHeader: String): Single<PrivateKeyAuthResponse>
 }

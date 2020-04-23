@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.common.ApiConstants
+import io.moonshard.moonshard.repository.AuthRepository
 import io.moonshard.moonshard.repository.NetworkRepository
 import io.moonshard.moonshard.repository.RoomsRepository
 import okhttp3.OkHttpClient
@@ -49,5 +50,10 @@ class WebModule(var context: Context) {
     @Provides
     fun providesRoomsRepository(): RoomsRepository {
         return RoomsRepository()
+    }
+
+    @Provides
+    fun providesAuthRepository(): AuthRepository {
+        return AuthRepository()
     }
 }

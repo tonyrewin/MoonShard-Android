@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.profile.wallet.transfer
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,15 +15,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
 import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
 import kotlinx.android.synthetic.main.recipient_bottom_sheet.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class TransferWalletFragment : Fragment() {
+class TransferWalletFragment : MvpAppCompatFragment(),
+    TransferWalletView {
+
+    @InjectPresenter
+    lateinit var presenter: TransferWalletPresenter
 
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
 
@@ -43,6 +53,10 @@ class TransferWalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        backBtn?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
 
@@ -66,6 +80,18 @@ class TransferWalletFragment : Fragment() {
         val llInfoBottomSheet = view.findViewById<NestedScrollView>(R.id.infoBottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
+        sheetInfoBehavior!!.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged( bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) bg.visibility = View.GONE
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                bg.visibility = View.VISIBLE
+                bg?.setBackgroundColor(Color.rgb(155, 155, 182))
+                bg.alpha =0.2F
+            }
+        })
 
         chooseMember?.setOnClickListener {
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED

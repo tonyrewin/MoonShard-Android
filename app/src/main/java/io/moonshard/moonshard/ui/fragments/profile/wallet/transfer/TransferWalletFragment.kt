@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.profile.wallet.transfer
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -79,6 +80,18 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         val llInfoBottomSheet = view.findViewById<NestedScrollView>(R.id.infoBottomSheet)
         sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
 
+        sheetInfoBehavior!!.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged( bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) bg.visibility = View.GONE
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                bg.visibility = View.VISIBLE
+                bg?.setBackgroundColor(Color.rgb(155, 155, 182))
+                bg.alpha =0.2F
+            }
+        })
 
         chooseMember?.setOnClickListener {
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED

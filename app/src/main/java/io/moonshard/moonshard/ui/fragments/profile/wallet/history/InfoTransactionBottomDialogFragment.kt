@@ -10,7 +10,6 @@ import io.moonshard.moonshard.R
 
 class InfoTransactionBottomDialogFragment : BottomSheetDialogFragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

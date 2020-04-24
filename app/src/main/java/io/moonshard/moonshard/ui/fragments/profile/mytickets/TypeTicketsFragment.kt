@@ -7,11 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.profile.mytickets.TypeTicketsPresenter
+import io.moonshard.moonshard.presentation.view.profile.my_tickets.TypeTicketsView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_type_tickets.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class TypeTicketsFragment : Fragment() {
+class TypeTicketsFragment : MvpAppCompatFragment(), TypeTicketsView {
+
+    @InjectPresenter
+    lateinit var presenter: TypeTicketsPresenter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet
+package io.moonshard.moonshard.ui.fragments.profile.wallet.status
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

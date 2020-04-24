@@ -27,6 +27,7 @@ import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPres
 import io.moonshard.moonshard.ui.fragments.profile.wallet.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WithdrawWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.history.HistoryTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -291,6 +292,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = TransferWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "TransferWalletFragment").addToBackStack("TransferWalletFragment")
+            .commit()
+    }
+
+    fun showHistoryTransactionScreen(){
+        val fragment = HistoryTransactionFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "HistoryTransactionFragment").addToBackStack("HistoryTransactionFragment")
             .commit()
     }
 

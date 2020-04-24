@@ -14,15 +14,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
 import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
 import kotlinx.android.synthetic.main.recipient_bottom_sheet.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class TransferWalletFragment : Fragment() {
+class TransferWalletFragment : MvpAppCompatFragment(),
+    TransferWalletView {
+
+    @InjectPresenter
+    lateinit var presenter: TransferWalletPresenter
 
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
 
@@ -43,6 +52,10 @@ class TransferWalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        backBtn?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
 

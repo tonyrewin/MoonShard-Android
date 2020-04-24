@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet.status
+package io.moonshard.moonshard.ui.fragments.profile.wallet.transacations
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.transactions.SuccessTransactionPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.transactions.SuccessTransactionView
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class SuccessTransactionFragment : Fragment() {
+class SuccessTransactionFragment : MvpAppCompatFragment(),
+    SuccessTransactionView {
+
+    @InjectPresenter
+    lateinit var presenter: SuccessTransactionPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

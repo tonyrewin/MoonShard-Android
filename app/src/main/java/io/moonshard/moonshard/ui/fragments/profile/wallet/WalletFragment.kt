@@ -14,15 +14,22 @@ import io.moonshard.moonshard.models.wallet.DateItem
 import io.moonshard.moonshard.models.wallet.GeneralItem
 import io.moonshard.moonshard.models.wallet.ListItem
 import io.moonshard.moonshard.models.wallet.PojoOfJsonArray
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.WalletPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.WalletView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletListener
 import io.moonshard.moonshard.ui.fragments.profile.wallet.history.InfoTransactionBottomDialogFragment
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class WalletFragment : Fragment() {
+class WalletFragment : MvpAppCompatFragment(),
+    WalletView {
 
+    @InjectPresenter
+    lateinit var presenter: WalletPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

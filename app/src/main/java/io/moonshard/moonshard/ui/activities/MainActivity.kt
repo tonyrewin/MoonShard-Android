@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
@@ -24,9 +23,9 @@ import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.TypeTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.PresentTicketFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPresentFragment
-import io.moonshard.moonshard.ui.fragments.profile.wallet.FillUpWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
-import io.moonshard.moonshard.ui.fragments.profile.wallet.WithdrawWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.history.HistoryTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
@@ -275,14 +274,16 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     fun showFillUpWalletFragment(){
-        val fragment = FillUpWalletFragment()
+        val fragment =
+            FillUpWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "FillUpWalletFragment").addToBackStack("FillUpWalletFragment")
             .commit()
     }
 
     fun showWithdrawWalletFragment(){
-        val fragment = WithdrawWalletFragment()
+        val fragment =
+            WithdrawWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "WithdrawWalletFragment").addToBackStack("WithdrawWalletFragment")
             .commit()

@@ -10,16 +10,25 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.wallet.DateItem
 import io.moonshard.moonshard.models.wallet.GeneralItem
 import io.moonshard.moonshard.models.wallet.ListItem
 import io.moonshard.moonshard.models.wallet.PojoOfJsonArray
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.history.HistoryTransactionPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.history.HistoryTransactionView
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletListener
 import kotlinx.android.synthetic.main.fragment_history_transaction.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class HistoryTransactionFragment : Fragment() {
+class HistoryTransactionFragment : MvpAppCompatFragment(),
+    HistoryTransactionView {
+
+    @InjectPresenter
+    lateinit var presenter: HistoryTransactionPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +40,11 @@ class HistoryTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        backBtn?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
         initFilterBtn()
         initAdapter()
     }

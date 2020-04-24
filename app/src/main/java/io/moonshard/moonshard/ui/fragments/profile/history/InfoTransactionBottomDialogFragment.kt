@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet.history
+package io.moonshard.moonshard.ui.fragments.profile.history
 
 import android.os.Bundle
 import android.view.LayoutInflater

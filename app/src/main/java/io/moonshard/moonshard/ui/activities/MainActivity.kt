@@ -26,7 +26,7 @@ import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPres
 import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
-import io.moonshard.moonshard.ui.fragments.profile.wallet.history.HistoryTransactionFragment
+import io.moonshard.moonshard.ui.fragments.profile.history.HistoryTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*

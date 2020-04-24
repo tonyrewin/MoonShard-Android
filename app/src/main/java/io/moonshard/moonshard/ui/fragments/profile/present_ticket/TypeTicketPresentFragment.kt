@@ -15,6 +15,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils
+import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.TypeTicketPresentPresenter
+import io.moonshard.moonshard.presentation.view.profile.present_ticket.TypeTicketPresentView
 import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentAdapter
 import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentListener
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
@@ -22,13 +24,16 @@ import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_type_ticket_present.*
 import kotlinx.android.synthetic.main.little_ticket_item.view.*
 import kotlinx.android.synthetic.main.recipient_bottom_sheet.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class TypeTicketPresentFragment : Fragment() {
+class TypeTicketPresentFragment : MvpAppCompatFragment(), TypeTicketPresentView {
+
+    @InjectPresenter
+    lateinit var presenter: TypeTicketPresentPresenter
 
     var sheetInfoBehavior: BottomSheetBehavior<View>? = null
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

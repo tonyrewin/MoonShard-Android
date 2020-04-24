@@ -1,8 +1,7 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet.history
+package io.moonshard.moonshard.ui.fragments.profile.history
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,8 @@ import io.moonshard.moonshard.models.wallet.DateItem
 import io.moonshard.moonshard.models.wallet.GeneralItem
 import io.moonshard.moonshard.models.wallet.ListItem
 import io.moonshard.moonshard.models.wallet.PojoOfJsonArray
-import io.moonshard.moonshard.presentation.presenter.profile.wallet.history.HistoryTransactionPresenter
-import io.moonshard.moonshard.presentation.view.profile.wallet.history.HistoryTransactionView
+import io.moonshard.moonshard.presentation.presenter.profile.history.HistoryTransactionPresenter
+import io.moonshard.moonshard.presentation.view.profile.history.HistoryTransactionView
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.TransactionsWalletListener
 import kotlinx.android.synthetic.main.fragment_history_transaction.*

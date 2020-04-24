@@ -81,7 +81,7 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
     private fun showSearch() {
         searchLayoutToolbar?.visibility = View.VISIBLE
         defaultToolbar?.visibility = View.GONE
-        (activity as? MainActivity)?.hideBottomNavigationBar()
+      //  (activity as? MainActivity)?.hideBottomNavigationBar()
     }
 
     private fun hideSearch() {
@@ -89,7 +89,7 @@ class MyChatsFragment : MvpAppCompatFragment(), MyChatsView {
         findEd?.text?.clear()
         searchLayoutToolbar?.visibility = View.GONE
         defaultToolbar?.visibility = View.VISIBLE
-        (activity as? MainActivity)?.showBottomNavigationBar()
+        //(activity as? MainActivity)?.showBottomNavigationBar()
     }
 
     private fun initViewPager() {

@@ -376,7 +376,7 @@
     <string name="your_wallet">Ваш кошелек</string>
     <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Текущий баланс</string>
-    <string name="refill_a_wallet">Пополнить кошелек</string>
+    <string name="refill_wallet">Пополнить кошелек</string>
     <string name="refill">Пополнение</string>
     <string name="withdraw_funds">Вывести средства</string>
     <string name="withdraw">Снять</string>
@@ -455,4 +455,54 @@
     <string name="ticket_buy_item_text9">300 ₽</string>
     <string name="ticket_buy_item_text10">0</string>
 
+    <!-- config_ticket_buy_item.xml -->
+    <string name="one_day_ticket">Билет на один день</string>
+    
+    <!-- fragment_config_buy_tickets.xml -->
+    <string name="order_confirmation">Подтверждение заказа</string>
+    <string name="total_payment">К оплате</string>
+    <string name="pay">Оплатить</string>
+
+    <!-- fragment_confirm_transaction.xml -->
+    <string name="confirm">Подтвердить</string>
+    <string name="wrong_password">Неверный пароль</string>
+    <string name="enter_your_password_to_confirm">Введите свой пароль для подтверждения транзакции</string>
+    <string name="enter_password">Введите пароль</string>
+
+    <!-- fragment_fill_up_wallet.xml -->
+    <string name="after_refill_your_wallet">Пополните кошелёк \nи вам не придётся вводить данные при каждой покупке</string>
+    <string name="current_balance_0_rubles">Текущий баланс: 0 RUB</string>
+
+    <!-- fragment_sales_ticket.xml -->
+    <string name="sold">Продано</string>
+
+    <!-- fragmetn_scan_qr_ticket.xml -->
+    <string name="dancefloor">Танцпол</string>
+    <string name="ground_floor">Партер</string>
+    <string name="scan_ticket">Сканировать билет</string>
+
+    <!-- fragment_scanned_ticket.xml -->
+    <string name="scanned">Отсканировано</string>
+
+    <!-- fragment_sarch_ticket.xml -->
+    <string name="search_by_ticket_number">Поиск по номеру билета</string>
+    <string name="enter_unique_ticket_id">Введите уникальные номер билета \n, чтобы увидеть его статус</string>
+
+    <!-- fragment_statistic_tickets.xml -->
+    <string name="statistics">Статистика</string>
+    <string name="not_used">Не использован</string>
+
+    <!-- fragment_success_wallet.xml -->
+    <string name="success">Успешно</string>
+    <string name="payment_success">Оплата прошла успешно</string>
+    <string name="you_can_find_your_tickets_in_your_profile">Вы можете найти ваши билеты во вкладке "Билеты" своего профиля</string>
+    <string name="withdrawn_from_the_wallet">Снято с кошелька: 1500 RUB</string>
+    <string name="back_to_chat">Назад в чат</string>
+    <string name="see_tickets">Смотреть билеты</string>
+
+    <!-- fragment_success_transaction.xml -->
+    <string name="operation_complete">Операция выполнена</string>
+
+    <!-- fragment_wallet.xml -->
+    <string name="history">История</string>
 </resources>

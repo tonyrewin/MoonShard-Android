@@ -372,7 +372,7 @@
     <string name="your_wallet">Tu billetera</string>
     <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Saldo actual</string>
-    <string name="refill_a_wallet">Llenar un bolso</string>
+    <string name="refill_wallet">Llenar bolso</string>
     <string name="withdraw_funds">Retirar Fondos</string>
     <string name="withdraw">Retirar</string>
     <string name="cash_flow">Flujo de efectivo</string>
@@ -453,5 +453,56 @@
     <!-- /ticket_buy_item.xml -->
     <string name="ticket_buy_item_text9">300 ₽</string>
     <string name="ticket_buy_item_text10">0 0</string>
-    
+
+    <!-- config_ticket_buy_item.xml -->
+    <string name="one_day_ticket">Boleto de un día</string>
+
+    <!-- fragment_config_buy_tickets.xml -->
+    <string name="order_confirmation">Confirmación del pedido</string>
+    <string name="total_payment">Pago total</string>
+    <string name="pay">Pagar</string>
+
+    <!-- fragment_confirm_transaction.xml -->
+    <string name="confirm">Confirmar</string>
+    <string name="wrong_password">Contraseña incorrecta</string>
+    <string name="enter_your_password_to_confirm">Ingrese su contraseña para confirmar la transacción</string>
+    <string name="enter_password">Introducir la contraseña</string>
+
+    <!-- fragment_fill_up_wallet.xml -->
+    <string name="after_refill_your_wallet">Después de rellenar su billetera, ya no necesitará ingresar las credenciales de la tarjeta</string>
+    <string name="current_balance_0_rubles">Saldo actual: 0 RUB</string>
+
+    <!-- fragment_sales_ticket.xml -->
+    <string name="sold">Vendido</string>
+
+    <!-- fragmetn_scan_qr_ticket.xml -->
+    <string name="dancefloor">Pista de baile</string>
+    <string name="ground_floor">Planta baja</string>
+    <string name="scan_ticket">Escanear ticket</string>
+
+    <!-- fragment_scanned_ticket.xml -->
+    <string name="scanned">Escaneada</string>
+
+    <!-- fragment_sarch_ticket.xml -->
+
+    <string name="search_by_ticket_number">Buscar por número de ticket</string>
+    <string name="enter_unique_ticket_id">Ingrese un número de boleto único \ npara conocer su estado</string>
+
+    <!-- fragment_statistic_tickets.xml -->
+    <string name="statistics">Estadísticas</string>
+    <string name="not_used">Not used</string>
+
+    <!-- fragment_success_wallet.xml -->
+    <string name="success">Éxito</string>
+    <string name="payment_success">Pago exitoso</string>
+    <string name="you_can_find_your_tickets_in_your_profile">Puede encontrar la pestaña "Entradas" en su perfil</string>
+    <string name="withdrawn_from_the_wallet">Retirado de la billetera: 1500 RUB</string>
+    <string name="back_to_chat">Volver al chat</string>
+    <string name="see_tickets">Ver entradas</string>
+
+    <!-- fragment_success_transaction.xml -->
+    <string name="operation_complete">Operation complete</string>
+
+    <!-- fragment_wallet.xml -->
+    <string name="history">History</string>
 </resources>

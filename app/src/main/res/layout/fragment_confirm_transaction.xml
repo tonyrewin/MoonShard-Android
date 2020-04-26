@@ -22,7 +22,7 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Введите пароль"
+            android:text="@string/enter_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -35,7 +35,7 @@
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/inputPassTv"
-            android:text="Введите свой пароль чтобы подтвердить \nтранзакцию "
+            android:text="@string/enter_your_password_to_confirm"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:fontFamily="@font/roboto_regular"
@@ -87,7 +87,7 @@
             android:fontFamily="@font/roboto_regular"
             android:textSize="14sp"
             android:textColor="#FF6060"
-            android:text="Неверный пароль"
+            android:text="@string/wrong_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -101,7 +101,7 @@
             android:layout_marginBottom="42dp"
             android:backgroundTint="#0075FF"
             android:fontFamily="@font/roboto_regular"
-            android:text="ПОДТВЕРДИТЬ"
+            android:text="@string/confirm"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 

@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Успех"
+                    android:text="@string/success"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -66,7 +66,7 @@
                 android:layout_centerHorizontal="true"
                 android:textSize="17sp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Оплата прошла успешно"
+                android:text="@string/payment_success"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -81,14 +81,14 @@
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Ваши билеты находятся во вкладке «‎Билеты»‎ в вашем профиле"
+                android:text="@string/you_can_find_your_tickets_in_your_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
        <TextView
                 android:layout_centerHorizontal="true"
                android:layout_marginStart="73dp"
-                android:text="Списано 1500 ₽ с кошелька"
+                android:text="@string/withdrawn_from_the_wallet"
                 android:id="@+id/valueWallet"
                 android:layout_marginTop="23dp"
                 android:layout_below="@+id/placeWalletTv"
@@ -108,7 +108,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#CCE3FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Вернуться в чат"
+                android:text="@string/back_to_chat"
                 android:textColor="#0075FF"
                 android:textSize="14sp" />
 
@@ -123,7 +123,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#0075FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Посмотреть билеты"
+                android:text="@string/see_tickets"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 

@@ -196,7 +196,7 @@
                 android:id="@+id/descriptionInfoTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="@string/description вфыв фвфвфв ф"
+                tools:text="@string/description_lorem_ipsum"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 

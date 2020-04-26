@@ -34,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Подтверждение заказа"
+                        android:text="@string/order_confirmation"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -86,7 +86,7 @@
                         android:layout_marginStart="9dp"
                         android:layout_marginTop="9dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="1 июля 2020 г. в 23:00"
+                        android:text="2020/07/01 23:00"
                         android:textColor="#6F6F6F"
                         android:textSize="14sp" />
 
@@ -98,7 +98,7 @@
                         android:layout_below="@+id/labelTicket"
                         android:layout_marginStart="11dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Москва. Мутабор клуб."
+                        android:text="Moscow. Mutabor club."
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
 
@@ -120,7 +120,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textSize="16sp"
                         android:textColor="#000000"
-                        android:text="3 билета"
+                        android:text="3 tickets"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -171,7 +171,7 @@
                 android:layout_marginStart="16.5dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#000000"
-                android:text="К оплате"
+                android:text="@string/total_payment"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -197,7 +197,7 @@
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="#0075FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Оплатить"
+                android:text="@string/pay"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 

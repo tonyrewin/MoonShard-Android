@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Продано"
+                    android:text="@string/sold"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -86,7 +86,7 @@
                         android:layout_toRightOf="@+id/ticketIconBlue"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="center_vertical"
-                        android:text="Продано"
+                        android:text="@string/sold"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -96,7 +96,7 @@
                         android:layout_marginTop="16dp"
                         android:textSize="14sp"
                         android:textColor="#6F6F6F"
-                        android:text="11 000 из 12000"
+                        android:text="11 000 / 12000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

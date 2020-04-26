@@ -26,7 +26,7 @@
     <TextView
             android:fontFamily="@font/roboto_regular"
             android:textColor="#333333"
-            android:text="Пополнение кошелька"
+            android:text="@string/refill_wallet"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="7 апреля, вторник"
+                android:text="7 april, thursday"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp" />
 
@@ -95,7 +95,7 @@
                     android:textColor="#333333"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Откого куда: Kanaevsky" />
+                    android:text="From to: Kanaevsky" />
 
             <TextView
                     android:fontFamily="@font/roboto_regular"
@@ -103,7 +103,7 @@
                     android:textColor="#333333"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Статус: Success" />
+                    android:text="Status: Success" />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                     android:textSize="14sp"
                     android:textColor="#333333"
                     android:layout_height="wrap_content"
-                    android:text="Код транзы : 0x2312" />
+                    android:text="Transaction code: 0x2312" />
 
             <TextView
                     android:fontFamily="@font/roboto_regular"
@@ -119,7 +119,7 @@
                     android:textColor="#333333"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Сумма: 5000 RUB" />
+                    android:text="Total: 5000 RUB" />
 
             <TextView
                     android:fontFamily="@font/roboto_regular"
@@ -127,7 +127,7 @@
                     android:textColor="#333333"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Сбор: 10 RUB" />
+                    android:text="Fine: 10 RUB" />
 
         </LinearLayout>
 

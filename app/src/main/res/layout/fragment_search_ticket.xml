@@ -39,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Поиск по номеру билета"
+                        android:text="@string/search_by_ticket_number"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -69,7 +69,7 @@
                         android:id="@+id/tv"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="20dp"
-                        android:text="Введите уникальный номер билета чтобы \nузнать его статус"
+                        android:text="@string/enter_unique_ticket_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -127,7 +127,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_below="@+id/lineView"
                     android:id="@+id/nameTicket"
-                    android:text="Билет в партер"
+                    android:text="@string/ground_ticket"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -164,7 +164,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_below="@+id/lineView2"
                     android:id="@+id/statusTv"
-                    android:text="Статус билета"
+                    android:text="@string/ticket_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -178,7 +178,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_below="@+id/statusTv"
                     android:id="@+id/statusTicketTv"
-                    android:text="Отсканирован "
+                    android:text="@string/scanned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

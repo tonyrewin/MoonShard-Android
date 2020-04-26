@@ -12,7 +12,7 @@
             android:layout_marginStart="12dp"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="#333333"
-            android:text="Билет на 1 день"
+            android:text="@string/one_day_ticket"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -24,7 +24,7 @@
             android:layout_below="@+id/typeTicketTv"
             android:fontFamily="@font/roboto_regular"
             android:textColor="#9B9BB6"
-            android:text="13 или 14 июля"
+            android:text="13/14 July"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -36,7 +36,7 @@
             android:layout_alignParentEnd="true"
             android:fontFamily="@font/roboto_regular"
             android:textColor="#333333"
-            android:text="300 ₽"
+            android:text="300 RUB"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

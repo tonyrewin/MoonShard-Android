@@ -18,7 +18,7 @@
             android:layout_toRightOf="@+id/typeOperationIv"
             android:fontFamily="@font/roboto_regular"
             android:textColor="#333333"
-            android:text="Пополнение кошелька"
+            android:text="@string/refill_wallet"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

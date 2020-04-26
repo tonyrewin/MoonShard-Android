@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Сканировать билет"
+                    android:text="@string/scan_ticket"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Готово"
+                    android:text="@string/done"
                     android:textColor="#0075FF"
                     android:textSize="14sp" />
 
@@ -73,7 +73,7 @@
                 android:textSize="14sp"
                 android:textColor="#333333"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Билет в партер"
+                android:text="@string/ground_ticket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -86,7 +86,7 @@
                 android:textSize="14sp"
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Танцпартер"
+                android:text="@string/dancefloor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

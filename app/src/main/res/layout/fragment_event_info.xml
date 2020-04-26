@@ -233,7 +233,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#333333"
                         android:textSize="16sp"
-                        tools:text="@string/description вфыв фвфвфв ф" />
+                        tools:text="@string/description_lorem_ipsum" />
 
 
             </LinearLayout>

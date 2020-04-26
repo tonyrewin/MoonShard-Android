@@ -228,7 +228,7 @@
     <string name="chat_info_text153">234 members, 30 online</string>
     <string name="chat_info_text154">130 m away</string>
     <string name="description">Description</string>
-    <string name="description_of_vfv_fvfvfv_f">Description of vfv fvfvfv f</string>
+    <string name="description_lorem_ipsum">Description lorem impsum</string>
     <string name="notification">Notification</string>
     <string name="add_member">Add member</string>
     <string name="leave_group">Leave group</string>
@@ -372,7 +372,7 @@
     <string name="your_wallet">Your wallet</string>
     <string name="null_rubles">0 ₽</string>
     <string name="current_balance">Current balance</string>
-    <string name="refill_a_wallet">Refill a wallet</string>
+    <string name="refill_wallet">Refill wallet</string>
     <string name="withdraw">Withdraw</string>
     <string name="transfer_to_user">Transfer to user</string>
     <string name="withdraw_funds">Withdraw funds</string>
@@ -455,4 +455,56 @@
     <string name="ticket_buy_item_text9">300 ₽</string>
     <string name="ticket_buy_item_text10">0</string>
 
+    <!-- config_ticket_buy_item.xml -->
+    <string name="one_day_ticket">One day ticket</string>
+    
+    <!-- fragment_config_buy_tickets.xml -->
+    <string name="order_confirmation">Order confirmation</string>
+    <string name="total_payment">Total payment</string>
+    <string name="pay">Pay</string>
+
+    <!-- fragment_confirm_transaction.xml -->
+    <string name="confirm">Confirm</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="enter_your_password_to_confirm">Enter your password to confirm the transaction</string>
+    <string name="enter_password">Enter password</string>
+
+    <!-- fragment_fill_up_wallet.xml -->
+    <string name="after_refill_your_wallet">After refill your wallet \nyou\'re not gonna need to enter card credentials anymore</string>
+    <string name="current_balance_0_rubles">Current balance: 0 RUB</string>
+
+    <!-- fragment_sales_ticket.xml -->
+    <string name="sold">Sold</string>
+
+    <!-- fragmetn_scan_qr_ticket.xml -->
+    <string name="dancefloor">Dancefloor</string>
+    <string name="ground_floor">Ground floor</string>
+    <string name="scan_ticket">Scan ticket</string>
+
+    <!-- fragment_scanned_ticket.xml -->
+    <string name="scanned">Scanned</string>
+
+    <!-- fragment_search_ticket.xml -->
+    <string name="ground_ticket">Ground ticket</string>
+    <string name="ticket_status">Ticket status</string>
+    <string name="search_by_ticket_number">Search by ticket number</string>
+    <string name="enter_unique_ticket_id">Enter unique ticket number \nto know its status</string>
+
+    <!-- fragment_statistic_tickets.xml -->
+    <string name="statistics">Statistics</string>
+    <string name="not_used">Not used</string>
+
+    <!-- fragment_success_wallet.xml -->
+    <string name="success">Success</string>
+    <string name="payment_success">Payment success</string>
+    <string name="you_can_find_your_tickets_in_your_profile">You can find "Tickets" tab in your profile</string>
+    <string name="withdrawn_from_the_wallet">Withdrawn from wallet: 1500 RUB</string>
+    <string name="back_to_chat">Back to chat</string>
+    <string name="see_tickets">See tickets</string>
+
+    <!-- fragment_success_transaction.xml -->
+    <string name="operation_complete">Operation complete</string>
+
+    <!-- fragment_wallet.xml -->
+    <string name="history">History</string>
 </resources>

@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Твой кошелек"
+                    android:text="@string/your_wallet"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -59,7 +59,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Движение средств"
+                android:text="@string/cash_flow"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Пополнение"
+                    android:text="@string/refill"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Списание"
+                    android:text="@string/withdraw"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 

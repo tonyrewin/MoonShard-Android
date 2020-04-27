@@ -105,4 +105,9 @@
     <style name="ScrollItem.B">
         <item name="android:background">?attr/colorAccent</item>
     </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slid_down</item>
+    </style>
 </resources>

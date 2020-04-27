@@ -33,6 +33,7 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
+import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
@@ -216,6 +217,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> {
+                                    MainApplication.getXmppConnection().addInRoster(from);
                                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                                 });
                     }

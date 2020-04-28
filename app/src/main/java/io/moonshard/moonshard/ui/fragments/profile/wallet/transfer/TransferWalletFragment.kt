@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferRecipientDialogPresenter
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
@@ -34,14 +35,11 @@ class TransferWalletFragment : MvpAppCompatFragment(),
     @InjectPresenter
     lateinit var presenter: TransferWalletPresenter
 
-    var sheetInfoBehavior: BottomSheetBehavior<View>? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //important for edit text
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,45 +75,9 @@ class TransferWalletFragment : MvpAppCompatFragment(),
             }
         })
 
-        val llInfoBottomSheet = view.findViewById<NestedScrollView>(R.id.infoBottomSheet)
-        sheetInfoBehavior = BottomSheetBehavior.from(llInfoBottomSheet)
-
-        sheetInfoBehavior!!.setBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged( bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) bg.visibility = View.GONE
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                bg.visibility = View.VISIBLE
-                bg?.setBackgroundColor(Color.rgb(155, 155, 182))
-                bg.alpha =0.2F
-            }
-        })
-
         chooseMember?.setOnClickListener {
-            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            val addPhotoBottomDialogFragment = TransferRecipientDialogFragment()
+            addPhotoBottomDialogFragment.show(activity!!.supportFragmentManager, "TransferRecipientDialogFragment")
         }
-
-        chooseBtn?.setOnClickListener{
-            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
-        cancelBtn?.setOnClickListener{
-            sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
-        initAdapter()
-    }
-
-    private fun initAdapter() {
-        rv?.layoutManager = LinearLayoutManager(context)
-        rv?.adapter =
-            RecipientWalletAdapter(object :
-                RecipientWalletListener {
-                override fun click() {
-
-                }
-            }, arrayListOf())
     }
 }

@@ -49,9 +49,6 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
-
         if (focusedItem == position) {
             holder.categoryName?.setTextColor(Color.parseColor("#0075FF"))
             holder.mainLayout?.setBackgroundColor(Color.parseColor("#EEF6FF"))

@@ -537,6 +537,18 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
+    public void addInRoster(EntityBareJid jid){
+        try {
+            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+            VCard card = vm.loadVCard(jid);
+            String nickname = card.getNickName();
+            Roster roster = MainApplication.getXmppConnection().getRoster();
+            roster.createEntry(jid,nickname,null);
+        }catch (Exception e){
+            Logger.d(e);
+        }
+    }
+
     public boolean isConnectionReady() {
         return connection.isConnected() && connection.isAuthenticated();
     }

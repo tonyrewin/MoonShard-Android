@@ -507,4 +507,19 @@
 
     <!-- fragment_wallet.xml -->
     <string name="history">History</string>
+
+    <!-- admin_permission_item.xml -->
+    <string name="moderator">Moderator</string>
+    <string name="can_remove_messages_and">Can remove messages and add users to the blacklist</string>
+    <string name="permission_level">Permission level</string>
+    
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select_recipient">Select recipient</string>
+
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select">Select</string>
+    <string name="search">Search</string>
+    <string name="send_season_ticket">Send Season Ticket</string>
+
+    <!-- fragment_transfer_recipient_dialog.xml -->
 </resources>

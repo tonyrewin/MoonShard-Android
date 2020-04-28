@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical">
 
 
@@ -24,7 +25,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:src="@color/colorPrimary" />
+            tools:src="@color/colorPrimary" />
 
     <TextView
             android:id="@+id/nameTv"
@@ -37,6 +38,8 @@
             android:textSize="16sp" />
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
             android:id="@+id/statusTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

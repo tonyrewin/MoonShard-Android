@@ -12,10 +12,4 @@ import org.jivesoftware.smack.roster.RosterEntry
 @InjectViewState
 class TypeTicketPresentPresenter : MvpPresenter<TypeTicketPresentView>() {
 
-    fun getContacts() {
-        val usersSet = MainApplication.getXmppConnection().contactList
-        val contacts = ArrayList<RosterEntry>()
-        contacts.addAll(usersSet)
-        viewState?.showContacts(contacts)
-    }
 }

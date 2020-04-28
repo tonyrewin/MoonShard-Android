@@ -54,9 +54,9 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
         setAvatar(contacts[position].jid!!.asUnescapedString(),contacts[position].name,holder.avatar)
 
         //todo hardcore
-       // if(position==9){
-       //     holder.viewLine?.visibility = View.GONE
-        //}
+        if(position==contacts.size-1){
+            holder.viewLine?.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int = contacts.size

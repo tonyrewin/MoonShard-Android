@@ -74,15 +74,10 @@ class TypeTicketPresentFragment : MvpAppCompatFragment(), TypeTicketPresentView 
             sheetInfoBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        initTypeTicketPresentAdapter()
-        //initRecipientAdapter()
-
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
-
-        //presenter.getContacts()
-
+        initTypeTicketPresentAdapter()
     }
 
     private fun initTypeTicketPresentAdapter(){
@@ -93,31 +88,6 @@ class TypeTicketPresentFragment : MvpAppCompatFragment(), TypeTicketPresentView 
                 override fun click() {
                     val addPhotoBottomDialogFragment = RecipientDialogFragment()
                    addPhotoBottomDialogFragment.show(activity!!.supportFragmentManager, "RecipientDialogFragment")
-
-                    /*
-                    backBtn.isClickable = false
-                    toolBarTittle?.text = "Отправить билет"
-                    toolBar?.setBackgroundColor(Color.rgb(242, 242, 242))
-                    layoutToolbar?.alpha = 0.5f
-                    mainLayout?.setBackgroundColor(Color.rgb(242, 242, 242))
-
-                    //  layoutToolbar?.setBackgroundColor(Color.rgb(242, 242, 242))
-                  //  mainLayout?.setBackgroundColor(Color.rgb(242, 242, 242))
-                    //layoutToolbar?.elevation = Utils.convertDpToPixel(4F,context).toFloat()
-                    sheetInfoBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-
-                     */
-                }
-            }, arrayListOf())
-    }
-
-    private fun initRecipientAdapter() {
-        rv?.layoutManager = LinearLayoutManager(context)
-        rv?.adapter =
-            RecipientWalletAdapter(object :
-                RecipientWalletListener {
-                override fun click() {
-
                 }
             }, arrayListOf())
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -18,12 +19,16 @@ import io.moonshard.moonshard.ui.adapters.chat.AdminPermissionListener
 import kotlinx.android.synthetic.main.fragment_admin_permission.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Occupant
 
 
 class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
 
     @InjectPresenter
     lateinit var presenter: AdminPermissionPresenter
+
+    var idChat: String = ""
+    var occupant:Occupant? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +40,12 @@ class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            idChat = it.getString("chatId")
+            occupant = Gson().fromJson(it.getString("occupant"),Occupant::class.java)
+        }
+
         //presenter.getAvatar("kek")
         initAdapter()
 

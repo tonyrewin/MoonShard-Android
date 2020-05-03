@@ -77,11 +77,19 @@ class AdminsFragment : MvpAppCompatFragment(),
         (adminsRv?.adapter as? AdminsAdapter)?.setAdmins(admins)
     }
 
+    override fun showAdminPermission(occupant: Occupant) {
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,occupant)
+    }
+
     private fun initAdapter() {
         adminsRv?.layoutManager = LinearLayoutManager(context)
         adminsRv?.adapter = AdminsAdapter(this, object : AdminListener {
             override fun remove(categoryName: String) {
 
+            }
+
+            override fun clickAdminPermission(occupant: Occupant) {
+                showAdminPermission(occupant)
             }
         }, arrayListOf())
     }

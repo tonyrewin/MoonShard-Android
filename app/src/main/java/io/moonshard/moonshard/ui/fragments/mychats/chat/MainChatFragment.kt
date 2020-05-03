@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
@@ -21,6 +22,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragmen
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import moxy.MvpAppCompatFragment
+import org.jivesoftware.smackx.muc.Occupant
 
 
 class MainChatFragment : MvpAppCompatFragment(), MainChatView {
@@ -318,9 +320,13 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showAdminPermissionFragment(idChat: String){
+    fun showAdminPermissionFragment(
+        idChat: String,
+        occupant: Occupant
+    ){
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putString("occupant", Gson().toJson(occupant));
         val fragment = AdminPermissionFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()

@@ -6,11 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.PresentTicketPresenter
+import io.moonshard.moonshard.presentation.view.profile.present_ticket.PresentTicketView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_present_ticket.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class PresentTicketFragment : Fragment() {
+class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
+
+    @InjectPresenter
+    lateinit var presenter: PresentTicketPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

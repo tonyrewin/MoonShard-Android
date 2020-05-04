@@ -46,6 +46,7 @@ import kotlinx.android.synthetic.main.fragment_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jxmpp.jid.impl.JidCreate
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -88,23 +89,27 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         disposible = searchEventEt?.afterTextChangeEvents()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe {
-                if(!RoomsMap.isFilter){
-                if (it.editable.toString().isEmpty()) {
-                    clearSearch?.visibility = View.GONE
-                } else {
-                    clearSearch?.visibility = View.VISIBLE
-                }
+                if (!RoomsMap.isFilter) {
+                    if (it.editable.toString().isEmpty()) {
+                        clearSearch?.visibility = View.GONE
+                    } else {
+                        clearSearch?.visibility = View.VISIBLE
+                    }
 
-                try {
-                    val fragment =
-                        childFragmentManager.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
-                    (fragment as? ListChatsMapFragment)?.setFilter(it.editable?.toString() ?: "")
-                } catch (e: Exception) {
-                    Logger.d(e)
+                    try {
+                        val fragment =
+                            childFragmentManager.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+                        (fragment as? ListChatsMapFragment)?.setFilter(
+                            it.editable?.toString() ?: ""
+                        )
+                    } catch (e: Exception) {
+                        Logger.d(e)
+                    }
                 }
             }
-            }
 
+
+        //  MainApplication.getXmppConnection().addInRoster(JidCreate.entityBareFrom("dasdsladk@moonshard.tech"))
 
 /*
         try {
@@ -267,13 +272,13 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         initDateBottomSheet()
 
         clearSearch?.setOnClickListener {
-            if(RoomsMap.isFilter){
+            if (RoomsMap.isFilter) {
                 RoomsMap.clearFilters()
                 presenter.getRooms("", "", "", null)
                 hideDateBottomSheet()
                 updateListRooms()
                 clearSearch()
-            }else{
+            } else {
                 clearSearch()
             }
         }
@@ -572,8 +577,8 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             dateAndTime.set(Calendar.YEAR, year)
             dateAndTime.set(Calendar.MONTH, monthOfYear)
             dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
-            presenter.setDateFilter("Выбрать дату",dateAndTime)
+            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
+            presenter.setDateFilter("Выбрать дату", dateAndTime)
             clearSearch.visibility = View.VISIBLE
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
@@ -600,7 +605,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
             }
             5 -> {
-                searchEventEt.setText( "$dayOfMonth июня")
+                searchEventEt.setText("$dayOfMonth июня")
 
             }
             6 -> {
@@ -616,7 +621,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
             }
             9 -> {
-                searchEventEt.setText( "$dayOfMonth октября")
+                searchEventEt.setText("$dayOfMonth октября")
 
             }
             10 -> {

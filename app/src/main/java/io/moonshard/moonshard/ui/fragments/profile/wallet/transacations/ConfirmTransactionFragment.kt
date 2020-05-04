@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.profile.wallet
+package io.moonshard.moonshard.ui.fragments.profile.wallet.transacations
 
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
@@ -9,10 +9,18 @@ import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.profile.wallet.transactions.ConfirmTransactionPresenter
+import io.moonshard.moonshard.presentation.view.profile.wallet.transactions.ConfirmTransactionView
 import kotlinx.android.synthetic.main.fragment_confirm_transaction.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class ConfirmTransactionFragment : Fragment() {
+class ConfirmTransactionFragment : MvpAppCompatFragment(),
+    ConfirmTransactionView {
+
+    @InjectPresenter
+    lateinit var presenter: ConfirmTransactionPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

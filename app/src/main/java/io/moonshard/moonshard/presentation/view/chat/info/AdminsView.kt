@@ -9,4 +9,5 @@ interface AdminsView: MvpView {
     fun showAdmins(admins:List<Occupant>)
     fun showProgressBar()
     fun hideProgressBar()
+    fun showAdminPermission(occupant: Occupant)
 }

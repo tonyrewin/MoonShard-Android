@@ -5,7 +5,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragments.profile.wallet.transfer.TransferWalletFragment">
 
-
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -236,8 +235,11 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <include
-            android:id="@+id/infoBottomSheet"
-            layout="@layout/recipient_bottom_sheet" />
+    <View
+            android:visibility="gone"
+            android:id="@+id/bg"
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

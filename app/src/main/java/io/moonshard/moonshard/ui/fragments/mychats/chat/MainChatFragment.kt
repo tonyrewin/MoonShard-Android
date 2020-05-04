@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
@@ -14,15 +15,17 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ChatInfoFragme
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.chat.ManageChatFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.admin_permissions.AdminPermissionFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.*
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import moxy.MvpAppCompatFragment
+import org.jivesoftware.smackx.muc.Occupant
 
 
-class MainChatFragment : MvpAppCompatFragment(),MainChatView {
+class MainChatFragment : MvpAppCompatFragment(), MainChatView {
 
     var idChat: String = ""
     var fromMap: Boolean = false
@@ -55,7 +58,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
         bundle.putString("chatId", jidChat)
         bundle.putBoolean("fromMap", fromMap)
         bundle.putString("stateChat", stateChat)
-        bundle.putBoolean("fromCreateNewChat",fromCreateNewChat)
+        bundle.putBoolean("fromCreateNewChat", fromCreateNewChat)
         val chatFragment = ChatFragment()
         chatFragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
@@ -85,7 +88,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showProfileUserScreen(jid: String,fromMuc:Boolean = true) {
+    fun showProfileUserScreen(jid: String, fromMuc: Boolean = true) {
         val bundle = Bundle()
         bundle.putString("userJid", jid)
         bundle.putBoolean("fromMuc", fromMuc)
@@ -181,7 +184,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showManageTicketsScreen(idChat: String){
+    fun showManageTicketsScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = TicketsManageFragment()
@@ -192,7 +195,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showManageTypesTicketScreen(idChat:String){
+    fun showManageTypesTicketScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = ManageTypesTicketFragment()
@@ -204,7 +207,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     }
 
 
-    fun showAddNewTypeTicketScreen(idChat:String){
+    fun showAddNewTypeTicketScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = AddNewTypeTicketFragment()
@@ -215,7 +218,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showBuyTicketsScreen(idChat:String){
+    fun showBuyTicketsScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = BuyTicketsFragment()
@@ -226,7 +229,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showConfirmBuyTicketsFragment(idChat: String){
+    fun showConfirmBuyTicketsFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = ConfirmBuyTicketsFragment()
@@ -237,7 +240,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showScanQrTicketFragment(idChat: String){
+    fun showScanQrTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = ScanQrTicketFragment()
@@ -248,7 +251,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showStatisticTicketsFragment(idChat: String){
+    fun showStatisticTicketsFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = StatisticTicketsFragment()
@@ -259,7 +262,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showNotUsedTicketsFragment(idChat: String){
+    fun showNotUsedTicketsFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = NotUsedTicketsFragment()
@@ -270,7 +273,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showSalesTicketFragment(idChat: String){
+    fun showSalesTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = SalesTicketFragment()
@@ -281,7 +284,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showScannedTicketFragment(idChat: String){
+    fun showScannedTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = ScannedTicketFragment()
@@ -293,7 +296,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     }
 
 
-    fun showSearchTicketFragment(idChat: String){
+    fun showSearchTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -308,13 +311,28 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     fun showAddAdminScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        val fragment =
-            AddAdminFragment()
+        val fragment = AddAdminFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
 
         ft.replace(R.id.mainContainer, fragment, "AddAdminFragment")
             .addToBackStack("AddAdminFragment")
+            .commit()
+    }
+
+    fun showAdminPermissionFragment(
+        idChat: String,
+        occupant: Occupant
+    ){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        bundle.putString("occupant", Gson().toJson(occupant));
+        val fragment = AdminPermissionFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+
+        ft.replace(R.id.mainContainer, fragment, "AdminPermissionFragment")
+            .addToBackStack("AdminPermissionFragment")
             .commit()
     }
 
@@ -330,7 +348,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .commit()
     }
 
-    fun showTimeEventScreen(fromManageEventScreen:Boolean=false) {
+    fun showTimeEventScreen(fromManageEventScreen: Boolean = false) {
         val bundle = Bundle()
         bundle.putBoolean("fromManageEventScreen", fromManageEventScreen)
         val fragment =
@@ -341,7 +359,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
             .addToBackStack("TimeEventFragment").commit()
     }
 
-    fun showChooseMapScreen(fromManageEventScreen:Boolean=false) {
+    fun showChooseMapScreen(fromManageEventScreen: Boolean = false) {
         val bundle = Bundle()
         bundle.putBoolean("fromManageEventScreen", fromManageEventScreen)
         val fragment =
@@ -364,7 +382,7 @@ class MainChatFragment : MvpAppCompatFragment(),MainChatView {
     }
 
 
-    fun showFullScreen(url:String){
+    fun showFullScreen(url: String) {
         val bundle = Bundle()
         bundle.putString("url", url)
         val eventFragment = FullPhotoFragment()

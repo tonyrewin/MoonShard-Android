@@ -44,8 +44,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
         var idChat = ""
+
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.getRoomInfo(idChat)

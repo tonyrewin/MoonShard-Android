@@ -6,10 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketInfoPresenter
+import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketInfoView
 import kotlinx.android.synthetic.main.fragment_my_ticket_info.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class MyTicketInfoFragment : Fragment() {
+class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
+
+    @InjectPresenter
+    lateinit var presenter: MyTicketInfoPresenter
 
     var isActiveAction: Boolean = false
 

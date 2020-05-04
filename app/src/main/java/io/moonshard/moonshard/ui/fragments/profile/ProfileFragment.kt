@@ -36,10 +36,6 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
 
-        changeBtn?.setSafeOnClickListener {
-            showChangeProfileScreen()
-        }
-
         backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
         }

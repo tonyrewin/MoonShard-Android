@@ -37,21 +37,6 @@ class PasswordRecoveryPresenter: MvpPresenter<PasswordRecoveryView>() {
             })
     }
 
-    fun register(email: String, password: String,userName:String) {
-        compositeDisposable.add(useCase!!.register(
-            email,password,userName
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, throwable ->
-                if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
-                } else {
-                    com.orhanobut.logger.Logger.d(result)
-                }
-            })
-    }
-
     fun login(email: String, password: String) {
         compositeDisposable.add(useCase!!.login(
             email,password

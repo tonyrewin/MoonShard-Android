@@ -73,4 +73,8 @@ interface API {
     @Headers("Accept: application/json", "Content-type:application/json")
     @POST
     fun savePrivateKey(@Url url: String, @Body request: PrivateKeyRequestModel, @Header("Authorization") authHeader: String): Single<PrivateKeyAuthResponse>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @POST
+    fun addEmailToProfile(@Url url: String, @Body request: EmailToProfileRequestModel, @Header("Authorization") authHeader: String): Single<GeneralResponseAuth>
 }

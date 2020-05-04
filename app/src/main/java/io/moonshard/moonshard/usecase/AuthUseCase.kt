@@ -22,8 +22,8 @@ class AuthUseCase {
         return authRepository.resetPassword(email,newPassword)
     }
 
-    fun register(email:String,newPassword:String,userName:String): Single<GeneralResponseAuth> {
-        return authRepository.register(email,newPassword,userName)
+    fun register(username:String,password:String): Single<GeneralResponseAuth> {
+        return authRepository.register(username,password)
     }
 
     fun login(email:String,newPassword:String): Single<TokenModelResponse> {
@@ -32,6 +32,10 @@ class AuthUseCase {
 
     fun logout(accessToken:String,refreshToken:String): Single<GeneralResponseAuth> {
         return authRepository.logout(accessToken,refreshToken)
+    }
+
+    fun addEmailToProfile(accessToken: String,email: String):Single<GeneralResponseAuth>{
+        return authRepository.addEmailToProfile(accessToken,email)
     }
 
     fun refreshToken(accessToken:String,refreshToken:String): Single<TokenModelResponse> {

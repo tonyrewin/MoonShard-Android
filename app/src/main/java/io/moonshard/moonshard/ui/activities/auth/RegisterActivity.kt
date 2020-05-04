@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.google.gson.Gson
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -34,6 +35,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        var kek = Gson().toJson("Kek")
+
         if (checkFirstStart()) {
             setTheme(R.style.AppTheme)
             startIntro()
@@ -48,7 +51,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
             }
 
             registerBtn?.setSafeOnClickListener {
-                presenter.register(editEmail.text.toString(), editPassword.text.toString())
+                presenter.registerOnServer(nickNameEt.text.toString(), editPassword.text.toString())
             }
 
             val content = SpannableString("Уже есть аккаунт? Войти")
@@ -82,7 +85,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onSuccess() {
         isRegistration = true
         saveLoginCredentials(
-            editEmail.text.toString() + "@moonshard.tech",
+            nickNameEt.text.toString() + "@moonshard.tech",
             editPassword.text.toString()
         )
         startService()

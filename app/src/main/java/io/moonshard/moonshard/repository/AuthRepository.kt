@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.repository
 
 import io.moonshard.moonshard.API
+import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.ApiConstants.Companion.ADD_EMAIL_TO_PROFILE_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.COMPLEX_BASE_URL_AUTH
 import io.moonshard.moonshard.common.ApiConstants.Companion.LOGIN_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.LOGOUT_URL
@@ -21,6 +23,10 @@ class AuthRepository {
     @Inject
     internal lateinit var api: API
 
+    init {
+        MainApplication.getComponent().inject(this)
+    }
+
     fun resetPassword(email:String,newPassword:String): Single<Response> {
         val modelRecoveryPass  =
             RecoveryPassRequestModel(
@@ -39,11 +45,11 @@ class AuthRepository {
         return api.login(COMPLEX_BASE_URL_AUTH+ LOGIN_URL,modelRecoveryPass)
     }
 
-    fun register(email:String,newPassword:String,userName:String): Single<GeneralResponseAuth> {
+    fun register(username:String,password:String): Single<GeneralResponseAuth> {
         val model  =
             RegisterRequestModel(
-                email,
-                newPassword,userName
+                username,
+                password
             )
         return api.register(COMPLEX_BASE_URL_AUTH+ REGISTER_URL,model)
     }
@@ -57,7 +63,13 @@ class AuthRepository {
         return api.logout(COMPLEX_BASE_URL_AUTH+ LOGOUT_URL,model)
     }
 
-
+    fun addEmailToProfile(accessToken: String,email: String):Single<GeneralResponseAuth>{
+        val model  =
+            EmailToProfileRequestModel(email)
+        return api.addEmailToProfile(COMPLEX_BASE_URL_AUTH+ ADD_EMAIL_TO_PROFILE_URL,model,
+            "Bearer $accessToken"
+        )
+    }
     fun refreshToken(accessToken:String,refreshToken:String): Single<TokenModelResponse> {
         val model  =
             TokenRequestModel(
@@ -72,6 +84,8 @@ class AuthRepository {
             PrivateKeyRequestModel(
                 encryptionPassword
             )
-        return api.savePrivateKey(COMPLEX_BASE_URL_AUTH+ SAVE_PRIVATE_KEY_URL,model,"Bearer " + token)
+        return api.savePrivateKey(COMPLEX_BASE_URL_AUTH+ SAVE_PRIVATE_KEY_URL,model,
+            "Bearer $token"
+        )
     }
 }

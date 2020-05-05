@@ -33,11 +33,12 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
-                if (throwable != null) {
+                if (throwable == null) {
                     com.orhanobut.logger.Logger.d(result)
                 } else {
                     com.orhanobut.logger.Logger.d(result)
                 }
+                viewState?.hideLoader()
             })
     }
 }

@@ -35,7 +35,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var kek = Gson().toJson("Kek")
 
         if (checkFirstStart()) {
             setTheme(R.style.AppTheme)
@@ -51,7 +50,14 @@ class RegisterActivity : BaseActivity(), RegisterView {
             }
 
             registerBtn?.setSafeOnClickListener {
-                presenter.registerOnServer(nickNameEt.text.toString(), editPassword.text.toString())
+
+                if (nickNameEt?.text.toString().contains("@")) {
+                    showError("Вы ввели недопустимый символ")
+                } else {
+                   val actualUserName = nickNameEt.text.toString() + "@moonshard.tech"
+                    showLoader()
+                    presenter.registerOnServer(actualUserName, editPassword.text.toString())
+                }
             }
 
             val content = SpannableString("Уже есть аккаунт? Войти")

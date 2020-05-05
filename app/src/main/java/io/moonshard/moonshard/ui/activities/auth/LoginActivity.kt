@@ -63,8 +63,8 @@ class LoginActivity : BaseActivity(), LoginView {
             } else {
                 actualUserName = editEmail.text.toString() + "@moonshard.tech"
                 showLoader()
-                saveLoginCredentials(actualUserName, editPassword.text.toString())
-                startService()
+                presenter.login(actualUserName,editPassword.text.toString())
+                //startService()
             }
         }
 
@@ -78,7 +78,7 @@ class LoginActivity : BaseActivity(), LoginView {
         }
     }
 
-    private fun startService() {
+   override fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
     }
 
@@ -88,11 +88,6 @@ class LoginActivity : BaseActivity(), LoginView {
             hideLoader()
             showContactsScreen()
         }
-    }
-
-    private fun saveLoginCredentials(email: String, password: String) {
-        SecurePreferences.setValue("jid", email)
-        SecurePreferences.setValue("pass", password)
     }
 
     override fun showContactsScreen() {

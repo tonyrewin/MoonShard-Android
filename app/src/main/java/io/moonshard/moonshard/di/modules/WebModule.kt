@@ -26,6 +26,7 @@ class WebModule(var context: Context) {
         val client = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor())
             .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1,TimeUnit.MINUTES)
             .build()
 
         return Retrofit.Builder()

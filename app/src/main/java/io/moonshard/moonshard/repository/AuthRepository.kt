@@ -42,7 +42,7 @@ class AuthRepository {
                 email,
                 newPassword
             )
-        return api.login(COMPLEX_BASE_URL_AUTH+ LOGIN_URL,modelRecoveryPass)
+        return api.login(COMPLEX_BASE_URL_AUTH + LOGIN_URL,modelRecoveryPass)
     }
 
     fun register(username:String,password:String): Single<GeneralResponseAuth> {

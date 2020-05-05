@@ -38,6 +38,8 @@ import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
 import io.reactivex.schedulers.Schedulers;
 
+import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.removeLongStringValue;
+
 public class MainApplication extends Application {
 
     private static ApplicationComponent component;
@@ -217,6 +219,9 @@ public class MainApplication extends Application {
         SecurePreferences.removeValue("pass");
         SecurePreferences.removeValue("logged_in");
         SecurePreferences.removeValue("inviteInChats");
+        removeLongStringValue("accessToken");
+        removeLongStringValue("refreshToken");
+
     }
 
     private static void initTrueTime() {

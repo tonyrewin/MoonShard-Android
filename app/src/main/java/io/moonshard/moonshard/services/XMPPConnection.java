@@ -23,6 +23,8 @@ import org.jivesoftware.smack.packet.StanzaError;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
+import org.jivesoftware.smack.sasl.SASLMechanism;
+import org.jivesoftware.smack.sasl.provided.SASLPlainMechanism;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
@@ -66,6 +68,7 @@ import io.reactivex.schedulers.Schedulers;
 import trikita.log.Log;
 
 import static io.moonshard.moonshard.MainApplication.getLoginActivity;
+import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.getLongStringValue;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
@@ -91,13 +94,18 @@ public class XMPPConnection implements ConnectionListener {
     public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
+        String accessToken = getLongStringValue("accessToken");
+        String refreshToken = getLongStringValue("refreshToken");
 
-        if (jid != null && password != null) {
+        if (jid != null && password != null &&accessToken!=null&&refreshToken!=null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
             credentials.username = username;
             credentials.jabberHost = jabberHost;
             credentials.password = password;
+            credentials.accessToken=accessToken;
+            credentials.refreshToken=refreshToken;
+
             MainApplication.setCurrentLoginCredentials(credentials);
             try {
                 MainApplication.setJid(JidCreate.from(username + "@" + jabberHost).asUnescapedString());
@@ -141,13 +149,15 @@ public class XMPPConnection implements ConnectionListener {
         try {
             connection.connect();
             SASLAuthentication.blacklistSASLMechanism("SCRAM-SHA-1");
-            SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
             SASLAuthentication.blacklistSASLMechanism("DIGEST-MD5");
+            SASLAuthentication.blacklistSASLMechanism("CRAM-MD5");
+            SASLAuthentication.blacklistSASLMechanism("EXTERNAL");
+            SASLAuthentication.blacklistSASLMechanism("GSSAPI");
+            SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
 
-            if (!credentials.username.equals("") || !credentials.password.equals("")) {
-                connection.login(credentials.username, credentials.password);
+            if (!credentials.username.equals("") || !credentials.password.equals("") ||!credentials.accessToken.equals("")||!credentials.refreshToken.equals("")) {
+                connection.login(credentials.username, credentials.accessToken);
             }
-
         } catch (Exception e) {
             BaseActivity baseActivity = getLoginActivity();
             if (baseActivity != null) {

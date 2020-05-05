@@ -40,9 +40,7 @@ class SettingsFragment : MvpAppCompatFragment(), SettingsView {
         switchNotifications?.isChecked =  SecurePreferences.getBooleanValue("notification_state", true)
 
         logOut?.setSafeOnClickListener {
-            MainApplication.resetLoginCredentials()
-            MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
-            presenter.logOut()
+            presenter.newLogOut()
         }
 
         securityLayout?.setSafeOnClickListener {

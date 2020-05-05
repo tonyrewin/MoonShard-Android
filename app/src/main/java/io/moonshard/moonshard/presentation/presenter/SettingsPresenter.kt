@@ -10,9 +10,11 @@ import io.moonshard.moonshard.presentation.view.SettingsView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.repository.ChatUserRepository
 import io.moonshard.moonshard.repository.MessageRepository
+import io.moonshard.moonshard.usecase.AuthUseCase
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -21,6 +23,15 @@ import org.jivesoftware.smackx.vcardtemp.VCardManager
 @InjectViewState
 class SettingsPresenter : MvpPresenter<SettingsView>() {
 
+    private var useCase: AuthUseCase? = null
+    private val compositeDisposable = CompositeDisposable()
+
+
+    init {
+        useCase = AuthUseCase()
+    }
+
+    /*
     fun logOut() {
         Thread {
             val success = MainApplication.getXmppConnection().logOut()
@@ -36,6 +47,24 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
             }
         }.start()
     }
+     */
+
+    fun newLogOut(){
+        compositeDisposable.add(useCase!!.logout(
+            MainApplication.getCurrentLoginCredentials().accessToken, MainApplication.getCurrentLoginCredentials().refreshToken
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+                if (throwable == null) {
+                    MainApplication.resetLoginCredentials()
+                    MainApplication.getXmppConnection().setStatus(false, "OFFLINE")
+                    clearBaseDate()
+                } else {
+                    viewState?.showError(throwable.localizedMessage)
+                }
+            })
+    }
 
     private fun clearBaseDate() {
         Completable.mergeArray(
@@ -46,7 +75,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-
+                viewState?.showRegistrationScreen()
             }, {
                 Logger.d(it)
             })

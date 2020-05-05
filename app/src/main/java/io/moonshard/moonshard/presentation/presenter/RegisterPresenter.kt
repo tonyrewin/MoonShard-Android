@@ -39,7 +39,7 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
                 if (throwable == null) {
-                    saveLoginCredentials(result.accessToken,result.refreshToken)
+                    saveTokens(result.accessToken,result.refreshToken)
                     viewState?.startService()
                 } else {
                     viewState?.setRegisterLayout()
@@ -48,7 +48,7 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
             })
     }
 
-    private fun saveLoginCredentials(accessToken:String,refreshToken:String) {
+    private fun saveTokens(accessToken:String,refreshToken:String) {
         setLongStringValue("accessToken", accessToken)
         setLongStringValue("refreshToken",refreshToken)
     }

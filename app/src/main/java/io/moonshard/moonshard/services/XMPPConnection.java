@@ -23,12 +23,9 @@ import org.jivesoftware.smack.packet.StanzaError;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
-import org.jivesoftware.smack.sasl.SASLMechanism;
-import org.jivesoftware.smack.sasl.provided.SASLPlainMechanism;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.disco.packet.DiscoverItems;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
@@ -47,21 +44,21 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
-import io.moonshard.moonshard.common.NotFoundException;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
-import io.moonshard.moonshard.models.dbEntities.ChatEntity;
 import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
+import io.moonshard.moonshard.usecase.AuthUseCase;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -69,27 +66,21 @@ import trikita.log.Log;
 
 import static io.moonshard.moonshard.MainApplication.getLoginActivity;
 import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.getLongStringValue;
+import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.setLongStringValue;
 
 public class XMPPConnection implements ConnectionListener {
     private final static String LOG_TAG = "XMPPConnection";
+    public MultiUserChatManager multiUserChatManager = null;
+    public ChatManager chatManager = null;
+    public ServiceDiscoveryManager serviceDiscoveryManager = null;
     private LoginCredentials credentials = new LoginCredentials();
     private XMPPTCPConnection connection = null;
     private NetworkHandler networkHandler;
     private Roster roster;
     private MamManager mamManager;
-    public MultiUserChatManager multiUserChatManager = null;
-    public ChatManager chatManager = null;
-    public ServiceDiscoveryManager serviceDiscoveryManager = null;
 
-    public enum ConnectionState {
-        CONNECTED,
-        DISCONNECTED
-    }
+    private AuthUseCase useCase;
 
-    public enum SessionState {
-        LOGGED_IN,
-        LOGGED_OUT
-    }
 
     public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
@@ -97,14 +88,14 @@ public class XMPPConnection implements ConnectionListener {
         String accessToken = getLongStringValue("accessToken");
         String refreshToken = getLongStringValue("refreshToken");
 
-        if (jid != null && password != null &&accessToken!=null&&refreshToken!=null) {
+        if (jid != null && password != null && accessToken != null && refreshToken != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
             credentials.username = username;
             credentials.jabberHost = jabberHost;
             credentials.password = password;
-            credentials.accessToken=accessToken;
-            credentials.refreshToken=refreshToken;
+            credentials.accessToken = accessToken;
+            credentials.refreshToken = refreshToken;
 
             MainApplication.setCurrentLoginCredentials(credentials);
             try {
@@ -114,6 +105,7 @@ public class XMPPConnection implements ConnectionListener {
             }
         }
         networkHandler = new NetworkHandler();
+        useCase = new AuthUseCase();
     }
 
     public LoginCredentials getLoginCredentials() {
@@ -155,7 +147,7 @@ public class XMPPConnection implements ConnectionListener {
             SASLAuthentication.blacklistSASLMechanism("GSSAPI");
             SASLAuthentication.unBlacklistSASLMechanism("PLAIN");
 
-            if (!credentials.username.equals("") || !credentials.password.equals("") ||!credentials.accessToken.equals("")||!credentials.refreshToken.equals("")) {
+            if (!credentials.username.equals("") || !credentials.password.equals("") || !credentials.accessToken.equals("") || !credentials.refreshToken.equals("")) {
                 connection.login(credentials.username, credentials.accessToken);
             }
         } catch (Exception e) {
@@ -178,12 +170,12 @@ public class XMPPConnection implements ConnectionListener {
             // sendUserPresence(new Presence(Presence.Type.unavailable));
         }
         multiUserChatManager = MultiUserChatManager.getInstanceFor(connection);
-        Log.d("myMainTest: ","multiUserChatManager");
+        Log.d("myMainTest: ", "multiUserChatManager");
 
 
-        if(SecurePreferences.getBooleanValue("inviteInChats", true)){
+        if (SecurePreferences.getBooleanValue("inviteInChats", true)) {
             enableInviteInChats();
-        }else{
+        } else {
             disableInviteInChats();
         }
 
@@ -221,7 +213,7 @@ public class XMPPConnection implements ConnectionListener {
 
     @Override
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
-        Log.d("myMainTest: ","authenticated");
+        Log.d("myMainTest: ", "authenticated");
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);
         try {
@@ -252,6 +244,8 @@ public class XMPPConnection implements ConnectionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Observable.just(true).repeatWhen(t->t.delay(25, TimeUnit.MINUTES)).subscribe(b->{refreshToken();});
     }
 
     @Override
@@ -547,14 +541,14 @@ public class XMPPConnection implements ConnectionListener {
         return null;
     }
 
-    public void addInRoster(EntityBareJid jid){
+    public void addInRoster(EntityBareJid jid) {
         try {
             VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
             VCard card = vm.loadVCard(jid);
             String nickname = card.getNickName();
             Roster roster = MainApplication.getXmppConnection().getRoster();
-            roster.createEntry(jid,nickname,null);
-        }catch (Exception e){
+            roster.createEntry(jid, nickname, null);
+        } catch (Exception e) {
             Logger.d(e);
         }
     }
@@ -637,7 +631,7 @@ public class XMPPConnection implements ConnectionListener {
 
             muc.addParticipantStatusListener(networkHandler);
         } catch (Exception e) {
-            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+            if (((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL) {
                 removeChatFromBd(jid);
             }
             Logger.d(e.getMessage());
@@ -654,7 +648,7 @@ public class XMPPConnection implements ConnectionListener {
 
             muc.addUserStatusListener(networkHandler);
         } catch (Exception e) {
-            if(((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL){
+            if (((XMPPException.XMPPErrorException) e).getStanzaError().getType() == StanzaError.Type.CANCEL) {
                 removeChatFromBd(jid);
             }
             Logger.d(e.getMessage());
@@ -696,8 +690,8 @@ public class XMPPConnection implements ConnectionListener {
                 muc.join(nickName);
                 muc.addMessageListener(MainApplication.getXmppConnection().getNetwork());
             }
-        }catch (XMPPException.XMPPErrorException e){
-            if(e.getStanzaError().getType() == StanzaError.Type.CANCEL){
+        } catch (XMPPException.XMPPErrorException e) {
+            if (e.getStanzaError().getType() == StanzaError.Type.CANCEL) {
                 removeChatFromBd(jid);
             }
             Logger.d(e.getMessage());
@@ -706,7 +700,7 @@ public class XMPPConnection implements ConnectionListener {
         }
     }
 
-    private void removeChatFromBd(String chatJid){
+    private void removeChatFromBd(String chatJid) {
         try {
             ChatListRepository.INSTANCE.getChatByJidSingle(JidCreate.from(chatJid))
                     .subscribeOn(Schedulers.io())
@@ -715,28 +709,62 @@ public class XMPPConnection implements ConnectionListener {
                         ChatListRepository.INSTANCE.removeChat(chat)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> {}, throwable ->{
+                                .subscribe(() -> {
+                                }, throwable -> {
                                     Logger.d(throwable);
                                 });
                     }, error -> Logger.d(error));
-        }catch (Exception e){
+        } catch (Exception e) {
             Logger.d(e);
         }
     }
 
-    public void disableInviteInChats(){
-        if(multiUserChatManager!=null){
+    public void disableInviteInChats() {
+        if (multiUserChatManager != null) {
             multiUserChatManager.removeInvitationListener(networkHandler);
-        }else{
+        } else {
             Logger.d("multiUserChatManager is null: disableInviteInChats");
         }
     }
 
-    public void enableInviteInChats(){
-        if(multiUserChatManager!=null){
+    public void enableInviteInChats() {
+        if (multiUserChatManager != null) {
             multiUserChatManager.addInvitationListener(networkHandler);
-        }else{
+        } else {
             Logger.d("multiUserChatManager is null: enableInviteInChats ");
         }
+    }
+
+    void refreshToken() {
+        String accessToken = getLongStringValue("accessToken");
+        String refreshToken = getLongStringValue("refreshToken");
+
+        useCase.refreshToken(
+                accessToken, refreshToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    saveLoginCredentials(result.getAccessToken(), result.getRefreshToken());
+                }, error -> Logger.d(error));
+    }
+
+    private void saveLoginCredentials(String accessToken,String refreshToken) {
+        setLongStringValue("accessToken", accessToken);
+        setLongStringValue("refreshToken",refreshToken);
+
+        credentials.accessToken = accessToken;
+        credentials.refreshToken = refreshToken;
+
+        MainApplication.setCurrentLoginCredentials(credentials);
+    }
+
+    public enum ConnectionState {
+        CONNECTED,
+        DISCONNECTED
+    }
+
+    public enum SessionState {
+        LOGGED_IN,
+        LOGGED_OUT
     }
 }

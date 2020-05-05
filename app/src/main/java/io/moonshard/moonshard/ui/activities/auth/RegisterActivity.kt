@@ -40,42 +40,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
             setTheme(R.style.AppTheme)
             startIntro()
         } else {
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-
-            startService() // if we want open this screen when logout we must use handle 5 sec
             isAuth()
-            alreadyHaveText?.setSafeOnClickListener {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
-
-            registerBtn?.setSafeOnClickListener {
-
-                if (nickNameEt?.text.toString().contains("@")) {
-                    showError("Вы ввели недопустимый символ")
-                } else {
-                   val actualUserName = nickNameEt.text.toString() + "@moonshard.tech"
-                    showLoader()
-                    presenter.registerOnServer(actualUserName, editPassword.text.toString())
-                }
-            }
-
-            val content = SpannableString("Уже есть аккаунт? Войти")
-            content.setSpan(UnderlineSpan(), 18, content.length, 0)
-            alreadyHaveText?.text = content
-
-            var isSecurity = true
-            visiblePassBtn?.setSafeOnClickListener {
-                if (isSecurity) {
-                    editPassword?.transformationMethod = null
-                    visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
-                    isSecurity = false
-                } else {
-                    editPassword?.transformationMethod = PasswordTransformationMethod()
-                    visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
-                    isSecurity = true
-                }
-            }
         }
     }
 
@@ -102,7 +67,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
         SecurePreferences.setValue("pass", password)
     }
 
-    private fun startService() {
+    override fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
     }
 
@@ -182,12 +147,53 @@ class RegisterActivity : BaseActivity(), RegisterView {
         progressBarReg?.visibility = View.GONE
     }
 
-    //need made refactor
     fun isAuth(){
         val logged = SecurePreferences.getBooleanValue("logged_in", false)
         if (!logged) {
-            setTheme(R.style.AppTheme)
-            setContentView(R.layout.activity_register)
+           setRegisterLayout()
+        }else{
+            presenter.refreshToken()
         }
     }
+
+    override fun setRegisterLayout(){
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
+        setTheme(R.style.AppTheme)
+        setContentView(R.layout.activity_register)
+
+        alreadyHaveText?.setSafeOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
+        registerBtn?.setSafeOnClickListener {
+
+            if (nickNameEt?.text.toString().contains("@")) {
+                showError("Вы ввели недопустимый символ")
+            } else {
+                val actualUserName = nickNameEt.text.toString() + "@moonshard.tech"
+                showLoader()
+                presenter.registerOnServer(actualUserName, editPassword.text.toString())
+            }
+        }
+
+        val content = SpannableString("Уже есть аккаунт? Войти")
+        content.setSpan(UnderlineSpan(), 18, content.length, 0)
+        alreadyHaveText?.text = content
+
+        var isSecurity = true
+        visiblePassBtn?.setSafeOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
+        }
+    }
+
 }

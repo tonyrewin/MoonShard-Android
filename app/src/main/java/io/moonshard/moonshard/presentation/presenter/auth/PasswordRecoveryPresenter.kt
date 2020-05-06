@@ -8,6 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import retrofit2.HttpException
 import zlc.season.rxdownload4.utils.log
 import java.util.logging.Logger
 
@@ -32,51 +33,7 @@ class PasswordRecoveryPresenter: MvpPresenter<PasswordRecoveryView>() {
                 if (throwable == null) {
                     com.orhanobut.logger.Logger.d(result)
                 } else {
-                    com.orhanobut.logger.Logger.d(result)
-                }
-            })
-    }
-
-    fun login(email: String, password: String) {
-        compositeDisposable.add(useCase!!.login(
-            email,password
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, throwable ->
-                if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
-                } else {
-                    com.orhanobut.logger.Logger.d(result)
-                }
-            })
-    }
-
-    fun logout(accessToken:String,refreshToken:String) {
-        compositeDisposable.add(useCase!!.logout(
-            accessToken,refreshToken
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, throwable ->
-                if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
-                } else {
-                    com.orhanobut.logger.Logger.d(result)
-                }
-            })
-    }
-
-    fun refreshToken(accessToken:String,refreshToken:String) {
-        compositeDisposable.add(useCase!!.refreshToken(
-            accessToken,refreshToken
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, throwable ->
-                if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
-                } else {
+                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
                     com.orhanobut.logger.Logger.d(result)
                 }
             })

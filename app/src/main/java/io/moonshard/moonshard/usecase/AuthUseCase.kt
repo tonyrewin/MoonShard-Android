@@ -18,7 +18,7 @@ class AuthUseCase {
         MainApplication.getComponent().inject(this)
     }
 
-    fun resetPassword(email:String,newPassword:String): Single<Response> {
+    fun resetPassword(email:String,newPassword:String): Single<GeneralResponseAuth> {
         return authRepository.resetPassword(email,newPassword)
     }
 

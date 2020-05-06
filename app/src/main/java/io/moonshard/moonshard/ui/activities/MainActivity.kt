@@ -18,6 +18,7 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragmen
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.ProfileFragment
+import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketInfoFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.TypeTicketsFragment
@@ -314,6 +315,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = PresentTicketFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "PresentTicketFragment").addToBackStack("PresentTicketFragment")
+            .commit()
+    }
+
+    fun showVerificationEmailScreen(){
+        val fragment = VerificationEmailFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.container, fragment, "showVerificationEmailScreen").addToBackStack("showVerificationEmailScreen")
             .commit()
     }
 

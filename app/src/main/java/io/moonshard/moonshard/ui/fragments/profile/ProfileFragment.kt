@@ -36,10 +36,6 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
 
-        backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
-        }
-
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
         }
@@ -53,6 +49,10 @@ class ProfileFragment : MvpAppCompatFragment(),
         }
         presentTicketLayout?.setSafeOnClickListener {
             (activity as MainActivity).showPresentTicketFragment()
+        }
+
+        confirmEmailBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showVerificationEmailScreen()
         }
     }
 

@@ -152,7 +152,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
         if (!logged) {
            setRegisterLayout()
         }else{
-            presenter.refreshToken()
+            presenter.login()
         }
     }
 

@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter
 
 
+import com.orhanobut.logger.Logger
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.common.setLongStringValue
@@ -28,18 +30,19 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
         MainApplication.getXmppConnection()?.register(email, pass)
     }
 
+    /*
     fun refreshToken() {
         val accessToken = getLongStringValue("accessToken")
         val refreshToken = getLongStringValue("refreshToken")
 
         compositeDisposable.add(useCase!!.refreshToken(
-            accessToken!!,refreshToken!!
+            accessToken!!, refreshToken!!
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
                 if (throwable == null) {
-                    saveTokens(result.accessToken,result.refreshToken)
+                    saveTokens(result.accessToken, result.refreshToken)
                     viewState?.startService()
                 } else {
                     viewState?.setRegisterLayout()
@@ -47,15 +50,16 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
                 }
             })
     }
+     */
 
-    private fun saveTokens(accessToken:String,refreshToken:String) {
+    private fun saveTokens(accessToken: String, refreshToken: String) {
         setLongStringValue("accessToken", accessToken)
-        setLongStringValue("refreshToken",refreshToken)
+        setLongStringValue("refreshToken", refreshToken)
     }
 
-    fun registerOnServer(nickname: String,password: String){
+    fun registerOnServer(nickname: String, password: String) {
         compositeDisposable.add(useCase!!.register(
-            nickname,password
+            nickname, password
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -67,5 +71,44 @@ class RegisterPresenter : MvpPresenter<RegisterView>() {
                 }
                 viewState?.hideLoader()
             })
+    }
+
+    fun login() {
+        val nickname = SecurePreferences.getStringValue("jid", null)
+        val password = SecurePreferences.getStringValue("pass", null)
+
+        compositeDisposable.add(useCase!!.login(
+            nickname!!, password!!
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+                if (throwable == null) {
+                    saveLoginCredentials(
+                        nickname,
+                        password,
+                        result.accessToken,
+                        result.refreshToken
+                    )
+                    viewState?.startService()
+                    Logger.d(result)
+                } else {
+                    viewState?.hideLoader()
+                    viewState?.setRegisterLayout()
+                    Logger.d(result)
+                }
+            })
+    }
+
+    private fun saveLoginCredentials(
+        email: String,
+        password: String,
+        accessToken: String,
+        refreshToken: String
+    ) {
+        SecurePreferences.setValue("jid", email)
+        SecurePreferences.setValue("pass", password)
+        setLongStringValue("accessToken", accessToken)
+        setLongStringValue("refreshToken", refreshToken)
     }
 }

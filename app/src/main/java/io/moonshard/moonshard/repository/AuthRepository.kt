@@ -27,7 +27,7 @@ class AuthRepository {
         MainApplication.getComponent().inject(this)
     }
 
-    fun resetPassword(email:String,newPassword:String): Single<Response> {
+    fun resetPassword(email:String,newPassword:String): Single<GeneralResponseAuth> {
         val modelRecoveryPass  =
             RecoveryPassRequestModel(
                 email,
@@ -63,7 +63,7 @@ class AuthRepository {
         return api.logout(COMPLEX_BASE_URL_AUTH+ LOGOUT_URL,model)
     }
 
-    fun addEmailToProfile(accessToken: String,email: String):Single<GeneralResponseAuth>{
+    fun addEmailToProfile(email: String,accessToken: String):Single<GeneralResponseAuth>{
         val model  =
             EmailToProfileRequestModel(email)
         return api.addEmailToProfile(COMPLEX_BASE_URL_AUTH+ ADD_EMAIL_TO_PROFILE_URL,model,

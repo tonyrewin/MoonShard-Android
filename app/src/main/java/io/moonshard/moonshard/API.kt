@@ -52,7 +52,7 @@ interface API {
 
     @Headers("Accept: application/json", "Content-type:application/json")
     @POST
-    fun resetPassword(@Url url: String, @Body request: RecoveryPassRequestModel): Single<Response>
+    fun resetPassword(@Url url: String, @Body request: RecoveryPassRequestModel): Single<GeneralResponseAuth>
 
     @Headers("Accept: application/json", "Content-type:application/json")
     @POST

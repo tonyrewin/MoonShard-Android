@@ -4,5 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PrivateKeyRequestModel(
     @SerializedName("encryptionPassword")
-    var encryptionPassword: String
+    var encryptionPassword: String,
+    @SerializedName("privateKey")
+    var privateKey: String?=null
 )

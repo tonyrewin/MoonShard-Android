@@ -2,11 +2,13 @@ package io.moonshard.moonshard.presentation.presenter
 
 
 import android.content.Context
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.setLongStringValue
+import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.repository.ChatListRepository
@@ -17,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import retrofit2.HttpException
 import javax.inject.Inject
 
 
@@ -65,6 +68,9 @@ class LoginPresenter : MvpPresenter<LoginView>() {
                     Logger.d(result)
                 } else {
                     Logger.d(result)
+                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
+                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                    viewState?.showError(myError.error.message)
                     viewState?.hideLoader()
                 }
             })

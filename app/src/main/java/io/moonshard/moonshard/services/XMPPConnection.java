@@ -58,6 +58,7 @@ import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
 import io.moonshard.moonshard.usecase.AuthUseCase;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -245,7 +246,11 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
 
-        Observable.just(true).repeatWhen(t->t.delay(25, TimeUnit.MINUTES)).subscribe(b->{refreshToken();});
+        Log.d("myInterval",false);
+         Observable.just(true).interval(25,25, TimeUnit.MINUTES).subscribe(b->{
+             Log.d("myInterval",true);
+             refreshToken();
+         });
     }
 
     @Override
@@ -409,6 +414,7 @@ public class XMPPConnection implements ConnectionListener {
         return stream.toByteArray();
     }
 
+    /*
     //must be without @
     public void register(String user, String pass) throws XMPPException, SmackException.NoResponseException, SmackException.NotConnectedException {
         BaseActivity baseActivity = getLoginActivity();
@@ -429,6 +435,8 @@ public class XMPPConnection implements ConnectionListener {
         }
         Log.d("Auth", "Time taken to register: " + (System.currentTimeMillis() - l));
     }
+
+     */
 
     public boolean login(String jid, String pass) {
         String username = jid.split("@")[0];
@@ -460,6 +468,11 @@ public class XMPPConnection implements ConnectionListener {
                 e.printStackTrace();
             }
         } catch (Exception e) {
+            BaseActivity baseActivity = getLoginActivity();
+            if (baseActivity != null) {
+                baseActivity.onError(e);
+            }
+            e.printStackTrace();
             Log.d("LOGIN ERROR" + connection.isAuthenticated());
             e.printStackTrace();
             return false;

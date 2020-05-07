@@ -50,4 +50,8 @@ class PasswordRecoveryActivity : MvpAppCompatActivity(), PasswordRecoveryView {
     override fun showError(error:String) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
+
+    override fun back(){
+        onBackPressed()
+    }
 }

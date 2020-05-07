@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter.auth
 
 import android.text.Editable
+import com.google.gson.Gson
+import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.view.auth.PasswordRecoveryView
 import io.moonshard.moonshard.usecase.AuthUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,24 +33,12 @@ class PasswordRecoveryPresenter: MvpPresenter<PasswordRecoveryView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
                 if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
+                    viewState?.showError("Письмо с инструкцией по восстановлению пароля отправлено на вашу почту")
+                    viewState?.back()
                 } else {
                     val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                    com.orhanobut.logger.Logger.d(result)
-                }
-            })
-    }
-
-    fun savePrivateKey(encryptionPassword:String,token:String) {
-        compositeDisposable.add(useCase!!.refreshToken(
-            encryptionPassword,token
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { result, throwable ->
-                if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
-                } else {
+                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                    viewState?.showError(myError.error.message)
                     com.orhanobut.logger.Logger.d(result)
                 }
             })

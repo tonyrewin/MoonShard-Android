@@ -4,4 +4,5 @@ import moxy.MvpView
 
 interface VerificationEmailView: MvpView {
     fun showToast(text: String)
+    fun back()
 }

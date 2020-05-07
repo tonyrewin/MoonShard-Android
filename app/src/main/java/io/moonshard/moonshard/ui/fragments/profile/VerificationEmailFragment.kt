@@ -35,9 +35,17 @@ class VerificationEmailFragment  : MvpAppCompatFragment(),
         readyBtn?.setSafeOnClickListener {
             presenter.verificationEmail(emailEt.text.toString())
         }
+
+        back?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 
     override fun showToast(text: String) {
         Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun back(){
+        fragmentManager?.popBackStack()
     }
 }

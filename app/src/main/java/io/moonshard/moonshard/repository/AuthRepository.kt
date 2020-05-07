@@ -4,16 +4,19 @@ import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.ApiConstants.Companion.ADD_EMAIL_TO_PROFILE_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.COMPLEX_BASE_URL_AUTH
+import io.moonshard.moonshard.common.ApiConstants.Companion.GET_PRIVATE_KEY_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.LOGIN_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.LOGOUT_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.RECOVERY_PASSWORD_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.REFRESH_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.REGISTER_URL
 import io.moonshard.moonshard.common.ApiConstants.Companion.SAVE_PRIVATE_KEY_URL
+import io.moonshard.moonshard.common.ApiConstants.Companion.USER_PROFILE_INFO_URL
 import io.moonshard.moonshard.models.api.auth.request.*
 import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
 import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
 import io.moonshard.moonshard.models.api.auth.response.PrivateKeyAuthResponse
+import io.moonshard.moonshard.models.api.auth.response.ProfileUserResponse
 import io.reactivex.Single
 import okhttp3.Response
 import javax.inject.Inject
@@ -79,12 +82,28 @@ class AuthRepository {
         return api.refreshToken(COMPLEX_BASE_URL_AUTH+ REFRESH_URL,model)
     }
 
-    fun savePrivateKey(encryptionPassword:String,token:String): Single<PrivateKeyAuthResponse> {
+    fun savePrivateKey(encryptionPassword:String,privateKey:String,token:String): Single<GeneralResponseAuth> {
+        val model  =
+            PrivateKeyRequestModel(
+                encryptionPassword,privateKey
+            )
+        return api.savePrivateKey(COMPLEX_BASE_URL_AUTH+ SAVE_PRIVATE_KEY_URL,model,
+            "Bearer $token"
+        )
+    }
+
+    fun getPrivateKey(encryptionPassword:String,token:String): Single<PrivateKeyAuthResponse> {
         val model  =
             PrivateKeyRequestModel(
                 encryptionPassword
             )
-        return api.savePrivateKey(COMPLEX_BASE_URL_AUTH+ SAVE_PRIVATE_KEY_URL,model,
+        return api.getPrivateKey(COMPLEX_BASE_URL_AUTH+ GET_PRIVATE_KEY_URL,model,
+            "Bearer $token"
+        )
+    }
+
+    fun getUserProfileInfo(token:String): Single<ProfileUserResponse> {
+        return api.getUserProfileInfo(COMPLEX_BASE_URL_AUTH+ USER_PROFILE_INFO_URL,
             "Bearer $token"
         )
     }

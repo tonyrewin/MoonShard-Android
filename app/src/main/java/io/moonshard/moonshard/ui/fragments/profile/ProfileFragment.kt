@@ -35,6 +35,9 @@ class ProfileFragment : MvpAppCompatFragment(),
         (activity as MainActivity).showBottomNavigationBar()
         presenter.getInfoProfile()
         presenter.getAvatar()
+        presenter.getVerificationEmail()
+        //presenter.savePrivateKey("")
+        //presenter.getPrivateKey("1234567891234567")
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
@@ -90,5 +93,20 @@ class ProfileFragment : MvpAppCompatFragment(),
 
     override fun showError(error: String) {
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
+
+   override fun setVerification(email:String?,isActivated:Boolean?){
+        if(email.isNullOrEmpty()){
+            confirmEmailTv?.text = "Чтобы пользоваться кошельком.Добавьте почту."
+            confirmEmailBtn?.isClickable = true
+        }else{
+            if(isActivated!!){
+                confirmEmailTv?.text = "Ваш email подтвержден"
+                confirmEmailBtn?.isClickable = false
+            }else{
+                confirmEmailTv?.text = "Ваш email не подтвержден. Сообщение было отправлено на почту."
+                confirmEmailBtn?.isClickable = true
+            }
+        }
     }
 }

@@ -11,4 +11,5 @@ interface RegisterView : MvpView {
     fun showStartProfileScreen()
     fun startService()
     fun setRegisterLayout()
+    fun successRegistration()
 }

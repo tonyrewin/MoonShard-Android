@@ -8,7 +8,6 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import com.google.gson.Gson
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -30,11 +29,10 @@ class RegisterActivity : BaseActivity(), RegisterView {
     @InjectPresenter
     lateinit var presenter: RegisterPresenter
 
-    var isRegistration = false
+    var isRegistrationSuccess = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         if (checkFirstStart()) {
             setTheme(R.style.AppTheme)
@@ -53,15 +51,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
         startActivity(intent)
     }
 
-    override fun onSuccess() {
-        isRegistration = true
-        saveLoginCredentials(
-            nickNameEt.text.toString() + "@moonshard.tech",
-            editPassword.text.toString()
-        )
-        startService()
-    }
-
     private fun saveLoginCredentials(email: String, password: String) {
         SecurePreferences.setValue("jid", email)
         SecurePreferences.setValue("pass", password)
@@ -75,11 +64,19 @@ class RegisterActivity : BaseActivity(), RegisterView {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onSuccess() {
+
+    }
+
+    override fun successRegistration() {
+        isRegistrationSuccess = true
+    }
+
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
-            auth()
-            /*
+            setTheme(R.style.AppTheme)
+
             when (e) {
                 is XMPPException -> {
                     showError("Произошла ошибка на сервере")
@@ -94,8 +91,18 @@ class RegisterActivity : BaseActivity(), RegisterView {
                     e.message?.let { showError(it) } ?: showError("Произошла ошибка")
                 }
             }
+        }
+    }
 
-             */
+    override fun onAuthenticated() {
+        setTheme(R.style.AppTheme)
+        runOnUiThread {
+            hideLoader()
+            if (isRegistrationSuccess) {
+                showStartProfileScreen()
+            } else {
+                showContactsScreen()
+            }
         }
     }
 
@@ -110,29 +117,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
     override fun showStartProfileScreen() {
         val intentStartProfileActivity = Intent(this, StartProfileActivity::class.java)
         startActivity(intentStartProfileActivity)
-    }
-
-    private fun auth() {
-        val logged = SecurePreferences.getBooleanValue("logged_in", false)
-        if (logged) {
-            setTheme(R.style.AppTheme)
-            showContactsScreen()
-        } else {
-            //setTheme(R.style.AppTheme)
-            //setContentView(R.layout.activity_register)
-        }
-    }
-
-    override fun onAuthenticated() {
-        setTheme(R.style.AppTheme)
-        runOnUiThread {
-            hideLoader()
-            if (isRegistration) {
-                showStartProfileScreen()
-            } else {
-                showContactsScreen()
-            }
-        }
     }
 
     override fun showToast(text: String) {
@@ -168,7 +152,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
         }
 
         registerBtn?.setSafeOnClickListener {
-
             if (nickNameEt?.text.toString().contains("@")) {
                 showError("Вы ввели недопустимый символ")
             } else {

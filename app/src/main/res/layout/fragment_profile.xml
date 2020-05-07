@@ -301,13 +301,14 @@
 
 
         <TextView
+                android:id="@+id/confirmEmailTv"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="Ваш email не подтвержден."
+                android:text="Подтвердите свой email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

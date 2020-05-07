@@ -16,7 +16,10 @@ interface ApiConstants {
 
         //profile
         const val SAVE_PRIVATE_KEY_URL = "/profile/savePrivateKey"
+        const val GET_PRIVATE_KEY_URL = "/profile/getPrivateKey"
         const val ADD_EMAIL_TO_PROFILE_URL = "/profile/email/add"
+        const val USER_PROFILE_INFO_URL = "/profile/info"
+
 
 
     }

@@ -25,6 +25,7 @@ class ChatsPresenter : BasePresenter<ChatsView>() {
         val chatsObservable = ChatListRepository.getChats()
         val messagesObservable = MessageRepository.observeMessageStorage()
         Observable.combineLatest<List<ChatEntity>, Class<Any>, Unit>(chatsObservable, messagesObservable, BiFunction { t1, _ ->
+
             val lastMessageSingles = emptyList<Single<MessageEntity>>().toMutableList()
 
             for (chat in t1) {
@@ -66,6 +67,7 @@ class ChatsPresenter : BasePresenter<ChatsView>() {
                 })
                 .autoDispose(this)
         })
+            .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe()
             .autoDispose(this)

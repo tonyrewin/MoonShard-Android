@@ -36,8 +36,8 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
         presenter.getVerificationEmail()
-        //presenter.savePrivateKey("")
-        //presenter.getPrivateKey("1234567891234567")
+            //presenter.savePrivateKey("")
+            //presenter.getPrivateKey("1234567891234567")
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
@@ -108,5 +108,10 @@ class ProfileFragment : MvpAppCompatFragment(),
                 confirmEmailBtn?.isClickable = true
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDestroy()
     }
 }

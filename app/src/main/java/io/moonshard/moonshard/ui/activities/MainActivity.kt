@@ -19,16 +19,15 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFr
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.ProfileFragment
 import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
+import io.moonshard.moonshard.ui.fragments.profile.history.HistoryTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketInfoFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
-import io.moonshard.moonshard.ui.fragments.profile.mytickets.TypeTicketsFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.PresentTicketFragment
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPresentFragment
-import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
-import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
-import io.moonshard.moonshard.ui.fragments.profile.history.HistoryTransactionFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
@@ -72,7 +71,6 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             true
         }
     }
-
 
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -260,50 +258,56 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-     fun showWalletFragment(){
+    fun showWalletFragment() {
         val fragment = WalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.container, fragment, "WalletFragment").addToBackStack("WalletFragment")
             .commit()
     }
 
-    fun showMyTicketsFragment(){
+    fun showMyTicketsFragment() {
         val fragment = MyTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "MyTicketsFragment").addToBackStack("MyTicketsFragment")
+        ft.replace(R.id.container, fragment, "MyTicketsFragment")
+            .addToBackStack("MyTicketsFragment")
             .commit()
     }
 
-    fun showFillUpWalletFragment(){
+    fun showFillUpWalletFragment() {
         val fragment =
             FillUpWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "FillUpWalletFragment").addToBackStack("FillUpWalletFragment")
+        ft.replace(R.id.container, fragment, "FillUpWalletFragment")
+            .addToBackStack("FillUpWalletFragment")
             .commit()
     }
 
-    fun showWithdrawWalletFragment(){
+    fun showWithdrawWalletFragment() {
         val fragment =
             WithdrawWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "WithdrawWalletFragment").addToBackStack("WithdrawWalletFragment")
+        ft.replace(R.id.container, fragment, "WithdrawWalletFragment")
+            .addToBackStack("WithdrawWalletFragment")
             .commit()
     }
 
-    fun showTransferWalletFragment(){
+    fun showTransferWalletFragment() {
         val fragment = TransferWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "TransferWalletFragment").addToBackStack("TransferWalletFragment")
+        ft.replace(R.id.container, fragment, "TransferWalletFragment")
+            .addToBackStack("TransferWalletFragment")
             .commit()
     }
 
-    fun showHistoryTransactionScreen(){
+    fun showHistoryTransactionScreen() {
         val fragment = HistoryTransactionFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "HistoryTransactionFragment").addToBackStack("HistoryTransactionFragment")
+        ft.replace(R.id.container, fragment, "HistoryTransactionFragment")
+            .addToBackStack("HistoryTransactionFragment")
             .commit()
     }
 
+    /*
     fun showTypeTicketsFragment(){
         val fragment = TypeTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -311,31 +315,37 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showPresentTicketFragment(){
+     */
+
+    fun showPresentTicketFragment() {
         val fragment = PresentTicketFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "PresentTicketFragment").addToBackStack("PresentTicketFragment")
+        ft.replace(R.id.container, fragment, "PresentTicketFragment")
+            .addToBackStack("PresentTicketFragment")
             .commit()
     }
 
-    fun showVerificationEmailScreen(){
+    fun showVerificationEmailScreen() {
         val fragment = VerificationEmailFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "showVerificationEmailScreen").addToBackStack("showVerificationEmailScreen")
+        ft.replace(R.id.container, fragment, "showVerificationEmailScreen")
+            .addToBackStack("showVerificationEmailScreen")
             .commit()
     }
 
-    fun showTypeTicketsPresentFragment(){
+    fun showTypeTicketsPresentFragment() {
         val fragment = TypeTicketPresentFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "TypeTicketPresentFragment").addToBackStack("TypeTicketPresentFragment")
+        ft.replace(R.id.container, fragment, "TypeTicketPresentFragment")
+            .addToBackStack("TypeTicketPresentFragment")
             .commit()
     }
 
-    fun showMyTicketInfoFragment(){
+    fun showMyTicketInfoFragment() {
         val fragment = MyTicketInfoFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "MyTicketInfoFragment").addToBackStack("MyTicketInfoFragment")
+        ft.replace(R.id.container, fragment, "MyTicketInfoFragment")
+            .addToBackStack("MyTicketInfoFragment")
             .commit()
     }
 

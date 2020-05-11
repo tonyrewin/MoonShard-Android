@@ -38,7 +38,7 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
 
 
         ticket1?.setOnClickListener {
-            (activity as MainActivity).showTypeTicketsFragment()
+            (activity as MainActivity).showMyTicketInfoFragment()
         }
 
         ticket2?.setOnClickListener {

@@ -39,7 +39,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="6dp"
             android:background="@drawable/layout_settings_bg">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -102,7 +101,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
@@ -132,7 +130,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,17 +145,18 @@
                 android:id="@+id/walletBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp">
+                android:layout_marginBottom="13dp">
 
             <ImageView
                     android:id="@+id/presentIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="16dp"
                     android:src="@drawable/ic_wallet" />
 
             <TextView
+                    android:gravity="center_vertical"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto_regular"
@@ -190,29 +188,28 @@
                 android:id="@+id/myTicketBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp">
-
+                android:layout_marginBottom="14dp">
 
             <ImageView
                     android:id="@+id/ticketIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:layout_marginTop="15dp"
                     android:src="@drawable/ic_ticket_blue" />
 
             <TextView
+                    android:gravity="center_vertical"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="14dp"
                     android:layout_toRightOf="@+id/ticketIcon"
                     android:text="Мои билеты" />
-            
-            
+
             <RelativeLayout
                     android:visibility="gone"
                     android:id="@+id/ticketsCount"
@@ -260,20 +257,21 @@
 
             <ImageView
                     android:id="@+id/walletIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="9dp"
                     android:src="@drawable/ic_present" />
 
             <TextView
+                    android:gravity="center_vertical"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="11dp"
                     android:layout_toRightOf="@+id/walletIcon"
                     android:text="Подарить билет" />
 
@@ -293,7 +291,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"

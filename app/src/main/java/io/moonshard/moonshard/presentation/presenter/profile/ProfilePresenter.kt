@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.gson.Gson
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
@@ -18,6 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jivesoftware.smackx.vcardtemp.packet.VCard
 import retrofit2.HttpException
 
 
@@ -49,13 +51,24 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             val card = vm.loadVCard()
             val nickName = card.nickName
             // val description = card.getField("DESCRIPTION")
-            val description = card.middleName
+            var description = card.middleName
+
+            if(description.isNullOrBlank()){
+                setDescriptionInVCard(vm,card)
+                description = card.middleName
+            }
+
             val hashMapData = hashMapOf<String, String>()
             hashMapData["nickName"] = nickName
             hashMapData["description"] = description
-            hashMapData["jidPart"] = card.to.asBareJid().localpartOrNull.toString()
+            hashMapData["jidPart"] = MainApplication.getCurrentLoginCredentials().username
             it.onSuccess(hashMapData)
         }
+    }
+
+    fun setDescriptionInVCard(vm:VCardManager,card:VCard){
+        card.middleName = "Привет! Теперь я пользуюсь Moonshard."
+        vm.saveVCard(card)
     }
 
     fun getAvatar() {

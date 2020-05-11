@@ -36,8 +36,8 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
         presenter.getVerificationEmail()
-            //presenter.savePrivateKey("")
-            //presenter.getPrivateKey("1234567891234567")
+        //presenter.savePrivateKey("")
+        //presenter.getPrivateKey("1234567891234567")
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
@@ -76,12 +76,7 @@ class ProfileFragment : MvpAppCompatFragment(),
             } else {
                 myJid?.text = "jid"
             }
-
-            if (description != null) {
-                descriptionTv?.text = description.toString()
-            } else {
-                descriptionTv?.text = "Информация о вас не заполнена"
-            }
+            descriptionTv?.text = "Привет! Теперь я пользуюсь Moonshard."
         }
     }
 
@@ -95,16 +90,17 @@ class ProfileFragment : MvpAppCompatFragment(),
         Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
     }
 
-   override fun setVerification(email:String?,isActivated:Boolean?){
-        if(email.isNullOrEmpty()){
+    override fun setVerification(email: String?, isActivated: Boolean?) {
+        if (email.isNullOrEmpty()) {
             confirmEmailTv?.text = "Чтобы пользоваться кошельком.Добавьте почту."
             confirmEmailBtn?.isClickable = true
-        }else{
-            if(isActivated!!){
+        } else {
+            if (isActivated!!) {
                 confirmEmailTv?.text = "Ваш email подтвержден"
                 confirmEmailBtn?.isClickable = false
-            }else{
-                confirmEmailTv?.text = "Ваш email не подтвержден. Сообщение было отправлено на почту."
+            } else {
+                confirmEmailTv?.text =
+                    "Ваш email не подтвержден. Сообщение было отправлено на почту."
                 confirmEmailBtn?.isClickable = true
             }
         }

@@ -46,6 +46,9 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
 
         var idChat = ""
 
+        initAdapter()
+
+
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.getRoomInfo(idChat)
@@ -75,14 +78,11 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
 
     override fun showChangeChatButton(isShow: Boolean) {
       //  changeChatInfoBtn?.visibility = View.GONE
-
-
         if(isShow){
             changeChatInfoBtn?.visibility = View.VISIBLE
         }else{
             changeChatInfoBtn?.visibility = View.GONE
         }
-
     }
 
     override fun hideLine() {

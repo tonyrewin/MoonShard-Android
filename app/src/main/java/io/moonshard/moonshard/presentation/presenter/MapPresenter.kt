@@ -209,8 +209,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 }, 2000)
             }
 
-
-
             val chatEntity = ChatEntity(
                 jid = jid,
                 chatName = nameRoom,

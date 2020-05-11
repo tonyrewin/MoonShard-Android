@@ -90,7 +90,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/layout_settings_bg"
@@ -101,22 +100,22 @@
                         android:id="@+id/fillUpWalletBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp">
+                        android:layout_marginBottom="13dp">
 
                     <ImageView
                             android:id="@+id/presentIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="13dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="15dp"
                             android:src="@drawable/ic_top_up_wallet" />
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_toRightOf="@+id/presentIcon"
+                            android:layout_marginTop="14dp"
+                            android:layout_toEndOf="@+id/presentIcon"
                             android:fontFamily="@font/roboto_regular"
                             android:gravity="center_vertical"
                             android:lineSpacingExtra="1sp"
@@ -153,14 +152,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="13dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="9dp"
                             android:src="@drawable/ic_transfer_money" />
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="11dp"
                             android:layout_toRightOf="@+id/transferIcon"
                             android:fontFamily="@font/roboto_regular"
                             android:gravity="center_vertical"
@@ -178,11 +177,18 @@
 
                 </RelativeLayout>
 
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginEnd="13dp"
+                        android:background="#F5F5F5" />
+
                 <RelativeLayout
                         android:id="@+id/withDrawBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="18dp">
+                        android:layout_marginBottom="13dp">
 
 
                     <ImageView
@@ -190,14 +196,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="13dp"
-                            android:layout_marginTop="16dp"
-                            android:src="@drawable/ic_output_wallet_red" />
+                            android:layout_marginTop="9dp"
+                            android:src="@drawable/ic_output_red" />
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="11dp"
                             android:layout_toRightOf="@+id/ticketIcon"
                             android:fontFamily="@font/roboto_regular"
                             android:gravity="center_vertical"
@@ -215,6 +221,13 @@
 
                 </RelativeLayout>
 
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginEnd="13dp"
+                        android:background="#F5F5F5" />
+
                 <RelativeLayout
                         android:id="@+id/historyBtn"
                         android:layout_width="wrap_content"
@@ -228,7 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="13dp"
                             android:layout_marginTop="16dp"
-                            android:src="@drawable/ic_output_wallet_red" />
+                            android:src="@drawable/ic_output_red" />
 
                     <TextView
                             android:layout_width="wrap_content"

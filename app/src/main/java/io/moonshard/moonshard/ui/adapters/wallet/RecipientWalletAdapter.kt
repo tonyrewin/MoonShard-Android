@@ -11,12 +11,15 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.RosterEntryCustom
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.roster.RosterEntry
+import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
 
@@ -49,9 +52,23 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
             notifyDataSetChanged()
         }
 
-        holder.nameTv?.text = contacts[position].name
+        try {
+            val jidUser = JidCreate.entityBareFrom(contacts[position].jid)
+            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCard(jidUser)
+            var nickName: String
+            nickName = if(card.nickName.isNullOrBlank()){
+                card.to.asBareJid().localpartOrNull.toString()
+            }else{
+                card.nickName
+            }
 
-        setAvatar(contacts[position].jid!!.asUnescapedString(),contacts[position].name,holder.avatar)
+            holder.nameTv?.text = nickName
+            setAvatar(contacts[position].jid!!.asUnescapedString(),nickName,holder.avatar)
+        }catch (e:Exception){
+            Logger.d(e)
+        }
+
 
         //todo hardcore
         if(position==contacts.size-1){

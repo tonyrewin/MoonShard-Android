@@ -123,6 +123,5 @@ class HistoryTransactionFragment : MvpAppCompatFragment(),
 
    override fun setData(transitions: List<ListItem>){
         (rv?.adapter as? TransactionsWalletAdapter)?.setTransaction(transitions)
-
     }
 }

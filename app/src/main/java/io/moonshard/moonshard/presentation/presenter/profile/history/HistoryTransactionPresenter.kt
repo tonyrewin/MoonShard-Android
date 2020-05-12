@@ -21,6 +21,9 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
 
     private var transactions = ArrayList<Transaction>()
     private var fullTransactions = ArrayList<Transaction>()
+    private var isFilter = false
+    private var isCalendarFilter = false
+    private var calendar:Calendar?=null
 
 
     fun getTransactions() {
@@ -45,7 +48,7 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
     }
 
     fun convertTransactionsWithDate(myOptions: ArrayList<Transaction>) {
-       // val groupedHashMap: HashMap<String, ArrayList<Transaction>> =
+        // val groupedHashMap: HashMap<String, ArrayList<Transaction>> =
         //    groupDataIntoHashMap(myOptions)
 
         val groupedHashMap: TreeMap<String, ArrayList<Transaction>> =
@@ -90,7 +93,7 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
     }
 
     private fun groupDataIntoTreeMap(listOfPojosOfJsonArray: List<Transaction>): TreeMap<String, ArrayList<Transaction>> {
-     val comp = CustomComparator()
+        val comp = CustomComparator()
         val groupedTreeMap: TreeMap<String, ArrayList<Transaction>> =
             TreeMap()
         for (pojoOfJsonArray in listOfPojosOfJsonArray) {
@@ -112,46 +115,97 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
     }
 
     fun setFilterDate(calendar: Calendar) {
-        val format1 = SimpleDateFormat("yyyy-MM-dd")
-        val formatted = format1.format(calendar.time)
-        Log.d("myCalendar", formatted)
+        if (isFilter) {
+            val format1 = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format1.format(calendar.time)
+            Log.d("myCalendar", formatted)
 
-        val list: List<Transaction> = fullTransactions.filter {
-            it.date.contains(formatted)
+            val list: List<Transaction> = transactions.filter {
+                it.date.contains(formatted)
+            }
+
+            transactions.clear()
+            transactions.addAll(list)
+        } else {
+            val format1 = SimpleDateFormat("yyyy-MM-dd")
+            val formatted = format1.format(calendar.time)
+            Log.d("myCalendar", formatted)
+
+            val list: List<Transaction> = fullTransactions.filter {
+                it.date.contains(formatted)
+            }
+
+            transactions.clear()
+            transactions.addAll(list)
         }
-
-        transactions.clear()
-        transactions.addAll(list)
-
+        this.calendar = calendar
+        isCalendarFilter = true
         convertTransactionsWithDate(transactions)
     }
 
     fun topUpFilter(isActive: Boolean) {
-        if (isActive) {
-            val list: List<Transaction> = fullTransactions.filter {
-                it.typeTransaction == 1
-            }
-            transactions.clear()
-            transactions.addAll(list)
+        if(isCalendarFilter){
+            if (isActive) {
+                val list: List<Transaction> = transactions.filter {
+                    it.typeTransaction == 1
+                }
+                transactions.clear()
+                transactions.addAll(list)
 
-            convertTransactionsWithDate(transactions)
-        } else {
-            getTransactions()
+                convertTransactionsWithDate(transactions)
+                isFilter = true
+            } else {
+                isFilter = false
+                setFilterDate(calendar!!)
+            }
+        }else{
+            if (isActive) {
+                val list: List<Transaction> = fullTransactions.filter {
+                    it.typeTransaction == 1
+                }
+                transactions.clear()
+                transactions.addAll(list)
+
+                convertTransactionsWithDate(transactions)
+                isFilter = true
+            } else {
+                isFilter = false
+                setFilterDate(calendar!!)
+            }
         }
     }
 
     fun writeOffFilter(isActive: Boolean) {
-        if (isActive) {
-            val list: List<Transaction> = fullTransactions.filter {
-                it.typeTransaction == 0
+        if(isCalendarFilter){
+            if (isActive) {
+                val list: List<Transaction> = transactions.filter {
+                    it.typeTransaction == 0
+                }
+
+                transactions.clear()
+                transactions.addAll(list)
+
+                convertTransactionsWithDate(transactions)
+            } else {
+                //getTransactions()
+                isFilter = false
+                setFilterDate(calendar!!)
             }
+        }else{
+            if (isActive) {
+                val list: List<Transaction> = fullTransactions.filter {
+                    it.typeTransaction == 0
+                }
 
-            transactions.clear()
-            transactions.addAll(list)
+                transactions.clear()
+                transactions.addAll(list)
 
-            convertTransactionsWithDate(transactions)
-        } else {
-            getTransactions()
+                convertTransactionsWithDate(transactions)
+                isFilter = true
+            } else {
+                isFilter = false
+                setFilterDate(calendar!!)
+            }
         }
     }
 }

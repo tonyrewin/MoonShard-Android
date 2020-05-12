@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.RosterEntryCustom
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.internal.http2.Http2Reader
 import org.jivesoftware.smack.roster.RosterEntry
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
@@ -48,6 +50,11 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
         holder.checkBox.isChecked = selectedPosition == position
 
         holder.checkBox.setOnCheckedChangeListener { view, isChecked ->
+                selectedPosition = position
+                notifyDataSetChanged()
+        }
+
+        holder.checkBox.setOnClickListener {
             selectedPosition = position
             notifyDataSetChanged()
         }

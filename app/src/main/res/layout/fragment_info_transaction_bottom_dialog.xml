@@ -95,7 +95,7 @@
                     android:textColor="#333333"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Откого куда: Kanaevsky" />
+                    android:text="Кому: Kanaevsky" />
 
             <TextView
                     android:fontFamily="@font/roboto_regular"

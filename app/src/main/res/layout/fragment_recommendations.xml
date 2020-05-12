@@ -7,6 +7,7 @@
         tools:context=".ui.fragments.mychats.RecommendationsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
             android:visibility="visible"
             android:layout_marginBottom="48dp"
             android:id="@+id/recommendationsRv"

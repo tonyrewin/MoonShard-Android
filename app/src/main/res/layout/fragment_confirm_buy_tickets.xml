@@ -136,6 +136,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
+                            android:overScrollMode="never"
                             android:layout_below="@+id/view"
                             android:id="@+id/confirmTicketsRv"
                             android:layout_width="match_parent"

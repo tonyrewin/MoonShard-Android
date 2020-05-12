@@ -113,6 +113,7 @@
                     android:layout_height="1dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                    android:overScrollMode="never"
                     android:id="@+id/salesRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

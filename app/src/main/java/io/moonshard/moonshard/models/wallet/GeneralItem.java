@@ -1,14 +1,14 @@
 package io.moonshard.moonshard.models.wallet;
 
 public class GeneralItem extends ListItem {
-    private PojoOfJsonArray pojoOfJsonArray;
+    private Transaction transaction;
 
-    public PojoOfJsonArray getPojoOfJsonArray() {
-        return pojoOfJsonArray;
+    public Transaction getTransaction() {
+        return transaction;
     }
 
-    public void setPojoOfJsonArray(PojoOfJsonArray pojoOfJsonArray) {
-        this.pojoOfJsonArray = pojoOfJsonArray;
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     @Override

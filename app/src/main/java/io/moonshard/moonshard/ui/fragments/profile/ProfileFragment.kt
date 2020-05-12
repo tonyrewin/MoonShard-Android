@@ -76,7 +76,7 @@ class ProfileFragment : MvpAppCompatFragment(),
             } else {
                 myJid?.text = "jid"
             }
-            descriptionTv?.text = "Привет! Теперь я пользуюсь Moonshard."
+            descriptionTv?.text = description
         }
     }
 

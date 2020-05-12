@@ -56,7 +56,7 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
             val jidUser = JidCreate.entityBareFrom(contacts[position].jid)
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard(jidUser)
-            var nickName: String
+            val nickName: String
             nickName = if(card.nickName.isNullOrBlank()){
                 card.to.asBareJid().localpartOrNull.toString()
             }else{
@@ -69,8 +69,6 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
             Logger.d(e)
         }
 
-
-        //todo hardcore
         if(position==contacts.size-1){
             holder.viewLine?.visibility = View.GONE
         }

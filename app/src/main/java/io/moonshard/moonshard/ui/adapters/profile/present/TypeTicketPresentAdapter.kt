@@ -30,7 +30,6 @@ class TypeTicketPresentAdapter(val listener: TypeTicketPresentListener, private 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         if(position==9){
             val params = holder.mainLayout?.layoutParams as ViewGroup.MarginLayoutParams
             params.marginStart = Utils.convertDpToPixel(8F, holder.mainLayout?.context)

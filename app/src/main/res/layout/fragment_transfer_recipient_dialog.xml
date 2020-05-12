@@ -58,7 +58,7 @@
                 android:id="@+id/typeTicket"
                 android:layout_below="@+id/cancelBtn"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Отправить билет «Абонемент»"
+                android:text="Перевести средства»"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

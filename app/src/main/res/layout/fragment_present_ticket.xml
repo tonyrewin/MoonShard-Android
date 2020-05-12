@@ -7,7 +7,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragments.profile.present_ticket.PresentTicketFragment">
 
-
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
@@ -45,6 +44,15 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
     <RelativeLayout
             android:id="@+id/actionLayout"
             android:layout_below="@+id/cardInfo"
@@ -53,7 +61,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
@@ -90,9 +97,15 @@
 
     </RelativeLayout>
 
-    <include
-            android:id="@+id/ticket"
-            layout="@layout/my_ticket_item"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
+            android:id="@+id/ticketPresentRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 
 
 </LinearLayout>

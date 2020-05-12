@@ -4,7 +4,8 @@
         android:layout_width="match_parent"
         android:layout_height="264dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/mainView"
         android:layout_marginEnd="8dp"
         android:background="@drawable/layout_settings_bg"
         app:cardCornerRadius="16dp">
@@ -99,7 +100,7 @@
 
         <TextView
                 android:layout_alignParentEnd="true"
-                android:id="@+id/numberTicketTv"
+                android:id="@+id/numberTv"
                 android:layout_marginEnd="25dp"
                 android:layout_below="@+id/view"
                 android:layout_alignTop="@+id/typeTicket"
@@ -111,11 +112,12 @@
                 android:textSize="17sp"/>
 
         <TextView
+                android:id="@+id/numberTicketTv"
                 android:layout_alignTop="@+id/placeTicket"
-                android:layout_alignLeft="@+id/numberTicketTv"
+                android:layout_alignLeft="@+id/numberTv"
                 android:text="021457859710"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/numberTicketTv"
+                android:layout_below="@+id/numberTv"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp"

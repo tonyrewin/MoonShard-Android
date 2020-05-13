@@ -46,6 +46,10 @@
                 android:layout_height="wrap_content"/>
 
         <EditText
+                android:fontFamily="@font/roboto_regular"
+                android:paddingBottom="8dp"
+                android:paddingTop="6dp"
+                android:paddingStart="16dp"
                 android:layout_marginBottom="10dp"
                 android:maxHeight="64dp"
                 android:minHeight="32dp"

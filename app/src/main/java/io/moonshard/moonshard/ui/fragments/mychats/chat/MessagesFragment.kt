@@ -29,6 +29,7 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import androidx.core.view.MotionEventCompat.getActionMasked
 import android.R
+import com.orhanobut.logger.Logger
 import org.jivesoftware.smack.chat2.Chat
 
 
@@ -159,14 +160,18 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val uri = data?.data
+        try {
+            val uri = data?.data
 
-        if (uri != null) {
-            val input = context?.contentResolver?.openInputStream(uri)
-            if (input != null) {
-                val file = StreamUtil.stream2file(context!!,uri,input)
-                presenter.sendFile(file)
+            if (uri != null) {
+                val input = context?.contentResolver?.openInputStream(uri)
+                if (input != null) {
+                    val file = StreamUtil.stream2file(context!!,uri,input)
+                    presenter.sendFile(file)
+                }
             }
+        }catch (e:Exception){
+            Logger.d(e)
         }
     }
 

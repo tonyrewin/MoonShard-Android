@@ -8,12 +8,10 @@
         android:clipToPadding="false">
 
     <RelativeLayout
-            android:layout_marginBottom="15dp"
             android:id="@+id/layoutMessage"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
             android:layout_marginStart="5dp"
             android:paddingLeft="15dp">
 

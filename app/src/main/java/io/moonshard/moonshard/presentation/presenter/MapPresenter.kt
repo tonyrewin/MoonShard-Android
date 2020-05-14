@@ -319,6 +319,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             }
         }
         RoomsMap.isFilter = true
+        RoomsMap.isFilterDate = true
     }
 
     override fun onDestroy() {
@@ -326,5 +327,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         // todo
         //  made clear filter when close map fragment
         RoomsMap.clearFilters()
+        compositeDisposable.clear()
     }
 }

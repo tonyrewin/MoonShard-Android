@@ -212,14 +212,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             }
         }
 
-        removeCategoryFilterBtn?.setSafeOnClickListener {
-            RoomsMap.clearFilters()
-            presenter.getRooms("", "", "", null)
-            hideCategoryBottomSheet()
-            updateListRooms()
-            clearCategoryAdapter()
-        }
-
         sheetInfoBehavior?.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -262,6 +254,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         })
 
         calendarBtn?.setOnClickListener {
+            //showDateBottomSheet()
             if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 showDateBottomSheet()
             } else {
@@ -511,7 +504,27 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
+    private fun setupBottomSheetWithoutCategories() {
+        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
+            childFragmentManager,
+            context,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST
+        )
+        bottomSheetViewPager?.offscreenPageLimit = 1
+        bottomSheetViewPager?.adapter = sectionsPagerAdapter
+        bottomSheetTabs?.setupWithViewPager(bottomSheetViewPager)
+        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
+    }
+
     fun showCategoryBottomSheet() {
+        removeCategoryFilterBtn?.setSafeOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("", "", "", null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+            clearCategoryAdapter()
+        }
+
         bottomSheetCategory?.visibility = View.VISIBLE
         bottomSheetFind?.visibility = View.GONE
         categoryFilterName?.text = "Категория: " + RoomsMap.category?.categoryName
@@ -525,6 +538,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun showDateBottomSheet() {
+        setupBottomSheetWithoutCategories()
+
+
         searchEventEt.isEnabled = false
         sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         bottomSheetTime?.visibility = View.VISIBLE
@@ -540,23 +556,47 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     fun initDateBottomSheet() {
         todayTv?.setOnClickListener {
-            searchEventEt.setText(todayTv.text.toString())
             presenter.setDateFilter(todayTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = todayTv.text.toString()
+
+            updateDateListRooms(todayTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         tomorrowTv?.setOnClickListener {
-            searchEventEt.setText(tomorrowTv.text.toString())
             presenter.setDateFilter(tomorrowTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = tomorrowTv.text.toString()
+
+            updateDateListRooms(tomorrowTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         weekendTv?.setOnClickListener {
-            searchEventEt.setText(weekendTv.text.toString())
             presenter.setDateFilter(weekendTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = weekendTv.text.toString()
+
+            updateDateListRooms(weekendTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -569,6 +609,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             )
                 .show()
         }
+
+        removeCategoryFilterBtn?.setOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("", "", "", null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+            clearSearch()
+            setupBottomSheet()
+        }
     }
 
     // установка обработчика выбора даты
@@ -578,57 +627,74 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             dateAndTime.set(Calendar.MONTH, monthOfYear)
             dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
+
             presenter.setDateFilter("Выбрать дату", dateAndTime)
-            clearSearch.visibility = View.VISIBLE
+
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+
+            removeCategoryFilterBtn?.setOnClickListener {
+                RoomsMap.clearFilters()
+                presenter.getRooms("", "", "", null)
+                hideCategoryBottomSheet()
+                updateListRooms()
+                clearSearch()
+                setupBottomSheet()
+            }
+            updateDateListRooms("Выбрать дату", dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+
         }
 
     private fun setDate(dayOfMonth: Int, month: Int) {
         when (month) {
             0 -> {
-                searchEventEt.setText("$dayOfMonth января")
+                categoryFilterName.text = "$dayOfMonth января"
             }
             1 -> {
-                searchEventEt.setText("$dayOfMonth февраля")
+                categoryFilterName.text = "$dayOfMonth февраля"
 
             }
             2 -> {
-                searchEventEt.setText("$dayOfMonth марта")
+                categoryFilterName.text = "$dayOfMonth марта"
 
             }
             3 -> {
-                searchEventEt.setText("$dayOfMonth апреля")
+                categoryFilterName.text = "$dayOfMonth апреля"
 
             }
             4 -> {
-                searchEventEt.setText("$dayOfMonth мая")
+                categoryFilterName.text = "$dayOfMonth мая"
 
             }
             5 -> {
-                searchEventEt.setText("$dayOfMonth июня")
+                categoryFilterName.text = "$dayOfMonth июня"
 
             }
             6 -> {
-                searchEventEt.setText("$dayOfMonth июля")
+                categoryFilterName.text = "$dayOfMonth июля"
 
             }
             7 -> {
-                searchEventEt.setText("$dayOfMonth августа")
+                categoryFilterName.text = "$dayOfMonth августа"
 
             }
             8 -> {
-                searchEventEt.setText("$dayOfMonth сенятбря")
+                categoryFilterName.text = "$dayOfMonth сенятбря"
 
             }
             9 -> {
-                searchEventEt.setText("$dayOfMonth октября")
+                categoryFilterName.text = "$dayOfMonth октября"
 
             }
             10 -> {
-                searchEventEt.setText("$dayOfMonth ноября")
+                categoryFilterName.text = "$dayOfMonth ноября"
             }
             11 -> {
-                searchEventEt.setText("$dayOfMonth декабря")
+                categoryFilterName.text = "$dayOfMonth декабря"
             }
         }
     }
@@ -735,10 +801,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     fun updateListRooms() {
         val fragment =
-            fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+            childFragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
 
+    fun updateDateListRooms(date:String,calendar: Calendar?=null) {
+        val fragment =
+            childFragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+        (fragment as? ListChatsMapFragment)?.updateDateListRooms(date,calendar)
+    }
 
     override fun onDestroyView() {
         try {

@@ -246,11 +246,11 @@
             android:orientation="horizontal">
 
         <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:fontFamily="@font/roboto_medium"
                 android:background="@drawable/button_background_transparent"
                 android:textColor="#0075FF"
                 android:id="@+id/readBtn"
-                style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="159dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -258,12 +258,12 @@
                 android:text="Читать" />
 
         <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_marginStart="8dp"
                 android:layout_toRightOf="@+id/readBtn"
                 android:layout_below="@+id/mainLayout"
                 android:id="@+id/joinBtn"
-                style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="159dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"

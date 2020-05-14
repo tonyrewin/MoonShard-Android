@@ -18,6 +18,8 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_list_chats_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
@@ -53,6 +55,10 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
 
     fun updateChats(){
         presenter.getChats()
+    }
+
+    fun updateDateListRooms(date:String,calendar: Calendar?=null){
+        presenter.setDateFilter(date,calendar)
     }
 
     fun setFilter(text: String) {

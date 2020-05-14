@@ -45,9 +45,9 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <RelativeLayout
-                android:layout_below="@+id/toolBar"
+        <LinearLayout
                 android:id="@+id/balanceLayout"
+                android:layout_below="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -61,15 +61,25 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="17dp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Текущий баланс: 96 000 ₽"
+                    android:text="0 ₽"
                     android:textColor="#333333"
+                    android:textSize="34sp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Текущий баланс"
+                    android:textColor="#6F6F6F"
                     android:textSize="14sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
         <RelativeLayout
@@ -117,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/chooseMember"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/layout_settings_bg">
 

@@ -548,6 +548,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun hideDateBottomSheet() {
+        setupBottomSheet()
         searchEventEt.isEnabled = true
         sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetTime?.visibility = View.GONE

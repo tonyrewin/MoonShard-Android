@@ -240,18 +240,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="13dp"
-                            android:layout_marginTop="16dp"
-                            android:src="@drawable/ic_output_red" />
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/ic_history_wallet" />
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="11dp"
                             android:layout_toEndOf="@+id/historyIcon"
                             android:fontFamily="@font/roboto_regular"
                             android:gravity="center_vertical"
-                            android:text="История"
+                            android:text="Движение стредств"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 

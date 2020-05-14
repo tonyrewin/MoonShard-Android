@@ -9,6 +9,7 @@ import io.moonshard.moonshard.common.ApiConstants
 import io.moonshard.moonshard.repository.AuthRepository
 import io.moonshard.moonshard.repository.NetworkRepository
 import io.moonshard.moonshard.repository.RoomsRepository
+import io.moonshard.moonshard.repository.UnitPayRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,5 +57,10 @@ class WebModule(var context: Context) {
     @Provides
     fun providesAuthRepository(): AuthRepository {
         return AuthRepository()
+    }
+
+    @Provides
+    fun providesUnitPayRepository(): UnitPayRepository {
+        return UnitPayRepository()
     }
 }

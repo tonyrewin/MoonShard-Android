@@ -4,10 +4,10 @@ import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.api.auth.request.*
-import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
 import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
 import io.moonshard.moonshard.models.api.auth.response.PrivateKeyAuthResponse
 import io.moonshard.moonshard.models.api.auth.response.ProfileUserResponse
+import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.Response
@@ -86,4 +86,13 @@ interface API {
     @Headers("Accept: application/json", "Content-type:application/json")
     @GET
     fun getUserProfileInfo(@Url url: String, @Header("Authorization") authHeader: String): Single<ProfileUserResponse>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @GET
+    fun createPay(
+        @Url url: String,
+        @Query("sum") sum: Int,
+        @Query("account") account: String,
+        @Query("desc") desc: String
+    ): Single<Response>
 }

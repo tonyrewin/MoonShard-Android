@@ -89,7 +89,6 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun join() {
         try {
-
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()
             val nickName = Resourcepart.from(card.nickName)

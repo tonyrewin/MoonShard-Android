@@ -476,6 +476,17 @@ open class MessagesAdapter(
                     statusFileIv?.setImageResource(R.drawable.ic_download_file)
                     progressBarFile?.visibility = View.GONE
                     textSize.text = "ERROR"
+
+                    layoutFile?.setOnClickListener {
+                        downloadFile(
+                            url,
+                            textSize,
+                            statusFileIv,
+                            progressBarFile,
+                            layoutFile
+                        )
+                    }
+
                 }
             )
     }

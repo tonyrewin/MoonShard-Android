@@ -17,8 +17,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/swipeBtn"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="29dp"
             android:layout_marginBottom="13dp">
 
         <EditText
@@ -53,6 +52,7 @@
                 android:src="@drawable/ic_remove_category_filter" />
 
         <ImageView
+                android:layout_centerVertical="true"
                 android:id="@+id/calendarBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

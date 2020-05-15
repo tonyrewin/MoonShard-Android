@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction.*
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
@@ -261,6 +262,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showWalletFragment() {
         val fragment = WalletFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "WalletFragment").addToBackStack("WalletFragment")
             .commit()
     }
@@ -268,8 +270,27 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showMyTicketsFragment() {
         val fragment = MyTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "MyTicketsFragment")
             .addToBackStack("MyTicketsFragment")
+            .commit()
+    }
+
+    fun showPresentTicketFragment() {
+        val fragment = PresentTicketFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
+        ft.replace(R.id.container, fragment, "PresentTicketFragment")
+            .addToBackStack("PresentTicketFragment")
+            .commit()
+    }
+
+    fun showVerificationEmailScreen() {
+        val fragment = VerificationEmailFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
+        ft.replace(R.id.container, fragment, "showVerificationEmailScreen")
+            .addToBackStack("showVerificationEmailScreen")
             .commit()
     }
 
@@ -277,6 +298,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment =
             FillUpWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "FillUpWalletFragment")
             .addToBackStack("FillUpWalletFragment")
             .commit()
@@ -286,6 +308,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment =
             WithdrawWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "WithdrawWalletFragment")
             .addToBackStack("WithdrawWalletFragment")
             .commit()
@@ -294,6 +317,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showTransferWalletFragment() {
         val fragment = TransferWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "TransferWalletFragment")
             .addToBackStack("TransferWalletFragment")
             .commit()
@@ -302,6 +326,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showHistoryTransactionScreen() {
         val fragment = HistoryTransactionFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "HistoryTransactionFragment")
             .addToBackStack("HistoryTransactionFragment")
             .commit()
@@ -317,22 +342,6 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
      */
 
-    fun showPresentTicketFragment() {
-        val fragment = PresentTicketFragment()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "PresentTicketFragment")
-            .addToBackStack("PresentTicketFragment")
-            .commit()
-    }
-
-    fun showVerificationEmailScreen() {
-        val fragment = VerificationEmailFragment()
-        val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, fragment, "showVerificationEmailScreen")
-            .addToBackStack("showVerificationEmailScreen")
-            .commit()
-    }
-
     fun showTypeTicketsPresentFragment() {
         val fragment = TypeTicketPresentFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -344,6 +353,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showMyTicketInfoFragment() {
         val fragment = MyTicketInfoFragment()
         val ft = supportFragmentManager.beginTransaction()
+        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "MyTicketInfoFragment")
             .addToBackStack("MyTicketInfoFragment")
             .commit()

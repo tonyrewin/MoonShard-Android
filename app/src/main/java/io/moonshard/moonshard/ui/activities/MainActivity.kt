@@ -79,11 +79,14 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        startService(Intent(applicationContext, XMPPConnectionService::class.java))
+        //requestCode = 2 in MessagesFragment
+        if(requestCode==1){
+            startService(Intent(applicationContext, XMPPConnectionService::class.java))
 
-        android.os.Handler().postDelayed({
-            showMapScreen()
-        }, 500)
+            android.os.Handler().postDelayed({
+                showMapScreen()
+            }, 500)
+        }
     }
 
     override fun onRequestPermissionsResult(

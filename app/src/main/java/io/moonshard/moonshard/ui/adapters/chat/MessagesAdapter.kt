@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.orhanobut.logger.Logger
-import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
@@ -37,6 +36,13 @@ import java.util.*
 interface PhotoListener {
     fun clickPhoto(url: String)
     fun clickUserAvater(jid:String)
+    fun clickDownloadFile(
+        text: String,
+        sizeFile: TextView,
+        statusFileIv: ImageView?,
+        progressBarFile: ProgressBar?,
+        layoutFile: RelativeLayout
+    )
 }
 
 open class MessagesAdapter(
@@ -186,12 +192,20 @@ open class MessagesAdapter(
                             holder.statusFileIv?.setImageResource(R.drawable.ic_download_file)
 
                             holder.layoutFile?.setOnClickListener {
-                                downloadFile(
-                                    myMsgs[holder.adapterPosition].text,
+                                /*
+                                downloadFile(myMsgs[holder.adapterPosition].text,
                                     holder.sizeFile!!,
                                     holder.statusFileIv,
                                     holder.progressBarFile,
-                                    holder.layoutFile
+                                    holder.layoutFile!!)
+
+                                 */
+
+                                listener.clickDownloadFile(myMsgs[holder.adapterPosition].text,
+                                    holder.sizeFile!!,
+                                    holder.statusFileIv,
+                                    holder.progressBarFile,
+                                    holder.layoutFile!!
                                 )
                             }
                         }

@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
+import android.Manifest
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -29,16 +30,27 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import androidx.core.view.MotionEventCompat.getActionMasked
 import android.R
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.orhanobut.logger.Logger
 import org.jivesoftware.smack.chat2.Chat
+import pub.devrel.easypermissions.EasyPermissions
 
 
-class MessagesFragment : MvpAppCompatFragment(), MessagesView {
+class MessagesFragment : MvpAppCompatFragment(), MessagesView, EasyPermissions.PermissionCallbacks {
 
     @InjectPresenter
     lateinit var presenter: MessagesPresenter
 
     var idChat: String = ""
+
+    var textHolder: String?=null
+    var  sizeFileHolder: TextView?=null
+    var statusFileIvHolder: ImageView?=null
+    var progressBarFileHolder: ProgressBar?=null
+    var layoutFileHolder: RelativeLayout?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -132,6 +144,21 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
                        // showProfileUser(jid)
                     }
 
+                    override fun clickDownloadFile(
+                        text: String,
+                        sizeFile: TextView,
+                        statusFileIv: ImageView?,
+                        progressBarFile: ProgressBar?,
+                        layoutFile: RelativeLayout
+                    ) {
+                        textHolder = text
+                        sizeFileHolder = sizeFile
+                        statusFileIvHolder = statusFileIv
+                        progressBarFileHolder = progressBarFile
+                        layoutFileHolder = layoutFile
+                        checkStoragePermission()
+                    }
+
                     override fun clickPhoto(url: String) {
                         showFullScreen(url)
                     }
@@ -188,5 +215,48 @@ class MessagesFragment : MvpAppCompatFragment(), MessagesView {
 
     override fun hideProgressBar() {
        // progressBar?.visibility=View.GONE
+    }
+
+    private fun checkStoragePermission() {
+        val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        if (EasyPermissions.hasPermissions(activity!!, permission)) {
+            (messagesRv.adapter as MessagesAdapter).downloadFile(textHolder!!,sizeFileHolder!!,statusFileIvHolder,progressBarFileHolder,layoutFileHolder)
+            clearFileHolder()
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(
+                this,
+                "This app needs access to your storage",
+                2,
+                permission
+            )
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        //Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
+        clearFileHolder()
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        (messagesRv.adapter as MessagesAdapter).downloadFile(textHolder!!,sizeFileHolder!!,statusFileIvHolder,progressBarFileHolder,layoutFileHolder)
+        clearFileHolder()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    fun clearFileHolder(){
+        //(messagesRv.adapter as MessagesAdapter).downloadFile(textHolder!!,sizeFileHolder!!,statusFileIvHolder,progressBarFileHolder,layoutFileHolder)
+        textHolder =null
+        sizeFileHolder = null
+        statusFileIvHolder = null
+        progressBarFileHolder = null
+        layoutFileHolder = null
     }
 }

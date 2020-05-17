@@ -32,12 +32,32 @@ class VerificationEmailFragment  : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        readyBtn?.setSafeOnClickListener {
+        sendLinkBtn?.setSafeOnClickListener {
             presenter.verificationEmail(emailEt.text.toString())
         }
 
         back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        readyBtn?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
+        closeBtn?.setSafeOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+    }
+
+    override fun showVerificationLayout(isConfirmed:Boolean){
+        if(isConfirmed){
+            readyBtn?.visibility = View.VISIBLE
+            notConfirmedLayout.visibility  = View.GONE
+            emailConfirmed.visibility = View.VISIBLE
+        }else{
+            readyBtn?.visibility = View.GONE
+            notConfirmedLayout.visibility  = View.VISIBLE
+            emailConfirmed.visibility = View.GONE
         }
     }
 
@@ -47,5 +67,10 @@ class VerificationEmailFragment  : MvpAppCompatFragment(),
 
     override fun back(){
         fragmentManager?.popBackStack()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.getVerificationEmail()
     }
 }

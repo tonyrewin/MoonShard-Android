@@ -285,30 +285,4 @@
 
         </RelativeLayout>
     </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/confirmEmailBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/layout_settings_bg"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
-
-
-        <TextView
-                android:id="@+id/confirmEmailTv"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:fontFamily="@font/roboto_regular"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:text="Подтвердите свой email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 </LinearLayout>

@@ -43,19 +43,11 @@ class ProfileFragment : MvpAppCompatFragment(),
             showChangeProfileScreen()
         }
 
-        walletBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showWalletFragment()
-        }
-
         myTicketBtn?.setSafeOnClickListener {
             (activity as MainActivity).showMyTicketsFragment()
         }
         presentTicketLayout?.setSafeOnClickListener {
             (activity as MainActivity).showPresentTicketFragment()
-        }
-
-        confirmEmailBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showVerificationEmailScreen()
         }
     }
 
@@ -91,23 +83,29 @@ class ProfileFragment : MvpAppCompatFragment(),
     }
 
     override fun setVerification(email: String?, isActivated: Boolean?) {
-        if (email.isNullOrEmpty()) {
-            confirmEmailTv?.text = "Чтобы пользоваться кошельком.Добавьте почту."
-            confirmEmailBtn?.isClickable = true
-        } else {
-            if (isActivated!!) {
-                confirmEmailTv?.text = "Ваш email подтвержден"
-                confirmEmailBtn?.isClickable = false
-            } else {
-                confirmEmailTv?.text =
-                    "Ваш email не подтвержден. Сообщение было отправлено на почту."
-                confirmEmailBtn?.isClickable = true
-            }
-        }
+       if (email.isNullOrEmpty()) {
+           walletBtn?.setSafeOnClickListener {
+               (activity as MainActivity).showVerificationEmailScreen()
+           }
+       } else {
+           if (isActivated!!) {
+               walletBtn?.setSafeOnClickListener {
+                   (activity as MainActivity).showWalletFragment()
+               }
+           } else {
+               walletBtn?.setSafeOnClickListener {
+                   (activity as MainActivity).showVerificationEmailScreen()
+               }
+           }
+       }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 }

@@ -23,6 +23,9 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
     private var fullTransactions = ArrayList<Transaction>()
     private var isFilter = false
     private var isCalendarFilter = false
+    private var isTopUpFilter = false
+    private var isWriteOffFilter = false
+
     private var calendar:Calendar?=null
 
 
@@ -143,6 +146,21 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
         convertTransactionsWithDate(transactions)
     }
 
+    fun disableFilterDate(){
+        isCalendarFilter = false
+        if(isFilter){
+            if(isTopUpFilter){
+                topUpFilter(true)
+            }else if(isWriteOffFilter){
+                writeOffFilter(true)
+            }
+        }else{
+            transactions.clear()
+            transactions.addAll(fullTransactions)
+            convertTransactionsWithDate(transactions)
+        }
+    }
+
     fun topUpFilter(isActive: Boolean) {
         if(isCalendarFilter){
             if (isActive) {
@@ -154,9 +172,11 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
 
                 convertTransactionsWithDate(transactions)
                 isFilter = true
+                isTopUpFilter = true
             } else {
                 isFilter = false
                 setFilterDate(calendar!!)
+                isTopUpFilter = false
             }
         }else{
             if (isActive) {
@@ -168,9 +188,13 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
 
                 convertTransactionsWithDate(transactions)
                 isFilter = true
+                isTopUpFilter = true
             } else {
                 isFilter = false
-                setFilterDate(calendar!!)
+                isTopUpFilter = false
+                transactions.clear()
+                transactions.addAll(fullTransactions)
+                convertTransactionsWithDate(transactions)
             }
         }
     }
@@ -186,8 +210,12 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
                 transactions.addAll(list)
 
                 convertTransactionsWithDate(transactions)
+                isFilter = true
+                isWriteOffFilter = true
+
             } else {
                 //getTransactions()
+                isWriteOffFilter = false
                 isFilter = false
                 setFilterDate(calendar!!)
             }
@@ -202,9 +230,13 @@ class HistoryTransactionPresenter : MvpPresenter<HistoryTransactionView>() {
 
                 convertTransactionsWithDate(transactions)
                 isFilter = true
+                isWriteOffFilter = true
             } else {
+                isWriteOffFilter = false
                 isFilter = false
-                setFilterDate(calendar!!)
+                transactions.clear()
+                transactions.addAll(fullTransactions)
+                convertTransactionsWithDate(transactions)
             }
         }
     }

@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter.profile
 
+import android.util.Log
 import com.google.gson.Gson
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.Error
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
@@ -25,8 +27,38 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
     }
 
 
+    fun getVerificationEmail() {
+        // val accessToken = getLongStringValue("accessToken")
+
+        val accessToken = MainApplication.getCurrentLoginCredentials().accessToken
+
+        Log.d("myTimeUserProfile",accessToken)
+        compositeDisposable.add(useCase!!.getUserProfileInfo(accessToken!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+                Log.d("myTimeUserProfile","kek")
+                if (throwable == null) {
+                    if (result.email.isNullOrBlank()) {
+                        viewState?.showVerificationLayout(false)
+                    } else {
+                        if (result.isActivated!!) {
+                            viewState?.showVerificationLayout(true)
+                        } else {
+                            viewState?.showVerificationLayout(false)
+                        }
+                    }
+                    com.orhanobut.logger.Logger.d(result)
+                } else {
+                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
+                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                    viewState?.showToast(myError.error.message)
+                }
+            })
+    }
+
     fun verificationEmail(email:String){
-        if(email.isNotEmpty()){
+        if(email.isNotBlank()){
             val accessToken = getLongStringValue("accessToken")
 
             compositeDisposable.add(useCase!!.addEmailToProfile(
@@ -35,8 +67,7 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, throwable ->
                     if (throwable == null) {
-                        viewState?.showToast("Письмо было успешно отправлено на вашу почту.")
-                        viewState?.back()
+                        viewState?.showToast("Письмо отправлено")
                     } else {
                         val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
                         val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)

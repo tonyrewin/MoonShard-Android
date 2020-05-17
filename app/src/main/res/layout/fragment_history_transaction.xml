@@ -110,6 +110,39 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/dateLayout"
+                android:layout_width="89dp"
+                android:layout_height="32dp"
+                android:layout_below="@+id/cashFlowTv"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_toRightOf="@+id/writeOffBtn"
+                android:background="@drawable/wallet_button_active">
+
+            <TextView
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/dateTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="7 апр"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            <ImageView
+                    android:layout_marginEnd="7dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_cancel_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
         <ImageView
                 android:id="@+id/calendarBtn"
                 android:layout_marginEnd="8dp"

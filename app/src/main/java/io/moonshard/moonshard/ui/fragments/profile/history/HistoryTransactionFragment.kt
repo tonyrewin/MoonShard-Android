@@ -62,10 +62,22 @@ class HistoryTransactionFragment : MvpAppCompatFragment(),
                 dateAndTime.get(Calendar.DAY_OF_MONTH)
             )
                 .show()
+
+            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
+            calendarBtn?.visibility = View.GONE
+            dateLayout?.visibility = View.VISIBLE
         }
+
+
 
         backBtn?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
+        }
+
+        dateLayout?.setSafeOnClickListener {
+            presenter.disableFilterDate()
+            dateLayout?.visibility = View.GONE
+            calendarBtn?.visibility = View.VISIBLE
         }
 
         initFilterBtn()
@@ -123,5 +135,55 @@ class HistoryTransactionFragment : MvpAppCompatFragment(),
 
    override fun setData(transitions: List<ListItem>){
         (rv?.adapter as? TransactionsWalletAdapter)?.setTransaction(transitions)
+    }
+
+    private fun setDate(dayOfMonth: Int, month: Int) {
+        when (month) {
+            0 -> {
+                dateTv.text = "$dayOfMonth янв"
+            }
+            1 -> {
+                dateTv.text = "$dayOfMonth фев"
+
+            }
+            2 -> {
+                dateTv.text = "$dayOfMonth мар"
+
+            }
+            3 -> {
+                dateTv.text = "$dayOfMonth апр"
+
+            }
+            4 -> {
+                dateTv.text = "$dayOfMonth мая"
+
+            }
+            5 -> {
+                dateTv.text = "$dayOfMonth июн"
+
+            }
+            6 -> {
+                dateTv.text = "$dayOfMonth июля"
+
+            }
+            7 -> {
+                dateTv.text = "$dayOfMonth авг"
+
+            }
+            8 -> {
+                dateTv.text = "$dayOfMonth сент"
+
+            }
+            9 -> {
+                dateTv.text = "$dayOfMonth окт"
+
+            }
+            10 -> {
+                dateTv.text = "$dayOfMonth нояб"
+            }
+            11 -> {
+                dateTv.text = "$dayOfMonth дек"
+            }
+        }
     }
 }

@@ -4,11 +4,8 @@
         android:layout_width="match_parent"
         android:layout_height="83dp"
         xmlns:tools="http://schemas.android.com/tools"
-        android:background="@drawable/layout_settings_bg"
         android:id="@+id/mainLayout"
         android:orientation="vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:paddingStart="16dp">
 
 
@@ -64,6 +61,7 @@
             />
 
     <View
+            android:id="@+id/viewLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"

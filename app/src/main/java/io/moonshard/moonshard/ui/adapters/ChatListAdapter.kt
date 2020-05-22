@@ -65,6 +65,7 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
         presenter.onBindViewHolder(holder, position, listener)
+
     }
 
     override fun onItemDelete(position: Int) {
@@ -116,5 +117,6 @@ class ChatListAdapter(parentDelegate: MvpDelegate<*>, private val listener: Chat
         var lastMessageReadState: ImageView = view.lastMessageReadState
         var lastMessageDate: TextView = view.lastMessageDate
         var unreadMessageCount: TextView = view.unreadMessageCount
+        var viewLine:View? = view.viewLine
     }
 }

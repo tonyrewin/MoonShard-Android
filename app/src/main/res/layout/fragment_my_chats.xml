@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F9F9F9"
         android:orientation="vertical"
         tools:context=".ui.fragments.mychats.MyChatsFragment">
 
@@ -15,20 +17,20 @@
 
 
         <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/searchLayoutToolbar"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="match_parent">
+                android:visibility="gone">
 
             <RelativeLayout
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="19dp"
-                    android:layout_below="@+id/swipeBtn"
-                    android:layout_toLeftOf="@+id/cancelBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/swipeBtn"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toLeftOf="@+id/cancelBtn">
 
                 <EditText
                         android:id="@+id/findEd"
@@ -41,55 +43,55 @@
                         android:paddingEnd="5dp" />
 
                 <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="13dp"
-                        android:src="@drawable/ic_search"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"/>
+                        android:src="@drawable/ic_search" />
 
             </RelativeLayout>
 
 
             <TextView
-                    android:layout_marginStart="15dp"
                     android:id="@+id/cancelBtn"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="19dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_alignParentEnd="true"
-                    android:textSize="14sp"
-                    android:textColor="#0075FF"
-                    android:text="Отмена"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="19dp"
+                    android:text="Отмена"
+                    android:textColor="#0075FF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
         </RelativeLayout>
 
         <LinearLayout
                 android:id="@+id/defaultToolbar"
-                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="0dp"
+                android:orientation="horizontal"
                 android:padding="0dp"
-                android:orientation="horizontal">
+                android:visibility="visible">
 
             <ImageView
                     android:id="@+id/find"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_marginStart="24dp"
                     android:layout_gravity="center|start"
+                    android:layout_marginStart="24dp"
                     android:src="@drawable/ic_search" />
 
             <TextView
                     android:id="@+id/titleToolBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Мои чаты"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_gravity="center"
+                    android:text="Мои чаты"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -99,8 +101,8 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center|end"
-                    android:layout_weight="0"
                     android:layout_marginEnd="24dp"
+                    android:layout_weight="0"
                     android:src="@drawable/ic_new_chat" />
 
         </LinearLayout>
@@ -109,12 +111,14 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@android:color/black" />
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    </androidx.viewpager.widget.ViewPager>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"></androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

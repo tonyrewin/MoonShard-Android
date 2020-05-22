@@ -110,6 +110,7 @@
             android:visibility="invisible" />
 
     <View
+            android:id="@+id/viewLine"
             android:layout_alignParentBottom="true"
             android:background="#F9F9F9"
             android:layout_width="match_parent"

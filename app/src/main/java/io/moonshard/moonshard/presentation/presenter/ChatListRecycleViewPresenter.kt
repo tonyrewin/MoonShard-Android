@@ -112,6 +112,10 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
         } catch (e: Exception) {
             Log.d(e)
         }
+
+        if(position == chats.size-1){
+            holder.viewLine?.visibility = View.GONE
+        }
     }
 
     fun setData(chats: List<ChatListItem>) {

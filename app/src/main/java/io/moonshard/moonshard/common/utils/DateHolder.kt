@@ -14,7 +14,7 @@ class DateHolder(var unixTimestamp: Long) {
     val calendar: Calendar = Calendar.getInstance()
 
     init {
-        calendar.timeInMillis = unixTimestamp*1000L
+        calendar.timeInMillis = unixTimestamp
         year = calendar.get(Calendar.YEAR)
         month = calendar.get(Calendar.MONTH)
         weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
@@ -67,6 +67,7 @@ class DateHolder(var unixTimestamp: Long) {
     }
 
     fun alreadyComeDate():Boolean{
+        //val unixTime = unixTimestamp*1000L
         val unixTime = unixTimestamp*1000L
         val calendar = Calendar.getInstance()
         return unixTime < calendar.timeInMillis

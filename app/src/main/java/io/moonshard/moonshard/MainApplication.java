@@ -280,9 +280,9 @@ public class MainApplication extends Application {
         TrueTimeRx.build().initializeRx(DEFAULT_NTP_SERVER)
                 .subscribeOn(Schedulers.io())
                 .subscribe(date -> {
-                    Log.d("time", "TrueTime was initialized at: %s" + date);
+                    Log.d("myTimeLog", "TrueTime was initialized at: %s" + date);
                 }, throwable -> {
-                    Log.e("time", "TrueTime init failed: ");
+                    Log.e("myTimeLog", "TrueTime init failed: ");
                 });
     }
 }

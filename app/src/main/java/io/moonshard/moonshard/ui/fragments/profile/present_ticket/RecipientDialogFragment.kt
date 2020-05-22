@@ -67,7 +67,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
         rv?.adapter =
             RecipientWalletAdapter(object :
                 RecipientWalletListener {
-                override fun click() {
+                override fun click(asUnescapedString: String) {
 
                 }
             }, arrayListOf())

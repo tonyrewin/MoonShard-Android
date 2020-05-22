@@ -1,13 +1,17 @@
 package io.moonshard.moonshard.ui.fragments.profile
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.amulyakhare.textdrawable.TextDrawable
+import com.amulyakhare.textdrawable.util.ColorGenerator
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.Utils.drawableToBitmap
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
@@ -15,6 +19,7 @@ import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import java.io.ByteArrayOutputStream
 
 
 class ProfileFragment : MvpAppCompatFragment(),
@@ -36,8 +41,14 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
         presenter.getVerificationEmail()
+
+
+
+
         //presenter.savePrivateKey("")
         //presenter.getPrivateKey("1234567891234567")
+
+
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()

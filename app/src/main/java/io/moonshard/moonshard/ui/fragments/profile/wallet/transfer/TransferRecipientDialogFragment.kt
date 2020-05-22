@@ -26,6 +26,7 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
     @InjectPresenter
     lateinit var presenter: TransferRecipientDialogPresenter
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val metrics = DisplayMetrics()
@@ -60,6 +61,8 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
 
         cancelBtn?.setOnClickListener{
             dismiss()
+
+
         }
     }
 
@@ -68,7 +71,12 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
         rv?.adapter =
             RecipientWalletAdapter(object :
                 RecipientWalletListener {
-                override fun click() {
+                override fun click(jid:String) {
+                    //todo test
+                    chooseBtn?.setOnClickListener{
+                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(jid)
+                        dismiss()
+                    }
 
                 }
             }, arrayListOf())

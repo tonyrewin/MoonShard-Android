@@ -48,6 +48,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLException;
+
 import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
@@ -65,6 +67,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import trikita.log.Log;
 
+import static io.moonshard.moonshard.MainApplication.getContext;
 import static io.moonshard.moonshard.MainApplication.getLoginActivity;
 import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.getLongStringValue;
 import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.setLongStringValue;
@@ -263,6 +266,12 @@ public class XMPPConnection implements ConnectionListener {
     @Override
     public void connectionClosedOnError(Exception e) {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.DISCONNECTED;
+
+        if(e instanceof SSLException){
+            if(e.getMessage().contains("Connection reset by peer")){
+                //перезапускаем интернет соединение
+            }
+        }
         /*
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.DISCONNECTED;
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_OUT;
@@ -345,6 +354,7 @@ public class XMPPConnection implements ConnectionListener {
     }
 
     public Single<byte[]> loadAvatar(String senderID, String nameChat) {
+
         return Single.create(emitter -> {
             if (!senderID.isEmpty()) {
                 if (MainApplication.avatarsCache.containsKey(senderID)) {
@@ -393,10 +403,10 @@ public class XMPPConnection implements ConnectionListener {
     private byte[] createTextAvatar(String firstLetter) {
         Drawable avatarText = TextDrawable.builder()
                 .beginConfig()
-                .width(64)
-                .height(64)
+                .width( Utils.INSTANCE.convertDpToPixel(55F,getContext()))
+                .height(Utils.INSTANCE.convertDpToPixel(55F,getContext()))
                 .endConfig()
-                .buildRound(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+                .buildRect(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();

@@ -1,10 +1,7 @@
 package io.moonshard.moonshard.ui.adapters.wallet
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.models.RosterEntryCustom
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.internal.http2.Http2Reader
 import org.jivesoftware.smack.roster.RosterEntry
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
@@ -26,14 +21,16 @@ import trikita.log.Log
 
 
 interface RecipientWalletListener {
-    fun click()
+    fun click(asUnescapedString: String)
 }
 
-class RecipientWalletAdapter(val listener: RecipientWalletListener, private var contacts: ArrayList<RosterEntry>) :
-    RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>()  {
+class RecipientWalletAdapter(
+    val listener: RecipientWalletListener,
+    private var contacts: ArrayList<RosterEntry>
+) :
+    RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>() {
 
     var selectedPosition = -1
-    var lastItem = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -50,11 +47,13 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
         holder.checkBox.isChecked = selectedPosition == position
 
         holder.checkBox.setOnCheckedChangeListener { view, isChecked ->
-                selectedPosition = position
-                notifyDataSetChanged()
+            listener.click(contacts[position].jid!!.asUnescapedString())
+            selectedPosition = position
+            notifyDataSetChanged()
         }
 
         holder.checkBox.setOnClickListener {
+            listener.click(contacts[position].jid!!.asUnescapedString())
             selectedPosition = position
             notifyDataSetChanged()
         }
@@ -64,19 +63,19 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard(jidUser)
             val nickName: String
-            nickName = if(card.nickName.isNullOrBlank()){
+            nickName = if (card.nickName.isNullOrBlank()) {
                 card.to.asBareJid().localpartOrNull.toString()
-            }else{
+            } else {
                 card.nickName
             }
 
             holder.nameTv?.text = nickName
-            setAvatar(contacts[position].jid!!.asUnescapedString(),nickName,holder.avatar)
-        }catch (e:Exception){
+            setAvatar(contacts[position].jid!!.asUnescapedString(), nickName, holder.avatar)
+        } catch (e: Exception) {
             Logger.d(e)
         }
 
-        if(position==contacts.size-1){
+        if (position == contacts.size - 1) {
             holder.viewLine?.visibility = View.GONE
         }
     }
@@ -108,7 +107,7 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var checkBox:CheckBox = view.findViewById(R.id.checkBox)
+        internal var checkBox: CheckBox = view.findViewById(R.id.checkBox)
         internal var avatar: ImageView? = view.findViewById(R.id.contactAvatar)
         internal var statusTv: TextView? = view.findViewById(R.id.statusTv)
         internal var nameTv: TextView? = view.findViewById(R.id.nameTv)

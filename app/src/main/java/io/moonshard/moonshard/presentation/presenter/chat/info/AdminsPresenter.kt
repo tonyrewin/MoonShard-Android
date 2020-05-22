@@ -20,6 +20,7 @@ class AdminsPresenter : MvpPresenter<AdminsView>() {
             val moderators = muc.moderators
             viewState?.showAdmins(moderators)
             viewState?.hideProgressBar()
+
         } catch (e: Exception) {
             viewState?.hideProgressBar()
             e.message?.let { viewState?.showToast(it) }

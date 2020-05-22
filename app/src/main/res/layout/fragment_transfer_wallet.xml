@@ -154,6 +154,9 @@
 
 
             <RelativeLayout
+                    tools:visibility="visible"
+                    android:id="@+id/recipientLayout"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:layout_below="@+id/view"
@@ -166,7 +169,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="11dp"
                         android:layout_marginEnd="12dp"
-                        android:src="@color/colorPrimary" />
+                        tools:src="@color/colorPrimary" />
 
                 <TextView
                         android:id="@+id/nameAdminTv"
@@ -174,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:layout_toEndOf="@+id/userAdminAvatar"
-                        android:text="Kanaevsky"
+                        tools:text="Kanaevsky"
                         android:textColor="#DE000000"
                         android:textSize="16sp" />
 
@@ -185,7 +188,7 @@
                         android:layout_below="@+id/nameAdminTv"
                         android:layout_alignStart="@+id/nameAdminTv"
                         android:layout_marginTop="4dp"
-                        android:text="online"
+                        tools:text="online"
                         android:textColor="#0075FF" />
 
                 <ImageView

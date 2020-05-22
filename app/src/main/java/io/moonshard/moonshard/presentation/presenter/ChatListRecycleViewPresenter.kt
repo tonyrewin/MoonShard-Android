@@ -3,29 +3,26 @@ package io.moonshard.moonshard.presentation.presenter
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
+import com.amulyakhare.textdrawable.TextDrawable
+import com.amulyakhare.textdrawable.util.ColorGenerator
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.ChatListItem
-import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ChatListRecyclerView
 import io.moonshard.moonshard.repository.ChatListRepository
-import io.moonshard.moonshard.repository.MessageRepository
 import io.moonshard.moonshard.ui.adapters.ChatListAdapter
 import io.moonshard.moonshard.ui.adapters.ChatListListener
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.Jid
-import org.jxmpp.jid.impl.JidCreate
-import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 import java.util.*
 
@@ -45,14 +42,17 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
         position: Int,
         listener: ChatListListener
     ) {
+
         try {
             val chat = chats[position]
+            /*
             MainApplication.getXmppConnection().addChatStatusListener(chat.jid.asUnescapedString())
             if (chat.isGroupChat) {
                 joinChat(chat.jid.asUnescapedString())
             } else {
                 MainApplication.getXmppConnection().chatManager.chatWith(JidCreate.entityBareFrom(chat.jid))
             }
+             */
             setAvatar(chat.jid.asUnescapedString(), chat.chatName, holder.avatar)
             holder.chatName.visibility = View.VISIBLE
             holder.chatName.text = chat.chatName
@@ -141,6 +141,7 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
         }
     }
 
+    /*
     fun joinChat(jid: String) {
         try {
             val manager =
@@ -162,6 +163,8 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
             Log.d(e.message)
         }
     }
+
+     */
 
     private fun sortChatsByRecentlyUpdatedDate() {
         chats = chats.sortedWith(Comparator { o1, o2 ->

@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.moonshardwallet.MainService;
 import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -120,6 +121,7 @@ public class MainApplication extends Application {
                 .webModule(new WebModule(getApplicationContext()))
                 .build();
 
+        /*
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -134,6 +136,8 @@ public class MainApplication extends Application {
             }
         };
 
+
+
         new Handler().postDelayed(() -> {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -144,8 +148,7 @@ public class MainApplication extends Application {
 
             getApplicationContext().bindService(new Intent(getApplicationContext(), P2ChatService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         }, 2000);
-
-
+   */
         instance = this;
         ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
@@ -157,6 +160,9 @@ public class MainApplication extends Application {
                 .logErrorOnRestart(false) //default: true
                 .trackActivities(true) //default: false
                 .apply();
+
+
+       // MainService.initService(getApplicationContext());
     }
 
     private static void setupLogger() {

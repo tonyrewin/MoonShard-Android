@@ -16,7 +16,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
@@ -29,7 +28,6 @@ class EventsPresenter : MvpPresenter<EventsView>() {
     init {
         useCase = RoomsUseCase()
     }
-
 
     fun getRooms() {
         //this hard data - center Moscow
@@ -49,7 +47,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
         jidChat?.let {
             val myEvents = arrayListOf<RoomPin>()
             for (i in events.indices) {
-                if (jidChat == events[i].groupId) {
+                if (jidChat == events[i].parentGroupId) {
                     myEvents.add(events[i])
                 }
             }
@@ -67,12 +65,12 @@ class EventsPresenter : MvpPresenter<EventsView>() {
     fun joinChat(jid: String) {
         try {
             val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
             val entityBareJid = JidCreate.entityBareFrom(jid)
             val muc = manager.getMultiUserChat(entityBareJid)
             val nickName = Resourcepart.from(MainApplication.getCurrentLoginCredentials().username)
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
             val roomName = info.name
 
@@ -87,21 +85,21 @@ class EventsPresenter : MvpPresenter<EventsView>() {
                 unreadMessagesCount = 0
             )
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (muc.isJoined) {
-                        viewState?.showChatScreens(jid)
+                        viewState?.showChatScreen(jid)
                     }
                 }, {
                     if (it is NotFoundException) {
                         ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 if (muc.isJoined) {
-                                    viewState?.showChatScreens(jid)
+                                    viewState?.showChatScreen(jid)
                                 }
                             }, { throwable ->
                                 Logger.d(throwable.message)
@@ -117,7 +115,7 @@ class EventsPresenter : MvpPresenter<EventsView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             isAdminFromOccupants(muc.moderators)
         } catch (e: Exception) {

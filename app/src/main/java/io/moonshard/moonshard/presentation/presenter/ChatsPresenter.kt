@@ -20,10 +20,12 @@ import trikita.log.Log
 
 @InjectViewState
 class ChatsPresenter : BasePresenter<ChatsView>() {
+
     fun observeChatList() {
         val chatsObservable = ChatListRepository.getChats()
         val messagesObservable = MessageRepository.observeMessageStorage()
         Observable.combineLatest<List<ChatEntity>, Class<Any>, Unit>(chatsObservable, messagesObservable, BiFunction { t1, _ ->
+
             val lastMessageSingles = emptyList<Single<MessageEntity>>().toMutableList()
 
             for (chat in t1) {
@@ -65,57 +67,9 @@ class ChatsPresenter : BasePresenter<ChatsView>() {
                 })
                 .autoDispose(this)
         })
+            .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe()
             .autoDispose(this)
     }
-
-    fun setDialogs() {
-        /*val dialogs = ArrayList<GenericDialog>()
-        StreamSupport.stream(chatsHelper.loadLocalChats())
-            .forEach { chatEntity -> dialogs.add(GenericDialog(chatEntity)) }
-        StreamSupport.stream(dialogs)
-            .forEach { dialog ->
-                val messageEntity = LocalDBWrapper.getLastMessage(dialog.id)
-                if (messageEntity != null) {
-                   // dialog.lastMessage = GenericMessage(messageEntity)
-                }
-            }
-
-        chatsHelper.loadLocalChats().observe(this, Observer<List<ChatEntity>>())
-        viewState?.setData(dialogs)*/
-       // loadRemoteContactList()
-    }
-
-    /*
-    private fun loadRemoteContactList() {
-        CompletableFuture.supplyAsync {
-            chatsHelper.remoteContacts
-        }
-            .thenAccept { contacts ->
-                MainApplication.getMainUIThread().post {
-                    if (contacts != null) {
-                        StreamSupport.stream(contacts).forEach { contact ->
-                            val chatID = contact.jid.asUnescapedString()
-                            LocalDBWrapper.createChatEntry(
-                                chatID,
-                                if (contact.name == null) contact.jid.asUnescapedString().split(
-                                    "@"
-                                )[0] else contact.name,
-                                arrayListOf()
-                            )
-                            val dialog = GenericDialog(LocalDBWrapper.getChatByChatID(chatID))
-                            val messageEntity = LocalDBWrapper.getLastMessage(chatID)
-                            if (messageEntity != null) {
-                                dialog.lastMessage = GenericMessage(messageEntity)
-                            }
-
-                            //  dialogListAdapter.upsertItem(dialog)
-                            //  dialogListAdapter.notifyDataSetChanged()
-                        }
-                    }
-                }
-            }
-    }
-     */
 }

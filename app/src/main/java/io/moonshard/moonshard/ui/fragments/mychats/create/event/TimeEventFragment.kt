@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.ui.adapters.RvTimeListener
 import io.moonshard.moonshard.ui.adapters.TimeGroupChatAdapter
@@ -16,6 +17,8 @@ import kotlinx.android.synthetic.main.fragment_time_group_chat.*
 
 
 class TimeEventFragment : Fragment() {
+
+    private var fromManageEventScreen: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +30,10 @@ class TimeEventFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            fromManageEventScreen = it.getBoolean("fromManageEventScreen", false)
+        }
 
         back?.setSafeOnClickListener {
             fragmentManager?.popBackStack()
@@ -41,12 +48,29 @@ class TimeEventFragment : Fragment() {
         times.add("6 дней")
         times.add("Неделя")
 
-
         timesRv?.layoutManager = LinearLayoutManager(view.context)
         timesRv?.adapter = TimeGroupChatAdapter(object : RvTimeListener {
             override fun clickChat(time: String) {
-                ChooseChatRepository.time = time
+                if(fromManageEventScreen){
+                    ChangeEventRepository.event?.ttl = convertDaysToTtl(time)
+                }else{
+                    ChooseChatRepository.time = time
+                }
             }
         }, times)
+    }
+
+    fun convertDaysToTtl(days:String):Long{
+        var ttl:Long = 60*60*24
+        when (days) {
+            "1 день" -> ttl = 60*60*24
+            "2 дня" -> ttl = 60*60*48
+            "3 дня" -> ttl = 60*60*(24*3)
+            "4 дня" -> ttl = 60*60*(24*4)
+            "5 дней" -> ttl = 60*60*(24*5)
+            "6 дней" -> ttl = 60*60*(24*6)
+            "Неделя" -> ttl = 60*60*(24*7)
+        }
+        return ttl
     }
 }

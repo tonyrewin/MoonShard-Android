@@ -33,13 +33,15 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
     fun getMembers(jid: String) {
         try {
+            viewState?.showProgressBar()
+
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
 
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(groupId)
 
             val members = muc.occupants
@@ -94,7 +96,9 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             }
 
             viewState?.showMembers(occupants)
+            viewState?.hideProgressBar()
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState?.showError(it) }
         }
     }
@@ -131,7 +135,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             muc.leave()
             removeChatFromBd(jid)
@@ -141,13 +145,13 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
     }
 
     private fun removeChatFromBd(jid: String) {
-        ChatListRepository.getChatByJid(JidCreate.from(jid))
+        ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chat ->
                 ChatListRepository.removeChat(chat)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         viewState?.showChatsScreen()
                     }, { throwable ->
@@ -163,7 +167,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
             isAdminFromOccupants(moderators)

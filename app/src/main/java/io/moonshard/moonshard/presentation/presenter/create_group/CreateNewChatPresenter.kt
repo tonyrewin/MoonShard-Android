@@ -1,7 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
-import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
@@ -22,17 +21,19 @@ import java.util.*
 @InjectViewState
 class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
-
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        chatName: String
+        chatName: String,
+        description: String
     ) {
+        viewState?.showProgressBar()
         if (chatName.isNotBlank()) {
             val actualChatName: String
-            val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
+            val jidRoomString = UUID.randomUUID().toString()+"-chat" + "@conference.moonshard.tech"
 
             if (chatName.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
+                viewState?.hideProgressBar()
                 return
             } else {
                 actualChatName = chatName.split("@")[0]
@@ -40,7 +41,7 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
 
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
 
@@ -54,7 +55,8 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
                 answerForm.setAnswer("muc#roomconfig_roomname", actualChatName)
-
+                answerForm.setAnswer("muc#roomconfig_publicroom",true)
+                answerForm.setAnswer("muc#roomconfig_roomdesc", description)
                 val arrayList = arrayListOf<String>()
                 arrayList.add("anyone")
                 answerForm.setAnswer("muc#roomconfig_whois",arrayList)
@@ -73,36 +75,35 @@ class CreateNewChatPresenter : MvpPresenter<CreateNewChatView>() {
                 )
 
                 ChatListRepository.addChat(chatEntity)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         joinChat(jidRoomString)
                     }, {
                         it.message?.let { viewState?.showToast(it) }
                     })
             } catch (e: Exception) {
+                viewState?.hideProgressBar()
                 e.message?.let { viewState?.showToast(it) }
             }
         } else {
+            viewState?.hideProgressBar()
             viewState?.showToast("Заполните поле")
         }
     }
 
-    fun joinChat(jid: String) {
+    private fun joinChat(jid: String) {
         try {
-            val manager =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val entityBareJid = JidCreate.entityBareFrom(jid)
-            val muc = manager.getMultiUserChat(entityBareJid)
+            MainApplication.getXmppConnection().addUserStatusListener(jid)
+            MainApplication.getXmppConnection().addChatStatusListener(jid)
+            MainApplication.getXmppConnection().joinChat(jid)
 
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard()
-            val nickName = Resourcepart.from(card.nickName)
-
-            muc.join(nickName)
+            viewState?.hideProgressBar()
             viewState?.showChatScreen(jid)
         } catch (e: Exception) {
-            Logger.d(e.message)
+            viewState?.hideProgressBar()
+            e.message?.let { viewState?.showToast(it) }
         }
     }
+
 }

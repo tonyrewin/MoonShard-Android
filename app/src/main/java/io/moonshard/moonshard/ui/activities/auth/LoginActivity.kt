@@ -3,25 +3,25 @@ package io.moonshard.moonshard.ui.activities.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.PasswordTransformationMethod
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.google.zxing.integration.android.IntentIntegrator
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.presentation.view.LoginView
 import io.moonshard.moonshard.services.XMPPConnectionService
-import kotlinx.android.synthetic.main.activity_login.*
-import moxy.presenter.InjectPresenter
-import android.text.style.UnderlineSpan
-import android.text.SpannableString
-import android.text.method.PasswordTransformationMethod
-import io.moonshard.moonshard.R
-import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.activities.BaseActivity
 import io.moonshard.moonshard.ui.activities.MainActivity
-import kotlinx.android.synthetic.main.activity_login.editEmail
-import kotlinx.android.synthetic.main.activity_login.editPassword
-import kotlinx.android.synthetic.main.activity_login.visiblePassBtn
+import kotlinx.android.synthetic.main.activity_login.*
+import moxy.presenter.InjectPresenter
+import org.jivesoftware.smack.SmackException
+import org.jivesoftware.smack.XMPPException
 
 
 class LoginActivity : BaseActivity(), LoginView {
@@ -31,12 +31,17 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_login)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        val content = SpannableString("Еще нет аккаунта? Регистрация")
-        content.setSpan(UnderlineSpan(), 18, content.length, 0)
-        dontHaveText.text = content
+        val contentNotHaveText = SpannableString("Еще нет аккаунта? Регистрация")
+        contentNotHaveText.setSpan(UnderlineSpan(), 18, contentNotHaveText.length, 0)
+        dontHaveText.text = contentNotHaveText
+
+        val contentForgotPass= SpannableString("Забыли пароль?")
+        contentForgotPass.setSpan(UnderlineSpan(), 0, contentForgotPass.length, 0)
+        forgotPassTv.text = contentForgotPass
 
         var isSecurity = true
         visiblePassBtn?.setSafeOnClickListener {
@@ -58,8 +63,8 @@ class LoginActivity : BaseActivity(), LoginView {
             } else {
                 actualUserName = editEmail.text.toString() + "@moonshard.tech"
                 showLoader()
-                saveLoginCredentials(actualUserName, editPassword.text.toString())
-                startService()
+                presenter.login(actualUserName,editPassword.text.toString())
+                //startService()
             }
         }
 
@@ -69,11 +74,11 @@ class LoginActivity : BaseActivity(), LoginView {
         }
 
         forgotPassTv?.setSafeOnClickListener {
-
+            startActivity(Intent(this, PasswordRecoveryActivity::class.java))
         }
     }
 
-    private fun startService() {
+   override fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
     }
 
@@ -83,11 +88,6 @@ class LoginActivity : BaseActivity(), LoginView {
             hideLoader()
             showContactsScreen()
         }
-    }
-
-    private fun saveLoginCredentials(email: String, password: String) {
-        SecurePreferences.setValue("jid", email)
-        SecurePreferences.setValue("pass", password)
     }
 
     override fun showContactsScreen() {
@@ -113,7 +113,21 @@ class LoginActivity : BaseActivity(), LoginView {
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
-            e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+
+            when (e) {
+                is XMPPException -> {
+                    showError("Произошла ошибка на сервере")
+                }
+                is SmackException.NoResponseException -> {
+                    showError("Время ожидания ответа от сервера истекло")
+                }
+                is SmackException.NotConnectedException -> {
+                    showError("Отсутствует интернет-соединение")
+                }
+                else -> {
+                    e.message?.let { showError(it) } ?: showError("Произошла ошибка")
+                }
+            }
         }
     }
 

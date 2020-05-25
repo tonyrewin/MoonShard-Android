@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.presentation.presenter.create_group
 
 import android.annotation.SuppressLint
+import android.util.Log
+import com.orhanobut.logger.Logger
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.db.ChooseChatRepository
@@ -16,7 +18,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.packet.VCard
 import org.jxmpp.jid.impl.JidCreate
@@ -51,26 +52,27 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     @SuppressLint("CheckResult")
     fun createGroupChat(
-        username: String, latitude: Double?, longitude: Double?,
+        nameEvent: String, latitude: Double?, longitude: Double?,
         ttl: Int,
         category: Category?,
-        group: ChatEntity?, eventStartDate: Long
+        group: ChatEntity?, eventStartDate: Long, address: String
     ) {
 
         if (latitude != null && longitude != null && category != null) {
             val actualUserName: String
-            val jidRoomString = UUID.randomUUID().toString() + "@conference.moonshard.tech"
+            val jidRoomString =
+                UUID.randomUUID().toString() + "-event" + "@conference.moonshard.tech"
 
-            if (username.contains("@")) {
+            if (nameEvent.contains("@")) {
                 viewState?.showToast("Вы ввели недопустимый символ")
                 return
             } else {
-                actualUserName = username.split("@")[0]
+                actualUserName = nameEvent.split("@")[0]
             }
 
             try {
                 val manager =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                    MainApplication.getXmppConnection().multiUserChatManager
                 val entityBareJid = JidCreate.entityBareFrom(jidRoomString)
                 val muc = manager.getMultiUserChat(entityBareJid)
                 val nickName =
@@ -82,12 +84,14 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                 val answerForm = form.createAnswerForm()
                 answerForm.setAnswer("muc#roomconfig_persistentroom", true)
                 answerForm.setAnswer("muc#roomconfig_roomname", actualUserName)
+                answerForm.setAnswer("muc#roomconfig_publicroom", true)
                 val arrayList = arrayListOf<String>()
                 arrayList.add("anyone")
-                answerForm.setAnswer("muc#roomconfig_whois",arrayList)
+                answerForm.setAnswer("muc#roomconfig_whois", arrayList)
                 muc.sendConfigurationForm(answerForm)
 
-                val vm = VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val vm =
+                    VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
                 val vcard = VCard()
                 vm.saveVCard(vcard, JidCreate.entityBareFrom(jidRoomString))
 
@@ -99,32 +103,36 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
                     0
                 )
 
-                ChatListRepository.addChat(chatEntity)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        createRoomOnServer(
-                            latitude,
-                            longitude,
-                            ttl,
-                            jidRoomString,
-                            category,
-                            group,
-                            eventStartDate
-                        )
-                    }
+                createRoomOnServer(
+                    latitude,
+                    longitude,
+                    ttl,
+                    jidRoomString,
+                    category,
+                    group,
+                    eventStartDate,
+                    nameEvent,
+                    address,
+                    chatEntity
+                )
             } catch (e: Exception) {
                 e.message?.let { viewState?.showToast(it) }
             }
         } else {
             viewState?.showToast("Заполните поля")
         }
+
+
     }
 
-    fun getGroups() {
+    private fun getGroups() {
         ChatListRepository.getChats()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .map {
+                Log.d("TAAAAg", Thread.currentThread().name)
+                it.filter { chatEntity -> chatEntity.jid.contains("chat") }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ chats ->
                 getAdminChats(chats)
             }, { throwable ->
@@ -144,10 +152,9 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         val newAdminChats = arrayListOf<ChatEntity>()
         newAdminChats.addAll(adminChats)
 
-
         for (i in adminChats.indices) {
-            for(k in events.indices){
-                if(adminChats[i].jid==events[k].roomId){
+            for (k in events.indices) {
+                if (adminChats[i].jid == events[k].roomId) {
                     newAdminChats.remove(adminChats[i])
                 }
             }
@@ -159,7 +166,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         return try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             isAdminFromOccupants(muc.moderators)
         } catch (e: Exception) {
@@ -197,7 +204,8 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     private fun createRoomOnServer(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
-        category: Category, group: ChatEntity?, eventStartDate: Long
+        category: Category, group: ChatEntity?, eventStartDate: Long, name: String, address: String
+        , chatEntity: ChatEntity
     ) {
         val categories = arrayListOf<Category>()
         categories.add(category)
@@ -208,14 +216,25 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
             roomId,
             categories,
             group?.jid,
-            eventStartDate
+            eventStartDate, name, address
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { _, throwable ->
                 if (throwable == null) {
-                    viewState?.showMapScreen()
-                    ChooseChatRepository.clean()
+                    ChatListRepository.addChat(chatEntity)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            //important
+                            MainApplication.getXmppConnection().addUserStatusListener(roomId)
+                            MainApplication.getXmppConnection().addChatStatusListener(roomId)
+                            MainApplication.getXmppConnection().joinChat(roomId)
+                            ChooseChatRepository.clean()
+                            viewState?.showMapScreen()
+                        }, {
+                            Logger.d(it)
+                        })
                 } else {
                     viewState?.showToast("Ошибка: ${throwable.message}")
                 }

@@ -88,7 +88,7 @@ public final class DateFormatter {
     }
 
     /**
-     * Interface used to format dates before they were displayed (e.g. dialogs time, messages date headers etc.).
+     * Interface used to format dates before they were displayed (e.g. dialogs showTimeDays, messages date headers etc.).
      */
     public interface Formatter {
 

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.AdminsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -19,6 +20,7 @@ import trikita.log.Log
 
 interface AdminListener {
     fun remove(categoryName: String)
+    fun clickAdminPermission(occupant: Occupant)
 }
 
 class AdminsAdapter(
@@ -43,6 +45,10 @@ class AdminsAdapter(
         holder.nameTv?.text = moderators[position].nick
         holder.roleTv?.text = moderators[position].role.name
         setAvatar(moderators[position].jid.asUnescapedString(), holder.userAvatar!!)
+
+        holder.itemView.setSafeOnClickListener {
+            listener.clickAdminPermission(moderators[position])
+        }
     }
 
     private fun setAvatar(jid: String, imageView: ImageView) {
@@ -70,5 +76,4 @@ class AdminsAdapter(
         internal var roleTv: TextView? = view.findViewById(R.id.roleTv)
         internal var userAvatar: ImageView? = view.findViewById(R.id.userAdminAvatar)
     }
-
 }

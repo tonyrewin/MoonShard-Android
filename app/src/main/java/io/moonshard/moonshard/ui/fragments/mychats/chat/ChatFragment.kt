@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,10 +16,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.ChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ChatView
 import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.chats.MyChatsPagerAdapter
-import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ChatInfoFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.EventInfoFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.ProfileUserFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.FullPhotoFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -28,8 +26,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     var idChat: String = ""
     var fromMap: Boolean? = false
-    var fromCreateNewChat:Boolean=false
-    var stateChat:String = "join"
+    var fromCreateNewChat: Boolean = false
+    var stateChat: String = "join"
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
@@ -43,25 +41,33 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         arguments?.let {
             idChat = it.getString("chatId")
-            fromMap = it.getBoolean("fromMap")
-            stateChat = it.getString("stateChat","join")
-            fromCreateNewChat = it.getBoolean("fromCreateNewChat",false)
+            fromMap = it.getBoolean("fromMap", false)
+            stateChat = it.getString("stateChat", "join")
+            fromCreateNewChat = it.getBoolean("fromCreateNewChat", false)
             presenter.setChatId(idChat)
             ChatRepository.idChatCurrent = idChat
             ChatRepository.stateChat = stateChat
             presenter.isEvent()
         }
 
-
         backBtn?.setSafeOnClickListener {
-            if(fromCreateNewChat){
-                activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            }else{
-                fragmentManager?.popBackStack()
-                ChatRepository.clean()
+            if (fromCreateNewChat) {
+                activity!!.supportFragmentManager.popBackStack(null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+            } else {
+                if(parentFragment is MainChatFragment){
+                    if(parentFragment!!.childFragmentManager.backStackEntryCount==0){
+                        parentFragment!!.fragmentManager?.popBackStack()
+                    }else{
+                        parentFragment!!.childFragmentManager.popBackStackImmediate()
+                    }
+                }
             }
+            ChatRepository.clean()
         }
     }
 
@@ -106,37 +112,33 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     }
 
     private fun showEventInfo(chatId: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val eventFragment = EventInfoFragment()
-        eventFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, eventFragment, "EventInfoFragment")?.hide(this)
-            ?.addToBackStack("EventInfoFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showEventInfo(chatId)
+    }
+
+    fun showCreateNewEventScreen(idChat: String) {
+        (parentFragment as? MainChatFragment)?.showCreateNewEventScreen(idChat)
+    }
+
+    fun showChatFragment(jid:String){
+        (parentFragment as? MainChatFragment)?.showChatScreen(jid)
     }
 
     private fun showChatInfo(chatId: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val chatFragment = ChatInfoFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "ChatInfoFragment")?.hide(this)
-            ?.addToBackStack("ChatInfoFragment")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showChatInfo(chatId)
     }
 
-    fun showProfileUser(jid: String) {
-        val bundle = Bundle()
-        bundle.putString("userJid", jid)
-        bundle.putBoolean("fromChatFragment",true)
-        val fragment = ProfileUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, fragment, "ProfileUserFragment")?.hide(this)
-            ?.addToBackStack("ProfileUserFragment")
-            ?.commit()
+     fun showProfileUser(jid: String) {
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid,false)
+    }
+
+    fun showProfileUserFromMuc(jid: String){
+        val jidUser = presenter.getFullStringUser(jid)
+        (parentFragment as? MainChatFragment)?.showProfileUserScreen(jidUser,true)
+    }
+
+    fun showFullScreen(url:String){
+        //toolBar?.visibility = View.GONE
+        (parentFragment as? MainChatFragment)?.showFullScreen(url)
     }
 
     override fun setDataMuc(
@@ -144,13 +146,6 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     ) {
         nameChatTv?.text = name
         valueMembersChatTv.text = "$valueOccupants участников, $valueOnlineMembers онлайн"
-    }
-
-     fun showChatsScreen() {
-        val fragment = MyChatsFragment()
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        fragmentTransaction?.replace(R.id.container, fragment, null)
-            ?.commit()
     }
 
     override fun setNameUser(name: String) {
@@ -165,7 +160,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun initViewPager() {
         initToolBarInfoChat()
-        tabLayout.setupWithViewPager(viewPager)
+        tabLayout?.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,
             context!!,
@@ -177,7 +172,8 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
     override fun initViewPagerFromEvent() {
         tabLayout?.visibility = View.GONE
         initToolBarInfoEvent()
-        tabLayout.setupWithViewPager(viewPager)
+
+        tabLayout?.setupWithViewPager(viewPager)
         val sectionsPagerAdapter = MyChatsPagerAdapter(
             childFragmentManager,
             context!!,
@@ -192,13 +188,14 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        presenter.disconnectFromChat(stateChat)
-        ChatRepository.clean()
 
-        fromMap?.let {
-            if (it) {
-                (activity as MainActivity).showBottomNavigationBar()
-            }
+
+/*
+        for (fragment in childFragmentManager.fragments) {
+        childFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
         }
+ */
+        ChatRepository.clean()
     }
+
 }

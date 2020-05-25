@@ -9,4 +9,6 @@ interface MembersChatView: MvpView {
     fun showError(error:String)
     fun showMembers(members:List<Occupant>)
     fun removeMember(member: Occupant)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

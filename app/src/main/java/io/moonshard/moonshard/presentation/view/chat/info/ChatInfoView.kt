@@ -24,4 +24,6 @@ interface ChatInfoView: MvpView {
     fun showChangeChatButton(isShow: Boolean)
     fun hideLine()
     fun hideDescription()
+    fun showProgressBar()
+    fun hideProgressBar()
 }

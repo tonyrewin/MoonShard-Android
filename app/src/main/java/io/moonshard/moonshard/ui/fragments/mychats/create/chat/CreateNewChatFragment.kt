@@ -5,15 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.create_group.CreateNewChatPresenter
 import io.moonshard.moonshard.presentation.view.create.CreateNewChatView
-import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.ChatsFragment
-import io.moonshard.moonshard.ui.fragments.mychats.MyChatsFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_create_new_chat.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -35,33 +31,27 @@ class CreateNewChatFragment : MvpAppCompatFragment(), CreateNewChatView {
         super.onViewCreated(view, savedInstanceState)
 
         newChat?.setSafeOnClickListener {
-            presenter.createGroupChat(nameTv.text.toString())
+            presenter.createGroupChat(nameTv.text.toString(),descriptionTv.text.toString())
         }
 
         back?.setSafeOnClickListener {
-            activity?.onBackPressed()
+            fragmentManager?.popBackStack()
         }
     }
 
-    override fun showChatsScreen() {
-        val fragment = MyChatsFragment()
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        fragmentTransaction?.replace(R.id.container, fragment, null)
-            ?.addToBackStack(null)
-            ?.commit()
-    }
-
     override fun showChatScreen(chatId: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        bundle.putBoolean("fromCreateNewChat",true)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreatedChatScreen")?.commit()
+        (activity as? MainActivity)?.showMainChatScreen(chatId,fromCreateNewChat = true)
     }
 
     override fun showToast(text: String) {
         Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

@@ -23,19 +23,23 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
 
     fun getDataInfo(jid: String) {
         try {
+            viewState?.showProgressBar()
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
             val info =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(muc.room)
 
             viewState?.showName(info.name)
             viewState?.showDescription(info.description)
             viewState?.showOccupantsCount(info.occupantsCount.toString())
             viewState?.showAdminsCount(muc.moderators.size.toString())
+            viewState?.hideProgressBar()
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
+            viewState?.showToast("Произошла ошибка")
             Logger.d(e)
         }
     }
@@ -48,12 +52,12 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         mimeType: String?
     ) {
         try {
-            viewState.showProgressBar()
+            viewState?.showProgressBar()
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -65,6 +69,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
 
                 })
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState.showToast(it) }
         }
     }
@@ -87,15 +92,6 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             val card = vm.loadVCardMuc(muc.room)
             card.setAvatar(bytes,mimeType)
             vm.saveVCard(card,muc.room)
-
-
-            /*
-            val form = muc.configurationForm
-            val answerForm = form.createAnswerForm()
-            answerForm.setAnswer("muc#roomconfig_lang",avatarBytes)
-            muc.sendConfigurationForm(answerForm)
-
-             */
         } catch (e: Exception) {
             Logger.d(e.message)
         }
@@ -109,6 +105,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
                 viewState?.hideProgressBar()
                 viewState.showChatInfo()
             }, {
+                viewState?.hideProgressBar()
                 Logger.d(it)
             })
     }
@@ -124,22 +121,18 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
         }
     }
 
-    fun setAvatar(jid: String, bytes: ByteArray?, mimeType: String?) {
-        val manager = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+    fun destroyRoom(jid: String) {
         try {
-            val card = manager.loadVCard(JidCreate.entityBareFrom(jid))
-            if (bytes != null && mimeType != null) {
-                card.setAvatar(bytes, mimeType)
-            }
-            manager.saveVCard(card)
-        } catch (e: SmackException.NoResponseException) {
-            e.printStackTrace()
-        } catch (e: XMPPException.XMPPErrorException) {
-            e.printStackTrace()
-        } catch (e: SmackException.NotConnectedException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(JidCreate.entityBareFrom(jid))
+            val myJid = MainApplication.getXmppConnection().jid.asUnescapedString()
+            val roomJid = JidCreate.entityBareFrom(jid)
+            muc.destroy(myJid, roomJid)
+            viewState?.showChatsScreen()
+        } catch (e: Exception) {
+            Logger.d(e)
+            viewState?.showToast("Произошла ошибка на сервере")
         }
     }
 }

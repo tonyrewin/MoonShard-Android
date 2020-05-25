@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F9F9F9"
+        tools:context=".ui.fragments.profile.wallet.transfer.TransferWalletFragment">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@android:color/white"
+                android:elevation="6dp">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:padding="0dp">
+
+                <ImageView
+                        android:id="@+id/backBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_arrow_back" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Перевести средства"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat_bold" />
+
+            </RelativeLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <LinearLayout
+                android:id="@+id/balanceLayout"
+                android:layout_below="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/layout_settings_bg"
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="17dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="0 ₽"
+                    android:textColor="#333333"
+                    android:textSize="34sp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Текущий баланс"
+                    android:textColor="#6F6F6F"
+                    android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+                android:id="@+id/chooseMember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/balanceLayout"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/layout_settings_bg">
+
+            <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_user_plus" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_toRightOf="@+id/icon"
+                    android:text="Выбрать получателя"
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="17dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chooseMember"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/layout_settings_bg">
+
+            <TextView
+                    android:id="@+id/recipientTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Получатель"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/recipientTv"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="#F5F5F5" />
+
+
+            <RelativeLayout
+                    tools:visibility="visible"
+                    android:id="@+id/recipientLayout"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_below="@+id/view"
+                    android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/userAdminAvatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="12dp"
+                        tools:src="@color/colorPrimary" />
+
+                <TextView
+                        android:id="@+id/nameAdminTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@+id/userAdminAvatar"
+                        tools:text="Kanaevsky"
+                        android:textColor="#DE000000"
+                        android:textSize="16sp" />
+
+                <TextView
+                        android:id="@+id/statusTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/nameAdminTv"
+                        android:layout_alignStart="@+id/nameAdminTv"
+                        android:layout_marginTop="4dp"
+                        tools:text="online"
+                        android:textColor="#0075FF" />
+
+                <ImageView
+                        android:id="@+id/removeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="22dp"
+                        android:src="@drawable/ic_trash_bin"
+                        android:visibility="gone" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="83dp"
+                android:layout_alignParentBottom="true"
+                android:background="#FFFFFF">
+
+            <EditText
+                    android:id="@+id/moneyValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="80dp"
+                    android:layout_toLeftOf="@+id/btn"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:hint="700 ₽"
+                    android:textColor="#333333"
+                    android:textColorHint="#DDDDDD"
+                    android:textSize="34sp" />
+
+            <ImageView
+                    android:id="@+id/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="18dp"
+                    android:background="@drawable/ic_fill_up_enable_full"
+                    android:visibility="gone" />
+
+            <ImageButton
+                    android:id="@+id/nextBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="18dp"
+                    android:background="@drawable/ic_fill_up_disable"
+                    android:src="@drawable/ic_next_white" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+            android:visibility="gone"
+            android:id="@+id/bg"
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

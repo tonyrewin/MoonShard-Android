@@ -15,7 +15,6 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.api.RoomPin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
@@ -45,16 +44,16 @@ class EventAdapter(
         try {
             val jid = JidCreate.entityBareFrom(events[position].roomId)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(jid)
 
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(jid)
 
             holder.nameEvent?.text = roomInfo.name ?: "Информация отсутствует"
             holder.descriptionTv?.text = roomInfo.description ?: "Информация отсутствует"
-            setAvatar(events[position].groupId, roomInfo.name, holder.avatarEvent)
+            setAvatar(events[position].parentGroupId, roomInfo.name, holder.avatarEvent)
 
         } catch (e: Exception) {
             Log.d(e.message)

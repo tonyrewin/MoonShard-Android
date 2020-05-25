@@ -9,4 +9,6 @@ interface MessagesView: MvpView {
     fun addToEnd(msgs:ArrayList<GenericMessage>,reverse: Boolean)
     fun addToStart(message: GenericMessage, reverse: Boolean)
     fun setMessages(msgs: ArrayList<GenericMessage>, reverse: Boolean)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

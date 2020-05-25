@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:background="#F9F9F9"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.profile.mytickets.MyTicketInfoFragment">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@android:color/white"
+            android:elevation="6dp">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:padding="0dp">
+
+            <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Твои билеты"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/montserrat_bold" />
+
+            <TextView
+                    android:id="@+id/actionBtn"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:layout_marginEnd="17dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Действия"
+                    android:textColor="#0075FF"
+                    android:textSize="14sp" />
+
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.cardview.widget.CardView
+            app:cardElevation="0dp"
+            android:id="@+id/cardInfo"
+            android:layout_below="@+id/toolBar"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/layout_settings_bg"
+            app:cardCornerRadius="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/avatarTicket"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:background="@drawable/bck_rounded"
+                android:scaleType="centerCrop"
+                android:src="@drawable/party_test" />
+
+        <TextView
+                android:id="@+id/labelTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatarTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Валерий Меладзе"
+                android:textColor="#333333"
+                android:textSize="17sp" />
+
+        <TextView
+                android:id="@+id/startDateTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/labelTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="4.5dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="1 июля 2020 г. в 23:00"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+        <TextView
+                android:id="@+id/locationTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/startDateTicket"
+                android:layout_marginStart="9dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Москва. Mutabor club."
+                android:textColor="#0075FF"
+                android:textSize="14sp" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatarTicket"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="19dp"
+                android:src="@drawable/ic_check_circle" />
+
+        <View
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/locationTicket"
+                android:layout_marginTop="14dp"
+                android:background="#F5F5F5" />
+
+        <TextView
+                android:id="@+id/typeTicket"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="11dp"
+                android:layout_below="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Ввходной билет"
+                android:textColor="#333333"
+                android:textSize="17sp"/>
+
+        <TextView
+                android:id="@+id/placeTicket"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp"
+                android:layout_marginStart="9dp"
+                android:layout_below="@+id/typeTicket"
+                android:text="Билет на все дни мероприятия"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_alignParentEnd="true"
+                android:id="@+id/numberTicketTv"
+                android:layout_marginEnd="25dp"
+                android:layout_below="@+id/view"
+                android:layout_alignTop="@+id/typeTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="№ заказа"
+                android:textColor="#333333"
+                android:textSize="17sp"/>
+
+        <TextView
+                android:layout_alignTop="@+id/placeTicket"
+                android:layout_alignLeft="@+id/numberTicketTv"
+                android:text="021457859710"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/numberTicketTv"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#9B9BB6"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        
+        
+        <ImageView
+                android:layout_marginBottom="11dp"
+                android:src="@drawable/ic_qr"
+                android:layout_marginTop="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/placeTicket"
+                android:id="@+id/qrCode"
+                android:layout_width="170dp"
+                android:layout_height="170dp"/>
+
+        <TextView
+                android:id="@+id/eventEndedTv"
+                android:visibility="gone"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="12sp"
+                android:textColor="#9B9BB6"
+                android:layout_below="@+id/qrCode"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="9dp"
+                android:text="Мероприятие завершилось"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/actionLayout"
+            android:layout_below="@+id/cardInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp">
+
+            <ImageView
+                    android:id="@+id/presentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_rotate_yellow" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/presentIcon"
+                    android:text="Вернуть билет" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+        <View
+                android:layout_marginEnd="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F5F5F5" />
+
+        <RelativeLayout
+                android:id="@+id/myTicketBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp">
+
+
+            <ImageView
+                    android:id="@+id/ticketIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_download_pdf" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/ticketIcon"
+                    android:text="Сохранить как PDF" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+        <View
+                android:layout_marginEnd="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F5F5F5" />
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+            <ImageView
+                    android:id="@+id/walletIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_present" />
+
+            <TextView
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/walletIcon"
+                    android:text="Подарить билет" />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_next_gray" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/deleteTicketLayout"
+            android:layout_below="@+id/actionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
+
+        <ImageView
+                android:id="@+id/removeTicketIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_delete_ticket" />
+
+        <TextView
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/removeTicketIcon"
+                android:text="Удалить билет" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

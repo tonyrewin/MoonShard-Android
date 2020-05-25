@@ -10,7 +10,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.ProfileUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.ProfileUserView
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_profile_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -23,7 +23,7 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
 
     private var userJid = ""
 
-    private var fromChatFragment = false
+    private var fromMuc = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +38,7 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
 
         arguments?.let {
             userJid = it.getString("userJid")
-            fromChatFragment = it.getBoolean("fromChatFragment",false)
+            fromMuc = it.getBoolean("fromMuc",false)
             presenter.getInfoProfile(userJid)
             presenter.getAvatar(userJid)
         }
@@ -48,10 +48,14 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
         }
 
         sendMsgBtn?.setSafeOnClickListener {
-            if(fromChatFragment){
-                fragmentManager?.popBackStack()
-            }else{
+            //todo problem there is
+            //showChatScreen(userJid)
+
+
+            if(fromMuc){
                 presenter.startChatWithUser(userJid)
+            }else{
+                fragmentManager?.popBackStack()
             }
         }
     }
@@ -79,15 +83,14 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
     }
 
     override fun showChatScreen(chatId: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", chatId)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.add(R.id.container, chatFragment, "chatScreen")?.hide(this)
-            ?.addToBackStack("chatScreen")
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.showChatWithStack(chatId)
     }
 
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
 
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
 }

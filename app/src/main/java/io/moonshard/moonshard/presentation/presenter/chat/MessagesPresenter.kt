@@ -1,8 +1,9 @@
 package io.moonshard.moonshard.presentation.presenter.chat
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import com.instacart.library.truetime.TrueTime
+import com.instacart.library.truetime.TrueTimeRx
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.NotFoundException
 import io.moonshard.moonshard.models.GenericMessage
@@ -18,20 +19,26 @@ import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import org.jivesoftware.smack.SmackException
+import org.jivesoftware.smack.XMPPException
 import org.jivesoftware.smackx.forward.packet.Forwarded
+import org.jivesoftware.smackx.httpfileupload.HttpFileUploadManager
 import org.jivesoftware.smackx.mam.MamManager
+import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityBareJid
-import org.jxmpp.jid.FullJid
+import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
 import org.jxmpp.jid.parts.Resourcepart
 import org.jxmpp.stringprep.XmppStringprepException
 import trikita.log.Log
+import zlc.season.rxdownload4.download
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -47,6 +54,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     @SuppressLint("CheckResult")
     fun setChatId(chatId: String) {
+        viewState?.showProgressBar()
         chatID = chatId
         ChatListRepository.getChatByJid(JidCreate.bareFrom(chatId))
             .subscribeOn(Schedulers.io())
@@ -54,7 +62,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             .subscribe({
                 chat = it
                 loadLocalMessages()
-               // loadMoreMessages() // FIXME
+                // loadMoreMessages() // FIXME
             }, {
                 com.orhanobut.logger.Logger.d(it.message)
             })
@@ -62,8 +70,10 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
     }
 
     @SuppressLint("CheckResult")
-    fun sendMessage(text: String) {
-        sendMessageInternal(text)
+    fun sendMessage(text: String, isFile: Boolean = false) {
+        if (text.isBlank()) return
+
+        sendMessageInternal(text, isFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -79,7 +89,6 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun join() {
         try {
-
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()
             val nickName = Resourcepart.from(card.nickName)
@@ -89,7 +98,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 MainApplication.getXmppConnection()?.multiUserChatManager?.getMultiUserChat(jid)
             val mec = muc?.getEnterConfigurationBuilder(nickName)
 
-         //   mec?.requestNoHistory()
+            //   mec?.requestNoHistory()
             val mucEnterConfig = mec?.build()
             muc?.join(mucEnterConfig)
             muc?.addMessageListener(MainApplication.getXmppConnection().network)
@@ -99,7 +108,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         }
     }
 
-    private fun sendMessageInternal(text: String): Single<MessageEntity> {
+    private fun sendMessageInternal(text: String, isFile: Boolean): Single<MessageEntity> {
         return Single.create {
             val jid: EntityBareJid
             try {
@@ -127,7 +136,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
 
             val timestamp = try {
-                TrueTime.now().time
+                TrueTimeRx.now().time
             } catch (e: Exception) {
                 // Fallback to Plain Old Java CurrentTimeMillis
                 System.currentTimeMillis()
@@ -140,7 +149,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 text = text,
                 isSent = false,
                 isRead = false,
-                isCurrentUserSender = true
+                isCurrentUserSender = true,
+                isFile = isFile
             )
             // message.sender = ??? FIXME
             message.chat.target = this.chat
@@ -150,20 +160,55 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         }
     }
 
-    fun sendFile(path: File) {
+    fun sendFile(file: File) {
         if (MainApplication.getXmppConnection().isConnectionReady) {
-            val jid: FullJid?
-            try {
-                jid = JidCreate.entityFullFrom("$chatID/Smack")
-                MainApplication.getXmppConnection().sendFile(jid, path)
-            } catch (e: XmppStringprepException) {
+            upLoadFile(file).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    sendMessage(it,true)
+                }, {
 
+                })
+        }
+    }
+
+    private fun upLoadFile(file: File): Single<String> {
+        return Single.create {
+            val manager =
+                HttpFileUploadManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            try {
+                val url = manager.uploadFile(file).toString()
+                it.onSuccess(url)
+            } catch (e:Exception) {
+                it.onError(Throwable("Did not load"))
             }
         }
     }
 
+   fun  downloadFile(url:String){
+      val disposable = url.download()
+           .observeOn(AndroidSchedulers.mainThread())
+           .subscribeBy(
+               onNext = { progress ->
+
+                 //  progress.
+                 //  //download progress
+                   //button.text = "${progress.downloadSizeStr()}/${progress.totalSizeStr()}"
+                   //button.setProgress(progress)
+               },
+               onComplete = {
+                   //download complete
+                  // button.text = "Open"
+               },
+               onError = {
+                   //download failed
+                   //button.text = "Retry"
+               }
+           )
+   }
+
     override fun onDestroy() {
-        onNewMessageDisposable?.dispose()
+       // onNewMessageDisposable?.dispose()
     }
 
     override fun onFirstViewAttach() {
@@ -175,18 +220,24 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
         return object : Observer<MessageEntity> {
 
             override fun onSubscribe(d: Disposable) {
-                onNewMessageDisposable = d
+                //onNewMessageDisposable = d
             }
 
             override fun onNext(message: MessageEntity) {
                 ChatListRepository.updateUnreadMessagesCountByJid(JidCreate.bareFrom(chat.jid), 0)
-                    .subscribe()
-                viewState?.addToStart(GenericMessage(message), true)
+                    .subscribe({ }, {
+                        Logger.d(it)
+                    })
+                viewState.addToStart(GenericMessage(message), true)
             }
 
-            override fun onError(e: Throwable) {}
+            override fun onError(e: Throwable) {
+                Logger.d(e)
+            }
 
-            override fun onComplete() {}
+            override fun onComplete() {
+                val complete = ""
+            }
         }
     }
 
@@ -229,11 +280,16 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                     messageEntity.sender.target = chatUser
 
                                                     MessageRepository.saveMessage(messageEntity)
-                                                        .observeOn(Schedulers.io())
-                                                        .subscribeOn(AndroidSchedulers.mainThread())
+                                                        .subscribeOn(Schedulers.io())
+                                                        .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe({
-                                                            adapterMessages.add(GenericMessage(messageEntity))
-                                                        },{ throwable -> Log.e(throwable.message) })
+                                                            adapterMessages.add(
+                                                                GenericMessage(
+                                                                    messageEntity
+                                                                )
+                                                            )
+                                                        },
+                                                            { throwable -> Log.e(throwable.message) })
                                                     //need save message
                                                 }, {
                                                     val chatUser = ChatUser(
@@ -256,12 +312,19 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                                             messageEntity.chat.target = chat
                                                             messageEntity.sender.target = chatUser
 
-                                                            MessageRepository.saveMessage(messageEntity)
-                                                                .observeOn(Schedulers.io())
-                                                                .subscribeOn(AndroidSchedulers.mainThread())
+                                                            MessageRepository.saveMessage(
+                                                                messageEntity
+                                                            )
+                                                                .subscribeOn(Schedulers.io())
+                                                                .observeOn(AndroidSchedulers.mainThread())
                                                                 .subscribe({
-                                                                    adapterMessages.add(GenericMessage(messageEntity))
-                                                                },{ throwable -> Log.e(throwable.message) })
+                                                                    adapterMessages.add(
+                                                                        GenericMessage(
+                                                                            messageEntity
+                                                                        )
+                                                                    )
+                                                                },
+                                                                    { throwable -> Log.e(throwable.message) })
                                                         }
                                                 })
 
@@ -271,7 +334,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                         }
                     MainApplication.getMainUIThread().post {
                         adapterMessages.sortWith(messageComparator)
-                        viewState?.addToEnd(adapterMessages, true)
+                        viewState.addToEnd(adapterMessages, true)
                     }
                 }
             }, {
@@ -290,6 +353,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
             genericMessages.sortWith(messageComparator)
             viewState.setMessages(genericMessages, true)
+            viewState.hideProgressBar()
         }, {
             com.orhanobut.logger.Logger.d(it.message)
         })
@@ -314,7 +378,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                                     chatID,
                                     message.stanzaId,
                                     message.from.asBareJid().asUnescapedString(),
-                                    forwardedMessage.delayInformation.stamp.time,
+                                    forwardedMessage.delayInformation.stamp.showTimeDays,
                                     message.body,
                                     true,
                                     true
@@ -358,7 +422,8 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             }
         }
     }
-//mamManager.queryArchive(MamManager.MamQueryArgs.builder().limitResultsToJid(JidCreate.from(chatID)).build()).messageCount
+
+    //mamManager.queryArchive(MamManager.MamQueryArgs.builder().limitResultsToJid(JidCreate.from(chatID)).build()).messageCount
     @SuppressLint("CheckResult")
     fun loadMessagesFromMAM(): Single<MamManager.MamQuery> {
         return Single.create {
@@ -366,15 +431,16 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 val mamManager: MamManager? = MainApplication.getXmppConnection().mamManager
                 if (mamManager != null) {
                     MessageRepository.getFirstMessage(chat.jid)
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ msg ->
-                            val mamQuery =  mamManager.queryArchive(
+                            val mamQuery = mamManager.queryArchive(
                                 MamManager.MamQueryArgs.builder()
                                     .beforeUid(msg.messageUid)
                                     .limitResultsToJid(JidCreate.from(chatID))
                                     .setResultPageSizeTo(50)
-                                    .build())
+                                    .build()
+                            )
                             it.onSuccess(
                                 mamQuery
                             )

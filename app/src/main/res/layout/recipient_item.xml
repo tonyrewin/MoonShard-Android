@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical">
+
+
+
+    <CheckBox
+            android:checked="false"
+            android:button="@drawable/checkbox_selector_recipient"
+            android:layout_centerVertical="true"
+            android:id="@+id/checkBox"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_toEndOf="@+id/checkBox"
+            android:id="@+id/contactAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            tools:src="@color/colorPrimary" />
+
+    <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/contactAvatar"
+            android:text="Oleg Petrov"
+            android:textColor="#DE000000"
+            android:textSize="16sp" />
+
+    <TextView
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="14sp"
+            android:id="@+id/statusTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nameTv"
+            android:layout_alignStart="@+id/nameTv"
+            android:layout_marginTop="4dp"
+            android:text="online"
+            android:textColor="#0075FF" />
+
+    <View
+            android:layout_marginStart="54dp"
+            android:visibility="visible"
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/statusTv"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="22dp"
+            android:background="#F5F5F5" />
+
+</RelativeLayout>

@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.moonshard.moonshard.MainApplication
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_add_new_event.*
 
@@ -25,15 +27,13 @@ class AddNewEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        yourGeolocation?.text = MainApplication.getAddress()
+
         startLocalGroup?.setSafeOnClickListener {
             showCreateNewChatScreen()
         }
     }
-    fun showCreateNewChatScreen(){
-        val chatFragment =
-            CreateNewEventFragment()
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")?.addToBackStack("CreateNewEventFragment")
-            ?.commit()
+    private fun showCreateNewChatScreen(){
+        (activity as? MainActivity)?.showCreateNewEventScreen()
     }
 }

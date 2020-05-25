@@ -1,10 +1,12 @@
 package io.moonshard.moonshard.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.R
@@ -36,6 +38,14 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
 
         holder.iconCategory?.let {
             setDrawable(it,categories[position])
+        }
+
+        if (focusedItem == position) {
+            holder.categoryName?.setTextColor(Color.parseColor("#0075FF"))
+            holder.mainLayout?.setBackgroundColor(Color.parseColor("#EEF6FF"))
+        }else{
+            holder.mainLayout?.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            holder.categoryName?.setTextColor(Color.parseColor("#333333"))
         }
 
         holder.categoryName?.text = categories[position].categoryName
@@ -75,6 +85,10 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
         notifyDataSetChanged()
     }
 
+    fun clearCategories(){
+        focusedItem = -1
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = categories.size
 
@@ -82,6 +96,6 @@ class CategoryMapAdapter(val listener: CategoryMapListener, private var categori
         internal var categoryName: TextView? = view.findViewById(R.id.nameCategoryTv)
         internal var categoryInfo: TextView? = view.findViewById(R.id.categoryInfoTv)
         internal var iconCategory: ImageView? = view.findViewById(R.id.categoryIv)
-        internal var mainLayout: LinearLayout? = view.findViewById(R.id.mainLayout)
+        internal var mainLayout: RelativeLayout? = view.findViewById(R.id.mainLayout)
     }
 }

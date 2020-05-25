@@ -20,8 +20,14 @@ interface EventInfoView: MvpView {
     fun showError(error: String)
     fun showChatsScreen()
     fun setAvatar(avatar: Bitmap?)
+    fun setAvatarOrganizer(avatar: Bitmap?)
+    fun hideOrganizerLayout()
+    fun showDataOrganizer(organizerName:String)
 
     fun showChangeChatButton(isShow: Boolean)
     fun hideLine()
     fun hideDescription()
+    fun setStartDate(date:String)
+    fun showProgressBar()
+    fun hideProgressBar()
 }

@@ -55,7 +55,6 @@
                 android:background="@drawable/circle"
                 android:scaleType="center"
                 android:src="@drawable/ic_location" />
-
     </RelativeLayout>
 
     <include
@@ -66,6 +65,5 @@
             android:id="@+id/infoBottomSheet"
             layout="@layout/fragment_bottom_sheet_info"
             android:visibility="gone" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,7 +9,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.InviteUserPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.InviteUserView
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_invite_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -32,7 +32,6 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         arguments?.let {
             idChat = it.getString("chatId")
         }
@@ -51,12 +50,6 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
     }
 
     override fun showChatScreen() {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val chatFragment = ChatFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment)?.hide(this)?.addToBackStack(null)
-            ?.commit()
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
     }
 }

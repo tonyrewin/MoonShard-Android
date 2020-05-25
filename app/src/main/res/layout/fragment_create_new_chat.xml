@@ -35,9 +35,10 @@
                     android:text="Создать групповой чат"
                     android:textColor="#333333"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/montserrat_bold"/>
 
             <TextView
+                    android:fontFamily="@font/montserrat_bold"
                     android:id="@+id/newChat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -46,8 +47,7 @@
                     android:layout_marginEnd="14dp"
                     android:text="Готово"
                     android:textColor="#0075FF"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="14sp" />
 
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -64,14 +64,17 @@
             android:orientation="vertical">
 
         <TextView
+                android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="11dp"
                 android:text="Название"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-
         <EditText
+                android:textColorHint="#DDDDDD"
+                android:hint="Введите название"
+                android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
                 android:id="@+id/nameTv"
                 android:layout_width="match_parent"
@@ -87,5 +90,52 @@
                 android:paddingEnd="5dp" />
 
     </LinearLayout>
+
+
+    <LinearLayout
+            android:id="@+id/profileDescriptionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical">
+
+        <TextView
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="11dp"
+                android:text="Описание чата"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:textColorHint="#DDDDDD"
+                android:hint="Введите описание"
+                android:layout_marginEnd="13dp"
+                android:id="@+id/descriptionTv"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/rounded_edittext"
+                android:inputType="text"
+                android:maxLength="255"
+                android:maxLines="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp" />
+
+    </LinearLayout>
+
+
+    <ProgressBar
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </LinearLayout>

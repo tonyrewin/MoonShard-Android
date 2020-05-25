@@ -23,9 +23,13 @@ object ChatListRepository {
 
     fun addChat(chatEntity: ChatEntity): Completable {
         return Completable.create {
-            if (!it.isDisposed) {
-                chatBox.put(chatEntity)
-                it.onComplete()
+            try {
+                if (!it.isDisposed) {
+                    chatBox.put(chatEntity)
+                    it.onComplete()
+                }
+            }catch (e:Exception){
+                it.onError(e)
             }
         }
     }
@@ -39,23 +43,23 @@ object ChatListRepository {
                 }
             }
             MessageRepository.removeMessagesByJid(JidCreate.bareFrom(chatEntity.jid)).subscribe {
-                if (it.isDisposed) {
+                if (!it.isDisposed) {
                     it.onComplete()
                 }
             }
         }
     }
 
-    fun getChatByJid(jid: Jid): Observable<ChatEntity> {
-        return Observable.create {
+    fun getChatByJid(jid: Jid): Single<ChatEntity> {
+        return Single.create {
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
-            RxQuery.observable(query).subscribe { chat ->
+            RxQuery.single(query).subscribe { chat ->
                 if (!it.isDisposed) {
                     if (chat.isEmpty()) {
                         it.onError(NotFoundException())
                         return@subscribe
                     }
-                    it.onNext(chat.first())
+                    it.onSuccess(chat.first())
                 }
             }
         }
@@ -105,18 +109,20 @@ object ChatListRepository {
     }
 
     fun updateUnreadMessagesCountByJid(jid: Jid, newCountValue: Int): Completable {
-        return Completable.create {
+        return Completable.create { completableEmitter ->
             val query = chatBox.query().equal(ChatEntity_.jid, jid.asUnescapedString()).build()
             RxQuery.single(query).subscribe { chat ->
-                if (!it.isDisposed) {
+                if (!completableEmitter.isDisposed) {
                     if (chat.isEmpty()) {
-                        it.onError(NotFoundException())
+                        completableEmitter.onError(NotFoundException())
                         return@subscribe
                     }
                     chat.first().unreadMessagesCount = newCountValue
-                    addChat(chat.first()).subscribe {
-                        it.onComplete()
-                    }
+                    addChat(chat.first()).subscribe({
+                        completableEmitter.onComplete()
+                    }, {
+                        completableEmitter.onError(it)
+                    })
                 }
             }
         }
@@ -136,6 +142,13 @@ object ChatListRepository {
                 }
                 it.onNext(chat.first().unreadMessagesCount)
             }
+        }
+    }
+
+    fun clearChats(): Completable {
+        return Completable.create {
+            chatBox.removeAll()
+            it.onComplete()
         }
     }
 }

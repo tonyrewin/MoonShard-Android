@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.hdodenhof.circleimageview.CircleImageView
@@ -96,6 +97,6 @@ class GroupsAdapter(val listener: GroupsListener, private var groups: ArrayList<
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var categoryName: TextView? = view.findViewById(R.id.name)
         internal var iconCategory: CircleImageView? = view.findViewById(R.id.iconCategory)
-        internal var mainLayout: LinearLayout? = view.findViewById(R.id.mainLayout)
+        internal var mainLayout: RelativeLayout? = view.findViewById(R.id.mainLayout)
     }
 }

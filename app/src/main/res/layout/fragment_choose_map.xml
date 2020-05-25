@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
@@ -116,31 +117,35 @@
             android:background="@android:color/white">
 
         <ImageView
+                android:layout_centerVertical="true"
                 android:id="@+id/locationIconIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="11dp"
                 android:src="@drawable/ic_map_pin_circle" />
 
         <TextView
+                android:fontFamily="@font/roboto_regular"
                 android:id="@+id/bottomTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="14dp"
                 android:layout_toRightOf="@+id/locationIconIv"
-                android:text="Где вы хотите создать чат?"
+                android:text="Где будет проходить событие?"
                 android:textColor="#DE000000"
                 android:textSize="16sp" />
 
         <TextView
+                android:layout_marginTop="4dp"
+                tools:text="Сосничная улица,11к1"
+                android:fontFamily="@font/roboto_regular"
                 android:id="@+id/addressTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bottomTv"
                 android:layout_alignLeft="@+id/bottomTv"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="13dp"
                 android:maxLines="1"
                 android:textColor="#8A000000"
                 android:textSize="14sp" />

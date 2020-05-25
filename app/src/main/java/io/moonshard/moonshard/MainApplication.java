@@ -13,8 +13,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.instacart.library.truetime.TrueTime;
+import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -34,6 +36,9 @@ import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
+import io.reactivex.schedulers.Schedulers;
+
+import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.removeLongStringValue;
 
 public class MainApplication extends Application {
 
@@ -44,7 +49,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
-    public final static String DEFAULT_NTP_SERVER = "time.apple.com";
+    public final static String DEFAULT_NTP_SERVER = "0.ru.pool.ntp.org";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
     private static String jid;
@@ -57,12 +62,16 @@ public class MainApplication extends Application {
     public final static Map<String, byte[]> avatarsCache = new ConcurrentHashMap<>();
     private static Location currentLocation;
 
-    public static String getAdress() {
-        return adress;
+    public static String getAddress() {
+        if (adress == null) {
+            return "";
+        } else {
+            return adress;
+        }
     }
 
-    public static void setAdress(String adress) {
-        MainApplication.adress = adress;
+    public static void setAddress(String address) {
+        MainApplication.adress = address;
     }
 
     private static String adress;
@@ -102,6 +111,8 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        initTime();
+
         setupLogger();
 
         component = DaggerApplicationComponent.builder()
@@ -139,7 +150,7 @@ public class MainApplication extends Application {
         ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
         preferences = PreferenceManager.getDefaultSharedPreferences(instance);
-        initTrueTime();
+        //initTrueTime();
         loadLoginCredentials();
 
         CaocConfig.Builder.create()
@@ -168,9 +179,13 @@ public class MainApplication extends Application {
         return instance.getApplicationContext();
     }
 
-    public static String getJid() { return jid; }
+    public static String getJid() {
+        return jid;
+    }
 
-    public static void setJid(String jid1) { jid = jid1; }
+    public static void setJid(String jid1) {
+        jid = jid1;
+    }
 
     public static SharedPreferences getPreferences() {
         return preferences;
@@ -181,14 +196,14 @@ public class MainApplication extends Application {
     }
 
     public static void setXmppConnection(XMPPConnection xmppConnection) {
-        MainApplication.xmppConnection =  xmppConnection;
+        MainApplication.xmppConnection = xmppConnection;
     }
 
     public static void loadLoginCredentials() {
         currentLoginCredentials = new LoginCredentials();
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
-        if(jid != null && password != null) {
+        if (jid != null && password != null) {
             String username = jid.split("@")[0];
             String jabberHost = jid.split("@")[1];
             currentLoginCredentials.username = username;
@@ -203,13 +218,17 @@ public class MainApplication extends Application {
         SecurePreferences.removeValue("jid");
         SecurePreferences.removeValue("pass");
         SecurePreferences.removeValue("logged_in");
+        SecurePreferences.removeValue("inviteInChats");
+        removeLongStringValue("accessToken");
+        removeLongStringValue("refreshToken");
+
     }
 
     private static void initTrueTime() {
         new Thread(() -> {
             boolean isTrueTimeIsOn = false;
             int count = 0;
-            while(!isTrueTimeIsOn && count <= 10) {
+            while (!isTrueTimeIsOn && count <= 10) {
                 try {
                     TrueTime.build().withNtpHost(DEFAULT_NTP_SERVER).initialize();
                     isTrueTimeIsOn = true;
@@ -255,6 +274,16 @@ public class MainApplication extends Application {
 
     public static LoginCredentials getCurrentLoginCredentials() {
         return currentLoginCredentials;
+    }
+
+    void initTime() {
+        TrueTimeRx.build().initializeRx(DEFAULT_NTP_SERVER)
+                .subscribeOn(Schedulers.io())
+                .subscribe(date -> {
+                    Log.d("myTimeLog", "TrueTime was initialized at: %s" + date);
+                }, throwable -> {
+                    Log.e("myTimeLog", "TrueTime init failed: ");
+                });
     }
 }
 

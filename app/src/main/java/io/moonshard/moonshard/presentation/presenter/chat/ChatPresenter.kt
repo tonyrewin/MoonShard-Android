@@ -21,6 +21,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
+import org.jxmpp.jid.parts.Resourcepart
 import trikita.log.Log
 
 
@@ -36,10 +37,14 @@ class ChatPresenter : BasePresenter<ChatView>() {
 
     fun setChatId(chatId: String) {
         chatID = chatId
-        ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME update unread messages count on each message read
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe()
+        ChatListRepository.updateUnreadMessagesCountByJid(chatId, 0) // FIXME updateRooms unread messages count on each message read
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+
+            },{
+                Logger.d(it)
+            })
             .autoDispose(this)
         if(chatId.contains("conference")){
             getDataInfoMuc()
@@ -66,16 +71,29 @@ class ChatPresenter : BasePresenter<ChatView>() {
         }
     }
 
-
     fun getDataInfoMuc() {
         try {
             val groupId = JidCreate.entityBareFrom(chatID)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val roomInfo =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getRoomInfo(groupId)
+
+            //we can optimization
+            if(!muc.isJoined){
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard()
+                val nickName = Resourcepart.from(card.nickName)
+                muc.join(nickName)
+
+                android.os.Handler().postDelayed({
+                    MainApplication.getXmppConnection().addChatStatusListener(chatID)
+                    MainApplication.getXmppConnection().addUserStatusListener(chatID)
+                }, 2000)
+            }
+
             val occupants = muc.occupants
 
             val name = roomInfo.name
@@ -117,7 +135,11 @@ class ChatPresenter : BasePresenter<ChatView>() {
 
     fun isEvent() {
         if(chatID.contains("conference")){
-            getRooms()
+            if(chatID.contains("event")){
+                viewState.initViewPagerFromEvent()
+            }else if(chatID.contains("chat")){
+                viewState.initViewPager()
+            }
         }else{
             viewState?.initViewPagerFromEvent()
         }
@@ -126,10 +148,9 @@ class ChatPresenter : BasePresenter<ChatView>() {
     fun getRooms() {
         //this hard data - center Moscow
         useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { rooms, throwable ->
-                initPager(rooms)
                 if (throwable != null) {
                     throwable.message?.let { viewState?.showError(it) }
                 }
@@ -137,30 +158,15 @@ class ChatPresenter : BasePresenter<ChatView>() {
             .autoDispose(this)
     }
 
-    fun initPager(rooms: ArrayList<RoomPin>?) {
-        if (rooms != null) {
-            for (i in rooms.indices) {
-                if (rooms[i].roomId == chatID) {
-                    viewState.initViewPagerFromEvent()
-                    return
-                }
-            }
-            viewState.initViewPager()
-        } else {
-            viewState.initViewPager()
-        }
-    }
-
-    fun disconnectFromChat(state:String){
-        try {
-            if(state=="read") {
-                val muc =
-                    MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                        .getMultiUserChat(JidCreate.entityBareFrom(chatID))
-                muc.leave()
-            }
+    fun getFullStringUser(jid:String):String{
+        return try {
+            val groupId = JidCreate.entityBareFrom(chatID)
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            muc.getOccupant(JidCreate.entityFullFrom(jid)).jid.asUnescapedString()
         }catch (e:Exception){
-            Logger.d(e)
+            ""
         }
     }
 }

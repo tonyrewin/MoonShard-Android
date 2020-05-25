@@ -7,7 +7,7 @@
 
 
     <TextView
-            android:id="@+id/kek"
+            android:id="@+id/layoutToolbar"
             android:textColor="@android:color/black"
             android:layout_gravity="center"
             android:text="Хуй"

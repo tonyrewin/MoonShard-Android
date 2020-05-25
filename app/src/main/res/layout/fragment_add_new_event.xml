@@ -12,14 +12,12 @@
             android:layout_marginTop="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="171dp"
-            android:layout_height="171dp"
-            />
-
+            android:layout_height="171dp"/>
 
     <TextView
-            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="29dp"
             android:gravity="center_horizontal|bottom"
             android:textColor="#000000"
             android:lineSpacingExtra="3sp"
@@ -33,7 +31,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginStart="18dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="5dp"
             android:lineSpacingExtra="1sp"
             android:translationY="0.62sp"
             android:gravity="center_horizontal|bottom"
@@ -44,20 +42,34 @@
             android:layout_height="wrap_content"/>
 
     <TextView
-            android:layout_marginTop="13dp"
-            android:lineSpacingExtra="2sp"
-            android:translationY="0.8sp"
-            android:gravity="center_horizontal|bottom"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
-            android:text="Ваше местоположение:: \n Улица Парковая, Одинцово, Россия"
+            android:text="Ваше местоположение: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:paddingEnd="53dp"
+            android:paddingStart="57dp"
+            android:lineSpacingExtra="2sp"
+            android:translationY="0.8sp"
+            android:gravity="center_horizontal|bottom"
+            android:letterSpacing="0.01"
+            android:fontFamily="@font/roboto_regular"
+            android:id="@+id/yourGeolocation"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#9B9BB6"
+            android:textSize="14sp"
+            android:text="Улица Парковая, Одинцовsdaо, Россия"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     <Button
             android:id="@+id/startLocalGroup"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="14dp"
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#0075FF"
             android:textColor="@android:color/white"

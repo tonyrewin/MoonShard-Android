@@ -15,7 +15,8 @@ data class MessageEntity(
     var isSent: Boolean = false,
     var isRead: Boolean = false,
     var isCurrentUserSender: Boolean = false,
-    var isSystemMessage: Boolean = false
+    var isSystemMessage: Boolean = false,
+    var isFile:Boolean=false
 ) {
     lateinit var chat: ToOne<ChatEntity>
     lateinit var sender: ToOne<ChatUser>

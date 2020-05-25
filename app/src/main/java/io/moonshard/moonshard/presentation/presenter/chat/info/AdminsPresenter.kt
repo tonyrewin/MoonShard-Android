@@ -11,14 +11,18 @@ import org.jxmpp.jid.impl.JidCreate
 class AdminsPresenter : MvpPresenter<AdminsView>() {
 
     fun getAdmins(jid: String) {
+        viewState?.showProgressBar()
         try {
             val groupId = JidCreate.entityBareFrom(jid)
             val muc =
-                MultiUserChatManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
             viewState?.showAdmins(moderators)
+            viewState?.hideProgressBar()
+
         } catch (e: Exception) {
+            viewState?.hideProgressBar()
             e.message?.let { viewState?.showToast(it) }
         }
     }

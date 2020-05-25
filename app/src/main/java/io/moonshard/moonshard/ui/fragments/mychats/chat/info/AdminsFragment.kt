@@ -12,6 +12,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.AdminsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import io.moonshard.moonshard.ui.adapters.chat.AdminListener
 import io.moonshard.moonshard.ui.adapters.chat.AdminsAdapter
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_admins.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -51,6 +52,9 @@ class AdminsFragment : MvpAppCompatFragment(),
     }
 
     private fun showAddAdminScreen(idChat: String) {
+        (parentFragment as? MainChatFragment)?.showAddAdminScreen(idChat)
+
+        /*
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment =
@@ -58,9 +62,11 @@ class AdminsFragment : MvpAppCompatFragment(),
         fragment.arguments = bundle
         val ft = activity?.supportFragmentManager?.beginTransaction()
 
-        ft?.add(R.id.container, fragment, "AddAdminFragment")?.hide(this)
+        ft?.replace(R.id.mainContainer, fragment, "AddAdminFragment")?.hide(this)
             ?.addToBackStack("AddAdminFragment")
             ?.commit()
+
+         */
     }
 
     override fun showToast(text: String) {
@@ -71,12 +77,28 @@ class AdminsFragment : MvpAppCompatFragment(),
         (adminsRv?.adapter as? AdminsAdapter)?.setAdmins(admins)
     }
 
+    override fun showAdminPermission(occupant: Occupant) {
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,occupant)
+    }
+
     private fun initAdapter() {
         adminsRv?.layoutManager = LinearLayoutManager(context)
         adminsRv?.adapter = AdminsAdapter(this, object : AdminListener {
             override fun remove(categoryName: String) {
 
             }
+
+            override fun clickAdminPermission(occupant: Occupant) {
+                showAdminPermission(occupant)
+            }
         }, arrayListOf())
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

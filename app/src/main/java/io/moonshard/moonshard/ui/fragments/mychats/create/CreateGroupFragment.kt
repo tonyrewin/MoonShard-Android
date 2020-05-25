@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_create_group.*
 
 class CreateGroupFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +29,7 @@ class CreateGroupFragment : Fragment() {
         initViewPager()
 
         back?.setSafeOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
+            fragmentManager?.popBackStack()
         }
     }
 

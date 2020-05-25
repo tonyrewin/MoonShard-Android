@@ -14,7 +14,6 @@ import io.moonshard.moonshard.presentation.presenter.EventsPresenter
 import io.moonshard.moonshard.presentation.view.chat.EventsView
 import io.moonshard.moonshard.ui.adapters.chat.EventAdapter
 import io.moonshard.moonshard.ui.adapters.chat.EventListener
-import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import kotlinx.android.synthetic.main.fragment_events.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -26,7 +25,6 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
     lateinit var presenter: EventsPresenter
 
     var idChat: String = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,35 +47,19 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         }
     }
 
-    fun showCreateNewEventScreen(idChat: String) {
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val chatFragment = CreateNewEventFragment()
-        chatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, chatFragment, "CreateNewEventFragment")
-            ?.addToBackStack("CreateNewEventFragment")
-            ?.commit()
+    private fun showCreateNewEventScreen(idChat: String) {
+        (parentFragment as? ChatFragment)?.showCreateNewEventScreen(idChat)
     }
 
-
-
-   override fun showChatScreens(jid:String){
-       val bundle = Bundle()
-       bundle.putString("chatId", jid)
-       bundle.putBoolean("fromEvent",true)
-       val chatFragment = ChatFragment()
-       chatFragment.arguments = bundle
-       val ft = activity?.supportFragmentManager?.beginTransaction()
-       ft?.replace(R.id.container, chatFragment, "chatScreen")?.addToBackStack(null)
-           ?.commit()
+   override fun showChatScreen(jid:String){
+       (parentFragment as? ChatFragment)?.showChatFragment(jid)
     }
 
     private fun initAdapter() {
         eventsRv?.layoutManager = LinearLayoutManager(context)
         eventsRv?.adapter = EventAdapter(object : EventListener {
             override fun eventClick(event: RoomPin) {
-                event.roomId?.let { showChatScreens(it) }
+                event.roomId?.let { showChatScreen(it) }
             }
         }, arrayListOf())
     }
@@ -107,5 +89,9 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
             eventsRv.visibility = View.VISIBLE
             createNewEventLayout.visibility = View.GONE
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 }

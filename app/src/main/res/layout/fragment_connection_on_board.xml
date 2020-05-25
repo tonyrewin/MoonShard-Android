@@ -26,17 +26,18 @@
             android:src="@drawable/ic_connection_onboarding" />
 
     <TextView
+            android:fontFamily="@font/montserrat_bold"
             android:id="@+id/textViewBold"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/image"
             android:textSize="20sp"
             android:text="Всегда оставайся на связи"
-            android:textStyle="bold"
             android:textColor="#333333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     <TextView
+            android:fontFamily="@font/roboto_regular"
             android:id="@+id/textView"
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"

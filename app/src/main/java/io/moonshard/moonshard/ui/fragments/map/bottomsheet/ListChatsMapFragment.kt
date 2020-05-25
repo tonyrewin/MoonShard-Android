@@ -14,11 +14,12 @@ import io.moonshard.moonshard.presentation.view.ListChatMapView
 import io.moonshard.moonshard.ui.adapters.ListChatMapAdapter
 import io.moonshard.moonshard.ui.adapters.ListChatMapListener
 import io.moonshard.moonshard.ui.fragments.map.MapFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.ChatFragment
-import io.moonshard.moonshard.ui.fragments.mychats.chat.MessagesFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_list_chats_map.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
@@ -30,7 +31,6 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list_chats_map, container, false)
     }
 
@@ -41,39 +41,35 @@ class ListChatsMapFragment : MvpAppCompatFragment(), ListChatMapView {
     }
 
     override fun setChats(chats: ArrayList<RoomPin>) {
-        (groupsRv?.adapter as ListChatMapAdapter).setChats(chats)
+        (groupsRv?.adapter as? ListChatMapAdapter)?.setChats(chats)
     }
 
     private fun initAdapter() {
         groupsRv?.layoutManager = LinearLayoutManager(context)
         groupsRv?.adapter = ListChatMapAdapter(object : ListChatMapListener {
             override fun clickChat(room: RoomPin) {
-                presenter.joinChat(room.roomId.toString())
+                (parentFragment as? MapFragment)?.showMarkerBottomSheet(room)
             }
         }, arrayListOf())
     }
 
-    override fun showChatScreens(chatId: String) {
-        var fragment: Fragment? = null
-        MainApplication.getMainUIThread().post {
-            for(i in fragmentManager!!.fragments.indices){
-                if(fragmentManager!!.fragments[i].tag == "MapScreen"){
-                    fragment = (fragmentManager!!.fragments[i] as? MapFragment)
-                }
-            }
-
-            val bundle = Bundle()
-            bundle.putString("chatId", chatId)
-            bundle.putBoolean("fromMap", true)
-            val chatFragment = ChatFragment()
-            chatFragment.arguments = bundle
-            val ft = activity?.supportFragmentManager?.beginTransaction()
-            ft?.add(R.id.container, chatFragment)?.hide(this)?.hide(fragment!!)?.addToBackStack(null)
-                ?.commit()
-        }
-    }
-
     fun updateChats(){
         presenter.getChats()
+    }
+
+    fun updateDateListRooms(date:String,calendar: Calendar?=null){
+        presenter.setDateFilter(date,calendar)
+    }
+
+    fun setFilter(text: String) {
+        presenter.setFilter(text)
+    }
+
+    override fun onDataChange(){
+        (groupsRv?.adapter as? ListChatMapAdapter)?.notifyDataSetChanged()
+    }
+
+    override fun updatePinsOnMap( events:ArrayList<RoomPin>) {
+        (parentFragment as MapFragment).updateRoomsLocale(events)
     }
 }

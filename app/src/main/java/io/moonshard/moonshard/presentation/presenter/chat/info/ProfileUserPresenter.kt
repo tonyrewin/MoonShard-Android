@@ -58,17 +58,16 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                 unreadMessagesCount = 0
             )
 
-            ChatListRepository.getChatByJid(JidCreate.from(jid))
+            ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     viewState?.showChatScreen(jid)
                 }, {
                     if(it is NotFoundException) {
-
                         ChatListRepository.addChat(chatEntity)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 createChatOneToOne(jid)
                             }, { throwable ->
@@ -77,7 +76,9 @@ class ProfileUserPresenter: MvpPresenter<ProfileUserView>() {
                     }
                 })
         } catch (e: Exception) {
-            e.message?.let { viewState?.showError(it) }
+            e.message?.let {
+                viewState?.showError(it)
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.repository.RoomsRepository
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -20,9 +21,10 @@ class RoomsUseCase {
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         categories: ArrayList<Category>,
         idGroup: String?,
-        eventStartDate: Long
+        eventStartDate: Long,
+        name:String,address:String
     ): Single<RoomPin> {
-        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate)
+        return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate,name,address)
     }
 
     fun getRooms(
@@ -37,5 +39,17 @@ class RoomsUseCase {
 
     fun getRoomsByCategory(categoryId: Int,lat: String, lng: String, radius: String):Single<ArrayList<RoomPin>>{
         return roomsRepository.getRoomsByCategory(categoryId,lat, lng,radius)
+    }
+
+    fun changeRoom(room:RoomPin):Single<RoomPin>{
+        return roomsRepository.changeRoom(room)
+    }
+
+    fun getRoom(eventId:Long):Single<RoomPin>{
+        return roomsRepository.getRoom(eventId)
+    }
+
+    fun deleteRoom(eventId:Long):Completable{
+        return roomsRepository.deleteRoom(eventId)
     }
 }

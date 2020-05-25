@@ -2,6 +2,7 @@ package io.moonshard.moonshard
 
 import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
+import io.moonshard.moonshard.models.api.CreatePaymentRequestModel
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.api.auth.request.*
 import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
@@ -87,12 +88,10 @@ interface API {
     @GET
     fun getUserProfileInfo(@Url url: String, @Header("Authorization") authHeader: String): Single<ProfileUserResponse>
 
-    @Headers("Accept: application/json", "Content-type:application/json")
+    @Headers("Accept: application/json", "Content-type: application/json")
     @GET
     fun createPay(
         @Url url: String,
-        @Query("sum") sum: Int,
-        @Query("account") account: String,
-        @Query("desc") desc: String
+        @Body request: CreatePaymentRequestModel
     ): Single<Response>
 }

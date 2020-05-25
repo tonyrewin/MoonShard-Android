@@ -2,20 +2,15 @@ package io.moonshard.moonshard;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.moonshardwallet.MainService;
 import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -162,7 +157,7 @@ public class MainApplication extends Application {
                 .apply();
 
 
-       // MainService.initService(getApplicationContext());
+        // MainService.initService(getApplicationContext());
     }
 
     private static void setupLogger() {

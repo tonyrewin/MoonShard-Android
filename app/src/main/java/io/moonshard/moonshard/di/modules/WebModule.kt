@@ -28,6 +28,7 @@ class WebModule(var context: Context) {
             .addInterceptor(HttpLoggingInterceptor())
             .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(1,TimeUnit.MINUTES)
+            .followRedirects(false)
             .build()
 
         return Retrofit.Builder()
@@ -60,6 +61,7 @@ class WebModule(var context: Context) {
     }
 
     @Provides
+    @Singleton
     fun providesUnitPayRepository(): UnitPayRepository {
         return UnitPayRepository()
     }

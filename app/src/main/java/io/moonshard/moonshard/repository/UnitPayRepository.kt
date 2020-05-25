@@ -8,7 +8,7 @@ import io.moonshard.moonshard.models.api.CreatePaymentRequestModel
 import io.reactivex.Single
 import javax.inject.Inject
 
-object UnitPayRepository {
+class UnitPayRepository {
     @Inject
     internal lateinit var api: API
 

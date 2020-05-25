@@ -89,7 +89,7 @@ interface API {
     fun getUserProfileInfo(@Url url: String, @Header("Authorization") authHeader: String): Single<ProfileUserResponse>
 
     @Headers("Accept: application/json", "Content-type: application/json")
-    @GET
+    @POST
     fun createPay(
         @Url url: String,
         @Body request: CreatePaymentRequestModel

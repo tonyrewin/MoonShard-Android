@@ -4,8 +4,12 @@ import io.moonshard.moonshard.repository.UnitPayRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 class UnitPayUseCase {
+    @Inject
+    internal lateinit var repository: UnitPayRepository
+
     /**
      * Create the payment
      * @return URL to open in user's browser
@@ -14,7 +18,7 @@ class UnitPayUseCase {
         sum: Int, account: String, desc: String
     ): Single<String> {
         return Single.create<String> {
-            UnitPayRepository.createPay(sum, account, desc)
+            repository.createPay(sum, account, desc)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ res ->

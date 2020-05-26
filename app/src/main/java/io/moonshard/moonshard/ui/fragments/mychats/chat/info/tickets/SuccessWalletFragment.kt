@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import kotlinx.android.synthetic.main.fragment_success_wallet.*
 
 
 class SuccessWalletFragment : Fragment() {
@@ -21,5 +23,9 @@ class SuccessWalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        backBtn?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 }

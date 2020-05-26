@@ -31,7 +31,7 @@ class FullPhotoFragment : Fragment() {
         }
 
         close?.setOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 }

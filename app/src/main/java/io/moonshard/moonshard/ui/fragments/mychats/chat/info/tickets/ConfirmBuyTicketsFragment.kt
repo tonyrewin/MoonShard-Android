@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
@@ -28,6 +29,10 @@ class ConfirmBuyTicketsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
+
+        backBtn?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun initAdapter() {

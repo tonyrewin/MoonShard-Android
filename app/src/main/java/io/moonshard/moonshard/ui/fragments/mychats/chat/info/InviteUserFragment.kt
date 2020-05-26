@@ -41,7 +41,7 @@ class InviteUserFragment : MvpAppCompatFragment(), InviteUserView {
         }
 
         back?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 

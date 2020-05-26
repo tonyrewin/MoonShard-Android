@@ -30,7 +30,7 @@ class SalesTicketFragment : Fragment() {
         initBalanceTicketsAdapter()
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 

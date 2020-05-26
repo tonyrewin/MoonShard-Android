@@ -45,7 +45,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         addMemberBtn?.setSafeOnClickListener {

@@ -36,17 +36,17 @@ class TicketsManageFragment : Fragment() {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
-        }
-
-        scanTicketsBtn?.setOnClickListener {
-            (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
-
+            parentFragmentManager.popBackStack()
         }
 
         addTicketsBtn?.setOnClickListener {
             (parentFragment as? MainChatFragment)?.showManageTypesTicketScreen(idChat)
         }
+
+        scanTicketsBtn?.setOnClickListener {
+            (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
+        }
+
 
         statisticBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showStatisticTicketsFragment(idChat)

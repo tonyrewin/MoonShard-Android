@@ -55,7 +55,7 @@ class ProfileUserFragment : MvpAppCompatFragment(), ProfileUserView {
             if(fromMuc){
                 presenter.startChatWithUser(userJid)
             }else{
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
             }
         }
     }

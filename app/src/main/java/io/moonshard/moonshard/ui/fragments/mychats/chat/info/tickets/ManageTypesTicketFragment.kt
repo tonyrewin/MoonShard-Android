@@ -8,11 +8,19 @@ import android.view.ViewGroup
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ManageTypesTicketPresenter
+import io.moonshard.moonshard.presentation.view.chat.info.tickets.ManageTypesTicketView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_manage_types_ticket.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class ManageTypesTicketFragment : Fragment() {
+class ManageTypesTicketFragment : MvpAppCompatFragment(),
+    ManageTypesTicketView {
+
+    @InjectPresenter
+    lateinit var presenter: ManageTypesTicketPresenter
 
     var idChat = ""
 
@@ -30,6 +38,10 @@ class ManageTypesTicketFragment : Fragment() {
 
         arguments?.let {
             idChat = it.getString("chatId")
+        }
+
+        backBtn?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         addNewTicketBtn?.setSafeOnClickListener {

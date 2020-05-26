@@ -36,7 +36,7 @@ class NotUsedTicketsFragment : Fragment() {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         initAdapter()

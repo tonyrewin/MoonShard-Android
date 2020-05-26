@@ -40,7 +40,7 @@ class StatisticTicketsFragment : Fragment() {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         fillUpWalletBtn?.setSafeOnClickListener {

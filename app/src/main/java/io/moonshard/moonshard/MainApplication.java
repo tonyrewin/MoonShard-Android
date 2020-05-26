@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.moonshardwallet.MainService;
 import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -157,7 +158,7 @@ public class MainApplication extends Application {
                 .apply();
 
 
-        // MainService.initService(getApplicationContext());
+         MainService.initService(getApplicationContext());
     }
 
     private static void setupLogger() {

@@ -38,7 +38,7 @@ class BuyTicketsFragment : Fragment() {
 
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         closeBtn?.setSafeOnClickListener {

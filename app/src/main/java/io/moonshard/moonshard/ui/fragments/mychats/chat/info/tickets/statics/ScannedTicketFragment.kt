@@ -28,7 +28,7 @@ class ScannedTicketFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         initAdapter()

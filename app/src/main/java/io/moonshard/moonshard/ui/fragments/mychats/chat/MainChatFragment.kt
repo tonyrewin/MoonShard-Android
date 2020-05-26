@@ -206,7 +206,6 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-
     fun showAddNewTypeTicketScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)

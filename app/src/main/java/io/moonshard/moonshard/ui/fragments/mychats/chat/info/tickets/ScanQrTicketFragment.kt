@@ -14,6 +14,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import kotlinx.android.synthetic.main.fragment_scan_qr_ticket.*
 import java.io.File
 
@@ -32,12 +33,12 @@ class ScanQrTicketFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initScan()
 
-        backBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
+        backBtn?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         readyBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 

@@ -44,6 +44,10 @@ class AddAdminFragment : MvpAppCompatFragment(),
         addAdminBtn?.setSafeOnClickListener {
             presenter.addAdmin(nameTv.text.toString(),idChat)
         }
+
+        back?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     override fun showError(error: String) {

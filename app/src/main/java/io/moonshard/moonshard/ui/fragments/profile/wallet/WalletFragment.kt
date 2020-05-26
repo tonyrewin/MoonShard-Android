@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moonshardwallet.MainService
+import com.example.moonshardwallet.WalletService
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.WalletPresenter
@@ -52,5 +54,7 @@ class WalletFragment : MvpAppCompatFragment(),
         transferLayout?.setOnClickListener {
             (activity as MainActivity).showTransferWalletFragment()
         }
+
+        balanceTv?.text = MainService.getWalletService().balance
     }
 }

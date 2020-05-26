@@ -43,7 +43,7 @@ class AdminsFragment : MvpAppCompatFragment(),
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         addAdminLayout?.setSafeOnClickListener {

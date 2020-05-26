@@ -61,7 +61,7 @@ class ChatFragment : MvpAppCompatFragment(), ChatView {
             } else {
                 if(parentFragment is MainChatFragment){
                     if(parentFragment!!.childFragmentManager.backStackEntryCount==0){
-                        parentFragment!!.fragmentManager?.popBackStack()
+                        parentFragment!!.parentFragmentManager.popBackStack()
                     }else{
                         parentFragment!!.childFragmentManager.popBackStackImmediate()
                     }

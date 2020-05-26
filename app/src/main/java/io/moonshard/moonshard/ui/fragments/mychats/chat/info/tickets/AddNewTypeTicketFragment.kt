@@ -40,11 +40,19 @@ class AddNewTypeTicketFragment : MvpAppCompatFragment(),
 
 
         saveBtn?.setSafeOnClickListener {
-            presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.toString(),idChat)
+            presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
+        }
+
+        readyBtn?.setSafeOnClickListener {
+            presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
         }
 
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    override fun back(){
+        parentFragmentManager.popBackStack()
     }
 }

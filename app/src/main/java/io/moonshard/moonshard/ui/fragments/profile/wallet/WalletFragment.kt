@@ -55,6 +55,6 @@ class WalletFragment : MvpAppCompatFragment(),
             (activity as MainActivity).showTransferWalletFragment()
         }
 
-        balanceTv?.text = MainService.getWalletService().balance
+        balanceTv?.text = MainService.getWalletService().balance + " ₽"
     }
 }

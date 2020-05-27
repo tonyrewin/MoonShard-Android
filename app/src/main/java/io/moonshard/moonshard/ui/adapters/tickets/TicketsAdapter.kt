@@ -6,14 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moonshardwallet.models.MyTicket
 import io.moonshard.moonshard.R
 
 interface TicketListener {
     fun clickPlus()
     fun clickMinus()
+    fun click(originSaleAddress: String)
 }
 
-class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayList<String>) :
+class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayList<MyTicket>) :
     RecyclerView.Adapter<TicketsAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -26,11 +28,9 @@ class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayLis
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.typeTicketTv?.text = "Название:" + tickets[position].typeTicket
+        holder.costTicketTv?.text = tickets[position].priceTicket + " ₽"
 
-        //todo hardcore
-        if(position==9){
-            holder.viewLine?.visibility = View.GONE
-        }
 
         holder.plusBtn?.setOnClickListener {
             holder.counterTv?.text =  (holder.counterTv?.text.toString().toInt() + 1).toString()
@@ -44,9 +44,22 @@ class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayLis
             }
         }
 
+        holder?.itemView?.setOnClickListener {
+            listener.click(tickets[position].originSaleAddress)
+        }
+
+        if(position == tickets.size-1){
+            holder.viewLine?.visibility = View.GONE
+        }
     }
 
-    override fun getItemCount(): Int = 10
+    fun update(tickets: ArrayList<MyTicket>) {
+        this.tickets.clear()
+        this.tickets.addAll(tickets)
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int = tickets.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

@@ -6,16 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moonshardwallet.MainService
+import com.example.moonshardwallet.models.MyTicket
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.BuyTicketsPresenter
+import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
 import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_buy_tickets.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class BuyTicketsFragment : Fragment() {
+class BuyTicketsFragment : MvpAppCompatFragment(),
+    BuyTicketsView {
+
+    @InjectPresenter
+    lateinit var presenter: BuyTicketsPresenter
 
     var idChat = ""
 
@@ -31,6 +41,9 @@ class BuyTicketsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+
+        var tickets = MainService.getBuyTicketSErvice().myTicketsByOwner
+
 
         arguments?.let {
             idChat = it.getString("chatId")
@@ -48,8 +61,11 @@ class BuyTicketsFragment : Fragment() {
 
         nextBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat)
-
         }
+
+        presenter.getTypesTicket(idChat)
+
+
     }
 
     private fun initAdapter() {
@@ -62,6 +78,14 @@ class BuyTicketsFragment : Fragment() {
 
                 override fun clickMinus() {
                 }
+
+                override fun click(originSaleAddress: String) {
+                    presenter.buyTicket(originSaleAddress,1)
+                }
             }, arrayListOf())
+    }
+
+    override fun setTickets( tickets: ArrayList<MyTicket>) {
+        (ticketsRv?.adapter as? TicketsAdapter)?.update(tickets)
     }
 }

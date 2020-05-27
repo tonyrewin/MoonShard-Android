@@ -54,7 +54,7 @@ class ManageTypesTicketFragment : MvpAppCompatFragment(),
 
         initAdapter()
 
-            //presenter.getTypesTicket(idChat)
+            presenter.getTypesTicket(idChat)
     }
 
     private fun initAdapter() {

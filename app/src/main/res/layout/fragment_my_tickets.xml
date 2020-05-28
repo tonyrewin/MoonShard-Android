@@ -46,13 +46,10 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-            android:id="@+id/ticket1"
-            layout="@layout/my_ticket_item" />
-
-    <include
-            android:id="@+id/ticket2"
-            layout="@layout/my_ticket_item" />
+<androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myTicketsRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moonshardwallet.models.Ticket
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.PresentTicketPresenter
@@ -58,13 +59,15 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
         ticketPresentRv?.adapter =
             TicketPresentAdapter(object :
                 TicketPresentListener {
-                override fun click() {
+                override fun click(ticket: Ticket) {
                     val addPhotoBottomDialogFragment = RecipientDialogFragment()
                     addPhotoBottomDialogFragment.show(
                         activity!!.supportFragmentManager,
                         "RecipientDialogFragment"
-                    )
-                }
+                    )                }
             }, arrayListOf())
     }
-}
+
+    override fun setTickets(ticketSales: ArrayList<Ticket>) {
+        (ticketPresentRv?.adapter as? TicketPresentAdapter)?.update(ticketSales)
+    }}

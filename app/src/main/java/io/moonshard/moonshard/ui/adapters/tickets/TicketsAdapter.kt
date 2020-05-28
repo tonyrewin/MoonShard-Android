@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moonshardwallet.models.MyTicket
+import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
 
 interface TicketListener {
@@ -15,7 +15,7 @@ interface TicketListener {
     fun click(originSaleAddress: String)
 }
 
-class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayList<MyTicket>) :
+class TicketsAdapter(val listener: TicketListener, private var ticketSales: ArrayList<MyTicketSale>) :
     RecyclerView.Adapter<TicketsAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -28,8 +28,8 @@ class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayLis
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.typeTicketTv?.text = "Название:" + tickets[position].typeTicket
-        holder.costTicketTv?.text = tickets[position].priceTicket + " ₽"
+        holder.typeTicketTv?.text = "Название:" + ticketSales[position].typeTicket
+        holder.costTicketTv?.text = ticketSales[position].priceTicket + " ₽"
 
 
         holder.plusBtn?.setOnClickListener {
@@ -45,21 +45,21 @@ class TicketsAdapter(val listener: TicketListener, private var tickets: ArrayLis
         }
 
         holder?.itemView?.setOnClickListener {
-            listener.click(tickets[position].originSaleAddress)
+            listener.click(ticketSales[position].originSaleAddress)
         }
 
-        if(position == tickets.size-1){
+        if(position == ticketSales.size-1){
             holder.viewLine?.visibility = View.GONE
         }
     }
 
-    fun update(tickets: ArrayList<MyTicket>) {
-        this.tickets.clear()
-        this.tickets.addAll(tickets)
+    fun update(ticketSales: ArrayList<MyTicketSale>) {
+        this.ticketSales.clear()
+        this.ticketSales.addAll(ticketSales)
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = tickets.size
+    override fun getItemCount(): Int = ticketSales.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

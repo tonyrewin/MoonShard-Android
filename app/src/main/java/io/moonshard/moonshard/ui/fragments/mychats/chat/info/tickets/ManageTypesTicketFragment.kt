@@ -1,12 +1,11 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.models.MyTicket
+import com.example.moonshardwallet.models.MyTicketSale
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -65,7 +64,7 @@ class ManageTypesTicketFragment : MvpAppCompatFragment(),
         }, arrayListOf())
     }
 
-    override fun setTypesTicket( tickets: ArrayList<MyTicket>) {
-        (typesTicketsRv?.adapter as? TypesTicketAdapter)?.update(tickets)
+    override fun setTypesTicket(ticketSales: ArrayList<MyTicketSale>) {
+        (typesTicketsRv?.adapter as? TypesTicketAdapter)?.update(ticketSales)
     }
 }

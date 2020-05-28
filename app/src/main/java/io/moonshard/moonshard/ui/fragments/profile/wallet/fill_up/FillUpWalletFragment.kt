@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.example.moonshardwallet.MainService
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -61,6 +62,8 @@ class FillUpWalletFragment : MvpAppCompatFragment(),
                                        before: Int, count: Int) {
             }
         })
+        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.example.moonshardwallet.MainService
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -63,5 +64,8 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
                                        before: Int, count: Int) {
             }
         })
+
+        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+
     }
 }

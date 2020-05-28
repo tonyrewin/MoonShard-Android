@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.BuyTicketsFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.BuyTicketsFragment">
 
 
 

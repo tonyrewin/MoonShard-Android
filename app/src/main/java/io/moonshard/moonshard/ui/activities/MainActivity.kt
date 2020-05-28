@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction.*
+import com.example.moonshardwallet.models.Ticket
+import com.google.gson.Gson
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChooseChatRepository
@@ -354,8 +356,12 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showMyTicketInfoFragment() {
+    fun showMyTicketInfoFragment(ticket: Ticket) {
+        val ticketJson = Gson().toJson(ticket)
+        val bundle = Bundle()
+        bundle.putString("ticket", ticketJson)
         val fragment = MyTicketInfoFragment()
+        fragment.arguments = bundle
         val ft = supportFragmentManager.beginTransaction()
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "MyTicketInfoFragment")

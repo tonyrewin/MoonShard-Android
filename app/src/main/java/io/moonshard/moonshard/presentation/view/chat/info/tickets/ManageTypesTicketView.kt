@@ -1,8 +1,8 @@
 package io.moonshard.moonshard.presentation.view.chat.info.tickets
 
-import com.example.moonshardwallet.models.MyTicket
+import com.example.moonshardwallet.models.MyTicketSale
 import moxy.MvpView
 
 interface ManageTypesTicketView:MvpView {
-    fun setTypesTicket(tickets: ArrayList<MyTicket>)
+    fun setTypesTicket(ticketSales: ArrayList<MyTicketSale>)
 }

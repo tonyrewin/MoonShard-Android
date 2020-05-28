@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import com.example.moonshardwallet.MainService
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
@@ -75,6 +76,8 @@ class TransferWalletFragment : MvpAppCompatFragment(),
                 "TransferRecipientDialogFragment"
             )
         }
+        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+
     }
 
     fun showRecipient(jid: String) {

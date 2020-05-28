@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.statics.NotUsedTicketsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"

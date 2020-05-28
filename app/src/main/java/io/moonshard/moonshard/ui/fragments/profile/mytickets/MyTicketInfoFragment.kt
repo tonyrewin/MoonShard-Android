@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moonshardwallet.models.Ticket
+import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketInfoPresenter
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketInfoView
@@ -20,6 +22,8 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
 
     var isActiveAction: Boolean = false
 
+    var ticket:Ticket? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,6 +34,11 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            val ticketJson = it.getString("chatId")
+            ticket  = Gson().fromJson(ticketJson,Ticket::class.java)
+        }
 
         backBtn?.setOnClickListener {
             if (isActiveAction) {

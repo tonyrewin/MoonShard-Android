@@ -26,5 +26,4 @@ class BuyTicketsPresenter: MvpPresenter<BuyTicketsView>() {
             null
         }
     }
-
 }

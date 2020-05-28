@@ -6,15 +6,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moonshardwallet.models.MyTicketSale
+import com.example.moonshardwallet.models.Ticket
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils
 
 
 interface TicketPresentListener {
-    fun click()
+    fun click(ticket: Ticket)
 }
 
-class TicketPresentAdapter(val listener: TicketPresentListener, private var tickets: ArrayList<String>) :
+class TicketPresentAdapter(val listener: TicketPresentListener, private var tickets: ArrayList<Ticket>) :
     RecyclerView.Adapter<TicketPresentAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -26,6 +28,12 @@ class TicketPresentAdapter(val listener: TicketPresentListener, private var tick
             )
         )
 
+    fun update(tickets: ArrayList<Ticket>) {
+        this.tickets.clear()
+        this.tickets.addAll(tickets)
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(position==9){
             val params = holder.mainLayout?.layoutParams as? ViewGroup.MarginLayoutParams
@@ -36,7 +44,7 @@ class TicketPresentAdapter(val listener: TicketPresentListener, private var tick
         }
 
         holder.mainLayout?.setOnClickListener {
-            listener.click()
+            listener.click(tickets[position])
         }
     }
 

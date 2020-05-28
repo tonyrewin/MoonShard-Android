@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.TicketsManageFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.TicketsManageFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"

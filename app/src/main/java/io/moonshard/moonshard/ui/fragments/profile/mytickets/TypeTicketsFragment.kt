@@ -30,8 +30,8 @@ class TypeTicketsFragment : MvpAppCompatFragment(), TypeTicketsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ticket?.setOnClickListener {
-            (activity as MainActivity).showMyTicketInfoFragment()
+             ticket?.setOnClickListener {
+            //(activity as MainActivity).showMyTicketInfoFragment()
         }
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()

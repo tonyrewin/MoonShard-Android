@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="264dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:id="@+id/mainView"
@@ -20,7 +21,7 @@
                 android:layout_height="104dp"
                 android:background="@drawable/bck_rounded"
                 android:scaleType="centerCrop"
-                android:src="@drawable/party_test" />
+                tools:src="@drawable/party_test" />
 
         <TextView
                 android:id="@+id/labelTicket"
@@ -30,7 +31,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Валерий Меладзе"
+                tools:text="Валерий Меладзе"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -58,6 +59,8 @@
                 android:textSize="14sp" />
 
         <ImageView
+                android:visibility="gone"
+                android:id="@+id/scannedIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatarTicket"
@@ -75,26 +78,26 @@
                 android:background="#F5F5F5" />
 
         <TextView
-                android:id="@+id/typeTicket"
+                android:id="@+id/typeTicketTv"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="11dp"
                 android:layout_below="@+id/view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Ввходной билет"
+                android:text="Входной билет"
                 android:textColor="#333333"
                 android:textSize="17sp"/>
 
         <TextView
-                android:id="@+id/placeTicket"
+                android:id="@+id/typeTicket"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp"
                 android:layout_marginStart="9dp"
-                android:layout_below="@+id/typeTicket"
-                android:text="Партер"
+                android:layout_below="@+id/typeTicketTv"
+                tools:text="Партер"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -103,7 +106,7 @@
                 android:id="@+id/numberTv"
                 android:layout_marginEnd="25dp"
                 android:layout_below="@+id/view"
-                android:layout_alignTop="@+id/typeTicket"
+                android:layout_alignTop="@+id/typeTicketTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
@@ -112,10 +115,11 @@
                 android:textSize="17sp"/>
 
         <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/numberTicketTv"
                 android:layout_alignTop="@+id/placeTicket"
                 android:layout_alignLeft="@+id/numberTv"
-                android:text="021457859710"
+                tools:text="021457859710"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/numberTv"
                 android:fontFamily="@font/roboto_regular"

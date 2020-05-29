@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.models.MyTicketSale
 import com.example.moonshardwallet.models.Ticket
 
 import io.moonshard.moonshard.R
@@ -41,13 +41,13 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
         }
         initAdapter()
 
-        presenter.getMyTickets()
+            presenter.getMyTickets()
     }
 
     private fun initAdapter() {
         myTicketsRv?.layoutManager = LinearLayoutManager(context)
         myTicketsRv?.adapter =
-            TicketPresentAdapter(object :
+            TicketPresentAdapter(this.mvpDelegate,object :
                 TicketPresentListener {
                 override fun click(ticket: Ticket) {
                     (activity as MainActivity).showMyTicketInfoFragment(ticket)
@@ -56,6 +56,18 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
     }
 
     override fun setTickets(ticketSales: ArrayList<Ticket>) {
-        (myTicketsRv?.adapter as? TicketPresentAdapter)?.update(ticketSales)
+        (myTicketsRv?.adapter as? TicketPresentAdapter)?.setData(ticketSales)
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

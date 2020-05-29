@@ -206,10 +206,20 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
                     if (e.getClass() == NotFoundException.class) {
+
+
+                        MultiUserChat muc =
+                                MainApplication.getXmppConnection().multiUserChatManager
+                                        .getMultiUserChat(from);
+
+                        RoomInfo info =
+                                MainApplication.getXmppConnection().multiUserChatManager
+                                        .getRoomInfo(muc.getRoom());
+
                         ChatEntity chatEntity = new ChatEntity(
                                 0,
                                 from.asEntityBareJidString(),
-                                from.asEntityBareJidString().split("@")[0],
+                                info.getName(),
                                 false,
                                 0
                         );

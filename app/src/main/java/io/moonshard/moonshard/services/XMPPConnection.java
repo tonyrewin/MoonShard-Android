@@ -2,7 +2,9 @@ package io.moonshard.moonshard.services;
 
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -54,6 +56,7 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
+import io.moonshard.moonshard.R;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
 import io.moonshard.moonshard.repository.ChatListRepository;
@@ -394,6 +397,49 @@ public class XMPPConnection implements ConnectionListener {
                     }
                     emitter.onSuccess(avatarBytes);
                 }
+            } else {
+                emitter.onError(new IllegalArgumentException());
+            }
+        });
+    }
+
+    public Single<byte[]> loadAvatarForTicket(String senderID, String nameChat) {
+        return Single.create(emitter -> {
+            if (!senderID.isEmpty()) {
+                if (MainApplication.avatarsCache.containsKey(senderID)) {
+                    emitter.onSuccess(MainApplication.avatarsCache.get(senderID));
+                }
+                if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
+                    if (!nameChat.isEmpty()) {
+                        Drawable drawable = MainApplication.getContext().getDrawable(R.drawable.party_test);
+                        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte[] bitMapData = stream.toByteArray();
+                        emitter.onSuccess(bitMapData);
+                    } else {
+                        emitter.onError(new IllegalArgumentException());
+                    }
+                    return;
+                }
+                EntityBareJid jid = null;
+                try {
+                    jid = JidCreate.entityBareFrom(senderID);
+                } catch (XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+
+                    byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
+
+                    if (avatarBytes != null) {
+                        MainApplication.avatarsCache.put(senderID, avatarBytes);
+                    } else {
+                        Drawable drawable = MainApplication.getContext().getDrawable(R.drawable.party_test);
+                        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        avatarBytes = stream.toByteArray();                    }
+                        emitter.onSuccess(avatarBytes);
             } else {
                 emitter.onError(new IllegalArgumentException());
             }

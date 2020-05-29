@@ -5,4 +5,7 @@ import moxy.MvpView
 
 interface PresentTicketView: MvpView {
     fun setTickets(ticketSales: ArrayList<Ticket>)
+    fun showProgressBar()
+    fun hideProgressBar()
+    fun showToast(text:String)
 }

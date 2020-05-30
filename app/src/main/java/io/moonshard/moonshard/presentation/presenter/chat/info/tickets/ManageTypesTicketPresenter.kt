@@ -10,7 +10,7 @@ class ManageTypesTicketPresenter : MvpPresenter<ManageTypesTicketView>() {
 
 
     fun getTypesTicket(eventJid:String){
-       val typesTicket =  MainService.getBuyTicketSErvice().getTickets(eventJid)
+       val typesTicket =  MainService.getBuyTicketSErvice().getTicketsTypes(eventJid)
         viewState.setTypesTicket(typesTicket)
         var test = ""
     }

@@ -9,7 +9,7 @@ import moxy.MvpPresenter
 class BuyTicketsPresenter: MvpPresenter<BuyTicketsView>() {
 
     fun getTypesTicket(eventJid:String){
-        val typesTicket =  MainService.getBuyTicketSErvice().getTickets(eventJid)
+        val typesTicket =  MainService.getBuyTicketSErvice().getTicketsTypes(eventJid)
         viewState.setTickets(typesTicket)
         var test = ""
     }

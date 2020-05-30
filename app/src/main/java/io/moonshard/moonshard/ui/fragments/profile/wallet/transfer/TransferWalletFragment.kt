@@ -70,14 +70,19 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         })
 
         chooseMember?.setOnClickListener {
+
+          //  MainService.getBuyTicketSErvice().sendMoney("0xb4a31ab401bc17feb7d9697792c73cfe58546a3b", 1F)
+
+
             val addPhotoBottomDialogFragment = TransferRecipientDialogFragment()
             addPhotoBottomDialogFragment.show(
                 activity!!.supportFragmentManager,
                 "TransferRecipientDialogFragment"
             )
         }
-        balanceTv?.text = MainService.getWalletService().balance + " ₽"
 
+
+        balanceTv?.text = MainService.getWalletService().balance + " ₽"
     }
 
     fun showRecipient(jid: String) {

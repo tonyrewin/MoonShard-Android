@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info.tickets
 
+import android.util.Log
 import com.example.moonshardwallet.BuyTicketService
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.contracts.TicketFactory721
@@ -25,16 +26,15 @@ class AddNewTypeTicketPresenter : MvpPresenter<AddNewTypeTicketView>() {
                     MainService.getWalletService().ticketfactory.getSaleCreatedHumanEvents(it)[0]
                  val typeInt = event_tx?.ticket_type
                 // отправлять в связке тип в стринге и тип в инте на сервер
-
-               // viewState?.back()
+                viewState?.back()
             }.exceptionally { e ->
 
                 if(e.message == "java.lang.RuntimeException: Error processing transaction request: VM Exception while processing transaction: revert sale with this JID is already created!"){
                    val originSale =  MainService.getBuyTicketSErvice().getEventIdFromFirstSale(jidEvent)
                     MainService.getBuyTicketSErvice().createNewType(originSale, BigInteger(price),BigInteger(limit)).thenAccept {
                         var event_tx_ticket = MainService.getBuyTicketSErvice().ticket.getTicketBoughtHumanEvents(it); //todo тут вернулся 0
-                        var test = ""
-                       // viewState?.back()
+                         Log.d("plugIn tx: ",it.blockHash)
+                          viewState?.back()
                     }.exceptionally { e ->
                        null
                     }

@@ -364,7 +364,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         fragment.arguments = bundle
         val ft = supportFragmentManager.beginTransaction()
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
-        ft.replace(R.id.container, fragment, "MyTicketInfoFragment")
+        ft.add(R.id.container, fragment, "MyTicketInfoFragment")
             .addToBackStack("MyTicketInfoFragment")
             .commit()
     }

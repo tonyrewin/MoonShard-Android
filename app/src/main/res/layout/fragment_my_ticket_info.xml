@@ -115,6 +115,7 @@
                 android:textSize="14sp" />
 
         <ImageView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatarTicket"
@@ -124,9 +125,10 @@
                 android:src="@drawable/ic_check_circle" />
 
         <View
+                android:visibility="gone"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:id="@+id/view"
+                android:id="@+id/scannedIv"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/locationTicket"
@@ -134,10 +136,10 @@
                 android:background="#F5F5F5" />
 
         <TextView
-                android:id="@+id/typeTicket"
+                android:id="@+id/typeTicketTv"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="11dp"
-                android:layout_below="@+id/view"
+                android:layout_below="@+id/scannedIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
@@ -146,13 +148,13 @@
                 android:textSize="17sp"/>
 
         <TextView
-                android:id="@+id/placeTicket"
+                android:id="@+id/typeTicket"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp"
                 android:layout_marginStart="9dp"
-                android:layout_below="@+id/typeTicket"
+                android:layout_below="@+id/typeTicketTv"
                 android:text="Билет на все дни мероприятия"
                 android:layout_width="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -163,7 +165,7 @@
                 android:id="@+id/numberTicketTv"
                 android:layout_marginEnd="25dp"
                 android:layout_below="@+id/view"
-                android:layout_alignTop="@+id/typeTicket"
+                android:layout_alignTop="@+id/typeTicketTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
@@ -172,7 +174,8 @@
                 android:textSize="17sp"/>
 
         <TextView
-                android:layout_alignTop="@+id/placeTicket"
+                android:id="@+id/numberTicket"
+                android:layout_alignTop="@+id/typeTicket"
                 android:layout_alignLeft="@+id/numberTicketTv"
                 android:text="021457859710"
                 android:layout_alignParentEnd="true"
@@ -189,7 +192,7 @@
                 android:src="@drawable/ic_qr"
                 android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/placeTicket"
+                android:layout_below="@+id/typeTicket"
                 android:id="@+id/qrCode"
                 android:layout_width="170dp"
                 android:layout_height="170dp"/>

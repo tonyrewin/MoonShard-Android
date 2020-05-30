@@ -43,7 +43,6 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
                 holder.scannedIv?.visibility = View.VISIBLE
             }else{
                 holder.scannedIv?.visibility = View.GONE
-
             }
 
             if(position== tickets.size-1){

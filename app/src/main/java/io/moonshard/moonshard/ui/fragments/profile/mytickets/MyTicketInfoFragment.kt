@@ -1,13 +1,20 @@
 package io.moonshard.moonshard.ui.fragments.profile.mytickets
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.orhanobut.logger.Logger
+import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.wallet.QrCodeModel
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketInfoPresenter
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketInfoView
 import kotlinx.android.synthetic.main.fragment_my_ticket_info.*
@@ -36,8 +43,10 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            val ticketJson = it.getString("chatId")
+            val ticketJson = it.getString("ticket")
             ticket  = Gson().fromJson(ticketJson,Ticket::class.java)
+            presenter.getEventInfo(ticket!!.jidEvent)
+            showInfo(ticket!!)
         }
 
         backBtn?.setOnClickListener {
@@ -62,6 +71,42 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
 
             actionLayout?.visibility = View.VISIBLE
             deleteTicketLayout?.visibility = View.VISIBLE
+        }
+    }
+
+    fun showInfo(ticket:Ticket){
+        typeTicket?.text = ticket?.ticketType.toString()
+        numberTicket?.text = ticket?.ticketId.toString()
+
+        if(ticket?.payState?.toInt()==2){
+            scannedIv?.visibility = View.VISIBLE
+        }else{
+           scannedIv?.visibility = View.GONE
+        }
+
+        val contentQrCode = QrCodeModel(ticket?.ticketId!!,MainService.getWalletService().myAddress)
+        val contentQrCodeJson = Gson().toJson(contentQrCode)
+        generateQrCode(contentQrCodeJson)
+    }
+
+    fun generateQrCode(content:String){
+        try {
+            val barcodeEncoder = BarcodeEncoder()
+            val bitmap =
+                barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, 200, 200)
+            qrCode.setImageBitmap(bitmap)
+        } catch (e: Exception) {
+            Logger.d(e)
+        }
+    }
+
+    override fun showEventInfo(name:String){
+        labelTicket?.text = name
+    }
+
+    override fun setAvatar(avatar: Bitmap?) {
+        MainApplication.getMainUIThread().post {
+            avatarTicket?.setImageBitmap(avatar)
         }
     }
 }

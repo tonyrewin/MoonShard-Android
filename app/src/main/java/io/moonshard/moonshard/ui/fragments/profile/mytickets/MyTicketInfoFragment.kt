@@ -2,6 +2,7 @@ package io.moonshard.moonshard.ui.fragments.profile.mytickets
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -84,7 +85,11 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
            scannedIv?.visibility = View.GONE
         }
 
-        val contentQrCode = QrCodeModel(ticket?.ticketId!!,MainService.getWalletService().myAddress)
+        Log.d("ticketState",ticket.payState.toString())
+        Log.d("ticketId",ticket.ticketId.toString())
+
+
+        val contentQrCode = QrCodeModel(ticket?.ticketId!!,MainService.getWalletService().myAddress,ticket.jidEvent,ticket.ticketType)
         val contentQrCodeJson = Gson().toJson(contentQrCode)
         generateQrCode(contentQrCodeJson)
     }

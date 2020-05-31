@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
+import com.example.moonshardwallet.MainService
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.Utils.drawableToBitmap
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.ByteArrayOutputStream
+import java.math.BigInteger
 
 
 class ProfileFragment : MvpAppCompatFragment(),

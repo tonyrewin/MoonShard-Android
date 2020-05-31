@@ -3,6 +3,7 @@ package io.moonshard.moonshard.presentation.presenter.profile
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.LoginCredentials
@@ -21,6 +22,7 @@ import moxy.MvpPresenter
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jivesoftware.smackx.vcardtemp.packet.VCard
 import retrofit2.HttpException
+import java.math.BigInteger
 
 
 @InjectViewState
@@ -155,6 +157,18 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
+    }
+
+    fun acceptTicketAsPresent() {
+        MainService.getBuyTicketSErvice().acceptTicketAsPresentRx(
+            "0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c",
+            BigInteger.valueOf(6L)
+        ).thenAccept {
+
+
+        }.exceptionally { e ->
+            null
+        }
     }
 }
 

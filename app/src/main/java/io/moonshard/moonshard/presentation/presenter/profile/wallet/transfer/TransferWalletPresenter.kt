@@ -3,6 +3,8 @@ package io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.ImageView
+import com.example.moonshardwallet.MainService
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import io.reactivex.Single
@@ -62,5 +64,32 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
                     Log.e(throwable.message)
                 })
         }
+    }
+
+    fun sendMoney(addressTo:String,amount:String){
+
+
+        MainService.getBuyTicketSErvice().sendMoneyRx2("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                viewState?.showToast("Сумма успешна переведена")
+            }, {
+                viewState?.showToast("Произошла ошибка")
+                Logger.d(it)
+            })
+
+        /*
+        Log.d("myAmount",amount)
+          MainService.getBuyTicketSErvice().sendMoneyRx("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat()).thenAccept {
+              viewState?.showToast("Сумма успешна переведена")
+              viewState?.back()
+          }.exceptionally { e ->
+              viewState?.showToast("Произошла ошибка")
+              Logger.d(e)
+              null
+          }
+
+         */
     }
 }

@@ -9,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moonshardwallet.MainService
+import com.example.moonshardwallet.models.Ticket
+import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.RecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.RecipientDialogiView
@@ -24,6 +27,8 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
 
     @InjectPresenter
     lateinit var presenter: RecipientDialogPresenter
+
+    var ticket:Ticket?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,11 +55,17 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            val ticketJson = it.getString("ticket")
+            ticket  = Gson().fromJson(ticketJson, Ticket::class.java)
+        }
+
         initRecipientAdapter()
+
         presenter.getContacts()
 
         chooseBtn?.setOnClickListener{
-            dismiss()
+            presenter.sendTicketAsPresent("ticketUser",ticket!!.ticketId)
         }
 
         cancelBtn?.setOnClickListener{
@@ -77,4 +88,12 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
         (rv?.adapter as? RecipientWalletAdapter)?.setContacts(contacts)
     }
 
+    override fun back(){
+        dismiss()
+        activity?.supportFragmentManager?.popBackStack()
+    }
+
+    override fun dismissBack(){
+        dismiss()
+    }
 }

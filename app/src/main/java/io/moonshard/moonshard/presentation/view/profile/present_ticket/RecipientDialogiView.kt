@@ -6,4 +6,6 @@ import org.jivesoftware.smack.roster.RosterEntry
 
 interface RecipientDialogiView:MvpView {
     fun showContacts(contacts: ArrayList<RosterEntry>)
+    fun back()
+    fun dismissBack()
 }

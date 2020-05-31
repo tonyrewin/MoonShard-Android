@@ -46,6 +46,10 @@ class TransferWalletFragment : MvpAppCompatFragment(),
             fragmentManager?.popBackStack()
         }
 
+        nextBtn?.setOnClickListener {
+            presenter.sendMoney("",moneyValue.text.toString())
+        }
+
         moneyValue.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
@@ -70,10 +74,6 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         })
 
         chooseMember?.setOnClickListener {
-
-          //  MainService.getBuyTicketSErvice().sendMoney("0xb4a31ab401bc17feb7d9697792c73cfe58546a3b", 1F)
-
-
             val addPhotoBottomDialogFragment = TransferRecipientDialogFragment()
             addPhotoBottomDialogFragment.show(
                 activity!!.supportFragmentManager,
@@ -103,6 +103,12 @@ class TransferWalletFragment : MvpAppCompatFragment(),
     }
 
     override fun showToast(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun back(){
+        activity!!.runOnUiThread {
+            activity!!.supportFragmentManager.popBackStack()
+        }
     }
 }

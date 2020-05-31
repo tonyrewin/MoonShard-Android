@@ -158,7 +158,7 @@ public class MainApplication extends Application {
                 .apply();
 
 
-         MainService.initService(getApplicationContext());
+         //MainService.initLibrary(getApplicationContext());
     }
 
     private static void setupLogger() {

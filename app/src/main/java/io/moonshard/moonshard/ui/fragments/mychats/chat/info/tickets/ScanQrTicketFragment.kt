@@ -9,17 +9,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import com.example.moonshardwallet.models.Ticket
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.models.wallet.QrCodeModel
+import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ScanQrTicketPresenter
+import io.moonshard.moonshard.presentation.view.chat.info.tickets.ScanQrTicketView
 import kotlinx.android.synthetic.main.fragment_scan_qr_ticket.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 import java.io.File
 
 
-class ScanQrTicketFragment : Fragment() {
+class ScanQrTicketFragment : MvpAppCompatFragment(),
+    ScanQrTicketView {
+
+    @InjectPresenter
+    lateinit var presenter: ScanQrTicketPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,14 +68,18 @@ class ScanQrTicketFragment : Fragment() {
       //  setImageFromImagePath(barcodeImagePath)
     }
 
-    private fun successScan(barcodeImagePath: String) {
-      //  qrLayout?.visibility = View.VISIBLE
+    private fun successScan(ticketJson: String) {
+        val ticket = Gson().fromJson(ticketJson, QrCodeModel::class.java)
+        presenter.scanQrCode(ticket)
+    }
+
+    override fun showSuccessScannedTicket(ticket: QrCodeModel){
+        typeTicket?.text = ticket.typeTicket.toString()
         layoutScan?.visibility = View.VISIBLE
         layoutScan?.setBackgroundResource(R.drawable.layout_settings_bg)
         nameTicket?.setTextColor(Color.parseColor("#333333"))
         typeTicket?.setTextColor(Color.parseColor("#9B9BB6"))
         scanOk?.visibility = View.VISIBLE
-       // generateQrCode(barcodeImagePath)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -115,6 +115,7 @@
                 android:textSize="14sp" />
 
         <ImageView
+                android:id="@+id/scannedIv"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,7 +129,7 @@
                 android:visibility="gone"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:id="@+id/scannedIv"
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/locationTicket"
@@ -139,7 +140,7 @@
                 android:id="@+id/typeTicketTv"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="11dp"
-                android:layout_below="@+id/scannedIv"
+                android:layout_below="@+id/view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"

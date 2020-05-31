@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.example.moonshardwallet.MainService;
 import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -220,6 +221,8 @@ public class XMPPConnection implements ConnectionListener {
 
     @Override
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
+        MainService.initLibrary(MainApplication.getContext());
+
         Log.d("myMainTest: ", "authenticated");
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
         SecurePreferences.setValue("logged_in", true);

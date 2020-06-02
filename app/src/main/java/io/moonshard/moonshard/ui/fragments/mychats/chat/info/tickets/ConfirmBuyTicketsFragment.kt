@@ -1,21 +1,31 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ConfirmBuyTicketsPresenter
+import io.moonshard.moonshard.presentation.view.chat.info.tickets.ConfirmBuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
+import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.backBtn
+import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.costTv
+import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.ticketsCounterTv
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
 
-class ConfirmBuyTicketsFragment : Fragment() {
+class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
+    ConfirmBuyTicketsView {
 
+    @InjectPresenter
+    lateinit var presenter: ConfirmBuyTicketsPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +43,11 @@ class ConfirmBuyTicketsFragment : Fragment() {
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        nextBtn?.setSafeOnClickListener {
+            presenter.buyTickets()
+        }
+        presenter.getConfirmTickets()
     }
 
     private fun initAdapter() {
@@ -41,5 +56,26 @@ class ConfirmBuyTicketsFragment : Fragment() {
             override fun click() {
             }
         }, arrayListOf())
+    }
+
+    override fun setTickets(ticketSales: ArrayList<MyTicketSale>) {
+        (confirmTicketsRv?.adapter as? ConfirmTicketsBuyAdapter)?.update(ticketSales)
+    }
+
+  override fun showCost( value:String) {
+        costTv.text = "$value ₽"
+    }
+
+    override fun showAmount(value:String){
+        counterTicketsTv?.text = "$value билета"
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun back(){
+        parentFragmentManager.popBackStack()
+        parentFragmentManager.popBackStack()
     }
 }

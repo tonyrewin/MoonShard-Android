@@ -45,7 +45,7 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getVerificationEmail()
 
 
-
+        //MainService.getWalletService().cashOut()
 
         //presenter.savePrivateKey("")
         //presenter.getPrivateKey("1234567891234567")

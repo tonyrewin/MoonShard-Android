@@ -17,10 +17,12 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.EventInfoFrag
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.admin_permissions.AdminPermissionFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.*
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.BuyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
+import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
 import moxy.MvpAppCompatFragment
 import org.jivesoftware.smackx.muc.Occupant
 
@@ -195,6 +197,17 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
+    fun showVerificationEmail(idChat: String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        val fragment = VerificationEmailFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "VerificationEmailFragment")
+            .addToBackStack("VerificationEmailFragment")
+            .commit()
+    }
+
     fun showManageTypesTicketScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -220,7 +233,8 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     fun showBuyTicketsScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        val fragment = BuyTicketsFragment()
+        val fragment =
+            BuyTicketsFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "BuyTicketsFragment")
@@ -275,7 +289,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     fun showSalesTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        val fragment = SalesTicketFragment()
+        val fragment = SalesStatisticTicketFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "SalesTicketFragment")

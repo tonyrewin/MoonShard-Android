@@ -2,7 +2,6 @@ package io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.ImageView
 import com.example.moonshardwallet.MainService
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
@@ -69,7 +68,7 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
     fun sendMoney(addressTo:String,amount:String){
 
 
-        MainService.getBuyTicketSErvice().sendMoneyRx2("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat())
+        MainService.getBuyTicketService().sendMoneyRx2("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

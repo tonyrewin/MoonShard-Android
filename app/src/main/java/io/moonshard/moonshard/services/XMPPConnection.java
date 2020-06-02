@@ -221,7 +221,6 @@ public class XMPPConnection implements ConnectionListener {
 
     @Override
     public void authenticated(org.jivesoftware.smack.XMPPConnection connection, boolean resumed) {
-        MainService.initLibrary(MainApplication.getContext());
 
         Log.d("myMainTest: ", "authenticated");
         XMPPConnectionService.SESSION_STATE = SessionState.LOGGED_IN;
@@ -260,6 +259,8 @@ public class XMPPConnection implements ConnectionListener {
              Log.d("myInterval",true);
              refreshToken();
          });
+
+        initLibrary();
     }
 
     @Override
@@ -817,6 +818,20 @@ public class XMPPConnection implements ConnectionListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     saveLoginCredentials(result.getAccessToken(), result.getRefreshToken());
+                }, error -> Logger.d(error));
+    }
+
+    void initLibrary(){
+        String accessToken = MainApplication.getCurrentLoginCredentials().accessToken;
+
+        useCase.getUserProfileInfo(
+                accessToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if(result.isActivated()){
+                        MainApplication.initWalletLibrary();
+                    }
                 }, error -> Logger.d(error));
     }
 

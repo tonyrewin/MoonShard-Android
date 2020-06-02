@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.adapters.tickets
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,8 @@ import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
 
 interface TicketListener {
-    fun clickPlus()
-    fun clickMinus()
+    fun clickPlus(ticketSale:MyTicketSale)
+    fun clickMinus(ticketSale:MyTicketSale)
     fun click(originSaleAddress: String)
 }
 
@@ -34,13 +35,13 @@ class TicketsAdapter(val listener: TicketListener, private var ticketSales: Arra
 
         holder.plusBtn?.setOnClickListener {
             holder.counterTv?.text =  (holder.counterTv?.text.toString().toInt() + 1).toString()
-            listener.clickPlus()
+            listener.clickPlus(ticketSales[holder.adapterPosition])
         }
 
         holder.minusBtn?.setOnClickListener {
             if(holder.counterTv?.text!="0"){
                 holder.counterTv?.text =  (holder.counterTv?.text.toString().toInt() - 1).toString()
-                listener.clickMinus()
+                listener.clickMinus(ticketSales[holder.adapterPosition])
             }
         }
 
@@ -70,5 +71,6 @@ class TicketsAdapter(val listener: TicketListener, private var ticketSales: Arra
         internal var counterTv: TextView? = view.findViewById(R.id.counterTv)
         internal var viewLine: View? = view.findViewById(R.id.viewLine)
     }
+
 
 }

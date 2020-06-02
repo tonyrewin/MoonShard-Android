@@ -18,4 +18,5 @@ interface ManageEventView: MvpView {
     fun showProgressBar()
     fun hideProgressBar()
     fun showChatsScreen()
+    fun initManageTicket(isActivated: Boolean)
 }

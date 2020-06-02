@@ -11,7 +11,7 @@ class ScanQrTicketPresenter : MvpPresenter<ScanQrTicketView>() {
 
     fun scanQrCode(
         ticket: QrCodeModel){
-        MainService.getBuyTicketSErvice().scanQrCode(ticket.ticketId,ticket.addressWallet,ticket.jidEvent,"")
+        MainService.getBuyTicketService().scanQrCode(ticket.ticketId,ticket.addressWallet,ticket.jidEvent,"")
         viewState?.showSuccessScannedTicket(ticket)
     }
 }

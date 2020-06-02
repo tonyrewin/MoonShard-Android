@@ -34,5 +34,9 @@ class SearchTicketFragment : Fragment() {
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        searchBtn?.setSafeOnClickListener {
+
+        }
     }
 }

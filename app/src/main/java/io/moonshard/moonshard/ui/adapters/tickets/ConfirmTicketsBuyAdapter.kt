@@ -5,14 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
 
 interface ConfirmTicketsBuyListener {
     fun click()
 }
 
-class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private var tickets: ArrayList<String>) :
-    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>()  {
+class ConfirmTicketsBuyAdapter(
+    val listener: ConfirmTicketsBuyListener,
+    private var ticketsSale: ArrayList<MyTicketSale>
+) :
+    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -24,15 +28,25 @@ class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.typeTicketTv?.text = ticketsSale[holder.adapterPosition].typeTicket.toString()
+        holder.costTicketTv?.text = ticketsSale[holder.adapterPosition].priceTicket + " ₽"
 
         //todo hardcore
-        if(position==9){
+        if (position == ticketsSale.size-1) {
             holder.viewLine?.visibility = View.GONE
         }
 
     }
 
-    override fun getItemCount(): Int = 10
+
+    fun update(ticketSales: ArrayList<MyTicketSale>) {
+        this.ticketsSale.clear()
+        this.ticketsSale.addAll(ticketSales)
+        notifyDataSetChanged()
+    }
+
+
+    override fun getItemCount(): Int = ticketsSale.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

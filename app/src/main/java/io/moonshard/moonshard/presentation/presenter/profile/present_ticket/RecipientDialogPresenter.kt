@@ -26,7 +26,7 @@ class RecipientDialogPresenter : BasePresenter<RecipientDialogiView>(){
     }
 
     fun sendTicketAsPresent(walletAddressTo:String,idTicket:BigInteger){
-        MainService.getBuyTicketSErvice().presentTicketRx(
+        MainService.getBuyTicketService().presentTicketRx(
             walletAddressTo,
             idTicket
         ).thenAccept {

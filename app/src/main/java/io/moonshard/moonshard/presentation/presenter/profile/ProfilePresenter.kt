@@ -6,13 +6,11 @@ import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
 import de.adorsys.android.securestoragelibrary.SecurePreferences
-import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
 import io.moonshard.moonshard.usecase.AuthUseCase
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -98,17 +96,15 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     }
 
     fun getVerificationEmail() {
-       // val accessToken = getLongStringValue("accessToken")
-
         val accessToken = MainApplication.getCurrentLoginCredentials().accessToken
 
-        Log.d("myTimeUserProfile",accessToken)
         compositeDisposable.add(useCase!!.getUserProfileInfo(accessToken!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
-                Log.d("myTimeUserProfile","kek")
+                Log.d("responseUserProfileInfo",Gson().toJson(result))
                 if (throwable == null) {
+                    if(result.isActivated!!) MainApplication.initWalletLibrary()
                     viewState?.setVerification(result.email, result.isActivated)
                     com.orhanobut.logger.Logger.d(result)
                 } else {
@@ -120,11 +116,13 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     }
 
     fun savePrivateKey(encryptionPassword: String) {
-        val privateKey = SecurePreferences.getStringValue("pass", null)
+        val password = SecurePreferences.getStringValue("pass", null)
         val accessToken = getLongStringValue("accessToken")
+        val addressWallet = MainService.getWalletService().myAddress
+        val privateKeyWallet =   MainService.getWalletService().privateKeyInHex
 
         compositeDisposable.add(useCase!!.savePrivateKey(
-            "1234567891234563", "12312testValeraMineBlaBlaBla", accessToken!!
+            password!!, privateKeyWallet, accessToken!!
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -160,7 +158,7 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     }
 
     fun acceptTicketAsPresent() {
-        MainService.getBuyTicketSErvice().acceptTicketAsPresentRx(
+        MainService.getBuyTicketService().acceptTicketAsPresentRx(
             "0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c",
             BigInteger.valueOf(6L)
         ).thenAccept {

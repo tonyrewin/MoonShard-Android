@@ -13,7 +13,7 @@ class MyTicketsPresenter : MvpPresenter<MyTicketsView>() {
 
     fun getMyTickets() {
         viewState?.showProgressBar()
-        MainService.getBuyTicketSErvice().myTickets
+        MainService.getBuyTicketService().myTickets
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

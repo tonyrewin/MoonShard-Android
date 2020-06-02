@@ -67,6 +67,8 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             idChat = it.getString("chatId")
             presenter.getInfoChat(idChat)
         }
+        presenter.getVerificationEmail()
+
 
         locationLayout?.setSafeOnClickListener {
             ChangeEventRepository.name = nameEt?.text.toString()
@@ -119,10 +121,6 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
 
         destroyRoom?.setSafeOnClickListener {
             presenter.destroyRoom(idChat)
-        }
-
-        manageTicketsBtn?.setSafeOnClickListener {
-            showManageTicketsScreen()
         }
     }
 
@@ -204,6 +202,10 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
 
     private fun showManageTicketsScreen(){
         (parentFragment as? MainChatFragment)?.showManageTicketsScreen(idChat)
+    }
+
+    private fun showVerificationEmail(){
+        (parentFragment as? MainChatFragment)?.showVerificationEmail(idChat)
     }
 
     private fun showTimesScreen() {
@@ -341,6 +343,18 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
 
     override fun showChatsScreen(){
         (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
+    }
+
+   override fun initManageTicket(isActivated:Boolean){
+       if(isActivated){
+           manageTicketsBtn?.setOnClickListener {
+               showManageTicketsScreen()
+           }
+       }else{
+           manageTicketsBtn?.setOnClickListener {
+               showVerificationEmail()
+           }
+       }
     }
 
     override fun onDestroyView() {

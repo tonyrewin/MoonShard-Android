@@ -134,12 +134,13 @@
                     android:src="@drawable/ic_next_gray" />
 
             <TextView
+                    android:id="@+id/saleTicketView"
                     android:layout_marginEnd="17dp"
                     android:layout_marginTop="16dp"
                     android:layout_toStartOf="@+id/iconNext"
                     android:textSize="14sp"
                     android:textColor="#6F6F6F"
-                    android:text="11 000 из 12000"
+                    tools:text="11 000 из 12000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -194,7 +195,7 @@
                     android:layout_toStartOf="@+id/iconNextScan"
                     android:textSize="14sp"
                     android:textColor="#6F6F6F"
-                    android:text="11 000 из 12000"
+                    tools:text="11 000 из 12000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -249,7 +250,7 @@
                     android:layout_toStartOf="@+id/iconNextNotUsed"
                     android:textSize="14sp"
                     android:textColor="#6F6F6F"
-                    android:text="11 000 из 12000"
+                    tools:text="11 000 из 12000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

@@ -43,6 +43,7 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                         viewState?.showVerificationLayout(false)
                     } else {
                         if (result.isActivated!!) {
+                            MainApplication.initWalletLibrary()
                             viewState?.showVerificationLayout(true)
                         } else {
                             viewState?.showVerificationLayout(false)

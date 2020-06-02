@@ -1,4 +1,4 @@
-package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,7 +28,6 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
 
     var idChat = ""
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,9 +39,6 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-
-        var tickets = MainService.getBuyTicketSErvice().myTicketsByOwner
-
 
         arguments?.let {
             idChat = it.getString("chatId")
@@ -63,8 +59,6 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
         }
 
         presenter.getTypesTicket(idChat)
-
-
     }
 
     private fun initAdapter() {
@@ -72,16 +66,27 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
         ticketsRv?.adapter =
             TicketsAdapter(object :
                 TicketListener {
-                override fun clickPlus() {
+
+                override fun clickPlus(ticketSale: MyTicketSale) {
+                    presenter.plusTicketSale(ticketSale)
                 }
 
-                override fun clickMinus() {
+                override fun clickMinus(ticketSale: MyTicketSale) {
+                    presenter.minusTicketSale(ticketSale)
                 }
 
                 override fun click(originSaleAddress: String) {
                     presenter.buyTicket(originSaleAddress,1)
                 }
             }, arrayListOf())
+    }
+
+   override fun showCost(value:String){
+       costTv?.text = "$value ₽"
+    }
+
+    override fun showAmount(value:String){
+        ticketsCounterTv?.text = "$value билета"
     }
 
     override fun setTickets(ticketSales: ArrayList<MyTicketSale>) {

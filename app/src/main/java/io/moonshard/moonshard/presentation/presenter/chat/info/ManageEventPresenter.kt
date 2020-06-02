@@ -1,16 +1,20 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
+import android.util.Log
+import com.example.moonshardwallet.MainService
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
-import io.moonshard.moonshard.LoginCredentials
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
+import io.moonshard.moonshard.usecase.AuthUseCase
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,20 +23,24 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.RoomInfo
-import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
+import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.*
 
 @InjectViewState
 class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
-    private var useCase: RoomsUseCase? = null
+    private var roomsUseCase: RoomsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
     private var infoEventMuc: RoomInfo? = null
 
+    private var authUseCase: AuthUseCase? = null
+
+
     init {
-        useCase = RoomsUseCase()
+        roomsUseCase = RoomsUseCase()
+        authUseCase = AuthUseCase()
     }
 
     fun getInfoChat(jid: String) {
@@ -116,7 +124,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     fun changeEventServer(
         event: RoomPin
     ) {
-        compositeDisposable.add(useCase!!.changeRoom(
+        compositeDisposable.add(roomsUseCase!!.changeRoom(
             event
         )
             .subscribeOn(Schedulers.io())
@@ -201,7 +209,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             }
 
 
-            compositeDisposable.add(useCase!!.deleteRoom(
+            compositeDisposable.add(roomsUseCase!!.deleteRoom(
                 eventId!!
             )
                 .subscribeOn(Schedulers.io())
@@ -218,5 +226,29 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             Logger.d(e)
             viewState?.showToast("Произошла ошибка на сервере")
         }
+    }
+
+    fun getVerificationEmail() {
+        val accessToken = MainApplication.getCurrentLoginCredentials().accessToken
+
+        Log.d("myTimeUserProfile",accessToken)
+        compositeDisposable.add(authUseCase!!.getUserProfileInfo(accessToken!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+                Log.d("myTimeUserProfile","kek")
+                if (throwable == null) {
+                 if(result.isActivated!!){
+                     MainApplication.initWalletLibrary()
+                     viewState?.initManageTicket(result.isActivated!!)
+                 }else{
+                     viewState?.initManageTicket(result.isActivated!!)
+                 }
+                } else {
+                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
+                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                    viewState?.showToast(myError.error.message)
+                }
+            })
     }
 }

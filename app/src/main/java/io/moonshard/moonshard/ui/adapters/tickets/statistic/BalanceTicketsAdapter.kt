@@ -9,12 +9,12 @@ import com.example.moonshardwallet.models.TicketSaleStatistic
 import io.moonshard.moonshard.R
 
 
-interface StatisticTicketsListener {
+interface BalanceTicketListener {
     fun click()
 }
 
-class StatisticTicketsAdapter(val listener: StatisticTicketsListener, private var tickets: ArrayList<TicketSaleStatistic>) :
-    RecyclerView.Adapter<StatisticTicketsAdapter.ViewHolder>()  {
+class BalanceTicketsAdapter(val listener: BalanceTicketListener, private var tickets: ArrayList<TicketSaleStatistic>) :
+    RecyclerView.Adapter<BalanceTicketsAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -26,8 +26,10 @@ class StatisticTicketsAdapter(val listener: StatisticTicketsListener, private va
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nameTicket?.text  = tickets[holder.adapterPosition].typeTicket
-        holder.valueTickets?.text = tickets[holder.adapterPosition].amount+ " из " + tickets[holder.adapterPosition].all
+        val balance = tickets[holder.adapterPosition].all.toInt() - tickets[holder.adapterPosition].amount.toInt()
+
+        holder.nameTicket?.text  =  tickets[holder.adapterPosition].typeTicket
+        holder.valueTickets?.text  = balance.toString()
 
         if(holder.adapterPosition==tickets.size-1){
             holder.viewLine?.visibility = View.GONE
@@ -47,5 +49,4 @@ class StatisticTicketsAdapter(val listener: StatisticTicketsListener, private va
         internal var valueTickets: TextView? = view.findViewById(R.id.valueTickets)
         internal var viewLine: View? = view.findViewById(R.id.viewLine)
     }
-
 }

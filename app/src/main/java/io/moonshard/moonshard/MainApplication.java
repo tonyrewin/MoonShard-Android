@@ -161,6 +161,11 @@ public class MainApplication extends Application {
          //MainService.initLibrary(getApplicationContext());
     }
 
+    public static void initWalletLibrary(){
+        String password =  getCurrentLoginCredentials().password;
+        MainService.initLibrary(getContext(),password);
+    }
+
     private static void setupLogger() {
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)

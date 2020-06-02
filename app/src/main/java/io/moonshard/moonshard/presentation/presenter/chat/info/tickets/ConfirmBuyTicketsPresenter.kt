@@ -69,51 +69,9 @@ class ConfirmBuyTicketsPresenter: MvpPresenter<ConfirmBuyTicketsView>() {
                 Logger.d(e)
                 null
             }
-
             future.get()
-
-           // viewState?.showToast("Оплата успешно выполнена")
-
-
-                //  BuyTicketObject.ticketSales.clear() //временно
         }
-    }
-
-    fun test(){
-        var futures: ArrayList<CompletableFuture<Void>> = ArrayList()
-
-
-
-
-
-
-        BuyTicketObject.ticketSales.forEach { (key, value) ->
-
-            val future = MainService.getBuyTicketService().buy(key.originSaleAddress, value).thenAccept {
-                // var events_tx = sale_instance.getTokensPurchasedEvents(transactionReceipt);
-                // do somthing with event response
-                var event_tx_ticket =
-                    MainService.getBuyTicketService().ticket.getTicketBoughtHumanEvents(it)
-
-                Log.d("eventTxTicket transaction ","test")
-
-            }.exceptionally { e ->
-                Log.d("eventTxTicket error: ",e.message)
-                e.message?.let { viewState?.showToast(it) }
-                Logger.d(e)
-                null
-            }
-
-
-
-
-            futures.add(future)
-        }
-
-
-        CompletableFuture.allOf(*futures.toTypedArray())
-            .thenRunAsync {
-                Logger.d(("Ended doing things"))
-            }
+          viewState?.showToast("Оплата успешно выполнена")
+          BuyTicketObject.ticketSales.clear() //временно
     }
 }

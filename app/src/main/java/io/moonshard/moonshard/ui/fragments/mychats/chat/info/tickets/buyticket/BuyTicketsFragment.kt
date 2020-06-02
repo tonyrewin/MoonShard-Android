@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.MyTicketSale
 
 import io.moonshard.moonshard.R
@@ -55,7 +54,7 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
 
 
         nextBtn?.setSafeOnClickListener {
-            (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat)
+            (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat,this)
         }
 
         presenter.getTypesTicket(idChat)
@@ -91,5 +90,10 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
 
     override fun setTickets(ticketSales: ArrayList<MyTicketSale>) {
         (ticketsRv?.adapter as? TicketsAdapter)?.update(ticketSales)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        BuyTicketObject.ticketSales.clear()
     }
 }

@@ -242,13 +242,19 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showConfirmBuyTicketsFragment(idChat: String) {
+    fun showConfirmBuyTicketsFragment(
+        idChat: String,
+        buyTicketsFragment: BuyTicketsFragment
+    ) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = ConfirmBuyTicketsFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, fragment, "ConfirmBuyTicketsFragment")
+
+        //todo add
+        ft.add(R.id.mainContainer, fragment, "ConfirmBuyTicketsFragment")
+            .hide(buyTicketsFragment)
             .addToBackStack("ConfirmBuyTicketsFragment")
             .commit()
     }

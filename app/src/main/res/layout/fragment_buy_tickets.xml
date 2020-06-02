@@ -88,7 +88,7 @@
                     android:layout_height="104dp"
                     android:background="@drawable/bck_rounded"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/party_test" />
+                    tools:src="@drawable/party_test" />
 
             <TextView
                     android:id="@+id/labelTicket"
@@ -98,7 +98,7 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="13dp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Валерий Меладзе"
+                    tools:text="Валерий Меладзе"
                     android:textColor="#333333"
                     android:textSize="17sp" />
 
@@ -111,7 +111,7 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="4.5dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="1 июля 2020 г. в 23:00"
+                    tools:text="1 июля 2020 г. в 23:00"
                     android:textColor="#6F6F6F"
                     android:textSize="14sp" />
 

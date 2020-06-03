@@ -135,6 +135,7 @@
                 android:textSize="7pt" />
 
         <TextView
+                android:fontFamily="@font/roboto_regular"
                 android:layout_marginBottom="15dp"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"

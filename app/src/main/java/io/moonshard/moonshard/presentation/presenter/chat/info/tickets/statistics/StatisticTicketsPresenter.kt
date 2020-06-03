@@ -15,4 +15,10 @@ class StatisticTicketsPresenter: MvpPresenter<StatisticTicketsView>()  {
 
         viewState?.showSaleStatisticData(allSold,allSaleLimit)
     }
+
+    fun getScannedStatistic(jid:String){
+        val allSold =   MainService.getBuyTicketService().getAllSold(jid)
+        val allScanned = MainService.getBuyTicketService().getAllScannedTickets(jid)
+        viewState?.showScannedStatisticData(allScanned,allSold)
+    }
 }

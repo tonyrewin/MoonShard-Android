@@ -415,12 +415,16 @@ public class XMPPConnection implements ConnectionListener {
                 }
                 if (MainApplication.getXmppConnection() == null || !MainApplication.getXmppConnection().isConnectionReady()) {
                     if (!nameChat.isEmpty()) {
+                        /*
                         Drawable drawable = MainApplication.getContext().getDrawable(R.drawable.party_test);
                         Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         byte[] bitMapData = stream.toByteArray();
                         emitter.onSuccess(bitMapData);
+                         */
+                        emitter.onSuccess(createTextAvatarForTicket(Character.toString(Character.toUpperCase(nameChat.charAt(0)))));
+
                     } else {
                         emitter.onError(new IllegalArgumentException());
                     }
@@ -432,22 +436,30 @@ public class XMPPConnection implements ConnectionListener {
                 } catch (XmppStringprepException e) {
                     e.printStackTrace();
                 }
-
                     byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
 
                     if (avatarBytes != null) {
                         MainApplication.avatarsCache.put(senderID, avatarBytes);
                     } else {
-                        Drawable drawable = MainApplication.getContext().getDrawable(R.drawable.party_test);
-                        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        avatarBytes = stream.toByteArray();                    }
+                        avatarBytes = createTextAvatarForTicket(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                    }
                         emitter.onSuccess(avatarBytes);
             } else {
                 emitter.onError(new IllegalArgumentException());
             }
         });
+    }
+
+    private byte[] createTextAvatarForTicket(String firstLetter) {
+        Drawable avatarText = TextDrawable.builder()
+                .beginConfig()
+                .width( Utils.INSTANCE.convertDpToPixel(312F,getContext()))
+                .height(Utils.INSTANCE.convertDpToPixel(104F,getContext()))
+                .endConfig()
+                .buildRect(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Utils.INSTANCE.drawableToBitmap(avatarText).compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
     }
 
     private byte[] createTextAvatar(String firstLetter) {

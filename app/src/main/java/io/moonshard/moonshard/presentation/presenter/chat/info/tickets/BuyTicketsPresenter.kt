@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info.tickets
 
+import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
@@ -12,6 +13,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
 
     fun getTypesTicket(eventJid: String) {
         val typesTicket = MainService.getBuyTicketService().getTicketsTypes(eventJid)
+        Log.d("addressSale",typesTicket[0].originSaleAddress)
 
         for (i in typesTicket.indices) {
             BuyTicketObject.ticketSales.put(typesTicket[i], 0)

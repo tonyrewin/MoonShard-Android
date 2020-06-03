@@ -63,9 +63,15 @@ class StatisticTicketsFragment : MvpAppCompatFragment(),
         }
 
         presenter.getSaleStatistic(idChat)
+        presenter.getScannedStatistic(idChat)
+
     }
 
     override fun showSaleStatisticData(allSold: String, allSaleLimit: String) {
         saleTicketView?.text = "$allSold из $allSaleLimit"
+    }
+
+    override fun showScannedStatisticData(allScanned: String, allSold: String) {
+        scannedTv?.text = "$allScanned из $allSold "
     }
 }

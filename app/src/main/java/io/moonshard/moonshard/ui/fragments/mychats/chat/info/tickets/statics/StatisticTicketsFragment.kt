@@ -63,7 +63,6 @@ class StatisticTicketsFragment : MvpAppCompatFragment(),
         }
 
         presenter.getSaleStatistic(idChat)
-        presenter.getScannedStatistic(idChat)
 
     }
 
@@ -73,5 +72,17 @@ class StatisticTicketsFragment : MvpAppCompatFragment(),
 
     override fun showScannedStatisticData(allScanned: String, allSold: String) {
         scannedTv?.text = "$allScanned из $allSold "
+    }
+
+    override fun showNotUsedStatisticData(notUsed: String, allSold: String) {
+        notUsedTv?.text = "$notUsed из $allSold "
+    }
+
+    override fun showProgressBar(){
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar(){
+        progressBar?.visibility = View.GONE
     }
 }

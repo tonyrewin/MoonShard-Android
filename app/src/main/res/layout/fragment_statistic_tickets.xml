@@ -246,6 +246,7 @@
                     android:src="@drawable/ic_next_gray" />
 
             <TextView
+                    android:id="@+id/notUsedTv"
                     android:layout_marginEnd="17dp"
                     android:layout_marginTop="16dp"
                     android:layout_toStartOf="@+id/iconNextNotUsed"
@@ -257,8 +258,6 @@
 
         </RelativeLayout>
 
-
-
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -267,5 +266,13 @@
                 android:background="#F5F5F5" />
 
     </LinearLayout>
+
+    <ProgressBar
+            android:layout_centerInParent="true"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

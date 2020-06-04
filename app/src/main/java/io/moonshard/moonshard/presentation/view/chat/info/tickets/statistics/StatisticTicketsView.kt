@@ -5,4 +5,7 @@ import moxy.MvpView
 interface StatisticTicketsView:MvpView {
    fun showSaleStatisticData(allSold:String,allSaleLimit:String)
     fun showScannedStatisticData(allScanned: String, allSold: String)
+    fun showNotUsedStatisticData(notUsed: String, allSold: String)
+    fun hideProgressBar()
+    fun showProgressBar()
 }

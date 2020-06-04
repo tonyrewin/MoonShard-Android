@@ -88,12 +88,13 @@
                     android:textSize="16sp" />
 
             <TextView
+                    android:id="@+id/notUsedTv"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="9dp"
                     android:layout_marginTop="16dp"
                     android:textSize="14sp"
                     android:textColor="#6F6F6F"
-                    android:text="11 000 из 12000"
+                    tools:text="11 000 из 12000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

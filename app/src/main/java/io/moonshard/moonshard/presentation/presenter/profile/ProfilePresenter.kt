@@ -157,14 +157,16 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
         compositeDisposable.clear()
     }
 
-    fun acceptTicketAsPresent() {
+    fun acceptTicketAsPresent(owner: String, tokenId: BigInteger) {
         MainService.getBuyTicketService().acceptTicketAsPresentRx(
-            "0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c",
-            BigInteger.valueOf(6L)
+            owner,
+            tokenId
         ).thenAccept {
-
+        Log.d("success ticket","get success ticket")
 
         }.exceptionally { e ->
+            Log.d("success ticket",e.message)
+
             null
         }
     }

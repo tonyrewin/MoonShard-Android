@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.profile.present_ticket
 
+import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.PresentTicketView
@@ -16,8 +17,12 @@ class PresentTicketPresenter : MvpPresenter<PresentTicketView>() {
         MainService.getBuyTicketService().myTickets
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                viewState.setTickets(it)
+            .subscribe({ tickets ->
+                val newTickets =  tickets.filter {
+                    it.payState.toInt()!=2
+                }
+
+                viewState.setTickets(ArrayList(newTickets))
                 viewState?.hideProgressBar()
             }, {
                 viewState?.hideProgressBar()

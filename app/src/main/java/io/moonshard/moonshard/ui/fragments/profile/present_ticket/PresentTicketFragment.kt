@@ -66,6 +66,7 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
                     val bundle = Bundle()
                     bundle.putString("ticket", ticketJson)
                     val addPhotoBottomDialogFragment = RecipientDialogFragment()
+                    addPhotoBottomDialogFragment.arguments = bundle
                     addPhotoBottomDialogFragment.show(
                         activity!!.supportFragmentManager,
                         "RecipientDialogFragment"

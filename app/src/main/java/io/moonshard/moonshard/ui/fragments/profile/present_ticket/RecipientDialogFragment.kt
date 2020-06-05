@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -65,7 +66,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
         presenter.getContacts()
 
         chooseBtn?.setOnClickListener{
-            presenter.sendTicketAsPresent("ticketUser",ticket!!.ticketId)
+            presenter.sendTicketAsPresent("0x60a736a1194947116fe787e09520595c632317d7",ticket!!.ticketId)
         }
 
         cancelBtn?.setOnClickListener{

@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter.profile.present_ticket
 
+import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication

@@ -20,6 +20,7 @@ import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -158,12 +159,24 @@ public class MainApplication extends Application {
                 .apply();
 
 
-         //MainService.initLibrary(getApplicationContext());
+        //MainService.initLibrary(getApplicationContext());
     }
 
-    public static void initWalletLibrary(){
-        String password =  getCurrentLoginCredentials().password;
-        MainService.initLibrary(getContext(),password);
+    public static void initWalletLibrary() {
+        String password = getCurrentLoginCredentials().password;
+        MainService.initLibrary(getContext(), password);
+
+        MainService.getBuyTicketService().approvalEventFlowable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(event -> {
+                    if (event.approved == MainService.getWalletService().getMyAddress()) {
+                        acceptTicketAsPresent(event.owner, event.tokenId);
+                    }
+                }, throwable -> {
+                    Logger.e(throwable.getMessage());
+                });
+
+
     }
 
     private static void setupLogger() {
@@ -291,6 +304,17 @@ public class MainApplication extends Application {
                 }, throwable -> {
                     Log.e("myTimeLog", "TrueTime init failed: ");
                 });
+    }
+
+    static void acceptTicketAsPresent(String owner, BigInteger tokenId) {
+        MainService.getBuyTicketService().acceptTicketAsPresentRx(
+                owner,
+                tokenId
+        ).thenAccept((avatarBytes) -> Log.d("success", "get success ticket")).exceptionally((exc -> {
+            Logger.e(exc.getMessage());
+            return null;
+        }
+        ));
     }
 }
 

@@ -41,21 +41,6 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getAvatar()
         presenter.getVerificationEmail()
 
-
-        MainService.getBuyTicketService().approvalEventFlowable()?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe({ event ->
-                Log.d("approvalEvent: ",event.approved)
-                Log.d("approvalEvent: ",event.owner)
-                Log.d("approvalEvent: ",event.tokenId)
-                if(event.approved==MainService.getWalletService().myAddress){
-                    presenter.acceptTicketAsPresent(event.owner,event.tokenId)
-                }
-            }, { throwable ->
-                Log.e(throwable.message)
-            })
-
-
         //MainService.getWalletService().cashOut()
 
         //presenter.savePrivateKey("")

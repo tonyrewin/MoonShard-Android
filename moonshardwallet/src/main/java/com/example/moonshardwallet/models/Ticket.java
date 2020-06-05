@@ -13,13 +13,15 @@ public class Ticket {
     BigInteger ticketType;
     String jidEvent;
     BigInteger ticketId;
+    String ticketSaleAddress;
 
 
-    public Ticket( BigInteger payState, BigInteger ticketType,String jidEvent,BigInteger ticketId) {
+    public Ticket( BigInteger payState, BigInteger ticketType,String jidEvent,BigInteger ticketId,String ticketSaleAddress) {
         this.payState = payState;
         this.ticketType = ticketType;
         this.jidEvent = jidEvent;
         this.ticketId =ticketId;
+        this.ticketSaleAddress = ticketSaleAddress;
     }
 
     public String getJidEvent() {
@@ -37,6 +39,11 @@ public class Ticket {
     public BigInteger getTicketId() {
         return ticketId;
     }
+
+    public String getTicketSaleAddress() {
+        return ticketSaleAddress;
+    }
+
 }
 
 

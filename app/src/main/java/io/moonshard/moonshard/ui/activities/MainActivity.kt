@@ -173,7 +173,6 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         ft.replace(R.id.container, newFragment, "MapScreen").commit()
     }
 
-
     fun showMapScrenFromCreateNewEventScreen() {
         supportFragmentManager.popBackStack(
             null,

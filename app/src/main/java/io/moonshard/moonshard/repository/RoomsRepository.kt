@@ -22,7 +22,7 @@ class RoomsRepository {
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         categories: ArrayList<Category>,
         idGroup: String?,
-        eventStartDate: Long,
+        eventStartDate: String,
         name: String,address:String
     ): Single<RoomPin> {
         val request = ModelMapRequest(
@@ -62,11 +62,11 @@ class RoomsRepository {
         return api.changeRoom(room)
     }
 
-    fun getRoom(eventId: Long): Single<RoomPin> {
+    fun getRoom(eventId: String): Single<RoomPin> {
         return api.getRoom(eventId)
     }
 
-    fun deleteRoom(eventId: Long):Completable{
-        return api.deleteRoom(eventId.toString())
+    fun deleteRoom(eventId: String):Completable{
+        return api.deleteRoom(eventId)
     }
 }

@@ -11,6 +11,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.DateHolder
+import io.moonshard.moonshard.common.utils.DateHolderChat
 import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.ChatListItem
@@ -70,8 +71,8 @@ class ChatListRecycleViewPresenter : MvpPresenter<ChatListRecyclerView>() {
 
                 holder.lastMessageText.text = chat.lastMessageText
 
-                val currentDate = DateHolder(System.currentTimeMillis())
-                val messageDate = DateHolder(chat.lastMessageDate)
+                val currentDate = DateHolderChat(System.currentTimeMillis())
+                val messageDate = DateHolderChat(chat.lastMessageDate)
                 val lastMessageDateText =
                     if (messageDate.year == currentDate.year && messageDate.month == currentDate.month
                         && messageDate.dayOfMonth == currentDate.dayOfMonth

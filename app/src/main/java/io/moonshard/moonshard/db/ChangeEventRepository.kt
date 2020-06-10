@@ -23,6 +23,8 @@ object ChangeEventRepository {
     }
 
     fun setStartDate(calendar: Calendar){
-        event!!.eventStartDate = convertCalendarToTimeStamp(calendar)
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+        val date = calendar.time
+        event!!.eventStartDate = sdf.format(date)
     }
 }

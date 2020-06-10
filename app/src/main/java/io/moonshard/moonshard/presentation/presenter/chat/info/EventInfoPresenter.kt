@@ -39,7 +39,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
     }
 
     fun getRoomInfo(jid: String) {
-        var eventId: Long? = null
+        var eventId: String? = null
         for (i in RoomsMap.rooms.indices) {
             if (jid == RoomsMap.rooms[i].roomId) {
                 eventId = RoomsMap.rooms[i].id
@@ -132,8 +132,6 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 ChangeEventRepository.event?.category?.get(0)?.categoryName.toString()
             val onlineMembersValue = getValueOnlineUsers(muc, members)
 
-            val calendar =
-                convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
 
             location = LatLng(
                 ChangeEventRepository.event!!.latitude,

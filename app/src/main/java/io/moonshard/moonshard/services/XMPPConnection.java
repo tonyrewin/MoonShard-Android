@@ -2,14 +2,13 @@ package io.moonshard.moonshard.services;
 
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.moonshardwallet.MainService;
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -30,7 +29,6 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
-import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
@@ -41,7 +39,6 @@ import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
-import org.jxmpp.jid.parts.Localpart;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -57,18 +54,18 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences;
 import io.moonshard.moonshard.EmptyLoginCredentialsException;
 import io.moonshard.moonshard.LoginCredentials;
 import io.moonshard.moonshard.MainApplication;
-import io.moonshard.moonshard.R;
 import io.moonshard.moonshard.common.utils.Utils;
 import io.moonshard.moonshard.helpers.NetworkHandler;
+import io.moonshard.moonshard.models.api.auth.response.ErrorResponse;
 import io.moonshard.moonshard.repository.ChatListRepository;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager;
 import io.moonshard.moonshard.usecase.AuthUseCase;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 import trikita.log.Log;
 
 import static io.moonshard.moonshard.MainApplication.getContext;
@@ -254,13 +251,13 @@ public class XMPPConnection implements ConnectionListener {
             e.printStackTrace();
         }
 
-        Log.d("myInterval",false);
-         Observable.just(true).interval(25,25, TimeUnit.MINUTES).subscribe(b->{
-             Log.d("myInterval",true);
-             refreshToken();
-         });
+        Log.d("myInterval", false);
+        Observable.just(true).interval(25, 25, TimeUnit.MINUTES).subscribe(b -> {
+            Log.d("myInterval", true);
+            refreshToken();
+        });
 
-        initLibrary();
+        getPrivateKey();
     }
 
     @Override
@@ -274,8 +271,8 @@ public class XMPPConnection implements ConnectionListener {
     public void connectionClosedOnError(Exception e) {
         XMPPConnectionService.CONNECTION_STATE = ConnectionState.DISCONNECTED;
 
-        if(e instanceof SSLException){
-            if(e.getMessage().contains("Connection reset by peer")){
+        if (e instanceof SSLException) {
+            if (e.getMessage().contains("Connection reset by peer")) {
                 //перезапускаем интернет соединение
             }
         }
@@ -436,14 +433,14 @@ public class XMPPConnection implements ConnectionListener {
                 } catch (XmppStringprepException e) {
                     e.printStackTrace();
                 }
-                    byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
+                byte[] avatarBytes = MainApplication.getXmppConnection().getAvatarMuc(jid);
 
-                    if (avatarBytes != null) {
-                        MainApplication.avatarsCache.put(senderID, avatarBytes);
-                    } else {
-                        avatarBytes = createTextAvatarForTicket(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
-                    }
-                        emitter.onSuccess(avatarBytes);
+                if (avatarBytes != null) {
+                    MainApplication.avatarsCache.put(senderID, avatarBytes);
+                } else {
+                    avatarBytes = createTextAvatarForTicket(Character.toString(Character.toUpperCase(nameChat.charAt(0))));
+                }
+                emitter.onSuccess(avatarBytes);
             } else {
                 emitter.onError(new IllegalArgumentException());
             }
@@ -453,8 +450,8 @@ public class XMPPConnection implements ConnectionListener {
     private byte[] createTextAvatarForTicket(String firstLetter) {
         Drawable avatarText = TextDrawable.builder()
                 .beginConfig()
-                .width( Utils.INSTANCE.convertDpToPixel(312F,getContext()))
-                .height(Utils.INSTANCE.convertDpToPixel(104F,getContext()))
+                .width(Utils.INSTANCE.convertDpToPixel(312F, getContext()))
+                .height(Utils.INSTANCE.convertDpToPixel(104F, getContext()))
                 .endConfig()
                 .buildRect(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -465,8 +462,8 @@ public class XMPPConnection implements ConnectionListener {
     private byte[] createTextAvatar(String firstLetter) {
         Drawable avatarText = TextDrawable.builder()
                 .beginConfig()
-                .width( Utils.INSTANCE.convertDpToPixel(55F,getContext()))
-                .height(Utils.INSTANCE.convertDpToPixel(55F,getContext()))
+                .width(Utils.INSTANCE.convertDpToPixel(55F, getContext()))
+                .height(Utils.INSTANCE.convertDpToPixel(55F, getContext()))
                 .endConfig()
                 .buildRect(firstLetter, ColorGenerator.MATERIAL.getColor(firstLetter));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -833,7 +830,24 @@ public class XMPPConnection implements ConnectionListener {
                 }, error -> Logger.d(error));
     }
 
-    void initLibrary(){
+    void getPrivateKey() {
+        String accessToken = getLongStringValue("accessToken");
+
+        useCase.getPrivateKey(
+                accessToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    initLibrary(result.getPrivateKey());
+                }, error ->{
+                    Gson gson = new Gson();
+                    String jsonError =((HttpException) error).response().errorBody().string();
+                    ErrorResponse myError = gson.fromJson(jsonError, ErrorResponse.class);
+                    Logger.d(myError.getError().getMessage());
+                });
+    }
+
+    void initLibrary(String privateKey) {
         String accessToken = MainApplication.getCurrentLoginCredentials().accessToken;
 
         useCase.getUserProfileInfo(
@@ -841,21 +855,41 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    if(result.isActivated()){
-                        MainApplication.initWalletLibrary();
+                    if (result.isActivated()) {
+                        MainApplication.initWalletLibrary(privateKey);
                     }
                 }, error -> Logger.d(error));
     }
 
-    private void saveLoginCredentials(String accessToken,String refreshToken) {
+    //todo there is not must be
+    public void savePrivateKey() {
+        String accessToken = MainApplication.getCurrentLoginCredentials().accessToken;
+        String addressWallet = MainService.getWalletService().getMyAddress();
+        String privateKeyWallet = MainService.getWalletService().getPrivateKeyInHex();
+
+        useCase.savePrivateKey(
+                privateKeyWallet, addressWallet, accessToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                   Logger.d(result);
+                }, error -> Logger.d(error));
+    }
+
+    private void saveLoginCredentials(String accessToken, String refreshToken) {
         setLongStringValue("accessToken", accessToken);
-        setLongStringValue("refreshToken",refreshToken);
+        setLongStringValue("refreshToken", refreshToken);
 
         credentials.accessToken = accessToken;
         credentials.refreshToken = refreshToken;
 
         MainApplication.setCurrentLoginCredentials(credentials);
     }
+
+    private static String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
+    }
+
 
     public enum ConnectionState {
         CONNECTED,

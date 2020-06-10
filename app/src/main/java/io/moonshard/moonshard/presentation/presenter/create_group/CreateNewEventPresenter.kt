@@ -36,18 +36,12 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
     }
 
     fun getCategories() {
-        viewState?.showProgressBar()
-        compositeDisposable.add(useCase!!.getCategories()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { categories, throwable ->
-                viewState?.hideProgressBar()
-                if (throwable == null) {
-                    viewState?.showCategories(categories)
-                } else {
-                    viewState?.showToast("Ошибка: ${throwable.message}")
-                }
-            })
+        val categories = arrayListOf<Category>()
+        categories.add(Category(1,"Тусовки"))
+        categories.add(Category(2,"Бизнес ивенты"))
+        categories.add(Category(3,"Кружок по интересам"))
+        categories.add(Category(4,"Культурные мероприятия"))
+        viewState?.showCategories(categories)
     }
 
     @SuppressLint("CheckResult")
@@ -55,7 +49,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
         nameEvent: String, latitude: Double?, longitude: Double?,
         ttl: Int,
         category: Category?,
-        group: ChatEntity?, eventStartDate: Long, address: String
+        group: ChatEntity?, eventStartDate: String, address: String
     ) {
 
         if (latitude != null && longitude != null && category != null) {
@@ -204,7 +198,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
     private fun createRoomOnServer(
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
-        category: Category, group: ChatEntity?, eventStartDate: Long, name: String, address: String
+        category: Category, group: ChatEntity?, eventStartDate: String, name: String, address: String
         , chatEntity: ChatEntity
     ) {
         val categories = arrayListOf<Category>()

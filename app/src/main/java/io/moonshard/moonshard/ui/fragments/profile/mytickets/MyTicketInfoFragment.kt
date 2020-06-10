@@ -88,7 +88,9 @@ class MyTicketInfoFragment: MvpAppCompatFragment(), MyTicketInfoView {
         Log.d("ticketId",ticket.ticketId.toString())
 
 
-        val contentQrCode = QrCodeModel(ticket?.ticketId!!,MainService.getWalletService().myAddress,ticket.jidEvent,ticket.ticketType,ticket.ticketSaleAddress)
+        val contentQrCode = QrCodeModel(ticket?.ticketId!!,MainService.getWalletService(
+
+        ).myAddress,ticket.jidEvent,ticket.ticketType,ticket.ticketSaleAddress)
         val contentQrCodeJson = Gson().toJson(contentQrCode)
         generateQrCode(contentQrCodeJson)
     }

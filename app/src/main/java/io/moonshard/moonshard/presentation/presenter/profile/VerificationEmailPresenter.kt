@@ -1,10 +1,10 @@
 package io.moonshard.moonshard.presentation.presenter.profile
 
 import android.util.Log
+import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
-import io.moonshard.moonshard.models.api.auth.response.Error
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.view.profile.VerificationEmailView
 import io.moonshard.moonshard.usecase.AuthUseCase
@@ -43,7 +43,7 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                         viewState?.showVerificationLayout(false)
                     } else {
                         if (result.isActivated!!) {
-                            MainApplication.initWalletLibrary()
+                            getPrivateKey()
                             viewState?.showVerificationLayout(true)
                         } else {
                             viewState?.showVerificationLayout(false)
@@ -54,6 +54,31 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                     val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
                     val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
                     viewState?.showToast(myError.error.message)
+                }
+            })
+    }
+
+    fun getPrivateKey() {
+        val accessToken = getLongStringValue("accessToken")
+
+        compositeDisposable.add(useCase!!.getPrivateKey(
+            accessToken!!
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+                if (throwable == null) {
+                    if (result.privateKey.isNotBlank()) {
+                        MainApplication.initWalletLibrary(result.privateKey)
+                    }
+                } else {
+                    val jsonError = (throwable as HttpException).response()!!.errorBody()!!.string()
+                    val (error) = Gson().fromJson(jsonError, ErrorResponse::class.java)
+
+                    if (error.message == "cipher text too short") {
+                        MainApplication.initWalletLibrary(null)
+                    }
+                    com.orhanobut.logger.Logger.d(result)
                 }
             })
     }

@@ -61,8 +61,6 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
 
         cancelBtn?.setOnClickListener{
             dismiss()
-
-
         }
     }
 

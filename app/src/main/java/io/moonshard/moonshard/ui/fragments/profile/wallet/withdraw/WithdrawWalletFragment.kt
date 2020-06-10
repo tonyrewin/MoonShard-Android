@@ -3,18 +3,21 @@ package io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import com.example.moonshardwallet.MainService
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.withdraw.WithdrawWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.withdraw.WithdrawWalletView
+import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.fragment_withdraw_wallet.*
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.backBtn
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.balanceTv
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -65,7 +68,14 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
             }
         })
 
-        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+        presenter.getBalance()
+    }
 
+    override fun showBalance(balance:String){
+        balanceTv?.text = "$balance ₽"
+    }
+
+    override fun showToast(text:String){
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 }

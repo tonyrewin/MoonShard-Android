@@ -8,4 +8,5 @@ interface TransferWalletView: MvpView {
     fun setDataRecipient(name: String, status: String)
     fun showToast(text: String)
     fun back()
+    fun showBalance(balance: String)
 }

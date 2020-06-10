@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.moonshardwallet.MainService;
+import com.google.gson.Gson;
 import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -34,6 +35,7 @@ import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.removeLongStringValue;
@@ -162,21 +164,48 @@ public class MainApplication extends Application {
         //MainService.initLibrary(getApplicationContext());
     }
 
-    public static void initWalletLibrary() {
-        String password = getCurrentLoginCredentials().password;
-        MainService.initLibrary(getContext(), password);
+    public static void initWalletLibrary(String privateKey) {
+        String accountPassword = getCurrentLoginCredentials().password;
+        MainService.initLibrary(getContext(), accountPassword, privateKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    if (privateKey == null) {
+                        xmppConnection.savePrivateKey();
+                    }
+                    approvalTicketsAsPresent();
+                }, e -> {
+                    Logger.e(e.getMessage());
+                });
+    }
 
+    static void approvalTicketsAsPresent() {
         MainService.getBuyTicketService().approvalEventFlowable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
-                    if (event.approved == MainService.getWalletService().getMyAddress()) {
+                    if (event.approved.equals(MainService.getWalletService().getMyAddress())) {
+                        Log.d("approvalTicketsAsPresent", " event listen");
                         acceptTicketAsPresent(event.owner, event.tokenId);
                     }
                 }, throwable -> {
+                    Log.d("approvalTicketsAsPresent", throwable.getMessage());
                     Logger.e(throwable.getMessage());
                 });
+    }
 
-
+    static void acceptTicketAsPresent(String owner, BigInteger tokenId) {
+        MainService.getBuyTicketService().acceptTicketAsPresentRx2(
+                owner,
+                tokenId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    Log.d("acceptTicketAsPresent", "get success ticket");
+                }, throwable -> {
+                    Log.d("acceptTicketAsPresent", throwable.getMessage());
+                    Logger.e(throwable.getMessage());
+                });
     }
 
     private static void setupLogger() {
@@ -306,7 +335,8 @@ public class MainApplication extends Application {
                 });
     }
 
-    static void acceptTicketAsPresent(String owner, BigInteger tokenId) {
+
+        /*
         MainService.getBuyTicketService().acceptTicketAsPresentRx(
                 owner,
                 tokenId
@@ -315,7 +345,9 @@ public class MainApplication extends Application {
             return null;
         }
         ));
-    }
+
+         */
+
 }
 
 

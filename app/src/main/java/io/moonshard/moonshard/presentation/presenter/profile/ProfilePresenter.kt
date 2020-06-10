@@ -5,15 +5,17 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
-import de.adorsys.android.securestoragelibrary.SecurePreferences
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
 import io.moonshard.moonshard.usecase.AuthUseCase
+import io.reactivex.CompletableObserver
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -35,8 +37,7 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     }
 
     fun getInfoProfile() {
-        getInfoFromVCard().
-             subscribeOn(Schedulers.io())
+        getInfoFromVCard().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 viewState?.setData(it["nickName"], it["description"], it["jidPart"])
@@ -53,8 +54,8 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             // val description = card.getField("DESCRIPTION")
             var description = card.middleName
 
-            if(description.isNullOrBlank()){
-                setDescriptionInVCard(vm,card)
+            if (description.isNullOrBlank()) {
+                setDescriptionInVCard(vm, card)
                 description = card.middleName
             }
 
@@ -66,7 +67,7 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
         }
     }
 
-    fun setDescriptionInVCard(vm:VCardManager,card:VCard){
+    fun setDescriptionInVCard(vm: VCardManager, card: VCard) {
         card.middleName = "Привет! Теперь я пользуюсь Moonshard."
         vm.saveVCard(card)
     }
@@ -102,11 +103,12 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
-                Log.d("responseUserProfileInfo",Gson().toJson(result))
+                Log.d("responseUserProfileInfo", Gson().toJson(result))
                 if (throwable == null) {
-                    if(result.isActivated!!) MainApplication.initWalletLibrary()
+                    //todo получить
+                    if (result.isActivated!!) getPrivateKey()
                     viewState?.setVerification(result.email, result.isActivated)
-                    com.orhanobut.logger.Logger.d(result)
+                    Logger.d(result)
                 } else {
                     val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
                     val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
@@ -115,39 +117,44 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             })
     }
 
-    fun savePrivateKey(encryptionPassword: String) {
-        val password = SecurePreferences.getStringValue("pass", null)
+    fun getPrivateKey() {
         val accessToken = getLongStringValue("accessToken")
-        val addressWallet = MainService.getWalletService().myAddress
-        val privateKeyWallet =   MainService.getWalletService().privateKeyInHex
 
-        compositeDisposable.add(useCase!!.savePrivateKey(
-            password!!, privateKeyWallet, accessToken!!
+        compositeDisposable.add(useCase!!.getPrivateKey(
+            accessToken!!
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
                 if (throwable == null) {
-                    getPrivateKey("1234567891234563")
+                    if (result.privateKey.isNotBlank()) {
+                        MainApplication.initWalletLibrary(result.privateKey)
+                    }
                 } else {
-                    com.orhanobut.logger.Logger.d(result)
+                    val jsonError = (throwable as HttpException).response()!!.errorBody()!!.string()
+                    val (error) = Gson().fromJson(jsonError, ErrorResponse::class.java)
+
+                    if (error.message == "cipher text too short") {
+                        MainApplication.initWalletLibrary(null)
+                    }
+                    Logger.d(result)
                 }
             })
     }
 
-    fun getPrivateKey(encryptionPassword: String) {
+    fun getPublicKey(username: String) {
         val accessToken = getLongStringValue("accessToken")
 
-        compositeDisposable.add(useCase!!.getPrivateKey(
-            encryptionPassword, accessToken!!
+        compositeDisposable.add(useCase!!.getWalletAddress(
+            username, accessToken!!
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
                 if (throwable == null) {
-                    com.orhanobut.logger.Logger.d(result)
+                    Logger.d(result)
                 } else {
-                    com.orhanobut.logger.Logger.d(result)
+                    Logger.d(result)
                 }
             })
     }
@@ -162,10 +169,10 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
             owner,
             tokenId
         ).thenAccept {
-        Log.d("success ticket","get success ticket")
+            Log.d("success ticket", "get success ticket")
 
         }.exceptionally { e ->
-            Log.d("success ticket",e.message)
+            Log.d("success ticket", e.message)
 
             null
         }

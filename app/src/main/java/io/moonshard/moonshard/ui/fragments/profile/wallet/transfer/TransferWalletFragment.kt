@@ -15,6 +15,9 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
+import kotlinx.android.synthetic.main.fragment_transfer_wallet.backBtn
+import kotlinx.android.synthetic.main.fragment_transfer_wallet.balanceTv
+import kotlinx.android.synthetic.main.fragment_wallet.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -47,7 +50,7 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         }
 
         nextBtn?.setOnClickListener {
-            presenter.sendMoney("",moneyValue.text.toString())
+            presenter.sendMoney(moneyValue.text.toString())
         }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
@@ -80,16 +83,15 @@ class TransferWalletFragment : MvpAppCompatFragment(),
                 "TransferRecipientDialogFragment"
             )
         }
+        presenter.getBalance()
+    }
 
-
-        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+    override fun showBalance(balance:String){
+        balanceTv?.text = "$balance ₽"
     }
 
     fun showRecipient(jid: String) {
         presenter.showRecipient(jid)
-        //userAdminAvatar.setImageBitmap(avatar)
-        // nameAdminTv?.text = name
-        //  statusTv?.text = status
     }
 
     override fun setDataRecipient(name: String, status: String) {

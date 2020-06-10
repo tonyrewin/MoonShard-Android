@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import com.example.moonshardwallet.MainService
 
 import io.moonshard.moonshard.R
@@ -12,6 +12,9 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.fill_up.FillUpWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.fill_up.FillUpWalletView
 import kotlinx.android.synthetic.main.fragment_fill_up_wallet.*
+import kotlinx.android.synthetic.main.fragment_fill_up_wallet.backBtn
+import kotlinx.android.synthetic.main.fragment_fill_up_wallet.balanceTv
+import kotlinx.android.synthetic.main.fragment_wallet.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -62,8 +65,16 @@ class FillUpWalletFragment : MvpAppCompatFragment(),
                                        before: Int, count: Int) {
             }
         })
-        balanceTv?.text = MainService.getWalletService().balance + " ₽"
 
+        presenter.getBalance()
+    }
+
+    override fun showBalance(balance:String){
+        balanceTv?.text = "$balance ₽"
+    }
+
+    override fun showToast(text:String){
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 
 }

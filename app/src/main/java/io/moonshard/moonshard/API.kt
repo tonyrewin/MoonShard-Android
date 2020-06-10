@@ -5,10 +5,7 @@ import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.CreatePaymentRequestModel
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.api.auth.request.*
-import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
-import io.moonshard.moonshard.models.api.auth.response.PrivateKeyAuthResponse
-import io.moonshard.moonshard.models.api.auth.response.ProfileUserResponse
-import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
+import io.moonshard.moonshard.models.api.auth.response.*
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.Response
@@ -47,7 +44,7 @@ interface API {
     fun changeRoom(@Body room: RoomPin): Single<RoomPin>
 
     @GET("rooms/{eventId}")
-    fun getRoom(@Path("eventId") eventId: Long): Single<RoomPin>
+    fun getRoom(@Path("eventId") eventId: String): Single<RoomPin>
 
     @DELETE("rooms/{eventId}")
     fun deleteRoom(@Path("eventId") eventId: String): Completable
@@ -77,8 +74,12 @@ interface API {
     fun savePrivateKey(@Url url: String, @Body request: PrivateKeyRequestModel, @Header("Authorization") authHeader: String): Single<GeneralResponseAuth>
 
     @Headers("Accept: application/json", "Content-type:application/json")
-    @POST
-    fun getPrivateKey(@Url url: String, @Body request: PrivateKeyRequestModel, @Header("Authorization") authHeader: String): Single<PrivateKeyAuthResponse>
+    @GET
+    fun getPrivateKey(@Url url: String, @Header("Authorization") authHeader: String): Single<PrivateKeyAuthResponse>
+
+    @Headers("Accept: application/json", "Content-type:application/json")
+    @GET
+    fun getPublicKey(@Url url: String, @Query("username") username: String, @Header("Authorization") authHeader: String): Single<PublicKeyAuthResponse>
 
     @Headers("Accept: application/json", "Content-type:application/json")
     @POST

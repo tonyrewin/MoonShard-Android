@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.presentation.presenter
 
+import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.presentation.view.CategoriesMapView
 import io.moonshard.moonshard.usecase.RoomsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,13 +19,11 @@ class CategoriesMapPresenter: MvpPresenter<CategoriesMapView>() {
     }
 
     fun getCategories(){
-        compositeDisposable.add(useCase!!.getCategories()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { categories, throwable ->
-                if (throwable == null) {
-                    viewState?.showCategories(categories)
-                }
-            })
+        val categories = arrayListOf<Category>()
+        categories.add(Category(1,"Тусовки"))
+        categories.add(Category(2,"Бизнес ивенты"))
+        categories.add(Category(3,"Кружок по интересам"))
+        categories.add(Category(4,"Культурные мероприятия"))
+        viewState?.showCategories(categories)
     }
 }

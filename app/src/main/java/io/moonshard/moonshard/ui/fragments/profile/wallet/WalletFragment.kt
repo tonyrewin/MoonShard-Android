@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.WalletService
 import io.moonshard.moonshard.R
@@ -55,6 +56,14 @@ class WalletFragment : MvpAppCompatFragment(),
             (activity as MainActivity).showTransferWalletFragment()
         }
 
-        balanceTv?.text = MainService.getWalletService().balance + " ₽"
+        presenter.getBalance()
+    }
+
+    override fun showBalance(balance:String){
+        balanceTv?.text = "$balance ₽"
+    }
+
+    override fun showToast(text:String){
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 }

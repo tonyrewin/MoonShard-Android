@@ -21,7 +21,7 @@ class RoomsUseCase {
         latitude: Double?, longitude: Double?, ttl: Int, roomId: String,
         categories: ArrayList<Category>,
         idGroup: String?,
-        eventStartDate: Long,
+        eventStartDate: String,
         name:String,address:String
     ): Single<RoomPin> {
         return roomsRepository.putRoom(latitude, longitude, ttl, roomId, categories,idGroup,eventStartDate,name,address)
@@ -45,11 +45,11 @@ class RoomsUseCase {
         return roomsRepository.changeRoom(room)
     }
 
-    fun getRoom(eventId:Long):Single<RoomPin>{
+    fun getRoom(eventId:String):Single<RoomPin>{
         return roomsRepository.getRoom(eventId)
     }
 
-    fun deleteRoom(eventId:Long):Completable{
+    fun deleteRoom(eventId:String):Completable{
         return roomsRepository.deleteRoom(eventId)
     }
 }

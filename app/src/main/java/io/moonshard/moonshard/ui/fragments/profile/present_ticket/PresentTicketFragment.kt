@@ -60,8 +60,6 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
             TicketPresentAdapter(this.mvpDelegate,object :
                 TicketPresentListener {
                 override fun click(ticket: Ticket) {
-                    MainService.getBuyTicketService().presentTicket("0xb4a31ab401bc17feb7d9697792c73cfe58546a3b",ticket.ticketId)
-
                     val ticketJson = Gson().toJson(ticket)
                     val bundle = Bundle()
                     bundle.putString("ticket", ticketJson)

@@ -1,10 +1,7 @@
 package io.moonshard.moonshard.usecase
 
 import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.models.api.auth.response.GeneralResponseAuth
-import io.moonshard.moonshard.models.api.auth.response.PrivateKeyAuthResponse
-import io.moonshard.moonshard.models.api.auth.response.ProfileUserResponse
-import io.moonshard.moonshard.models.api.auth.response.TokenModelResponse
+import io.moonshard.moonshard.models.api.auth.response.*
 import io.moonshard.moonshard.repository.AuthRepository
 import io.reactivex.Single
 import okhttp3.Response
@@ -43,12 +40,16 @@ class AuthUseCase {
         return authRepository.refreshToken(accessToken,refreshToken)
     }
 
-    fun savePrivateKey(encryptionPassword:String,privateKey:String,token:String): Single<GeneralResponseAuth>{
-        return authRepository.savePrivateKey(encryptionPassword,privateKey,token)
+    fun savePrivateKey(privateKey:String,addressWallet:String,token:String): Single<GeneralResponseAuth>{
+        return authRepository.savePrivateKey(privateKey,addressWallet,token)
     }
 
-    fun getPrivateKey(encryptionPassword:String,token:String): Single<PrivateKeyAuthResponse>{
-        return authRepository.getPrivateKey(encryptionPassword,token)
+    fun getPrivateKey(token:String): Single<PrivateKeyAuthResponse>{
+        return authRepository.getPrivateKey(token)
+    }
+
+    fun getWalletAddress(encryptionPassword:String,token:String): Single<PublicKeyAuthResponse>{
+        return authRepository.getWalletAddress(encryptionPassword,token)
     }
 
     fun getUserProfileInfo(token:String): Single<ProfileUserResponse>{

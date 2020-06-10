@@ -54,7 +54,7 @@ class TimeEventFragment : Fragment() {
                 if(fromManageEventScreen){
                     ChangeEventRepository.event?.ttl = convertDaysToTtl(time)
                 }else{
-                    ChooseChatRepository.time = time
+                    ChooseChatRepository.durationTime = time
                 }
             }
         }, times)

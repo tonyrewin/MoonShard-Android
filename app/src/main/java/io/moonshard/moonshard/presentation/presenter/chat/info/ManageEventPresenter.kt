@@ -1,11 +1,11 @@
 package io.moonshard.moonshard.presentation.presenter.chat.info
 
 import android.util.Log
-import com.example.moonshardwallet.MainService
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
@@ -67,7 +67,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             )
 
             val calendar =
-                convertUnixTimeStampToCalendar(ChangeEventRepository.event?.eventStartDate!!)
+                convertIsoToCalendar(ChangeEventRepository.event?.eventStartDate!!)
 
             viewState?.setStartDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
@@ -80,6 +80,14 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         }
     }
 
+    private fun convertIsoToCalendar(newStartDate: String): Calendar {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        calendar.time = sdf.parse(newStartDate)
+        return calendar
+    }
+
+    /*
     private fun convertUnixTimeStampToCalendar(newStartDate: Long): Calendar {
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val date = Date(newStartDate * 1000L)
@@ -88,6 +96,9 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
         calendar.time = date
         return calendar
     }
+
+     */
+
 
     fun setData(
         name: String,
@@ -201,7 +212,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             val myJid = MainApplication.getXmppConnection().jid.asUnescapedString()
             val roomJid = JidCreate.entityBareFrom(jid)
 
-            var eventId: Long? = null
+            var eventId: String? = null
             for (i in RoomsMap.rooms.indices) {
                 if (jid == RoomsMap.rooms[i].roomId) {
                     eventId = RoomsMap.rooms[i].id
@@ -209,18 +220,19 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             }
 
 
-            compositeDisposable.add(roomsUseCase!!.deleteRoom(
-                eventId!!
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    muc.destroy(myJid, roomJid)
-                    viewState?.showChatsScreen()
-                }, {
-                    Logger.d(it)
-                    viewState?.showToast("Произошла ошибка на сервере")
-                })
+            compositeDisposable.add(
+                roomsUseCase!!.deleteRoom(
+                    eventId!!
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        muc.destroy(myJid, roomJid)
+                        viewState?.showChatsScreen()
+                    }, {
+                        Logger.d(it)
+                        viewState?.showToast("Произошла ошибка на сервере")
+                    })
             )
         } catch (e: Exception) {
             Logger.d(e)
@@ -231,19 +243,19 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     fun getVerificationEmail() {
         val accessToken = MainApplication.getCurrentLoginCredentials().accessToken
 
-        Log.d("myTimeUserProfile",accessToken)
+        Log.d("myTimeUserProfile", accessToken)
         compositeDisposable.add(authUseCase!!.getUserProfileInfo(accessToken!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result, throwable ->
-                Log.d("myTimeUserProfile","kek")
+                Log.d("myTimeUserProfile", "kek")
                 if (throwable == null) {
-                 if(result.isActivated!!){
-                     MainApplication.initWalletLibrary()
-                     viewState?.initManageTicket(result.isActivated!!)
-                 }else{
-                     viewState?.initManageTicket(result.isActivated!!)
-                 }
+                    if (result.isActivated!!) {
+                        getPrivateKey()
+                        viewState?.initManageTicket(result.isActivated!!)
+                    } else {
+                        viewState?.initManageTicket(result.isActivated!!)
+                    }
                 } else {
                     val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
                     val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
@@ -251,4 +263,34 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                 }
             })
     }
+
+    fun getPrivateKey() {
+        val accessToken = getLongStringValue("accessToken")
+
+        compositeDisposable.add(authUseCase!!.getPrivateKey(
+            accessToken!!
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result, throwable ->
+
+                if (throwable == null) {
+                    if (result.privateKey.isNotBlank()) {
+                        MainApplication.initWalletLibrary(result.privateKey)
+                    } else {
+                        MainApplication.initWalletLibrary(result.privateKey)
+                    }
+                } else {
+                    val jsonError = (throwable as HttpException).response()!!.errorBody()!!.string()
+                    val (error) = Gson().fromJson(jsonError, ErrorResponse::class.java)
+
+                    if (error.message == "cipher text too short") {
+                        MainApplication.initWalletLibrary(null)
+                    }
+                    Logger.d(result)
+                }
+            })
+    }
+
+
 }

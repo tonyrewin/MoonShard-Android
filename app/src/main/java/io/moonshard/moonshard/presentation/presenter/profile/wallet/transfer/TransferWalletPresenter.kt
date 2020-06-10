@@ -5,9 +5,12 @@ import android.graphics.BitmapFactory
 import com.example.moonshardwallet.MainService
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
+import io.moonshard.moonshard.usecase.AuthUseCase
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -18,21 +21,27 @@ import trikita.log.Log
 @InjectViewState
 class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
 
+    private var useCase: AuthUseCase? = null
+    private val compositeDisposable = CompositeDisposable()
+
+    private var jidCurrentUser:String?=null
+
+    init {
+        useCase = AuthUseCase()
+    }
+
+
     fun showRecipient(jid:String){
-        getInfoFromVCard(jid)
+        jidCurrentUser=jid
+        compositeDisposable.add(getInfoFromVCard(jid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 setAvatar(jid,it["nickName"]!!)
-
-
-
                 viewState?.setDataRecipient(it["nickName"]!!, it["status"]!!)
             }, {
                 it.message?.let { it1 -> viewState?.showToast(it1) }
-            })
-
-
+            }))
     }
 
     private fun getInfoFromVCard(jid:String): Single<HashMap<String, String>> {
@@ -65,30 +74,56 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
         }
     }
 
-    fun sendMoney(addressTo:String,amount:String){
+    fun sendMoney(amount:String){
+        getWalletAddress(amount)
+    }
 
+    fun getBalance() {
+        MainService.getWalletService().balance?.
+        subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe { balance, throwable ->
+                if (throwable == null) {
+                    viewState?.showBalance(balance)
+                } else {
+                    throwable.message?.let { viewState?.showToast(it) }
+                }
+            }
+    }
 
-        MainService.getBuyTicketService().sendMoneyRx2("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat())
+    fun getWalletAddress(amount: String) {
+        if(!jidCurrentUser.isNullOrBlank()) {
+            val accessToken = getLongStringValue("accessToken")
+
+            compositeDisposable.add(useCase!!.getWalletAddress(
+                jidCurrentUser!!, accessToken!!
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result, throwable ->
+                    Logger.d(result)
+                    if (throwable == null) {
+                        Log.d("testTransferMoney: ",jidCurrentUser)
+                        Log.d("testTransferMoney: ",result.walletAddress)
+                        if (!result.walletAddress.isNullOrBlank()) transferMoney(result.walletAddress,amount)
+                    } else {
+                        Logger.d(result)
+                    }
+                })
+        }
+    }
+
+    private fun transferMoney(addressTo:String, amount: String){
+        Log.d("testTransferMoney: ",amount)
+        compositeDisposable.add(MainService.getBuyTicketService().sendMoney(addressTo, amount.toFloat())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                viewState?.back()
                 viewState?.showToast("Сумма успешна переведена")
             }, {
                 viewState?.showToast("Произошла ошибка")
                 Logger.d(it)
-            })
-
-        /*
-        Log.d("myAmount",amount)
-          MainService.getBuyTicketSErvice().sendMoneyRx("0xa7f81a3596000c4a661d8c0c47d6df9b9bd4f33c", amount.toFloat()).thenAccept {
-              viewState?.showToast("Сумма успешна переведена")
-              viewState?.back()
-          }.exceptionally { e ->
-              viewState?.showToast("Произошла ошибка")
-              Logger.d(e)
-              null
-          }
-
-         */
+            }))
     }
 }

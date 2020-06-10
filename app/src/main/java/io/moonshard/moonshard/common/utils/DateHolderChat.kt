@@ -1,9 +1,8 @@
 package io.moonshard.moonshard.common.utils
 
-import java.text.SimpleDateFormat
 import java.util.*
 
-class DateHolder(var isoDate: String) {
+class DateHolderChat(var unixTimestamp: Long) {
     val year: Int
     val month: Int
     val weekOfMonth: Int
@@ -15,9 +14,7 @@ class DateHolder(var isoDate: String) {
     val calendar: Calendar = Calendar.getInstance()
 
     init {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
-        calendar.time = sdf.parse(isoDate)
-
+        calendar.timeInMillis = unixTimestamp
         year = calendar.get(Calendar.YEAR)
         month = calendar.get(Calendar.MONTH)
         weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
@@ -27,7 +24,7 @@ class DateHolder(var isoDate: String) {
         minute = calendar.get(Calendar.MINUTE)
     }
 
-    fun getMonthString(month: Int): String {
+    fun getMonthString(month: Int):String {
         return when (month) {
             0 -> {
                 "января"
@@ -69,18 +66,9 @@ class DateHolder(var isoDate: String) {
         }
     }
 
-    fun alreadyComeDate(): Boolean {
-        val calendarNow = Calendar.getInstance()
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
-        val isoCalendar = sdf.parse(isoDate)
-        return calendarNow.time.after(isoCalendar)
-
-        /*
-        //val unixTime = unixTimestamp*1000L
-        val unixTime = isoDate*1000L
+    fun alreadyComeDate():Boolean{
+        val unixTime = unixTimestamp*1000L
         val calendar = Calendar.getInstance()
         return unixTime < calendar.timeInMillis
-
-         */
     }
 }

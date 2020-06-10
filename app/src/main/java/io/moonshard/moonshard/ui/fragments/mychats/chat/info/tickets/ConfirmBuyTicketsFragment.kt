@@ -1,24 +1,31 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moonshardwallet.MainService
+import com.example.moonshardwallet.contracts.TicketSale721
 import com.example.moonshardwallet.models.MyTicketSale
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ConfirmBuyTicketsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.ConfirmBuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.backBtn
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.costTv
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.ticketsCounterTv
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.web3j.utils.Convert
+import java.math.BigDecimal
 
 
 class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
@@ -48,6 +55,7 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
             presenter.buyTickets()
         }
         presenter.getConfirmTickets()
+
     }
 
     private fun initAdapter() {

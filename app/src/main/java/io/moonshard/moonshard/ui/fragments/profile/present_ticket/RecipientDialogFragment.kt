@@ -30,6 +30,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
     lateinit var presenter: RecipientDialogPresenter
 
     var ticket:Ticket?=null
+    var userJid:String?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +67,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
         presenter.getContacts()
 
         chooseBtn?.setOnClickListener{
-            presenter.sendTicketAsPresent("0x60a736a1194947116fe787e09520595c632317d7",ticket!!.ticketId)
+            presenter.sendTicketAsPresent(userJid,ticket!!.ticketId)
         }
 
         cancelBtn?.setOnClickListener{
@@ -80,7 +81,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
             RecipientWalletAdapter(object :
                 RecipientWalletListener {
                 override fun click(asUnescapedString: String) {
-
+                    userJid = asUnescapedString
                 }
             }, arrayListOf())
     }

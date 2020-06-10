@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.models.dbEntities
 
+import io.moonshard.moonshard.models.api.RoomPin
 import io.objectbox.annotation.Backlink
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
@@ -14,7 +15,13 @@ data class ChatEntity(
     var isGroupChat: Boolean = false,
     var unreadMessagesCount: Int = 0
 ) {
+    var event: RoomPin?=null
+    var address:String? = null
+    var description:String? = null
+
+
     lateinit var users: ToMany<ChatUser>
+
     @Backlink(to = "chat")
     lateinit var messages: ToMany<MessageEntity>
 }

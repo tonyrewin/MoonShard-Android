@@ -7,6 +7,7 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.db.ChangeEventRepository
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
@@ -39,6 +40,31 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
     }
 
     fun getRoomInfo(jid: String) {
+        viewState?.showProgressBar()
+
+        ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ chatEntity ->
+                var eventId: String? = getEventId(jid)
+
+                if (eventId == null) {
+                    if (chatEntity.event != null) {
+                        ChangeEventRepository.event = chatEntity.event
+                        getMembers(jid)
+                        showOrganizerInfo(chatEntity.event!!)
+                    }
+                } else {
+                    getEvent(jid, eventId)
+                }
+            }, {
+                viewState?.hideProgressBar()
+                viewState?.showError("Произошла ошибка")
+                Logger.d(it)
+            })
+
+
+        /*
         var eventId: String? = null
         for (i in RoomsMap.rooms.indices) {
             if (jid == RoomsMap.rooms[i].roomId) {
@@ -63,10 +89,81 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                     }
                 })
         }
+         */
     }
 
-    fun getOrganizerInfo(eventJid: String) {
+    private fun getEvent(jid: String, eventId: String) {
+        compositeDisposable.add(useCase!!.getRoom(
+            eventId
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { event, throwable ->
+                if (throwable == null) {
+                    addEventDataInBd(eventId, event)
+                    ChangeEventRepository.event = event
+                    getMembers(jid)
+                    showOrganizerInfo(event)
+                } else {
+                    viewState?.hideProgressBar()
+                    Logger.d(throwable)
+                }
+            })
+    }
+
+    fun addEventDataInBd(eventId: String, event: RoomPin) {
+        ChatListRepository.getChatByJidSingle(JidCreate.from(eventId))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ chatEntity ->
+                chatEntity.event = event
+            }, {
+
+            })
+    }
+
+    private fun getEventId(jid: String): String? {
+        for (i in RoomsMap.rooms.indices) {
+            if (jid == RoomsMap.rooms[i].roomId) {
+                return RoomsMap.rooms[i].id
+            }
+        }
+        return null
+    }
+
+
+    fun showOrganizerInfo(event: RoomPin) {
+        if (event.parentGroupId.isNullOrEmpty()) {
+            viewState?.hideOrganizerLayout()
+        } else {
+            val organizerJid = event.parentGroupId!!
+            showOrganizerInfo(organizerJid)
+        }
+    }
+
+    fun getOrganizerInfo(eventJid: String, eventId: String?) {
         val allEvents = RoomsMap.rooms
+
+        if (eventId == null) {
+            ChatListRepository.getChatByJidSingle(JidCreate.from(eventJid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ chatEntity ->
+                    if (chatEntity.event?.parentGroupId.isNullOrEmpty()) {
+                        viewState?.hideOrganizerLayout()
+                    } else {
+                        val organizerJid = chatEntity.event?.parentGroupId!!
+                        showOrganizerInfo(organizerJid)
+                    }
+                }, {
+                    viewState?.hideProgressBar()
+                    Logger.d(it)
+                })
+        } else {
+
+        }
+
+
 
         for (i in allEvents.indices) {
             if (eventJid == allEvents[i].roomId) {

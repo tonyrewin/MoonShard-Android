@@ -1,5 +1,6 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,6 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
             idChat = it.getString("chatId")
         }
 
-
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
         }
@@ -52,9 +52,8 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
             fragmentManager?.popBackStack()
         }
 
-
         nextBtn?.setSafeOnClickListener {
-            (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat,this)
+            (parentFragment as? MainChatFragment)?.showConfirmBuyTicketsFragment(idChat, this)
         }
 
         presenter.getTypesTicket(idChat)
@@ -75,16 +74,16 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
                 }
 
                 override fun click(originSaleAddress: String) {
-                    presenter.buyTicket(originSaleAddress,1)
+                    presenter.buyTicket(originSaleAddress, 1)
                 }
             }, arrayListOf())
     }
 
-   override fun showCost(value:String){
-       costTv?.text = "$value ₽"
+    override fun showCost(value: String) {
+        costTv?.text = "$value ₽"
     }
 
-    override fun showAmount(value:String){
+    override fun showAmount(value: String) {
         ticketsCounterTv?.text = "$value билета"
     }
 
@@ -95,5 +94,25 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
     override fun onDestroyView() {
         super.onDestroyView()
         BuyTicketObject.ticketSales.clear()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    override fun showNameEvent(name: String?) {
+        labelTicket?.text = name
+    }
+
+    override fun showStartDateEvent(date: String?) {
+        startDateTicket?.text = date
+    }
+
+    override fun showAvatarEvent(avatar: Bitmap) {
+        avatarTicket?.setImageBitmap(avatar)
     }
 }

@@ -52,7 +52,6 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.getRoomInfo(idChat)
-            presenter.getOrganizerInfo(idChat)
         }
 
         backBtn?.setSafeOnClickListener {

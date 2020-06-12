@@ -872,7 +872,7 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                   Logger.d(result);
+                   Logger.d("privateKeyIs: ",result);
                 }, error -> Logger.d(error));
     }
 

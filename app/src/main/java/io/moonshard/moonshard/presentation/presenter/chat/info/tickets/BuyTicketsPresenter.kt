@@ -6,10 +6,12 @@ import android.util.Log
 import android.widget.ImageView
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.MyTicketSale
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.utils.DateHolder
 import io.moonshard.moonshard.db.ChangeEventRepository
+import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
@@ -104,11 +106,12 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
 
                 if (eventId == null) {
                     if(chatEntity.event!=null){
+                        val event = Gson().fromJson(chatEntity.event,RoomPin::class.java)
                         viewState?.hideProgressBar()
-                        viewState?.showNameEvent(chatEntity.event?.name)
-                        val date = DateHolder(chatEntity.event!!.eventStartDate!!)
+                        viewState?.showNameEvent(event?.name)
+                        val date = DateHolder(event!!.eventStartDate!!)
                         viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
-                        setAvatar(jid, chatEntity.event!!.name!!)
+                        setAvatar(jid, event!!.name!!)
                     }
                 } else {
                     getEvent(jid, eventId)
@@ -121,7 +124,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
 
     private fun getEventId(jid: String): String? {
         for (i in RoomsMap.rooms.indices) {
-            if (jid == RoomsMap.rooms[i].roomId) {
+            if (jid == RoomsMap.rooms[i].roomID) {
                 return RoomsMap.rooms[i].id
             }
         }

@@ -8,10 +8,10 @@ import moxy.MvpPresenter
 @InjectViewState
 class ManageTypesTicketPresenter : MvpPresenter<ManageTypesTicketView>() {
 
-
+    //todo нужно перевести на RxJava
     fun getTypesTicket(eventJid:String){
        val typesTicket =  MainService.getBuyTicketService().getTicketsTypes(eventJid)
-        viewState.setTypesTicket(typesTicket)
+        if(typesTicket!=null) viewState.setTypesTicket(typesTicket)
         var test = ""
     }
 }

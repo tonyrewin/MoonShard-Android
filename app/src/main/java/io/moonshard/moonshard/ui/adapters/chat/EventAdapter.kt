@@ -42,7 +42,7 @@ class EventAdapter(
             listener.eventClick(events[position])
         }
         try {
-            val jid = JidCreate.entityBareFrom(events[position].roomId)
+            val jid = JidCreate.entityBareFrom(events[position].roomID)
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(jid)

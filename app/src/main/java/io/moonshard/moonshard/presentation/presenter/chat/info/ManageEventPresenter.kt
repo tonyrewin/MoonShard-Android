@@ -214,7 +214,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
             var eventId: String? = null
             for (i in RoomsMap.rooms.indices) {
-                if (jid == RoomsMap.rooms[i].roomId) {
+                if (jid == RoomsMap.rooms[i].roomID) {
                     eventId = RoomsMap.rooms[i].id
                 }
             }

@@ -310,7 +310,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         infoBottomSheet?.visibility = View.VISIBLE
         for (i in RoomsMap.rooms.indices) {
             if (RoomsMap.rooms[i].latitude == marker?.position?.latitude) {
-                RoomsMap.rooms[i].roomId?.let {
+                RoomsMap.rooms[i].roomID?.let {
 
                     if (presenter.isJoin(it)) {
                         joinBtn?.visibility = View.GONE
@@ -333,17 +333,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
 
                     joinBtn?.setSafeOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.joinChat(RoomsMap.rooms[i].roomID!!)
                     }
                     readBtn?.setSafeOnClickListener {
-                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.readChat(RoomsMap.rooms[i].roomID!!)
                     }
 
                     joinBtn2?.setSafeOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.joinChat(RoomsMap.rooms[i].roomID!!)
                     }
                     readBtn2?.setSafeOnClickListener {
-                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.readChat(RoomsMap.rooms[i].roomID!!)
                     }
                 }
             }
@@ -731,7 +731,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         defaultBottomSheet?.visibility = View.GONE
         infoBottomSheet?.visibility = View.VISIBLE
 
-        if (presenter.isJoin(roomPin.roomId!!)) {
+        if (presenter.isJoin(roomPin.roomID!!)) {
             joinBtn?.visibility = View.GONE
             joinBtn2?.visibility = View.GONE
         } else {
@@ -752,17 +752,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
 
         joinBtn?.setSafeOnClickListener {
-            presenter.joinChat(roomPin.roomId!!)
+            presenter.joinChat(roomPin.roomID!!)
         }
         readBtn?.setSafeOnClickListener {
-            presenter.readChat(roomPin.roomId!!)
+            presenter.readChat(roomPin.roomID!!)
         }
 
         joinBtn2?.setSafeOnClickListener {
-            presenter.joinChat(roomPin.roomId!!)
+            presenter.joinChat(roomPin.roomID!!)
         }
         readBtn2?.setSafeOnClickListener {
-            presenter.readChat(roomPin.roomId!!)
+            presenter.readChat(roomPin.roomID!!)
         }
     }
 

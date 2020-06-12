@@ -49,6 +49,7 @@ import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.impl.LocalDomainAndResourcepartJid;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -121,7 +122,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                         messageEntity.sender.setTarget(user);
                         saveMessageKick(messageEntity, chatJid.asBareJid().asUnescapedString(), chatEntity, actor.asBareJid().asUnescapedString());
                     }, e -> {
-
+                        Logger.d(e);
                     });
         } catch (Exception e) {
             Logger.d(e);
@@ -191,7 +192,6 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     }
 
 
-
     /*
         This method for 1x1 chat
      */
@@ -206,10 +206,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
                     if (e.getClass() == NotFoundException.class) {
-                            VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
-                            VCard card = vm.loadVCard(from);
-                            String nickname = card.getNickName();
-                            ChatEntity chatEntity = new ChatEntity(0, from.asEntityBareJidString(), nickname, false, 0);
+                        VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+                        VCard card = vm.loadVCard(from);
+                        String nickname = card.getNickName();
+                        ChatEntity chatEntity = new ChatEntity(0, from.asEntityBareJidString(), nickname, false, 0, null);
 
 
                         ChatListRepository.INSTANCE.addChat(chatEntity)
@@ -287,6 +287,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     }
 
     void saveMessage(MessageEntity messageEntity, String chatJid, Message message, ChatEntity chatEntity) {
+        //String myJid = SecurePreferences.getStringValue("jid", null);
+
         MessageRepository.INSTANCE.saveMessage(messageEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -487,7 +489,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                         roomJid,
                                         roomName,
                                         false,
-                                        0
+                                        0, null
                                 );
                                 ChatListRepository.INSTANCE.addChat(chatEntity)
                                         .subscribeOn(Schedulers.io())
@@ -531,7 +533,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                     room.getRoom().asEntityBareJidString(),
                                     info.getName(),
                                     true,
-                                    0
+                                    0, null
                             );
                             addChat(chatEntity);
 

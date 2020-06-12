@@ -148,7 +148,7 @@ class CreateNewEventPresenter : MvpPresenter<CreateNewEventView>() {
 
         for (i in adminChats.indices) {
             for (k in events.indices) {
-                if (adminChats[i].jid == events[k].roomId) {
+                if (adminChats[i].jid == events[k].roomID) {
                     newAdminChats.remove(adminChats[i])
                 }
             }

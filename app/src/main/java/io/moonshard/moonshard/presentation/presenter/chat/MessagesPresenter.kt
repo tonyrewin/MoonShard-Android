@@ -65,7 +65,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 loadLocalMessages()
                 // loadMoreMessages() // FIXME
             }, {
-                com.orhanobut.logger.Logger.d(it.message)
+                Logger.d(it.message)
             })
         MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
     }
@@ -356,7 +356,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             viewState.setMessages(genericMessages, true)
             viewState.hideProgressBar()
         }, {
-            com.orhanobut.logger.Logger.d(it.message)
+            Logger.d(it.message)
         })
     }
 

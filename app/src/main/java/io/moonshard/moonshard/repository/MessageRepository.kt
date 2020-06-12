@@ -16,6 +16,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.jxmpp.jid.Jid
 import org.jxmpp.jid.impl.JidCreate
+import java.lang.Exception
 
 object MessageRepository {
     private val messageBox: Box<MessageEntity> = ObjectBox.boxStore.boxFor()
@@ -26,15 +27,21 @@ object MessageRepository {
 
     fun saveMessage(messageEntity: MessageEntity): Completable {
         return Completable.create {
-            messageBox.put(messageEntity)
-            it.onComplete()
+            try {
+                messageBox.put(messageEntity)
+                it.onComplete()
+            }catch (e:Exception){
+                it.onError(e)
+            }
         }
     }
 
     fun getMessagesByJid(jid: Jid): Observable<List<MessageEntity>> {
         return Observable.create {
             ChatListRepository.getChatByJid(jid).subscribe({ chat ->
-                it.onNext(chat.messages.toList())
+                if (chat.isThingInitialized()) {
+                    it.onNext(chat.messages.toList())
+                }
             }, { e ->
                 it.onError(e)
             })

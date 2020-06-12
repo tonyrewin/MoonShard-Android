@@ -14,7 +14,8 @@ interface EventInfoView: MvpView {
         onlineMembersValue: Int,
         latLngLocation: LatLng?,
         category: String,
-        description: String
+        description: String,
+        address: String?
     )
 
     fun showError(error: String)

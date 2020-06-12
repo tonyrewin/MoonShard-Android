@@ -170,7 +170,7 @@ public class MainApplication extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
-                    if (privateKey == null) {
+                    if (privateKey != null) {
                         xmppConnection.savePrivateKey();
                     }
                     approvalTicketsAsPresent();

@@ -59,7 +59,7 @@ class EventsFragment : MvpAppCompatFragment(), EventsView {
         eventsRv?.layoutManager = LinearLayoutManager(context)
         eventsRv?.adapter = EventAdapter(object : EventListener {
             override fun eventClick(event: RoomPin) {
-                event.roomId?.let { showChatScreen(it) }
+                event.roomID?.let { showChatScreen(it) }
             }
         }, arrayListOf())
     }

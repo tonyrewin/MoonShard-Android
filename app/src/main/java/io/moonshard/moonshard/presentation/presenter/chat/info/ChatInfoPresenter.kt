@@ -52,7 +52,7 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             val onlineMembersValue = getValueOnlineUsers(muc, members)
 
             for (i in rooms.indices) {
-                if (roomInfo.room.asEntityBareJidString() == rooms[i].roomId) {
+                if (roomInfo.room.asEntityBareJidString() == rooms[i].roomID) {
                     location = LatLng(rooms[i].latitude.toDouble(), rooms[i].longitude.toDouble())
                     category = rooms[i].category?.get(0)?.categoryName.toString()
                 }

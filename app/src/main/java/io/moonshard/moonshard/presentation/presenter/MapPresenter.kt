@@ -105,7 +105,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     fun getCardInfo(event: RoomPin) {
-        mucUseCase?.getRoomInfo(event.roomId!!)?.subscribeOn(Schedulers.io())
+        mucUseCase?.getRoomInfo(event.roomID!!)?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
                 try {
@@ -121,7 +121,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 }
             }, {
                 viewState?.showEventName(event.name!!)
-                setAvatar(event.roomId!!, event.name!!)
+                setAvatar(event.roomID!!, event.name!!)
                 Logger.d(it)
             })
         val distance = (calculationByDistance(

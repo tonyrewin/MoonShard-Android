@@ -15,8 +15,8 @@ data class RoomPin(
     var ttl: Long?,
     @SerializedName("categories")
     var category: ArrayList<Category>?,
-    @SerializedName("roomId")
-    var roomId: String?,
+    @SerializedName("roomID")
+    var roomID: String?,
     @SerializedName("parentGroupId")
     var parentGroupId: String?,
     @SerializedName("eventStartDate")
@@ -26,5 +26,6 @@ data class RoomPin(
     @SerializedName("address")
     var address: String?,
     @SerializedName("expiresAt")
-    var expiresAt: String?
+    var expiresAt: String?,
+    var description:String
 )

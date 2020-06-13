@@ -3,15 +3,15 @@ package io.moonshard.moonshard.presentation.presenter.chat.info.tickets
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import android.widget.ImageView
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.MyTicketSale
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.utils.DateHolder
-import io.moonshard.moonshard.db.ChangeEventRepository
+import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
@@ -35,13 +35,21 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
     }
 
     fun getTypesTicket(eventJid: String) {
-        val typesTicket = MainService.getBuyTicketService().getTicketsTypes(eventJid)
-        Log.d("addressSale",typesTicket[0].originSaleAddress)
+        MainService.getBuyTicketService().getTicketsTypes(eventJid)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { typesTicket, throwable ->
+                if (throwable == null) {
+                    for (i in typesTicket.indices) {
+                        BuyTicketObject.ticketSales.put(typesTicket[i], 0)
+                    }
+                    viewState.setTickets(typesTicket)
+                } else {
+                    throwable.message?.let { viewState?.showToast(it) }
+                }
+            }
 
-        for (i in typesTicket.indices) {
-            BuyTicketObject.ticketSales.put(typesTicket[i], 0)
-        }
-        viewState.setTickets(typesTicket)
+
     }
 
     fun buyTicket(saleAddress: String, amount: Int) {
@@ -114,7 +122,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
                         setAvatar(jid, event!!.name!!)
                     }
                 } else {
-                    getEvent(jid, eventId)
+                    getEvent(jid, eventId,chatEntity)
                 }
             }, {
                 viewState?.hideProgressBar()
@@ -131,7 +139,11 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
         return null
     }
 
-    private fun getEvent(jid: String, eventId: String) {
+    private fun getEvent(
+        jid: String,
+        eventId: String,
+        chatEntity: ChatEntity
+    ) {
         compositeDisposable.add(useCase!!.getRoom(
             eventId
         )
@@ -145,7 +157,12 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
                     viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
                     setAvatar(jid,event.name!!)
                 } else {
+                    val eventFromBd = Gson().fromJson(chatEntity.event,RoomPin::class.java)
                     viewState?.hideProgressBar()
+                    viewState?.showNameEvent(eventFromBd.name)
+                    val date = DateHolder(eventFromBd?.eventStartDate!!)
+                    viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
+                    setAvatar(jid,eventFromBd.name!!)
                     Logger.d(throwable)
                 }
             })

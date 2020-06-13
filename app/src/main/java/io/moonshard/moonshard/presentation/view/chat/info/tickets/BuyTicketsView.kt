@@ -15,4 +15,5 @@ interface BuyTicketsView:MvpView {
     fun showNameEvent(name:String?)
     fun showStartDateEvent(date:String?)
     fun showAvatarEvent(avatar: Bitmap)
+    fun showToast(text: String)
 }

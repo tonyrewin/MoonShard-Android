@@ -5,4 +5,5 @@ import moxy.MvpView
 
 interface ManageTypesTicketView:MvpView {
     fun setTypesTicket(ticketSales: ArrayList<MyTicketSale>)
+    fun showToast(text: String)
 }

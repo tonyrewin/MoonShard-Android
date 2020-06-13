@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moonshardwallet.models.MyTicketSale
 
@@ -53,7 +54,7 @@ class ManageTypesTicketFragment : MvpAppCompatFragment(),
 
         initAdapter()
 
-            presenter.getTypesTicket(idChat)
+        presenter.getTypesTicket(idChat)
     }
 
     private fun initAdapter() {
@@ -66,5 +67,9 @@ class ManageTypesTicketFragment : MvpAppCompatFragment(),
 
     override fun setTypesTicket(ticketSales: ArrayList<MyTicketSale>) {
         (typesTicketsRv?.adapter as? TypesTicketAdapter)?.update(ticketSales)
+    }
+
+    override fun showToast(text:String){
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

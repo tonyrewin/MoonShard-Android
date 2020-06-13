@@ -25,6 +25,7 @@ import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import retrofit2.HttpException
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -257,9 +258,13 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                         viewState?.initManageTicket(result.isActivated!!)
                     }
                 } else {
-                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
-                    viewState?.showToast(myError.error.message)
+                    if(throwable is UnknownHostException){
+                        viewState?.showToast("Отсутствует интернет-соединение")
+                    }else{
+                        val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
+                        val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                        viewState?.showToast(myError.error.message)
+                    }
                 }
             })
     }

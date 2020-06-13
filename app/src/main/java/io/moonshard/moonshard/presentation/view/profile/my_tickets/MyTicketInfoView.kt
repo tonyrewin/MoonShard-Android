@@ -4,6 +4,9 @@ import android.graphics.Bitmap
 import moxy.MvpView
 
 interface MyTicketInfoView: MvpView {
-    fun showEventInfo(name: String)
+    fun showEventInfo(name: String, startDateEvent:String, address:String)
     fun setAvatar(avatar: Bitmap?)
+    fun showProgressBar()
+    fun hideProgressBar()
+    fun showToast(text:String)
 }

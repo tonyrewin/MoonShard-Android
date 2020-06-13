@@ -77,7 +77,7 @@
                 android:layout_height="104dp"
                 android:background="@drawable/bck_rounded"
                 android:scaleType="centerCrop"
-                android:src="@drawable/party_test" />
+                tools:src="@drawable/party_test" />
 
         <TextView
                 android:id="@+id/labelTicket"
@@ -87,7 +87,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Валерий Меладзе"
+                tools:text="Валерий Меладзе"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -99,7 +99,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="4.5dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="1 июля 2020 г. в 23:00"
+                tools:text="1 июля 2020 г. в 23:00"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -110,7 +110,7 @@
                 android:layout_below="@+id/startDateTicket"
                 android:layout_marginStart="9dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Москва. Mutabor club."
+                tools:text="Москва. Mutabor club."
                 android:textColor="#0075FF"
                 android:textSize="14sp" />
 
@@ -270,7 +270,7 @@
                 android:background="#F5F5F5" />
 
         <RelativeLayout
-                android:id="@+id/myTicketBtn"
+                android:id="@+id/saveTicketAsPdfBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">
@@ -385,5 +385,12 @@
                 android:text="Удалить билет" />
 
     </RelativeLayout>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

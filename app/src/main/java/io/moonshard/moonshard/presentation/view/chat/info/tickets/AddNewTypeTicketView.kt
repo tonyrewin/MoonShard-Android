@@ -4,4 +4,7 @@ import moxy.MvpView
 
 interface AddNewTypeTicketView:MvpView {
     fun back()
+    fun hideProgressBar()
+    fun showProgressBar()
+    fun showToast(text: String)
 }

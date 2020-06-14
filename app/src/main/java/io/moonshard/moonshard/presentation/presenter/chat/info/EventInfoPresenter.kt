@@ -13,7 +13,7 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.EventInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,11 +34,11 @@ import kotlin.collections.HashMap
 
 @InjectViewState
 class EventInfoPresenter : MvpPresenter<EventInfoView>() {
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getRoomInfo(jid: String) {

@@ -136,7 +136,6 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         canvas.drawText("Адресс события: " + addressEvent, leftMargin, titleBaseLine + 105, paint);
         canvas.drawText("Номер билета: " + idTicket, leftMargin, titleBaseLine + 135, paint);
 
-
         canvas.drawBitmap(qrCode, centreX,
                 centreY, paint);
     }

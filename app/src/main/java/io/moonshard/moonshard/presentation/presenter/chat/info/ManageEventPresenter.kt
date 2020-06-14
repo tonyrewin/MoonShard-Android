@@ -15,7 +15,7 @@ import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.AuthUseCase
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -32,7 +32,7 @@ import java.util.*
 @InjectViewState
 class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
-    private var roomsUseCase: RoomsUseCase? = null
+    private var eventsUseCase: EventsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
     private var infoEventMuc: RoomInfo? = null
 
@@ -40,7 +40,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
 
     init {
-        roomsUseCase = RoomsUseCase()
+        eventsUseCase = EventsUseCase()
         authUseCase = AuthUseCase()
     }
 
@@ -136,7 +136,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
     fun changeEventServer(
         event: RoomPin
     ) {
-        compositeDisposable.add(roomsUseCase!!.changeRoom(
+        compositeDisposable.add(eventsUseCase!!.changeRoom(
             event
         )
             .subscribeOn(Schedulers.io())
@@ -222,7 +222,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
 
             compositeDisposable.add(
-                roomsUseCase!!.deleteRoom(
+                eventsUseCase!!.deleteRoom(
                     eventId!!
                 )
                     .subscribeOn(Schedulers.io())

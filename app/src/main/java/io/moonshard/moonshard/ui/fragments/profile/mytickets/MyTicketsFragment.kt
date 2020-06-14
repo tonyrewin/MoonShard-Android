@@ -41,13 +41,13 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
         }
         initAdapter()
 
-            presenter.getMyTickets()
+        presenter.getMyTickets()
     }
 
     private fun initAdapter() {
         myTicketsRv?.layoutManager = LinearLayoutManager(context)
         myTicketsRv?.adapter =
-            TicketPresentAdapter(this.mvpDelegate,object :
+            TicketPresentAdapter(this.mvpDelegate, object :
                 TicketPresentListener {
                 override fun click(ticket: Ticket) {
                     (activity as MainActivity).showMyTicketInfoFragment(ticket)

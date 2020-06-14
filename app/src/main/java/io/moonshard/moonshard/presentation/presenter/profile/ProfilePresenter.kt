@@ -3,6 +3,7 @@ package io.moonshard.moonshard.presentation.presenter.profile
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.TextView
 import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
@@ -11,6 +12,7 @@ import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
 import io.moonshard.moonshard.usecase.AuthUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.CompletableObserver
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,7 +32,6 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
 
     private var useCase: AuthUseCase? = null
     private val compositeDisposable = CompositeDisposable()
-
 
     init {
         useCase = AuthUseCase()
@@ -162,20 +163,6 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
-    }
-
-    fun acceptTicketAsPresent(owner: String, tokenId: BigInteger) {
-        MainService.getBuyTicketService().acceptTicketAsPresentRx(
-            owner,
-            tokenId
-        ).thenAccept {
-            Log.d("success ticket", "get success ticket")
-
-        }.exceptionally { e ->
-            Log.d("success ticket", e.message)
-
-            null
-        }
     }
 }
 

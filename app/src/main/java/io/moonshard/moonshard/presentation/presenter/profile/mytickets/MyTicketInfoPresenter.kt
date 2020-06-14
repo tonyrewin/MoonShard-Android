@@ -12,7 +12,7 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketInfoView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -23,12 +23,12 @@ import org.jxmpp.jid.impl.JidCreate
 @InjectViewState
 class MyTicketInfoPresenter : MvpPresenter<MyTicketInfoView>() {
 
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
 
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getEventInfo(jid: String) {

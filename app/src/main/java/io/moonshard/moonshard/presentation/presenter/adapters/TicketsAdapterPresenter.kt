@@ -3,9 +3,11 @@ package io.moonshard.moonshard.presentation.presenter.adapters
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.moonshardwallet.models.Ticket
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
@@ -14,7 +16,9 @@ import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.adapters.TicketsAdapterView
 import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentAdapter
 import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentListener
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -25,6 +29,11 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
 
     private var tickets:ArrayList<Ticket> = arrayListOf()
 
+    private var eventsUseCase: EventsUseCase? = null
+
+    init {
+        eventsUseCase = EventsUseCase()
+    }
 
     fun onBindViewHolder(
         holder: TicketPresentAdapter.ViewHolder,
@@ -35,7 +44,9 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
         try {
             val ticket = tickets[position]
             holder.titleTypeTv?.text  = getNameEvent(ticket.jidEvent)
-            holder.typeTicket?.text = "Название: "+ ticket.ticketType
+
+            getTicketTypeName(ticket.jidEvent,ticket.ticketType.toInt(), holder.typeTicket!!)
+            //holder.typeTicket?.text = "Название: "+ ticket.ticketType
             holder.numberTicketTv?.text = ticket.ticketId.toString()
             setAvatar(ticket.jidEvent,getNameEvent(ticket.jidEvent),holder.avatarTicket!!)
 
@@ -60,6 +71,21 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
         } catch (e: Exception) {
             Logger.d(e)
         }
+    }
+
+    private fun getTicketTypeName(eventID: String, typeID: Int,ticketTypeName:TextView) {
+        Log.d("getTicketTypeName", "$eventID, $typeID")
+        eventsUseCase!!.getTicketTypeName(eventID, typeID)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { ticketType, throwable ->
+                if (throwable == null) {
+                    ticketTypeName?.text = "Название: " + ticketType.typeName
+                    Logger.d(ticketType)
+                } else {
+                    throwable.message?.let { Logger.e(throwable.message!!) }
+                }
+            }
     }
 
     fun getNameEvent(jid: String):String{

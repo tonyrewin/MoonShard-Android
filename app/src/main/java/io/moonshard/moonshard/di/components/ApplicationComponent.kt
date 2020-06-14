@@ -7,7 +7,7 @@ import io.moonshard.moonshard.presentation.presenter.LoginPresenter
 import io.moonshard.moonshard.repository.*
 import io.moonshard.moonshard.services.P2ChatService
 import io.moonshard.moonshard.usecase.AuthUseCase
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.moonshard.moonshard.usecase.UnitPayUseCase
 import javax.inject.Singleton
 
@@ -17,8 +17,8 @@ interface ApplicationComponent {
     fun inject(p2chatService: P2ChatService)
     fun inject(presenter: LoginPresenter)
     fun inject(networkRepository: NetworkRepository)
-    fun inject(useCase: RoomsUseCase)
-    fun inject(repository: RoomsRepository)
+    fun inject(useCase: EventsUseCase)
+    fun inject(repository: EventsRepository)
     fun inject(useCase: AuthUseCase)
     fun inject(repository: AuthRepository)
     fun inject(repository: UnitPayRepository)

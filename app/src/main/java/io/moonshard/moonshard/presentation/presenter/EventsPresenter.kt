@@ -10,7 +10,7 @@ import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.EventsView
 import io.moonshard.moonshard.repository.ChatListRepository
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -22,11 +22,11 @@ import org.jxmpp.jid.parts.Resourcepart
 
 @InjectViewState
 class EventsPresenter : MvpPresenter<EventsView>() {
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getRooms() {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -38,7 +39,6 @@ class AddNewTypeTicketFragment : MvpAppCompatFragment(),
             idChat = it.getString("chatId")
         }
 
-
         saveBtn?.setSafeOnClickListener {
             presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
         }
@@ -54,5 +54,17 @@ class AddNewTypeTicketFragment : MvpAppCompatFragment(),
 
     override fun back(){
         parentFragmentManager.popBackStack()
+    }
+
+    override fun showProgressBar(){
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar(){
+        progressBar?.visibility = View.GONE
+    }
+
+    override fun showToast(text:String) {
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

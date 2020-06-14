@@ -2,14 +2,17 @@ package io.moonshard.moonshard.repository
 
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.MainApplication
+import io.moonshard.moonshard.common.ApiConstants
 import io.moonshard.moonshard.models.ModelMapRequest
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
+import io.moonshard.moonshard.models.api.tickets.TicketTypeName
+import io.moonshard.moonshard.models.api.tickets.TicketTypeNameRequest
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class RoomsRepository {
+class EventsRepository {
 
     @Inject
     internal lateinit var api: API
@@ -45,10 +48,6 @@ class RoomsRepository {
         return api.getRooms(lat, lng, radius)
     }
 
-    fun getCategories(): Single<ArrayList<Category>> {
-        return api.getCategories()
-    }
-
     fun getRoomsByCategory(
         categoryId: Int,
         lat: String,
@@ -68,5 +67,14 @@ class RoomsRepository {
 
     fun deleteRoom(eventId: String):Completable{
         return api.deleteRoom(eventId)
+    }
+
+    fun createTicketTypeName(eventID:String,typeName:String,typeID:Int):Single<TicketTypeName>{
+        val model = TicketTypeNameRequest(eventID,typeName,typeID)
+        return api.createTicketTypeName(model)
+    }
+
+    fun getTicketTypeName(eventID:String,typeID:Int):Single<TicketTypeName>{
+        return api.getTicketTypeName(eventID,typeID)
     }
 }

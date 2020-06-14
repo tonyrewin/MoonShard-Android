@@ -26,8 +26,7 @@ interface ApiConstants {
         //unitpay
         const val UNIT_PAY_CREATE_PAYMENT = "createPayment"
 
-
-
-
+        //events
+        const val CREATE_TICKET_TYPE_NAME = "/ticketTypeNames"
     }
 }

@@ -2,20 +2,18 @@ package io.moonshard.moonshard.presentation.presenter
 
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.presentation.view.CategoriesMapView
-import io.moonshard.moonshard.usecase.RoomsUseCase
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
 class CategoriesMapPresenter: MvpPresenter<CategoriesMapView>() {
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getCategories(){

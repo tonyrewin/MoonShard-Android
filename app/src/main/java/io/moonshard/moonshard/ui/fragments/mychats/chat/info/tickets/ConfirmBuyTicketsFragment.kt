@@ -1,35 +1,31 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.MainService
-import com.example.moonshardwallet.contracts.TicketSale721
 import com.example.moonshardwallet.models.MyTicketSale
-import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ConfirmBuyTicketsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.ConfirmBuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.backBtn
-import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.costTv
-import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.ticketsCounterTv
+import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.startDateTicket
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
-import org.web3j.utils.Convert
-import java.math.BigDecimal
 
 
 class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
     ConfirmBuyTicketsView {
+
+    var idChat = ""
+
 
     @InjectPresenter
     lateinit var presenter: ConfirmBuyTicketsPresenter
@@ -45,6 +41,10 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            idChat = it.getString("chatId")
+        }
+
         initAdapter()
 
         backBtn?.setSafeOnClickListener {
@@ -54,8 +54,8 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         nextBtn?.setSafeOnClickListener {
             presenter.buyTickets()
         }
+        presenter.getEventInfo(idChat)
         presenter.getConfirmTickets()
-
     }
 
     private fun initAdapter() {
@@ -70,11 +70,11 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         (confirmTicketsRv?.adapter as? ConfirmTicketsBuyAdapter)?.update(ticketSales)
     }
 
-  override fun showCost( value:String) {
+    override fun showCost(value: String) {
         costTv.text = "$value ₽"
     }
 
-    override fun showAmount(value:String){
+    override fun showAmount(value: String) {
         counterTicketsTv?.text = "$value билета"
     }
 
@@ -82,8 +82,24 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 
-    override fun back(){
+    override fun back() {
         parentFragmentManager.popBackStack()
         parentFragmentManager.popBackStack()
     }
+
+    override fun showEventInfo(name: String, startDateEvent: String, address: String) {
+        nameTicket?.text = name
+        startDateTicket?.text = startDateEvent
+        locationTicket?.text = address
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+
 }

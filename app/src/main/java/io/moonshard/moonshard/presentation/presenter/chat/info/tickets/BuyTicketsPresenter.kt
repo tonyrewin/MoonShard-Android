@@ -2,21 +2,19 @@ package io.moonshard.moonshard.presentation.presenter.chat.info.tickets
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.MyTicketSale
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.utils.DateHolder
-import io.moonshard.moonshard.db.ChatRepository
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.BuyTicketObject
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -26,12 +24,12 @@ import org.jxmpp.jid.impl.JidCreate
 
 @InjectViewState
 class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
 
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getTypesTicket(eventJid: String) {

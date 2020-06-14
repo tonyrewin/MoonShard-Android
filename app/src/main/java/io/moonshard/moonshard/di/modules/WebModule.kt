@@ -1,14 +1,13 @@
 package io.moonshard.moonshard.di.modules
 
 import android.content.Context
-import com.orhanobut.logger.Logger
 import dagger.Module
 import dagger.Provides
 import io.moonshard.moonshard.API
 import io.moonshard.moonshard.common.ApiConstants
 import io.moonshard.moonshard.repository.AuthRepository
 import io.moonshard.moonshard.repository.NetworkRepository
-import io.moonshard.moonshard.repository.RoomsRepository
+import io.moonshard.moonshard.repository.EventsRepository
 import io.moonshard.moonshard.repository.UnitPayRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -51,8 +50,8 @@ class WebModule(var context: Context) {
     }
 
     @Provides
-    fun providesRoomsRepository(): RoomsRepository {
-        return RoomsRepository()
+    fun providesRoomsRepository(): EventsRepository {
+        return EventsRepository()
     }
 
     @Provides

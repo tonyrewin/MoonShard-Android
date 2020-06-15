@@ -7,16 +7,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.adapters.ConfirmTicketsBuyAdapterPresenter
+import io.moonshard.moonshard.presentation.view.adapters.ConfirmTicketsBuyAdapterView
+import io.moonshard.moonshard.ui.adapters.MvpBaseAdapter
+import moxy.MvpDelegate
+import moxy.presenter.InjectPresenter
 
 interface ConfirmTicketsBuyListener {
     fun click()
 }
 
 class ConfirmTicketsBuyAdapter(
+    parentDelegate: MvpDelegate<*>,
     val listener: ConfirmTicketsBuyListener,
-    private var ticketsSale: ArrayList<MyTicketSale>
+    private var ticketsSale: ArrayList<MyTicketSale>,val idChat:String
 ) :
-    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>() {
+    MvpBaseAdapter<ConfirmTicketsBuyAdapter.ViewHolder>(parentDelegate, 0.toString()),
+    ConfirmTicketsBuyAdapterView {
+
+    @InjectPresenter
+    lateinit var presenter: ConfirmTicketsBuyAdapterPresenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -28,25 +38,18 @@ class ConfirmTicketsBuyAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.typeTicketTv?.text = ticketsSale[holder.adapterPosition].typeTicket.toString()
-        holder.costTicketTv?.text = ticketsSale[holder.adapterPosition].priceTicket + " ₽"
-
-        //todo hardcore
-        if (position == ticketsSale.size-1) {
-            holder.viewLine?.visibility = View.GONE
-        }
-
+        presenter.onBindViewHolder(holder, holder.adapterPosition, listener,idChat)
     }
 
-
     fun update(ticketSales: ArrayList<MyTicketSale>) {
-        this.ticketsSale.clear()
-        this.ticketsSale.addAll(ticketSales)
+        presenter.setData(ticketSales)
+    }
+
+    override fun onDataChange() {
         notifyDataSetChanged()
     }
 
-
-    override fun getItemCount(): Int = ticketsSale.size
+    override fun getItemCount(): Int = presenter.getChatListSize()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

@@ -59,10 +59,10 @@ class ManageTypesTicketFragment : MvpAppCompatFragment(),
 
     private fun initAdapter() {
         typesTicketsRv?.layoutManager = LinearLayoutManager(context)
-        typesTicketsRv?.adapter = TypesTicketAdapter(object : TypesTicketListener {
+        typesTicketsRv?.adapter = TypesTicketAdapter(this.mvpDelegate,object : TypesTicketListener {
             override fun changeClick() {
             }
-        }, arrayListOf())
+        }, arrayListOf(),idChat)
     }
 
     override fun setTypesTicket(ticketSales: ArrayList<MyTicketSale>) {

@@ -9,15 +9,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.adapters.BuyTicketsAdapterPresenter
+import io.moonshard.moonshard.presentation.view.adapters.BuyTicketsAdapterView
+import io.moonshard.moonshard.ui.adapters.MvpBaseAdapter
+import moxy.MvpDelegate
+import moxy.presenter.InjectPresenter
 
 interface TicketListener {
-    fun clickPlus(ticketSale:MyTicketSale)
-    fun clickMinus(ticketSale:MyTicketSale)
+    fun clickPlus(ticketSale: MyTicketSale)
+    fun clickMinus(ticketSale: MyTicketSale)
     fun click(originSaleAddress: String)
 }
 
-class TicketsAdapter(val listener: TicketListener, private var ticketSales: ArrayList<MyTicketSale>) :
-    RecyclerView.Adapter<TicketsAdapter.ViewHolder>()  {
+class BuyTicketsAdapter(
+    parentDelegate: MvpDelegate<*>,
+    val listener: TicketListener,
+    private var ticketSales: ArrayList<MyTicketSale>,
+    val idChat: String
+) :
+    MvpBaseAdapter<BuyTicketsAdapter.ViewHolder>(parentDelegate, 0.toString()),
+    BuyTicketsAdapterView {
+
+    @InjectPresenter
+    lateinit var presenter: BuyTicketsAdapterPresenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -28,39 +42,20 @@ class TicketsAdapter(val listener: TicketListener, private var ticketSales: Arra
             )
         )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.typeTicketTv?.text = ticketSales[position].typeTicket.toString()
-        holder.costTicketTv?.text = ticketSales[position].priceTicket + " ₽"
-
-
-        holder.plusBtn?.setOnClickListener {
-            holder.counterTv?.text =  (holder.counterTv?.text.toString().toInt() + 1).toString()
-            listener.clickPlus(ticketSales[holder.adapterPosition])
-        }
-
-        holder.minusBtn?.setOnClickListener {
-            if(holder.counterTv?.text!="0"){
-                holder.counterTv?.text =  (holder.counterTv?.text.toString().toInt() - 1).toString()
-                listener.clickMinus(ticketSales[holder.adapterPosition])
-            }
-        }
-
-        holder?.itemView?.setOnClickListener {
-            listener.click(ticketSales[position].originSaleAddress)
-        }
-
-        if(position == ticketSales.size-1){
-            holder.viewLine?.visibility = View.GONE
-        }
+    override fun onBindViewHolder(holder: BuyTicketsAdapter.ViewHolder, position: Int) {
+        Log.d("BuyTicketsFragment2",idChat)
+        presenter.onBindViewHolder(holder, holder.adapterPosition, listener, idChat)
     }
 
     fun update(ticketSales: ArrayList<MyTicketSale>) {
-        this.ticketSales.clear()
-        this.ticketSales.addAll(ticketSales)
+        presenter.setData(ticketSales)
+    }
+
+    override fun onDataChange() {
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = ticketSales.size
+    override fun getItemCount(): Int = presenter.getChatListSize()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

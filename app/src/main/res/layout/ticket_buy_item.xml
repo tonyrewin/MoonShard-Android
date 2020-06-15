@@ -12,7 +12,7 @@
             android:fontFamily="@font/montserrat_bold"
             android:textColor="#333333"
             android:textSize="14sp"
-            tools:text="Абонемент"
+            android:text="Билет"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

@@ -8,15 +8,28 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.common.utils.Utils
+import io.moonshard.moonshard.presentation.presenter.adapters.TypesTicketAdapterPresenter
+import io.moonshard.moonshard.presentation.view.adapters.TypesTicketAdapterView
+import io.moonshard.moonshard.ui.adapters.MvpBaseAdapter
+import moxy.MvpDelegate
+import moxy.presenter.InjectPresenter
 
 
 interface TypesTicketListener {
     fun changeClick()
 }
 
-class TypesTicketAdapter (val listener: TypesTicketListener, private var ticketSales: ArrayList<MyTicketSale>) :
-    RecyclerView.Adapter<TypesTicketAdapter.ViewHolder>()  {
+class TypesTicketAdapter(
+    parentDelegate: MvpDelegate<*>,
+    val listener: TypesTicketListener,
+    private var ticketSales: ArrayList<MyTicketSale>,
+    val idChat: String
+) :
+    MvpBaseAdapter<TypesTicketAdapter.ViewHolder>(parentDelegate, 0.toString()),
+    TypesTicketAdapterView {
+
+    @InjectPresenter
+    lateinit var presenter: TypesTicketAdapterPresenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -28,26 +41,18 @@ class TypesTicketAdapter (val listener: TypesTicketListener, private var ticketS
         )
 
     fun update(ticketSales: ArrayList<MyTicketSale>) {
-        this.ticketSales.clear()
-        this.ticketSales.addAll(ticketSales)
-        notifyDataSetChanged()
+        presenter.setData(ticketSales)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.typeTicketTv?.text = "Название билета: " + ticketSales[position].typeTicket.toString()
-        holder.priceTicketTv?.text = ticketSales[position].priceTicket.toString() + " ₽"
-        holder.limitTv?.text = ticketSales[position].saleLimit.toString() + " билетов"
-
-        if(position==ticketSales.size-1){
-            val params = holder.mainLayout?.layoutParams as ViewGroup.MarginLayoutParams
-            params.marginStart = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
-            params.marginEnd = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
-            params.bottomMargin = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
-            params.topMargin = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
-        }
+        presenter.onBindViewHolder(holder, holder.adapterPosition, listener,idChat)
     }
 
-    override fun getItemCount(): Int = ticketSales.size
+    override fun onDataChange() {
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int = presenter.getChatListSize()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.titleType)

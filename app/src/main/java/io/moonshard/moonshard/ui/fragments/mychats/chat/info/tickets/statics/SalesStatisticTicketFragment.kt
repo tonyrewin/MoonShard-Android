@@ -10,15 +10,12 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.statistics.SalesStatisticTicketPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.statistics.SalesStatisticTicketView
-import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.statistic.BalanceTicketListener
 import io.moonshard.moonshard.ui.adapters.tickets.statistic.BalanceTicketsAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.statistic.StatisticTicketsAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.statistic.StatisticTicketsListener
-import kotlinx.android.synthetic.main.fragment_buy_tickets.*
 import kotlinx.android.synthetic.main.fragment_sales_statistic_ticket.*
 import kotlinx.android.synthetic.main.fragment_sales_statistic_ticket.backBtn
-import kotlinx.android.synthetic.main.fragment_statistic_tickets.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.util.ArrayList

@@ -66,5 +66,4 @@ class TicketPresentAdapter(parentDelegate: MvpDelegate<*>, val listener: TicketP
             notifyDataSetChanged()
         }
     }
-
 }

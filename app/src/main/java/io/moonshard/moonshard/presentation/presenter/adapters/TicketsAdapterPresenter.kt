@@ -12,22 +12,20 @@ import com.example.moonshardwallet.models.Ticket
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.utils.Utils
-import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.adapters.TicketsAdapterView
 import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentAdapter
 import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentListener
 import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jxmpp.jid.impl.JidCreate
 
 @InjectViewState
-class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
+class TicketsAdapterPresenter : MvpPresenter<TicketsAdapterView>() {
 
-    private var tickets:ArrayList<Ticket> = arrayListOf()
+    private var tickets: ArrayList<Ticket> = arrayListOf()
 
     private var eventsUseCase: EventsUseCase? = null
 
@@ -43,20 +41,19 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
 
         try {
             val ticket = tickets[position]
-            holder.titleTypeTv?.text  = getNameEvent(ticket.jidEvent)
+            holder.titleTypeTv?.text = getNameEvent(ticket.jidEvent)
 
-            getTicketTypeName(ticket.jidEvent,ticket.ticketType.toInt(), holder.typeTicket!!)
-            //holder.typeTicket?.text = "Название: "+ ticket.ticketType
+            getTicketTypeName(ticket.jidEvent, ticket.ticketType.toInt(), holder.typeTicket!!)
             holder.numberTicketTv?.text = ticket.ticketId.toString()
-            setAvatar(ticket.jidEvent,getNameEvent(ticket.jidEvent),holder.avatarTicket!!)
+            setAvatar(ticket.jidEvent, getNameEvent(ticket.jidEvent), holder.avatarTicket!!)
 
-            if(ticket.payState.toInt()==2){
+            if (ticket.payState.toInt() == 2) {
                 holder.scannedIv?.visibility = View.VISIBLE
-            }else{
+            } else {
                 holder.scannedIv?.visibility = View.GONE
             }
 
-            if(position== tickets.size-1){
+            if (position == tickets.size - 1) {
                 val params = holder.mainLayout?.layoutParams as? ViewGroup.MarginLayoutParams
                 params?.marginStart = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
                 params?.marginEnd = Utils.convertDpToPixel(8F, holder.mainLayout?.context)
@@ -67,20 +64,19 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
             holder.mainLayout?.setOnClickListener {
                 listener.click(tickets[position], holder.typeTicket!!.text.toString())
             }
-
         } catch (e: Exception) {
             Logger.d(e)
         }
     }
 
-    private fun getTicketTypeName(eventID: String, typeID: Int,ticketTypeName:TextView) {
+    private fun getTicketTypeName(eventID: String, typeID: Int, ticketTypeName: TextView) {
         Log.d("getTicketTypeName", "$eventID, $typeID")
         eventsUseCase!!.getTicketTypeName(eventID, typeID)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { ticketType, throwable ->
                 if (throwable == null) {
-                    ticketTypeName?.text = ticketType.typeName
+                    ticketTypeName.text = ticketType.typeName
                     Logger.d(ticketType)
                 } else {
                     throwable.message?.let { Logger.e(throwable.message!!) }
@@ -88,7 +84,7 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
             }
     }
 
-    fun getNameEvent(jid: String):String{
+    fun getNameEvent(jid: String): String {
         val jidEvent = JidCreate.entityBareFrom(jid)
 
         val muc = MainApplication.getXmppConnection().multiUserChatManager

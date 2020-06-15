@@ -2,6 +2,7 @@ package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.BuyTicketsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.BuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.TicketListener
-import io.moonshard.moonshard.ui.adapters.tickets.TicketsAdapter
+import io.moonshard.moonshard.ui.adapters.tickets.BuyTicketsAdapter
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_buy_tickets.*
 import moxy.MvpAppCompatFragment
@@ -39,12 +40,15 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
 
+        showProgressBar()
         arguments?.let {
             idChat = it.getString("chatId")
+            Log.d("BuyTicketsFragment",idChat)
             presenter.getRoomInfo(idChat)
         }
+
+        initAdapter()
 
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
@@ -62,9 +66,11 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
     }
 
     private fun initAdapter() {
+        Log.d("BuyTicketsFragment0",idChat)
+
         ticketsRv?.layoutManager = LinearLayoutManager(context)
         ticketsRv?.adapter =
-            TicketsAdapter(object :
+            BuyTicketsAdapter(this.mvpDelegate,object :
                 TicketListener {
 
                 override fun clickPlus(ticketSale: MyTicketSale) {
@@ -76,9 +82,9 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
                 }
 
                 override fun click(originSaleAddress: String) {
-                    presenter.buyTicket(originSaleAddress, 1)
+
                 }
-            }, arrayListOf())
+            }, arrayListOf(),idChat)
     }
 
     override fun showCost(value: String) {
@@ -90,7 +96,7 @@ class BuyTicketsFragment : MvpAppCompatFragment(),
     }
 
     override fun setTickets(ticketSales: ArrayList<MyTicketSale>) {
-        (ticketsRv?.adapter as? TicketsAdapter)?.update(ticketSales)
+        (ticketsRv?.adapter as? BuyTicketsAdapter)?.update(ticketSales)
     }
 
     override fun onDestroyView() {

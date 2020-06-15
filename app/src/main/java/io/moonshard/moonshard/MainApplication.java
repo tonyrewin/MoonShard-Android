@@ -49,7 +49,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
-    public final static String DEFAULT_NTP_SERVER = "0.ru.pool.ntp.org";
+    public final static String DEFAULT_NTP_SERVER = "ntp5.stratum2.ru";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
     private static String jid;

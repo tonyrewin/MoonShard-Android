@@ -9,17 +9,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.contracts.TicketSale721.CalculatedFeesEventResponse
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.presentation.presenter.profile.ProfilePresenter
 import io.moonshard.moonshard.presentation.view.profile.ProfileView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import retrofit2.HttpException
 
 
 class ProfileFragment : MvpAppCompatFragment(),
@@ -41,6 +46,11 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
         presenter.getVerificationEmail()
+
+
+
+
+
 
 
       //  presenter.savePrivateKey()

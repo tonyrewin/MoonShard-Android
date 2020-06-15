@@ -33,6 +33,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
     }
 
     fun getTypesTicket(eventJid: String) {
+        viewState?.showProgressBar()
         MainService.getBuyTicketService().getTicketsTypes(eventJid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,23 +46,8 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
                 } else {
                     throwable.message?.let { viewState?.showToast(it) }
                 }
+                viewState?.hideProgressBar()
             }
-
-
-    }
-
-    fun buyTicket(saleAddress: String, amount: Int) {
-        MainService.getBuyTicketService().buy(saleAddress, amount).thenAccept {
-            // var events_tx = sale_instance.getTokensPurchasedEvents(transactionReceipt);
-            // do somthing with event response
-            var event_tx_ticket =
-                MainService.getBuyTicketService().ticket.getTicketBoughtHumanEvents(it)
-            var test = ""
-
-            var tickets = MainService.getBuyTicketService().myTicketsByOwner
-        }.exceptionally { e ->
-            null
-        }
     }
 
     fun plusTicketSale(ticketSale: MyTicketSale) {
@@ -103,7 +89,6 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
 
     fun getRoomInfo(jid: String) {
         viewState?.showProgressBar()
-
         ChatListRepository.getChatByJidSingle(JidCreate.from(jid))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -113,7 +98,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
                 if (eventId == null) {
                     if(chatEntity.event!=null){
                         val event = Gson().fromJson(chatEntity.event,RoomPin::class.java)
-                        viewState?.hideProgressBar()
+                       // viewState?.hideProgressBar()
                         viewState?.showNameEvent(event?.name)
                         val date = DateHolder(event!!.eventStartDate!!)
                         viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
@@ -123,7 +108,7 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
                     getEvent(jid, eventId,chatEntity)
                 }
             }, {
-                viewState?.hideProgressBar()
+               // viewState?.hideProgressBar()
                 Logger.d(it)
             })
     }
@@ -149,20 +134,19 @@ class BuyTicketsPresenter : MvpPresenter<BuyTicketsView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { event, throwable ->
                 if (throwable == null) {
-                    viewState?.hideProgressBar()
                     viewState?.showNameEvent(event.name)
                     val date = DateHolder(event?.eventStartDate!!)
                     viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
                     setAvatar(jid,event.name!!)
                 } else {
                     val eventFromBd = Gson().fromJson(chatEntity.event,RoomPin::class.java)
-                    viewState?.hideProgressBar()
                     viewState?.showNameEvent(eventFromBd.name)
                     val date = DateHolder(eventFromBd?.eventStartDate!!)
                     viewState.showStartDateEvent("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
                     setAvatar(jid,eventFromBd.name!!)
                     Logger.d(throwable)
                 }
+               // viewState?.hideProgressBar()
             })
     }
 

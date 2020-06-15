@@ -14,6 +14,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ConfirmBu
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.ConfirmBuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.BuyTicketObject
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.backBtn
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.startDateTicket
@@ -25,7 +26,6 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
     ConfirmBuyTicketsView {
 
     var idChat = ""
-
 
     @InjectPresenter
     lateinit var presenter: ConfirmBuyTicketsPresenter
@@ -52,7 +52,7 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         }
 
         nextBtn?.setSafeOnClickListener {
-            presenter.buyTickets()
+            presenter.buyTicketsRxMain()
         }
         presenter.getEventInfo(idChat)
         presenter.getConfirmTickets()
@@ -60,10 +60,10 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
 
     private fun initAdapter() {
         confirmTicketsRv?.layoutManager = LinearLayoutManager(context)
-        confirmTicketsRv?.adapter = ConfirmTicketsBuyAdapter(object : ConfirmTicketsBuyListener {
+        confirmTicketsRv?.adapter = ConfirmTicketsBuyAdapter(this.mvpDelegate,object : ConfirmTicketsBuyListener {
             override fun click() {
             }
-        }, arrayListOf())
+        }, arrayListOf(),idChat)
     }
 
     override fun setTickets(ticketSales: ArrayList<MyTicketSale>) {
@@ -101,5 +101,8 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         progressBar?.visibility = View.GONE
     }
 
-
+    override fun onDestroyView() {
+        BuyTicketObject.ticketSales.clear() //временно
+        super.onDestroyView()
+    }
 }

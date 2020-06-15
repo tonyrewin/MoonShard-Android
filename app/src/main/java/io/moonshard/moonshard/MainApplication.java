@@ -173,7 +173,7 @@ public class MainApplication extends Application {
                         xmppConnection.savePrivateKey();
                     approvalTicketsAsPresent();
                 }, e -> {
-                    Logger.e(e.getMessage());
+                    Logger.d(e.getMessage());
                 });
     }
 

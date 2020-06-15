@@ -355,10 +355,11 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-    fun showMyTicketInfoFragment(ticket: Ticket) {
+    fun showMyTicketInfoFragment(ticket: Ticket,ticketType:String) {
         val ticketJson = Gson().toJson(ticket)
         val bundle = Bundle()
         bundle.putString("ticket", ticketJson)
+        bundle.putString("ticketType", ticketType)
         val fragment = MyTicketInfoFragment()
         fragment.arguments = bundle
         val ft = supportFragmentManager.beginTransaction()

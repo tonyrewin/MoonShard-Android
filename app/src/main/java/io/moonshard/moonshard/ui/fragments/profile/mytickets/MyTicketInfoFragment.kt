@@ -53,10 +53,12 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
+            val ticketTypeName = it.getString("ticketType")
+
             val ticketJson = it.getString("ticket")
             ticket = Gson().fromJson(ticketJson, Ticket::class.java)
             presenter.getEventInfo(ticket!!.jidEvent)
-            showInfo(ticket!!)
+            showInfo(ticket!!,ticketTypeName)
         }
 
         backBtn?.setOnClickListener {
@@ -98,12 +100,11 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
         )
     }
 
-    fun showInfo(ticket: Ticket) {
-        typeTicket?.text = ticket.ticketType.toString()
+    private fun showInfo(ticket: Ticket, ticketTypeName:String) {
+        typeTicket?.text = ticketTypeName
         numberTicket?.text = ticket.ticketId.toString()
 
-        typeTicketValue = ticket.ticketType.toString()
-
+        typeTicketValue = ticketTypeName
 
         if (ticket.payState?.toInt() == 2) {
             scannedIv?.visibility = View.VISIBLE
@@ -114,17 +115,17 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
         Log.d("ticketState", ticket.payState.toString())
         Log.d("ticketId", ticket.ticketId.toString())
 
-
         val contentQrCode = QrCodeModel(
             ticket.ticketId!!, MainService.getWalletService(
 
-            ).myAddress, ticket.jidEvent, ticket.ticketType, ticket.ticketSaleAddress
+            ).myAddress, ticket.jidEvent, ticket.ticketSaleAddress,ticket.payState,ticket.ticketType
         )
         val contentQrCodeJson = Gson().toJson(contentQrCode)
+        Log.d("contentQrCodeJson",contentQrCodeJson)
         generateQrCode(contentQrCodeJson)
     }
 
-    fun generateQrCode(content: String) {
+    private fun generateQrCode(content: String) {
         try {
             val barcodeEncoder = BarcodeEncoder()
             val bitmap =
@@ -144,13 +145,16 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
         nameValue = name
         startDateTicketValue = startDateEvent
         addressEvent = address
-
     }
 
     override fun setAvatar(avatar: Bitmap?) {
         MainApplication.getMainUIThread().post {
             avatarTicket?.setImageBitmap(avatar)
         }
+    }
+
+    override fun showTypeTicket(typeName: String) {
+        typeTicket?.text=typeName
     }
 
     override fun showProgressBar() {

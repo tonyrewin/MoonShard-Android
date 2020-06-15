@@ -60,6 +60,10 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
             TicketPresentAdapter(this.mvpDelegate,object :
                 TicketPresentListener {
                 override fun click(ticket: Ticket) {
+
+                }
+
+                override fun click(ticket: Ticket, ticketName: String) {
                     val ticketJson = Gson().toJson(ticket)
                     val bundle = Bundle()
                     bundle.putString("ticket", ticketJson)
@@ -68,7 +72,8 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
                     addPhotoBottomDialogFragment.show(
                         activity!!.supportFragmentManager,
                         "RecipientDialogFragment"
-                    )                }
+                    )
+                }
             }, arrayListOf())
     }
 

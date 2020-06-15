@@ -29,7 +29,7 @@ class TicketsAdapter(val listener: TicketListener, private var ticketSales: Arra
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.typeTicketTv?.text = "Название:" + ticketSales[position].typeTicket
+        holder.typeTicketTv?.text = ticketSales[position].typeTicket.toString()
         holder.costTicketTv?.text = ticketSales[position].priceTicket + " ₽"
 
 

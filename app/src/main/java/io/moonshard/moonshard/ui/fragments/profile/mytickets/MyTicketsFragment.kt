@@ -50,7 +50,11 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
             TicketPresentAdapter(this.mvpDelegate, object :
                 TicketPresentListener {
                 override fun click(ticket: Ticket) {
-                    (activity as MainActivity).showMyTicketInfoFragment(ticket)
+
+                }
+
+                override fun click(ticket: Ticket, ticketName: String) {
+                    (activity as MainActivity).showMyTicketInfoFragment(ticket,ticketName)
                 }
             }, arrayListOf())
     }

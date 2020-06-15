@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.integration.android.IntentIntegrator
@@ -52,29 +50,29 @@ class ScanQrTicketFragment : MvpAppCompatFragment(),
         }
     }
 
-    private fun initScan(){
+    private fun initScan() {
         val integrator = IntentIntegrator.forSupportFragment(this)
         integrator.setBarcodeImageEnabled(true)
         integrator.initiateScan()
     }
 
-    private fun alreadyWasScan(barcodeImagePath: String){
+    override fun alreadyWasScan(error: String, typeTicketName: String) {
+        //  setImageFromImagePath(barcodeImagePath)
         //qrLayout?.visibility = View.VISIBLE
         layoutScan?.visibility = View.VISIBLE
         layoutScan?.setBackgroundResource(R.drawable.layout_red_corner_bg)
         nameTicket?.setTextColor(Color.parseColor("#FFFFFF"))
         typeTicket?.setTextColor(Color.parseColor("#FFFFFF"))
         scanOk?.visibility = View.GONE
-      //  setImageFromImagePath(barcodeImagePath)
+        nameTicket?.text = error
+        typeTicket?.text = typeTicketName
     }
 
-    private fun successScan(ticketJson: String) {
-        val ticket = Gson().fromJson(ticketJson, QrCodeModel::class.java)
-        presenter.scanQrCode(ticket)
-    }
-
-    override fun showSuccessScannedTicket(ticket: QrCodeModel){
-        typeTicket?.text = ticket.typeTicket.toString()
+    override fun showSuccessScannedTicket(
+        ticket: QrCodeModel,
+        typeTicketName: String
+    ) {
+        typeTicket?.text = typeTicketName.toString()
         layoutScan?.visibility = View.VISIBLE
         layoutScan?.setBackgroundResource(R.drawable.layout_settings_bg)
         nameTicket?.setTextColor(Color.parseColor("#333333"))
@@ -89,12 +87,6 @@ class ScanQrTicketFragment : MvpAppCompatFragment(),
             if (result.contents == null) {
                 fragmentManager?.popBackStack()
             } else {
-                //  Toast.makeText(activity!!, "Cancelled", Toast.LENGTH_LONG).show()
-                //                alreadyWasScan()
-
-                Log.d("test",result.contents)
-                Toast.makeText(activity!!, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-                Log.d("test",result.barcodeImagePath)
                 successScan(result.contents)
             }
         } else {
@@ -102,7 +94,14 @@ class ScanQrTicketFragment : MvpAppCompatFragment(),
         }
     }
 
-    fun generateQrCode(content:String){
+    private fun successScan(ticketJson: String) {
+        Log.d("scanQrCodeTest , json: ",ticketJson)
+
+        val ticket = Gson() .fromJson(ticketJson, QrCodeModel::class.java)
+        presenter.scan(ticket)
+    }
+
+    fun generateQrCode(content: String) {
         try {
             val barcodeEncoder = BarcodeEncoder()
             val bitmap =
@@ -112,11 +111,19 @@ class ScanQrTicketFragment : MvpAppCompatFragment(),
         }
     }
 
-    fun setImageFromImagePath(path:String){
+    fun setImageFromImagePath(path: String) {
         val imgFile = File(path)
         if (imgFile.exists()) {
             val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
             qrCode.setImageBitmap(myBitmap)
         }
+    }
+
+    override fun showProgressBar(){
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar(){
+        progressBar?.visibility = View.GONE
     }
 }

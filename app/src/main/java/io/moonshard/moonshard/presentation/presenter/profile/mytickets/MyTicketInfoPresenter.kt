@@ -3,6 +3,9 @@ package io.moonshard.moonshard.presentation.presenter.profile.mytickets
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
+import android.widget.TextView
+import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
@@ -23,12 +26,12 @@ import org.jxmpp.jid.impl.JidCreate
 @InjectViewState
 class MyTicketInfoPresenter : MvpPresenter<MyTicketInfoView>() {
 
-    private var useCase: EventsUseCase? = null
+    private var eventsUseCase: EventsUseCase? = null
 
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = EventsUseCase()
+        eventsUseCase = EventsUseCase()
     }
 
     fun getEventInfo(jid: String) {
@@ -72,7 +75,7 @@ class MyTicketInfoPresenter : MvpPresenter<MyTicketInfoView>() {
         eventId: String,
         chatEntity: ChatEntity
     ) {
-        compositeDisposable.add(useCase!!.getRoom(
+        compositeDisposable.add(eventsUseCase!!.getRoom(
             eventId
         )
             .subscribeOn(Schedulers.io())
@@ -97,6 +100,26 @@ class MyTicketInfoPresenter : MvpPresenter<MyTicketInfoView>() {
             })
     }
 
+    /*
+     fun getTicketTypeName(ticket: Ticket) {
+             val eventID = ticket.jidEvent
+             val typeID = ticket.ticketType.toInt()
+
+             eventsUseCase!!.getTicketTypeName(eventID, typeID)
+                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe { ticketType, throwable ->
+                     if (throwable == null) {
+                         viewState?.showTypeTicket(ticketType.typeName)
+                         Logger.d(ticketType)
+                     } else {
+                         throwable.message?.let { Logger.e(throwable.message!!) }
+                     }
+                 }
+    }
+
+     */
+
     @SuppressLint("CheckResult")
     private fun setAvatar(jid: String, nameChat: String) {
         if (MainApplication.getCurrentChatActivity() != jid) {
@@ -116,6 +139,4 @@ class MyTicketInfoPresenter : MvpPresenter<MyTicketInfoView>() {
                 })
         }
     }
-
-
 }

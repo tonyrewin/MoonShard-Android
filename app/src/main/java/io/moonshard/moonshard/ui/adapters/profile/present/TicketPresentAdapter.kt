@@ -21,6 +21,7 @@ import moxy.presenter.InjectPresenter
 
 interface TicketPresentListener {
     fun click(ticket: Ticket)
+    fun click(ticket: Ticket,ticketName:String)
 }
 
 class TicketPresentAdapter(parentDelegate: MvpDelegate<*>, val listener: TicketPresentListener, private var tickets: ArrayList<Ticket>) :

@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.fragments.mychats.chat.info.ticketSales.ScanQrTicketFragment">
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -122,7 +121,13 @@
                 android:layout_width="170dp"
                 android:layout_height="170dp"/>
 
-
     </RelativeLayout>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

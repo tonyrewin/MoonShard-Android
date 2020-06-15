@@ -65,7 +65,7 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
             }
 
             holder.mainLayout?.setOnClickListener {
-                listener.click(tickets[position])
+                listener.click(tickets[position], holder.typeTicket!!.text.toString())
             }
 
         } catch (e: Exception) {
@@ -80,7 +80,7 @@ class TicketsAdapterPresenter: MvpPresenter<TicketsAdapterView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { ticketType, throwable ->
                 if (throwable == null) {
-                    ticketTypeName?.text = "Название: " + ticketType.typeName
+                    ticketTypeName?.text = ticketType.typeName
                     Logger.d(ticketType)
                 } else {
                     throwable.message?.let { Logger.e(throwable.message!!) }

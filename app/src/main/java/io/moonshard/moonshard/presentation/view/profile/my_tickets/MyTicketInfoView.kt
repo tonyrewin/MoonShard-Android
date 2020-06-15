@@ -9,4 +9,5 @@ interface MyTicketInfoView: MvpView {
     fun showProgressBar()
     fun hideProgressBar()
     fun showToast(text:String)
+    fun showTypeTicket(typeName:String)
 }

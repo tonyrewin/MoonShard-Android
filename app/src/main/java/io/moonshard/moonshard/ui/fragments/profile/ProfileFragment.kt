@@ -47,23 +47,6 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getAvatar()
         presenter.getVerificationEmail()
 
-
-
-
-
-
-
-      //  presenter.savePrivateKey()
-
-     //   presenter.getPublicKey("xyt2312@moonshard.tech")
-
-        //MainService.getWalletService().cashOut()
-
-        //presenter.savePrivateKey("")
-        //presenter.getPrivateKey("1234567891234567")
-
-
-
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
         }

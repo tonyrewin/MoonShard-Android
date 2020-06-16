@@ -44,6 +44,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         var idChat = ""
 
         initAdapter()

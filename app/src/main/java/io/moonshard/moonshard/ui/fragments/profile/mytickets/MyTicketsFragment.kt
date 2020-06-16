@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moonshardwallet.models.Ticket
+import com.kenai.jffi.Main
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketsPresenter
@@ -24,6 +26,8 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
     @InjectPresenter
     lateinit var presenter: MyTicketsPresenter
 
+    private var fromSuccessWalletFragment = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +40,19 @@ class MyTicketsFragment : MvpAppCompatFragment(), MyTicketsView {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigationBar()
 
+
+        arguments?.let {
+            fromSuccessWalletFragment = it.getBoolean("fromSuccessWalletFragment")
+        }
+
+
         backBtn?.setOnClickListener {
-            fragmentManager?.popBackStack()
+            if(fromSuccessWalletFragment){
+                activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                (activity as MainActivity).showProfileFragment()
+            }else{
+                fragmentManager?.popBackStack()
+            }
         }
         initAdapter()
 

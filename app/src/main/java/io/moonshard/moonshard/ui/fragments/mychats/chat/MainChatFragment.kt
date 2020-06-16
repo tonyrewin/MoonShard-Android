@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
@@ -18,11 +19,13 @@ import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.ManageEventFr
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.event.admin_permissions.AdminPermissionFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.*
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.BuyTicketsFragment
+import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.ConfirmBuyTicketsFragment
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.statics.*
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
+import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import moxy.MvpAppCompatFragment
 import org.jivesoftware.smackx.muc.Occupant
 
@@ -230,6 +233,17 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
+    fun showMyTicketsFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromSuccessWalletFragment", true)
+        val fragment = MyTicketsFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "MyTicketsFragmentFromSuccess")
+            .addToBackStack("MyTicketsFragmentFromSuccess")
+            .commit()
+    }
+
     fun showBuyTicketsScreen(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -248,7 +262,8 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     ) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        val fragment = ConfirmBuyTicketsFragment()
+        val fragment =
+            ConfirmBuyTicketsFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
 
@@ -256,6 +271,18 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
         ft.add(R.id.mainContainer, fragment, "ConfirmBuyTicketsFragment")
             .hide(buyTicketsFragment)
             .addToBackStack("ConfirmBuyTicketsFragment")
+            .commit()
+    }
+
+    fun showSuccessWalletScreen(idChat: String,moneyValue:String){
+        val bundle = Bundle()
+        bundle.putString("chatId", idChat)
+        bundle.putString("moneyValue", moneyValue)
+        val fragment = SuccessWalletFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "SuccessWalletFragment")
+            .addToBackStack("SuccessWalletFragment")
             .commit()
     }
 

@@ -30,7 +30,6 @@ class ConfirmTicketsBuyAdapterPresenter : MvpPresenter<ConfirmTicketsBuyAdapterV
         listener: ConfirmTicketsBuyListener, idChat: String
     ) {
         try {
-            holder.typeTicketTv?.text = ticketSales[holder.adapterPosition].typeTicket.toString()
             holder.costTicketTv?.text = ticketSales[holder.adapterPosition].priceTicket + " ₽"
             getTicketTypeName(idChat,ticketSales[position].typeTicket.toInt(),holder.typeTicketTv!!)
             if (position == ticketSales.size - 1) {

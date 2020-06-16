@@ -1,6 +1,5 @@
 package io.moonshard.moonshard.presentation.view.chat.info.tickets
 
-import android.graphics.Bitmap
 import com.example.moonshardwallet.models.MyTicketSale
 import moxy.MvpView
 
@@ -13,4 +12,5 @@ interface ConfirmBuyTicketsView:MvpView {
     fun showProgressBar()
     fun hideProgressBar()
     fun showEventInfo(name: String, startDateEvent: String, address: String)
+    fun showSuccessScreen(costAll: String?)
 }

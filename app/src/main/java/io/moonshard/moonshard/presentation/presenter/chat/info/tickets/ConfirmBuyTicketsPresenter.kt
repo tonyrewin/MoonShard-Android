@@ -34,6 +34,10 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
         useCase = EventsUseCase()
     }
 
+
+    private var costAll: String? = null
+
+
     fun getConfirmTickets() {
         val ticketSales = BuyTicketObject.ticketSales
 
@@ -51,13 +55,19 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
     }
 
     private fun getCostAllTicket() {
+        val costAll = getCostAll()
+        viewState?.showCost(costAll)
+    }
+
+    private fun getCostAll(): String {
         var costAll: Double = 0.0
         for (key in BuyTicketObject.ticketSales) {
             val ticketSaleValue = key.value
             var cost = ticketSaleValue * key.key.priceTicket.toDouble()
             costAll = costAll + cost
         }
-        viewState?.showCost(costAll.toInt().toString())
+        this.costAll = costAll.toInt().toString()
+        return costAll.toInt().toString()
     }
 
     private fun getAmountAllTicket() {
@@ -67,29 +77,6 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
             amountAll = amountAll + ticketSaleValue
         }
         viewState?.showAmount(amountAll.toString())
-    }
-
-    fun buyTickets() {
-        BuyTicketObject.ticketSales.forEach { (key, value) ->
-            Log.d("eventTxTicket key: ", value.toString())
-            Log.d("eventTxTicket originSaleAddress: ", key.originSaleAddress.toString())
-
-            val future = MainService.getBuyTicketService().buy(key.originSaleAddress, value)
-                .thenAcceptAsync {
-                    // var events_tx = sale_instance.getTokensPurchasedEvents(transactionReceipt);
-                    var event_tx_ticket =
-                        MainService.getBuyTicketService().ticket.getTicketBoughtHumanEvents(it)
-                    Log.d("eventTxTicket transaction ", "test")
-                }.exceptionally { e ->
-                    Log.d("eventTxTicket error: ", e.message)
-                    Logger.d(e)
-                    null
-                }
-            future.get()
-        }
-        viewState?.hideProgressBar()
-        viewState?.showToast("Оплата успешно выполнена")
-        BuyTicketObject.ticketSales.clear() //временно
     }
 
     fun buyTicketsRxMain() {
@@ -112,8 +99,7 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.doOnComplete {
                 Log.d("eventTxTicket transaction ", "test")
-                viewState?.hideProgressBar()
-                viewState?.showToast("Оплата успешно выполнена")
+                viewState?.showSuccessScreen(costAll)
             }
             ?.subscribe( {
                 Log.d("eventTxTicket hash: ", it.blockHash)
@@ -123,64 +109,6 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
                 viewState?.showToast("Произошла ошибка")
             })
     }
-
-    fun buyTicketsRx() {
-
-        /*
-        BuyTicketObject.ticketSales.forEach { (key, value) ->
-            MainService.getBuyTicketService().buyRx(key.originSaleAddress, value)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d("eventTxTicket transaction ", "test")
-                    viewState?.hideProgressBar()
-                    viewState?.showToast("Оплата успешно выполнена")
-                    BuyTicketObject.ticketSales.clear() //временно
-                }, {
-                    Log.d("eventTxTicket error: ", it.message)
-                    viewState?.hideProgressBar()
-                    viewState?.showToast("Произошла ошибка")
-                    BuyTicketObject.ticketSales.clear() //временно
-                })
-        }
-         */
-
-
-        val values = arrayListOf<MyValue>()
-        BuyTicketObject.ticketSales.forEach { (key, value) ->
-            values.add(MyValue(key, value))
-        }
-
-        val obs = Observable.fromArray(values)
-
-
-        obs.flatMap { users -> Observable.fromIterable(users) }
-            .subscribe {
-                Log.d("eventTxTicket key: ", it.value.toString())
-                Log.d(
-                    "eventTxTicket originSaleAddress: ",
-                    it.myTicketSale.originSaleAddress.toString()
-                )
-
-                MainService.getBuyTicketService().buyRx(it.myTicketSale.originSaleAddress, it.value)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        Log.d("eventTxTicket transaction ", "test")
-                        viewState?.hideProgressBar()
-                        viewState?.showToast("Оплата успешно выполнена")
-                        BuyTicketObject.ticketSales.clear() //временно
-                    }, {
-                        Log.d("eventTxTicket error: ", it.message)
-                        viewState?.hideProgressBar()
-                        viewState?.showToast("Произошла ошибка")
-                        BuyTicketObject.ticketSales.clear() //временно
-                    })
-            }
-
-
-    }
-
 
     fun getEventInfo(jid: String) {
         viewState?.showProgressBar()
@@ -209,7 +137,6 @@ class ConfirmBuyTicketsPresenter : MvpPresenter<ConfirmBuyTicketsView>() {
                 Logger.d(it)
             })
     }
-
 
     private fun getEventId(jid: String): String? {
         for (i in RoomsMap.rooms.indices) {

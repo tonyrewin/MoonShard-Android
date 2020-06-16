@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.fragments.mychats.chat.info.ticketSales.SuccessWalletFragment">
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -19,6 +18,7 @@
                 android:padding="0dp">
 
             <ImageView
+                    android:visibility="gone"
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,68 +41,68 @@
 
 
     <RelativeLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="9dp"
-            android:background="@drawable/layout_settings_bg"
-            android:layout_below="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolBar"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/layout_settings_bg">
 
 
         <ImageView
                 android:id="@+id/successIv"
-                android:src="@drawable/ic_success_wallet"
-                android:layout_marginTop="73dp"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="73dp"
+                android:src="@drawable/ic_success_wallet" />
 
         <TextView
-                android:layout_marginTop="27dp"
-                android:layout_below="@+id/successIv"
                 android:id="@+id/successTv"
-                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/successIv"
                 android:layout_centerHorizontal="true"
-                android:textSize="17sp"
+                android:layout_marginTop="27dp"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="Оплата прошла успешно"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="#333333"
+                android:textSize="17sp" />
 
         <TextView
-                android:layout_marginEnd="35dp"
-                android:layout_marginStart="35dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="12dp"
                 android:id="@+id/placeWalletTv"
-                android:layout_below="@+id/successTv"
-                android:textColor="#333333"
-                android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:fontFamily="@font/roboto_regular"
-                android:text="Ваши билеты находятся во вкладке «‎Билеты»‎ в вашем профиле"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-       <TextView
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/successTv"
                 android:layout_centerHorizontal="true"
-               android:layout_marginStart="73dp"
-                android:text="Списано 1500 ₽ с кошелька"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="35dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Ваши билеты находятся во вкладке «‎Билеты»‎ в вашем профиле"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+        <TextView
                 android:id="@+id/valueWallet"
-                android:layout_marginTop="23dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/placeWalletTv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="73dp"
+                android:layout_marginTop="23dp"
+                android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
-                android:fontFamily="@font/roboto_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                tools:text="Списано 1500 ₽ с кошелька" />
 
         <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buyTicketBtn"
-                android:layout_alignParentBottom="true"
+                android:id="@+id/chatBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
@@ -115,9 +115,9 @@
 
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/showTicketsBtn"
-                android:layout_above="@+id/buyTicketBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/chatBtn"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
@@ -129,7 +129,6 @@
 
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>

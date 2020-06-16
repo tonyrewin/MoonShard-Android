@@ -1,6 +1,5 @@
-package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
+package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.tickets.ConfirmBu
 import io.moonshard.moonshard.presentation.view.chat.info.tickets.ConfirmBuyTicketsView
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyAdapter
 import io.moonshard.moonshard.ui.adapters.tickets.ConfirmTicketsBuyListener
-import io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets.buyticket.BuyTicketObject
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.*
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.backBtn
 import kotlinx.android.synthetic.main.fragment_confirm_buy_tickets.startDateTicket
@@ -56,6 +55,7 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
         }
         presenter.getEventInfo(idChat)
         presenter.getConfirmTickets()
+
     }
 
     private fun initAdapter() {
@@ -99,6 +99,10 @@ class ConfirmBuyTicketsFragment : MvpAppCompatFragment(),
 
     override fun hideProgressBar() {
         progressBar?.visibility = View.GONE
+    }
+
+    override fun showSuccessScreen(costAll: String?) {
+        (parentFragment as? MainChatFragment)?.showSuccessWalletScreen(idChat,costAll!!)
     }
 
     override fun onDestroyView() {

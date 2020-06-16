@@ -12,7 +12,7 @@
             android:layout_marginStart="12dp"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="#333333"
-            android:text="Билет на 1 день"
+            android:text="Билет"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

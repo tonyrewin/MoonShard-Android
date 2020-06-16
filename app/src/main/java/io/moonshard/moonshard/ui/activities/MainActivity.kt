@@ -130,13 +130,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onBackPressed() {
-
         if (intent.getStringExtra("screen") == "chat")
 
             if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 return
             }
+
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
@@ -148,6 +148,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val mainChatScreen = supportFragmentManager.findFragmentByTag("chatScreen")
         if (mainChatScreen != null) {
             if (mainChatScreen.childFragmentManager.backStackEntryCount > 0) {
+
+                //todo feature
+                if(mainChatScreen.childFragmentManager.findFragmentByTag("MyTicketsFragmentFromSuccess")!=null){
+                    showProfileFragment()
+                    return
+                }
+
                 mainChatScreen.childFragmentManager.popBackStack()
                 return
             } else {
@@ -194,6 +201,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     fun showProfileFragment() {
+        mainBottomNav?.menu?.getItem(2)?.isChecked = true
         val fragment =
             ProfileFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -275,7 +283,6 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     fun showMyTicketsFragment() {
         val fragment = MyTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
-        ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "MyTicketsFragment")
             .addToBackStack("MyTicketsFragment")
             .commit()

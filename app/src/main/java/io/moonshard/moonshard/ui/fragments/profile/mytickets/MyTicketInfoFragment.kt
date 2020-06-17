@@ -69,7 +69,7 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
                 actionBtn?.visibility = View.VISIBLE
 
                 actionLayout?.visibility = View.GONE
-                deleteTicketLayout?.visibility = View.GONE
+                    //deleteTicketLayout?.visibility = View.GONE
             } else {
                 fragmentManager?.popBackStack()
             }
@@ -82,7 +82,7 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
             actionBtn?.visibility = View.GONE
 
             actionLayout?.visibility = View.VISIBLE
-            deleteTicketLayout?.visibility = View.VISIBLE
+           // deleteTicketLayout?.visibility = View.VISIBLE
         }
 
         saveTicketAsPdfBtn?.setOnClickListener {

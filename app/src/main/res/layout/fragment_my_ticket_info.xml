@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Ввходной билет"
+                android:text="Входной билет"
                 android:textColor="#333333"
                 android:textSize="17sp"/>
 

@@ -103,6 +103,7 @@
                 android:paddingEnd="5dp" />
 
         <TextView
+                android:visibility="gone"
                 android:textSize="14sp"
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
@@ -112,6 +113,7 @@
                 android:layout_height="wrap_content"/>
 
         <EditText
+                android:visibility="gone"
                 android:textColorHint="#DDDDDD"
                 android:hint="Введите пояснение"
                 android:fontFamily="@font/roboto_regular"

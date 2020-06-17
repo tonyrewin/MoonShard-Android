@@ -101,10 +101,20 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
     }
 
     private fun showInfo(ticket: Ticket, ticketTypeName:String) {
-        typeTicket?.text = ticketTypeName
+
+        var ticketType = ""
+
+        ticketType = if(ticketTypeName.isBlank()){
+            "Билет"
+        }else{
+            ticketTypeName
+        }
+
+        typeTicket?.text = ticketType
         numberTicket?.text = ticket.ticketId.toString()
 
-        typeTicketValue = ticketTypeName
+
+        typeTicketValue = ticketType
 
         if (ticket.payState?.toInt() == 2) {
             scannedIv?.visibility = View.VISIBLE

@@ -79,6 +79,7 @@ class TicketsAdapterPresenter : MvpPresenter<TicketsAdapterView>() {
                     ticketTypeName.text = ticketType.typeName
                     Logger.d(ticketType)
                 } else {
+                    ticketTypeName.text = "Билет"
                     throwable.message?.let { Logger.e(throwable.message!!) }
                 }
             }

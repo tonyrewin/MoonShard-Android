@@ -27,7 +27,6 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
     @InjectPresenter
     lateinit var presenter: PresentTicketPresenter
 
-    var sheetInfoBehavior: BottomSheetBehavior<View>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +48,14 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
+
         initTypeTicketPresentAdapter()
 
         presenter.getMyTickets()
+
+        closePromptBtn?.setOnClickListener {
+            actionLayout?.visibility = View.GONE
+        }
     }
 
     private fun initTypeTicketPresentAdapter() {
@@ -92,5 +96,4 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
     override fun showToast(text: String) {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
-
 }

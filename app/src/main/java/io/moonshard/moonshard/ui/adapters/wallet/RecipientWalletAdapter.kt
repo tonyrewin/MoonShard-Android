@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.jabber.Recipient
+import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.roster.RosterEntry
@@ -26,7 +29,7 @@ interface RecipientWalletListener {
 
 class RecipientWalletAdapter(
     val listener: RecipientWalletListener,
-    private var contacts: ArrayList<RosterEntry>
+    private var contacts: ArrayList<Recipient>
 ) :
     RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>() {
 
@@ -44,36 +47,16 @@ class RecipientWalletAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.checkBox.setOnCheckedChangeListener(null)
 
-        holder.checkBox.isChecked = selectedPosition == position
+        holder.checkBox.isChecked = holder.adapterPosition==selectedPosition
 
         holder.checkBox.setOnCheckedChangeListener { view, isChecked ->
-            listener.click(contacts[position].jid!!.asUnescapedString())
-            selectedPosition = position
+            listener.click(contacts[position].jid)
+            selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
         }
 
-        holder.checkBox.setOnClickListener {
-            listener.click(contacts[position].jid!!.asUnescapedString())
-            selectedPosition = position
-            notifyDataSetChanged()
-        }
-
-        try {
-            val jidUser = JidCreate.entityBareFrom(contacts[position].jid)
-            val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-            val card = vm.loadVCard(jidUser)
-            val nickName: String
-            nickName = if (card.nickName.isNullOrBlank()) {
-                card.to.asBareJid().localpartOrNull.toString()
-            } else {
-                card.nickName
-            }
-
-            holder.nameTv?.text = nickName
-            setAvatar(contacts[position].jid!!.asUnescapedString(), nickName, holder.avatar)
-        } catch (e: Exception) {
-            Logger.d(e)
-        }
+        holder.nameTv?.text = contacts[holder.adapterPosition].nickName
+        setAvatar(contacts[position].jid, contacts[holder.adapterPosition].nickName, holder.avatar)
 
         if (position == contacts.size - 1) {
             holder.viewLine?.visibility = View.GONE
@@ -82,9 +65,32 @@ class RecipientWalletAdapter(
 
     override fun getItemCount(): Int = contacts.size
 
-    fun setContacts(contacts: ArrayList<RosterEntry>) {
+    fun setContacts(contacts: ArrayList<Recipient>) {
         this.contacts = contacts
         notifyDataSetChanged()
+    }
+
+    fun setData(position:Int,holder: ViewHolder):Completable{
+        return Completable.create {
+            try {
+                val jidUser = JidCreate.entityBareFrom(contacts[position].jid)
+                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+                val card = vm.loadVCard(jidUser)
+                val nickName: String
+                nickName = if (card.nickName.isNullOrBlank()) {
+                    card.to.asBareJid().localpartOrNull.toString()
+                } else {
+                    card.nickName
+                }
+
+                holder.nameTv?.text = nickName
+                //setAvatar(contacts[position].jid!!.asUnescapedString(), nickName, holder.avatar)
+                it.onComplete()
+            } catch (e: Exception) {
+                it.onError(e)
+                Logger.d(e)
+            }
+        }
     }
 
     private fun setAvatar(jid: String, nameChat: String, imageView: ImageView?) {

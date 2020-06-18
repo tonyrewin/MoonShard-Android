@@ -93,6 +93,6 @@ class TypeTicketPresentFragment : MvpAppCompatFragment(), TypeTicketPresentView 
     }
 
     override fun showContacts(contacts: ArrayList<RosterEntry>) {
-        (rv?.adapter as? RecipientWalletAdapter)?.setContacts(contacts)
+       // (rv?.adapter as? RecipientWalletAdapter)?.setContacts(contacts)
     }
 }

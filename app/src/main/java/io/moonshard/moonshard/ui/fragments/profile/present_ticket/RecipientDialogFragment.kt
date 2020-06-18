@@ -9,16 +9,22 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.models.jabber.Recipient
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.RecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.RecipientDialogiView
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_recipient_dialog.*
+import kotlinx.android.synthetic.main.fragment_recipient_dialog.cancelBtn
+import kotlinx.android.synthetic.main.fragment_recipient_dialog.chooseBtn
+import kotlinx.android.synthetic.main.fragment_recipient_dialog.rv
+import kotlinx.android.synthetic.main.fragment_transfer_recipient_dialog.*
 import moxy.MvpAppCompatDialogFragment
 import moxy.presenter.InjectPresenter
 import org.jivesoftware.smack.roster.RosterEntry
@@ -64,7 +70,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
 
         initRecipientAdapter()
 
-        presenter.getContacts()
+        presenter.getContactsRx()
 
         chooseBtn?.setOnClickListener{
             presenter.sendTicketAsPresent(userJid,ticket!!.ticketId)
@@ -86,7 +92,7 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
             }, arrayListOf())
     }
 
-    override fun showContacts(contacts: ArrayList<RosterEntry>) {
+    override fun showContacts(contacts: ArrayList<Recipient>) {
         (rv?.adapter as? RecipientWalletAdapter)?.setContacts(contacts)
     }
 
@@ -97,5 +103,17 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
 
     override fun dismissBack(){
         dismiss()
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

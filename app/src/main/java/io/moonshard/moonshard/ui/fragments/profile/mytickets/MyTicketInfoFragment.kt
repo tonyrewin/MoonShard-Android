@@ -21,6 +21,7 @@ import io.moonshard.moonshard.ViewPrintAdapter
 import io.moonshard.moonshard.models.wallet.QrCodeModel
 import io.moonshard.moonshard.presentation.presenter.profile.mytickets.MyTicketInfoPresenter
 import io.moonshard.moonshard.presentation.view.profile.my_tickets.MyTicketInfoView
+import io.moonshard.moonshard.ui.fragments.profile.present_ticket.RecipientPresentDialogFragment
 import kotlinx.android.synthetic.main.fragment_my_ticket_info.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -85,6 +86,10 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
            // deleteTicketLayout?.visibility = View.VISIBLE
         }
 
+        presentTicketBtn?.setOnClickListener {
+            openPresentTicketDialog()
+        }
+
         saveTicketAsPdfBtn?.setOnClickListener {
             printPDF()
         }
@@ -133,6 +138,18 @@ class MyTicketInfoFragment : MvpAppCompatFragment(), MyTicketInfoView {
         val contentQrCodeJson = Gson().toJson(contentQrCode)
         Log.d("contentQrCodeJson",contentQrCodeJson)
         generateQrCode(contentQrCodeJson)
+    }
+
+    fun openPresentTicketDialog(){
+        val ticketJson = Gson().toJson(ticket)
+        val bundle = Bundle()
+        bundle.putString("ticket", ticketJson)
+        val addPhotoBottomDialogFragment = RecipientPresentDialogFragment()
+        addPhotoBottomDialogFragment.arguments = bundle
+        addPhotoBottomDialogFragment.show(
+            activity!!.supportFragmentManager,
+            "RecipientDialogFragment"
+        )
     }
 
     private fun generateQrCode(content: String) {

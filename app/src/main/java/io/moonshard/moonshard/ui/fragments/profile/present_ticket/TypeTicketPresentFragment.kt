@@ -16,8 +16,6 @@ import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.Type
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.TypeTicketPresentView
 import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentAdapter
 import io.moonshard.moonshard.ui.adapters.profile.present.TypeTicketPresentListener
-import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
-import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import kotlinx.android.synthetic.main.fragment_type_ticket_present.*
 import kotlinx.android.synthetic.main.recipient_bottom_sheet.*
 import moxy.MvpAppCompatFragment
@@ -86,7 +84,7 @@ class TypeTicketPresentFragment : MvpAppCompatFragment(), TypeTicketPresentView 
             TypeTicketPresentAdapter(object :
                 TypeTicketPresentListener {
                 override fun click() {
-                    val addPhotoBottomDialogFragment = RecipientDialogFragment()
+                    val addPhotoBottomDialogFragment = RecipientPresentDialogFragment()
                    addPhotoBottomDialogFragment.show(activity!!.supportFragmentManager, "RecipientDialogFragment")
                 }
             }, arrayListOf())

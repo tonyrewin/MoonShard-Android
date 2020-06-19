@@ -32,7 +32,7 @@ import moxy.MvpAppCompatDialogFragment
 import moxy.presenter.InjectPresenter
 
 
-class RecipientDialogFragment : MvpAppCompatDialogFragment(), RecipientDialogiView {
+class RecipientPresentDialogFragment : MvpAppCompatDialogFragment(), RecipientDialogiView {
 
     @InjectPresenter
     lateinit var presenter: RecipientDialogPresenter

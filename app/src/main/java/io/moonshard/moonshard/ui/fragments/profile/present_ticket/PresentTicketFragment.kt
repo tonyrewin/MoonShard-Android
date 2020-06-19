@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.Ticket
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.PresentTicketPresenter
@@ -71,7 +69,7 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
                     val ticketJson = Gson().toJson(ticket)
                     val bundle = Bundle()
                     bundle.putString("ticket", ticketJson)
-                    val addPhotoBottomDialogFragment = RecipientDialogFragment()
+                    val addPhotoBottomDialogFragment = RecipientPresentDialogFragment()
                     addPhotoBottomDialogFragment.arguments = bundle
                     addPhotoBottomDialogFragment.show(
                         activity!!.supportFragmentManager,

@@ -1,11 +1,13 @@
 package io.moonshard.moonshard.ui.activities
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction.*
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
 import io.moonshard.moonshard.MainApplication
@@ -36,6 +38,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smackx.muc.MultiUserChat
 import pub.devrel.easypermissions.EasyPermissions
+
 
 class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
@@ -374,6 +377,15 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         ft.replace(R.id.container, fragment, "MyTicketInfoFragment")
             .addToBackStack("MyTicketInfoFragment")
             .commit()
+    }
+
+    fun hideKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var view = currentFocus
+        if (view == null) {
+            view = View(this)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroy() {

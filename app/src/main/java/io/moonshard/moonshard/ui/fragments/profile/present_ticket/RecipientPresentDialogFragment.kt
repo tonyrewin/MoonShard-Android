@@ -17,6 +17,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.jabber.Recipient
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.RecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.RecipientDialogiView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,6 +83,7 @@ class RecipientPresentDialogFragment : MvpAppCompatDialogFragment(), RecipientDi
         }
 
         cancelBtn?.setOnClickListener {
+            (activity as MainActivity).hideKeyboard()
             dismiss()
         }
 
@@ -116,11 +118,13 @@ class RecipientPresentDialogFragment : MvpAppCompatDialogFragment(), RecipientDi
     }
 
     override fun back() {
+        (activity as MainActivity).hideKeyboard()
         dismiss()
         activity?.supportFragmentManager?.popBackStack()
     }
 
     override fun dismissBack() {
+        (activity as MainActivity).hideKeyboard()
         dismiss()
     }
 

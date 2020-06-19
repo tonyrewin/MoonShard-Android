@@ -15,6 +15,7 @@ import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.jabber.Recipient
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferRecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferRecipientDialogView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -61,10 +62,12 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
         presenter.getContactsRx()
 
         chooseBtn?.setOnClickListener {
+            (activity as MainActivity).hideKeyboard()
             dismiss()
         }
 
         cancelBtn?.setOnClickListener {
+            (activity as MainActivity).hideKeyboard()
             dismiss()
         }
 
@@ -87,9 +90,8 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
                 override fun click(jid: String) {
                     //todo test
                     chooseBtn?.setOnClickListener {
-                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(
-                            jid
-                        )
+                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(jid)
+                        (activity as MainActivity).hideKeyboard()
                         dismiss()
                     }
 

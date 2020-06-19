@@ -50,7 +50,7 @@ class RecipientWalletAdapter(
         holder.checkBox.isChecked = holder.adapterPosition==selectedPosition
 
         holder.checkBox.setOnCheckedChangeListener { view, isChecked ->
-            listener.click(contacts[position].jid)
+            listener.click(contacts[holder.adapterPosition].jid)
             selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
         }

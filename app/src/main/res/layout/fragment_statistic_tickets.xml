@@ -41,24 +41,25 @@
 
     <RelativeLayout
             android:id="@+id/searchLayout"
-            android:layout_below="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/toolBar"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
             android:orientation="vertical"
+            android:visibility="gone"
             tools:ignore="RtlSymmetry">
 
         <ImageView
-                android:layout_marginBottom="11dp"
                 android:id="@+id/searchBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="11dp"
                 android:src="@drawable/ic_search_black" />
 
         <TextView

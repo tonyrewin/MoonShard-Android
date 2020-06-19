@@ -38,6 +38,7 @@
             android:textSize="16sp" />
 
     <TextView
+            android:visibility="gone"
             android:fontFamily="@font/roboto_regular"
             android:textSize="14sp"
             android:id="@+id/statusTv"

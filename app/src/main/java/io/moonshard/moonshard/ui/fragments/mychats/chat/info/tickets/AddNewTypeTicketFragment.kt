@@ -23,7 +23,6 @@ class AddNewTypeTicketFragment : MvpAppCompatFragment(),
 
     var idChat = ""
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,11 +39,19 @@ class AddNewTypeTicketFragment : MvpAppCompatFragment(),
         }
 
         saveBtn?.setSafeOnClickListener {
-            presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
+            if(typeEt.text.toString().isBlank() || priceEt.text.toString().isBlank() || limitEt.text.toString().isBlank()){
+                showToast("Заполните поля")
+            }else{
+                presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
+            }
         }
 
         readyBtn?.setSafeOnClickListener {
-            presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
+            if(typeEt.text.toString().isBlank() || priceEt.text.toString().isBlank() || limitEt.text.toString().isBlank()){
+                showToast("Заполните поля")
+            }else{
+                presenter.addNewEvent(typeEt.text.toString(),priceEt.text.toString(),limitEt.text.toString(),idChat)
+            }
         }
 
         backBtn?.setSafeOnClickListener {

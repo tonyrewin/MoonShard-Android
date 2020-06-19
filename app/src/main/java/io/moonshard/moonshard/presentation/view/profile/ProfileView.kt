@@ -8,4 +8,5 @@ interface ProfileView: MvpView {
     fun setAvatar(avatar:Bitmap?)
     fun showError(error:String)
     fun setVerification(email: String?, isActivated: Boolean?)
+    fun openBrowser(url: String)
 }

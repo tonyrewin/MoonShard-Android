@@ -12,4 +12,5 @@ interface RecipientDialogiView:MvpView {
     fun showToast(text: String)
     fun showProgressBar()
     fun hideProgressBar()
+    fun onDataChange()
 }

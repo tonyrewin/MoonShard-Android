@@ -77,7 +77,6 @@
                 android:ems="10"
                 android:gravity="center"
                 android:hint="Поиск"
-                android:inputType="textPassword"
                 android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView

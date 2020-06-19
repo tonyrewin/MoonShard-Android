@@ -10,23 +10,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.jabber.Recipient
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferRecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferRecipientDialogView
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_transfer_recipient_dialog.*
 import moxy.MvpAppCompatDialogFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smack.roster.RosterEntry
 
 
 class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRecipientDialogView {
 
     @InjectPresenter
     lateinit var presenter: TransferRecipientDialogPresenter
+
+    private var disposible: Disposable? = null
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,13 +60,23 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
         initRecipientAdapter()
         presenter.getContactsRx()
 
-        chooseBtn?.setOnClickListener{
+        chooseBtn?.setOnClickListener {
             dismiss()
         }
 
-        cancelBtn?.setOnClickListener{
+        cancelBtn?.setOnClickListener {
             dismiss()
         }
+
+        disposible = editSearch?.afterTextChangeEvents()
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe {
+                try {
+                    presenter.setFilter(it.editable.toString())
+                } catch (e: Exception) {
+                    com.orhanobut.logger.Logger.d(e)
+                }
+            }
     }
 
     private fun initRecipientAdapter() {
@@ -71,10 +84,12 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
         rv?.adapter =
             RecipientWalletAdapter(object :
                 RecipientWalletListener {
-                override fun click(jid:String) {
+                override fun click(jid: String) {
                     //todo test
-                    chooseBtn?.setOnClickListener{
-                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(jid)
+                    chooseBtn?.setOnClickListener {
+                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(
+                            jid
+                        )
                         dismiss()
                     }
 
@@ -96,5 +111,9 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
 
     override fun hideProgressBar() {
         progressBar?.visibility = View.GONE
+    }
+
+    override fun onDataChange() {
+        (rv?.adapter as? RecipientWalletAdapter)?.notifyDataSetChanged()
     }
 }

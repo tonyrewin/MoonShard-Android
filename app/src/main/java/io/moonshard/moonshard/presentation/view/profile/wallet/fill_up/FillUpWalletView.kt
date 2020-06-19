@@ -5,4 +5,5 @@ import moxy.MvpView
 interface FillUpWalletView: MvpView {
     fun showBalance(balance: String)
     fun showToast(text: String)
+    fun openBrowser(url: String)
 }

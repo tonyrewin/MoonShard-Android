@@ -4,39 +4,44 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moonshardwallet.MainService
 import com.example.moonshardwallet.models.Ticket
 import com.google.gson.Gson
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.models.jabber.Recipient
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.RecipientDialogPresenter
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.RecipientDialogiView
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletAdapter
 import io.moonshard.moonshard.ui.adapters.wallet.RecipientWalletListener
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_recipient_dialog.*
 import kotlinx.android.synthetic.main.fragment_recipient_dialog.cancelBtn
 import kotlinx.android.synthetic.main.fragment_recipient_dialog.chooseBtn
+import kotlinx.android.synthetic.main.fragment_recipient_dialog.editSearch
+import kotlinx.android.synthetic.main.fragment_recipient_dialog.progressBar
 import kotlinx.android.synthetic.main.fragment_recipient_dialog.rv
 import kotlinx.android.synthetic.main.fragment_transfer_recipient_dialog.*
 import moxy.MvpAppCompatDialogFragment
 import moxy.presenter.InjectPresenter
-import org.jivesoftware.smack.roster.RosterEntry
 
 
-class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiView {
+class RecipientDialogFragment : MvpAppCompatDialogFragment(), RecipientDialogiView {
 
     @InjectPresenter
     lateinit var presenter: RecipientDialogPresenter
 
-    var ticket:Ticket?=null
-    var userJid:String?=null
+    private var disposible: Disposable? = null
+
+
+    var ticket: Ticket? = null
+    var userJid: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,20 +70,30 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
 
         arguments?.let {
             val ticketJson = it.getString("ticket")
-            ticket  = Gson().fromJson(ticketJson, Ticket::class.java)
+            ticket = Gson().fromJson(ticketJson, Ticket::class.java)
         }
 
         initRecipientAdapter()
 
         presenter.getContactsRx()
 
-        chooseBtn?.setOnClickListener{
-            presenter.sendTicketAsPresent(userJid,ticket!!.ticketId)
+        chooseBtn?.setOnClickListener {
+            presenter.sendTicketAsPresent(userJid, ticket!!.ticketId)
         }
 
-        cancelBtn?.setOnClickListener{
+        cancelBtn?.setOnClickListener {
             dismiss()
         }
+
+        disposible = editSearch?.afterTextChangeEvents()
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe {
+                try {
+                    presenter.setFilter(it.editable.toString())
+                } catch (e: Exception) {
+                    com.orhanobut.logger.Logger.d(e)
+                }
+            }
     }
 
     private fun initRecipientAdapter() {
@@ -92,16 +107,20 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
             }, arrayListOf())
     }
 
+    override fun onDataChange() {
+        (rv?.adapter as? RecipientWalletAdapter)?.notifyDataSetChanged()
+    }
+
     override fun showContacts(contacts: ArrayList<Recipient>) {
         (rv?.adapter as? RecipientWalletAdapter)?.setContacts(contacts)
     }
 
-    override fun back(){
+    override fun back() {
         dismiss()
         activity?.supportFragmentManager?.popBackStack()
     }
 
-    override fun dismissBack(){
+    override fun dismissBack() {
         dismiss()
     }
 
@@ -110,10 +129,10 @@ class RecipientDialogFragment : MvpAppCompatDialogFragment(),RecipientDialogiVie
     }
 
     override fun showProgressBar() {
-        progressBar?.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
-        progressBar?.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 }

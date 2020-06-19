@@ -70,29 +70,6 @@ class RecipientWalletAdapter(
         notifyDataSetChanged()
     }
 
-    fun setData(position:Int,holder: ViewHolder):Completable{
-        return Completable.create {
-            try {
-                val jidUser = JidCreate.entityBareFrom(contacts[position].jid)
-                val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
-                val card = vm.loadVCard(jidUser)
-                val nickName: String
-                nickName = if (card.nickName.isNullOrBlank()) {
-                    card.to.asBareJid().localpartOrNull.toString()
-                } else {
-                    card.nickName
-                }
-
-                holder.nameTv?.text = nickName
-                //setAvatar(contacts[position].jid!!.asUnescapedString(), nickName, holder.avatar)
-                it.onComplete()
-            } catch (e: Exception) {
-                it.onError(e)
-                Logger.d(e)
-            }
-        }
-    }
-
     private fun setAvatar(jid: String, nameChat: String, imageView: ImageView?) {
         if (MainApplication.getCurrentChatActivity() != jid) {
             MainApplication.getXmppConnection().loadAvatar(jid, nameChat)

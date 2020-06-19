@@ -1,6 +1,8 @@
 package io.moonshard.moonshard.ui.fragments.profile
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,6 +48,9 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getInfoProfile()
         presenter.getAvatar()
         presenter.getVerificationEmail()
+
+        presenter.events()
+
 
         profileSettingsLayout?.setSafeOnClickListener {
             showChangeProfileScreen()
@@ -106,6 +111,11 @@ class ProfileFragment : MvpAppCompatFragment(),
                 }
             }
         }
+    }
+
+    override fun openBrowser(url:String){
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
     }
 
     override fun onDestroyView() {

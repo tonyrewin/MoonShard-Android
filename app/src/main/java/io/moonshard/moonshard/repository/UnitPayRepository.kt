@@ -6,6 +6,7 @@ import io.moonshard.moonshard.common.ApiConstants.Companion.COMPLEX_BASE_URL_UNI
 import io.moonshard.moonshard.common.ApiConstants.Companion.UNIT_PAY_CREATE_PAYMENT
 import io.moonshard.moonshard.models.api.CreatePaymentRequestModel
 import io.reactivex.Single
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class UnitPayRepository {
@@ -18,7 +19,7 @@ class UnitPayRepository {
 
     fun createPay(
         sum: Int, account: String, desc: String
-    ): Single<okhttp3.Response> {
+    ): Single<ResponseBody> {
         val request = CreatePaymentRequestModel(account, sum, desc)
         return api.createPay("$COMPLEX_BASE_URL_UNIT_PAY/$UNIT_PAY_CREATE_PAYMENT", request)
     }

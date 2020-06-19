@@ -68,6 +68,10 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
             }
         })
 
+        nextBtn?.setSafeOnClickListener {
+            presenter.cashOut(cardNumberEt.text.toString(),moneyValue.text.toString())
+        }
+
         presenter.getBalance()
     }
 

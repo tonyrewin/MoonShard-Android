@@ -10,6 +10,7 @@ import io.moonshard.moonshard.models.api.tickets.TicketTypeNameRequest
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 
@@ -114,7 +115,7 @@ interface API {
     fun createPay(
         @Url url: String,
         @Body request: CreatePaymentRequestModel
-    ): Single<Response>
+    ): Single<ResponseBody>
 
     @Headers("Accept: application/json", "Content-type:application/json")
     @POST("/ticketTypeNames")

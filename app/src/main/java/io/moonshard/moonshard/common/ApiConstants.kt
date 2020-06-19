@@ -4,7 +4,7 @@ interface ApiConstants {
     companion object {
         const val COMPLEX_BASE_URL = "https://sonis.moonshard.tech"
         const val COMPLEX_BASE_URL_AUTH = "https://auth.moonshard.tech/api/v1"
-        const val COMPLEX_BASE_URL_UNIT_PAY = "https://ph.moonshard.tech/api/v1"
+        const val COMPLEX_BASE_URL_UNIT_PAY = "https://gateway.payment.moonshard.tech/api/v1"
 
 
         //auth

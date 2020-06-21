@@ -49,7 +49,7 @@ class ProfileFragment : MvpAppCompatFragment(),
         presenter.getAvatar()
         presenter.getVerificationEmail()
 
-        presenter.events()
+       // presenter.events()
 
 
         profileSettingsLayout?.setSafeOnClickListener {

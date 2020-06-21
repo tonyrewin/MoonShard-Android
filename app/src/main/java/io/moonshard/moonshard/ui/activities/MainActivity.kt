@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -32,6 +33,7 @@ import io.moonshard.moonshard.ui.fragments.profile.present_ticket.PresentTicketF
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPresentFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.WebViewFillUpFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.ConfirmTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.SuccessTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
@@ -152,6 +154,13 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         if(supportFragmentManager.findFragmentByTag("SuccessTransactionFragment")!=null){
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             return
+        }
+
+        if(supportFragmentManager.findFragmentByTag("WebViewFillUpFragment")!=null){
+            supportFragmentManager.popBackStack()
+            return
+            //Log.d("WebViewFillUpFragment",supportFragmentManager.fragments.size.toString())
+            //supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
 
         val mainChatScreen = supportFragmentManager.findFragmentByTag("chatScreen")
@@ -284,7 +293,8 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = WalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
-        ft.replace(R.id.container, fragment, "WalletFragment").addToBackStack("WalletFragment")
+        ft.replace(R.id.container, fragment, "WalletFragment")
+            .addToBackStack("WalletFragment")
             .commit()
     }
 
@@ -316,12 +326,22 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     fun showFillUpWalletFragment() {
-        val fragment =
-            FillUpWalletFragment()
+        val fragment = FillUpWalletFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "FillUpWalletFragment")
             .addToBackStack("FillUpWalletFragment")
+            .commit()
+    }
+
+    fun showWebViewFillUpFragment(url:String){
+        val bundle = Bundle()
+        bundle.putString("url", url)
+        val fragment = WebViewFillUpFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        fragment.arguments = bundle
+        ft.replace(R.id.container, fragment, "WebViewFillUpFragment")
+            .addToBackStack("WebViewFillUpFragment")
             .commit()
     }
 

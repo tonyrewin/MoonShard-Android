@@ -9,15 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import com.example.moonshardwallet.MainService
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
+import io.moonshard.moonshard.ui.activities.MainActivity
+import kotlinx.android.synthetic.main.fragment_my_tickets.*
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.backBtn
-import kotlinx.android.synthetic.main.fragment_transfer_wallet.balanceTv
-import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_transfer_wallet.progressBar
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -50,7 +50,7 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         }
 
         nextBtn?.setOnClickListener {
-            presenter.sendMoney(moneyValue.text.toString())
+            (activity as MainActivity).showConfirmTransactionFragment(this)
         }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
@@ -86,7 +86,7 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         presenter.getBalance()
     }
 
-    override fun showBalance(balance:String){
+    override fun showBalance(balance: String) {
         balanceTv?.text = "$balance ₽"
     }
 
@@ -100,17 +100,33 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         statusTv?.text = status
     }
 
+    fun confirmTransaction() {
+        presenter.sendMoney(moneyValue.text.toString())
+    }
+
     override fun showAvatarRecipient(avatar: Bitmap) {
         userAdminAvatar.setImageBitmap(avatar)
     }
 
     override fun showToast(text: String) {
-            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    override fun back(){
-        activity!!.runOnUiThread {
-            activity!!.supportFragmentManager.popBackStack()
-        }
+    override fun back() {
+        activity!!.supportFragmentManager.popBackStack()
     }
+
+    override fun showSuccessScreen() {
+        (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+
 }

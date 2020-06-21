@@ -9,4 +9,7 @@ interface TransferWalletView: MvpView {
     fun showToast(text: String)
     fun back()
     fun showBalance(balance: String)
+    fun showSuccessScreen()
+    fun showProgressBar()
+    fun hideProgressBar()
 }

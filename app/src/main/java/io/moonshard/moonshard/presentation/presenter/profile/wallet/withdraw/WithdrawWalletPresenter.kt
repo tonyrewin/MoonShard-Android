@@ -25,16 +25,19 @@ class WithdrawWalletPresenter: MvpPresenter<WithdrawWalletView>() {
     }
 
     fun cashOut(numberCard:String, value :String){
+        viewState?.showProgressBar()
         MainService.getWalletService().cashOut(numberCard,"card",value.toInt())?.
         subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe { tx, throwable ->
                 if (throwable == null) {
+                    viewState?.hideProgressBar()
                     Log.d("cashOut","success")
-                    Log.d("cashOut",tx.blockHash)
+                    Log.d("cashOut",tx.transactionHash)
+                    viewState?.showSuccessScreen()
                 } else {
                     Log.d("cashOut",throwable.message)
-                    throwable.message?.let { viewState?.showToast(it) }
+                    throwable.message?.let { viewState?.showToast("Произошла ошибка") }
                 }
             }
     }

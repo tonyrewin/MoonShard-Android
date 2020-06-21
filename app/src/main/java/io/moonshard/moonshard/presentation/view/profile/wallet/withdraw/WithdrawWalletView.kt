@@ -5,4 +5,7 @@ import moxy.MvpView
 interface WithdrawWalletView: MvpView {
     fun showBalance(balance: String)
     fun showToast(text: String)
+    fun showSuccessScreen()
+    fun hideProgressBar()
+    fun showProgressBar()
 }

@@ -36,10 +36,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:fontFamily="@font/montserrat_bold"
                         android:text="Перевести средства"
                         android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/montserrat_bold" />
+                        android:textSize="14sp" />
 
             </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -47,9 +47,9 @@
 
         <LinearLayout
                 android:id="@+id/balanceLayout"
-                android:layout_below="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/toolBar"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
@@ -155,13 +155,13 @@
 
 
             <RelativeLayout
-                    tools:visibility="visible"
                     android:id="@+id/recipientLayout"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:layout_below="@+id/view"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/userAdminAvatar"
@@ -178,9 +178,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:layout_toEndOf="@+id/userAdminAvatar"
-                        tools:text="Kanaevsky"
                         android:textColor="#DE000000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:text="Kanaevsky" />
 
                 <TextView
                         android:id="@+id/statusTv"
@@ -189,8 +189,8 @@
                         android:layout_below="@+id/nameAdminTv"
                         android:layout_alignStart="@+id/nameAdminTv"
                         android:layout_marginTop="4dp"
-                        tools:text="online"
-                        android:textColor="#0075FF" />
+                        android:textColor="#0075FF"
+                        tools:text="online" />
 
                 <ImageView
                         android:id="@+id/removeBtn"
@@ -248,13 +248,14 @@
                     android:src="@drawable/ic_next_white" />
 
         </RelativeLayout>
+
+        <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+
     </RelativeLayout>
-
-    <View
-            android:visibility="gone"
-            android:id="@+id/bg"
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

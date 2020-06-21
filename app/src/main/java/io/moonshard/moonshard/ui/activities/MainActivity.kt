@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import com.example.moonshardwallet.models.Ticket
@@ -31,6 +32,8 @@ import io.moonshard.moonshard.ui.fragments.profile.present_ticket.PresentTicketF
 import io.moonshard.moonshard.ui.fragments.profile.present_ticket.TypeTicketPresentFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.ConfirmTransactionFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.SuccessTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
 import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
 import io.moonshard.moonshard.ui.fragments.settings.SettingsFragment
@@ -133,13 +136,12 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onBackPressed() {
-        if (intent.getStringExtra("screen") == "chat")
+        //if (intent.getStringExtra("screen") == "chat")
 
             if (supportFragmentManager.findFragmentByTag("CreatedChatScreen") != null) {
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 return
             }
-
 
         if (supportFragmentManager.findFragmentByTag("AddChatFragment") != null) {
             supportFragmentManager.popBackStack()
@@ -147,6 +149,10 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
 
+        if(supportFragmentManager.findFragmentByTag("SuccessTransactionFragment")!=null){
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            return
+        }
 
         val mainChatScreen = supportFragmentManager.findFragmentByTag("chatScreen")
         if (mainChatScreen != null) {
@@ -304,8 +310,8 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val fragment = VerificationEmailFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
-        ft.replace(R.id.container, fragment, "showVerificationEmailScreen")
-            .addToBackStack("showVerificationEmailScreen")
+        ft.replace(R.id.container, fragment, "VerificationEmailFragment")
+            .addToBackStack("VerificationEmailFragment")
             .commit()
     }
 
@@ -376,6 +382,34 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         ft.setTransition(TRANSIT_FRAGMENT_CLOSE)
         ft.replace(R.id.container, fragment, "MyTicketInfoFragment")
             .addToBackStack("MyTicketInfoFragment")
+            .commit()
+    }
+
+    fun showConfirmTransactionFragment(hideFragment:Fragment){
+        //val ticketJson = Gson().toJson(ticket)
+       // val bundle = Bundle()
+       // bundle.putString("ticket", ticketJson)
+       // bundle.putString("ticketType", ticketType)
+        val fragment = ConfirmTransactionFragment()
+       // fragment.arguments = bundle
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.container, fragment, "ConfirmTransactionFragment")
+            .hide(hideFragment)
+            .addToBackStack("ConfirmTransactionFragment")
+            .commit()
+    }
+
+    fun showSuccessTransactionFragment(hideFragment:Fragment){
+        //val ticketJson = Gson().toJson(ticket)
+        // val bundle = Bundle()
+        // bundle.putString("ticket", ticketJson)
+        // bundle.putString("ticketType", ticketType)
+        val fragment = SuccessTransactionFragment()
+        // fragment.arguments = bundle
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.container, fragment, "SuccessTransactionFragment")
+            .hide(hideFragment)
+            .addToBackStack("ConfirmTransactionFragment")
             .commit()
     }
 

@@ -19,32 +19,33 @@ import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
 @InjectViewState
-class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
+class TransferWalletPresenter : MvpPresenter<TransferWalletView>() {
 
     private var useCase: AuthUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
-    private var jidCurrentUser:String?=null
+    private var jidCurrentUser: String? = null
 
     init {
         useCase = AuthUseCase()
     }
 
 
-    fun showRecipient(jid:String){
-        jidCurrentUser=jid
+    fun showRecipient(jid: String) {
+        jidCurrentUser = jid
         compositeDisposable.add(getInfoFromVCard(jid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                setAvatar(jid,it["nickName"]!!)
+                setAvatar(jid, it["nickName"]!!)
                 viewState?.setDataRecipient(it["nickName"]!!, it["status"]!!)
             }, {
                 it.message?.let { it1 -> viewState?.showToast(it1) }
-            }))
+            })
+        )
     }
 
-    private fun getInfoFromVCard(jid:String): Single<HashMap<String, String>> {
+    private fun getInfoFromVCard(jid: String): Single<HashMap<String, String>> {
         return Single.create {
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard(JidCreate.entityBareFrom(jid))
@@ -66,7 +67,7 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
                     val avatar: Bitmap?
                     if (bytes != null) {
                         avatar = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                       viewState?.showAvatarRecipient(avatar)
+                        viewState?.showAvatarRecipient(avatar)
                     }
                 }, { throwable ->
                     Log.e(throwable.message)
@@ -74,13 +75,12 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
         }
     }
 
-    fun sendMoney(amount:String){
+    fun sendMoney(amount: String) {
         getWalletAddress(amount)
     }
 
     fun getBalance() {
-        MainService.getWalletService().balance?.
-        subscribeOn(Schedulers.io())
+        MainService.getWalletService().balance?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe { balance, throwable ->
                 if (throwable == null) {
@@ -92,9 +92,10 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
     }
 
     fun getWalletAddress(amount: String) {
-        if(!jidCurrentUser.isNullOrBlank()) {
+        if (!jidCurrentUser.isNullOrBlank()) {
             val accessToken = getLongStringValue("accessToken")
 
+            viewState?.showProgressBar()
             compositeDisposable.add(useCase!!.getWalletAddress(
                 jidCurrentUser!!, accessToken!!
             )
@@ -103,27 +104,35 @@ class TransferWalletPresenter: MvpPresenter<TransferWalletView>() {
                 .subscribe { result, throwable ->
                     Logger.d(result)
                     if (throwable == null) {
-                        Log.d("testTransferMoney: ",jidCurrentUser)
-                        Log.d("testTransferMoney: ",result.walletAddress)
-                        if (!result.walletAddress.isNullOrBlank()) transferMoney(result.walletAddress,amount)
+                        Log.d("testTransferMoney: ", jidCurrentUser)
+                        Log.d("testTransferMoney: ", result.walletAddress)
+                        if (!result.walletAddress.isNullOrBlank()) transferMoney(
+                            result.walletAddress,
+                            amount
+                        )
                     } else {
+                        viewState?.hideProgressBar()
+                        viewState?.showToast("Произошла ошибка")
                         Logger.d(result)
                     }
                 })
         }
     }
 
-    private fun transferMoney(addressTo:String, amount: String){
-        Log.d("testTransferMoney: ",amount)
-        compositeDisposable.add(MainService.getBuyTicketService().sendMoney(addressTo, amount.toFloat())
+    private fun transferMoney(addressTo: String, amount: String) {
+        Log.d("testTransferMoney: ", amount)
+        compositeDisposable.add(MainService.getBuyTicketService()
+            .sendMoney(addressTo, amount.toFloat())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                viewState?.back()
-                viewState?.showToast("Сумма успешна переведена")
+                viewState?.hideProgressBar()
+                viewState?.showSuccessScreen()
             }, {
+                viewState?.hideProgressBar()
                 viewState?.showToast("Произошла ошибка")
                 Logger.d(it)
-            }))
+            })
+        )
     }
 }

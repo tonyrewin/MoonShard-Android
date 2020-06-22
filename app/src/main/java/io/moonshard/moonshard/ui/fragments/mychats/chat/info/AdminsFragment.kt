@@ -78,7 +78,7 @@ class AdminsFragment : MvpAppCompatFragment(),
     }
 
     override fun showAdminPermission(occupant: Occupant) {
-        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,occupant)
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,occupant.jid.asUnescapedString()!!)
     }
 
     private fun initAdapter() {

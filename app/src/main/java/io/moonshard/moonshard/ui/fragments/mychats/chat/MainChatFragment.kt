@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
@@ -27,7 +25,6 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragmen
 import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
 import moxy.MvpAppCompatFragment
-import org.jivesoftware.smackx.muc.Occupant
 
 
 class MainChatFragment : MvpAppCompatFragment(), MainChatView {
@@ -129,9 +126,10 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showManageEventScreen(idChat: String) {
+    fun showManageEventScreen(idChat: String, typeRole: String?) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putString("typeRole", typeRole)
         val manageChatFragment =
             ManageEventFragment()
         manageChatFragment.arguments = bundle
@@ -173,7 +171,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
         val fragment = AdminsFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
-        ft.replace(R.id.mainContainer, fragment, "AdminsFragment").hide(this)
+        ft.replace(R.id.mainContainer, fragment, "AdminsFragment")
             .addToBackStack("AdminsFragment")
             .commit()
     }
@@ -189,9 +187,10 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showManageTicketsScreen(idChat: String) {
+    fun showManageTicketsScreen(idChat: String, typeRole: String?) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putSerializable("typeRole",typeRole)
         val fragment = TicketsManageFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
@@ -368,11 +367,12 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
 
     fun showAdminPermissionFragment(
         idChat: String,
-        occupant: Occupant
+        userJid:String?=null
     ){
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        bundle.putString("occupant", Gson().toJson(occupant));
+        //bundle.putString("occupant", Gson().toJson(occupant));
+        bundle.putString("userJid",userJid)
         val fragment = AdminPermissionFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()

@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import com.google.android.gms.maps.model.LatLng
 import moxy.MvpView
 import org.jivesoftware.smackx.muc.Occupant
-import org.jxmpp.jid.EntityFullJid
 
 interface EventInfoView: MvpView {
     fun showMembers(members: List<Occupant>)
@@ -25,7 +24,7 @@ interface EventInfoView: MvpView {
     fun hideOrganizerLayout()
     fun showDataOrganizer(organizerName:String)
 
-    fun showChangeChatButton(isShow: Boolean)
+    fun showChangeChatButton(isShow: Boolean, type: String?)
     fun hideLine()
     fun hideDescription()
     fun setStartDate(date:String)

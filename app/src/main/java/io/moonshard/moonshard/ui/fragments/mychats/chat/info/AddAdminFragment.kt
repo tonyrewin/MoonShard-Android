@@ -54,8 +54,9 @@ class AddAdminFragment : MvpAppCompatFragment(),
         Toast.makeText(context!!, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showChatScreen() {
-        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
+    override fun showChatScreen(jid:String) {
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,jid)
+        //(parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
 
         /*
         val bundle = Bundle()

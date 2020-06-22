@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.maps.model.LatLng
-import com.google.zxing.integration.android.IntentIntegrator
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -38,6 +37,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     lateinit var presenter: ManageEventPresenter
 
     var idChat = ""
+    var typeRole: String? = null
     var bytes: ByteArray? = null
     var mimeType: String? = null
     private val dateAndTime = Calendar.getInstance()
@@ -65,9 +65,53 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
 
         arguments?.let {
             idChat = it.getString("chatId")
+            typeRole = it.getString("typeRole")
             presenter.getInfoChat(idChat)
         }
         presenter.getVerificationEmail()
+
+        when (typeRole) {
+            "owner" -> {
+                readyBtn?.setSafeOnClickListener {
+                    presenter.setData(
+                        nameEt.text.toString(),
+                        descriptionEt.text.toString(),
+                        idChat,
+                        bytes,
+                        mimeType,
+                        ChangeEventRepository.event!!
+                    )
+                }
+            }
+            "admin" -> {
+                avatarIv?.isEnabled = false
+                nameEt?.isEnabled = false
+                locationLayout?.isEnabled = false
+                descriptionEt?.isEnabled = false
+                dateStartEvent?.isEnabled = false
+                timesLayout?.isEnabled = false
+                membersLayout?.isEnabled = false
+                adminsLayout?.isEnabled = false
+                destroyRoom?.isEnabled = false
+                readyBtn?.setSafeOnClickListener {
+                    showChatInfo()
+                }
+            }
+            "FaceController" -> {
+                avatarIv?.isEnabled = false
+                nameEt?.isEnabled = false
+                locationLayout?.isEnabled = false
+                descriptionEt?.isEnabled = false
+                dateStartEvent?.isEnabled = false
+                timesLayout?.isEnabled = false
+                membersLayout?.isEnabled = false
+                adminsLayout?.isEnabled = false
+                destroyRoom?.isEnabled = false
+                readyBtn?.setSafeOnClickListener {
+                    showChatInfo()
+                }
+            }
+        }
 
 
         locationLayout?.setSafeOnClickListener {
@@ -84,16 +128,6 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
             showAdminsScreen()
         }
 
-        readBtn?.setSafeOnClickListener {
-            presenter.setData(
-                nameEt.text.toString(),
-                descriptionEt.text.toString(),
-                idChat,
-                bytes,
-                mimeType,
-                ChangeEventRepository.event!!
-            )
-        }
 
         backBtn?.setSafeOnClickListener {
             ChangeEventRepository.clean()
@@ -178,38 +212,38 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         }
     }
 
-    fun getTtlToDays(ttl:Long):String{
-        var time =""
-        when(ttl){
-            (60*60*24).toLong() -> time = "1 день"
-            (60*60*48).toLong() -> time = "2 дня"
-            (60*60*(24*3)).toLong() -> time = "3 дня"
-            (60*60*(24*4)).toLong() -> time = "4 дня"
-            (60*60*(24*5)).toLong() -> time = "5 дней"
-            (60*60*(24*6)).toLong() -> time = "6 дней"
-            (60*60*(24*7)).toLong() -> time = "Неделя"
+    fun getTtlToDays(ttl: Long): String {
+        var time = ""
+        when (ttl) {
+            (60 * 60 * 24).toLong() -> time = "1 день"
+            (60 * 60 * 48).toLong() -> time = "2 дня"
+            (60 * 60 * (24 * 3)).toLong() -> time = "3 дня"
+            (60 * 60 * (24 * 4)).toLong() -> time = "4 дня"
+            (60 * 60 * (24 * 5)).toLong() -> time = "5 дней"
+            (60 * 60 * (24 * 6)).toLong() -> time = "6 дней"
+            (60 * 60 * (24 * 7)).toLong() -> time = "Неделя"
         }
         return time
     }
 
     private fun showAdminsScreen() {
-        (parentFragment as? MainChatFragment)?.showAddAdminScreen(idChat)
+        (parentFragment as? MainChatFragment)?.showAdminsScreen(idChat)
     }
 
     private fun showMembersScreen() {
         (parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
     }
 
-    private fun showManageTicketsScreen(){
-        (parentFragment as? MainChatFragment)?.showManageTicketsScreen(idChat)
+    private fun showManageTicketsScreen(typeRole: String?) {
+        (parentFragment as? MainChatFragment)?.showManageTicketsScreen(idChat, typeRole)
     }
 
-    private fun showVerificationEmail(){
+    private fun showVerificationEmail() {
         (parentFragment as? MainChatFragment)?.showVerificationEmail(idChat)
     }
 
     private fun showTimesScreen() {
-        (parentFragment as? MainChatFragment)?.showTimeEventScreen(fromManageEventScreen=true)
+        (parentFragment as? MainChatFragment)?.showTimeEventScreen(fromManageEventScreen = true)
     }
 
     private fun methodRequiresTwoPermission() {
@@ -242,7 +276,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     private fun showChooseMapScreen() {
-        (parentFragment as? MainChatFragment)?.showChooseMapScreen(fromManageEventScreen=true)
+        (parentFragment as? MainChatFragment)?.showChooseMapScreen(fromManageEventScreen = true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -293,7 +327,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     override fun showChatInfo() {
-        fragmentManager?.popBackStack()
+        childFragmentManager.popBackStack()
     }
 
     override fun showToast(text: String) {
@@ -341,20 +375,20 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
         return "Информация отсутствует"
     }
 
-    override fun showChatsScreen(){
+    override fun showChatsScreen() {
         (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 
-   override fun initManageTicket(isActivated:Boolean){
-       if(isActivated){
-           manageTicketsBtn?.setOnClickListener {
-               showManageTicketsScreen()
-           }
-       }else{
-           manageTicketsBtn?.setOnClickListener {
-               showVerificationEmail()
-           }
-       }
+    override fun initManageTicket(isActivated: Boolean) {
+        if (isActivated) {
+            manageTicketsBtn?.setOnClickListener {
+                showManageTicketsScreen(typeRole)
+            }
+        } else {
+            manageTicketsBtn?.setOnClickListener {
+                showVerificationEmail()
+            }
+        }
     }
 
     override fun onDestroyView() {

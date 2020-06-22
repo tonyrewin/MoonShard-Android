@@ -21,6 +21,8 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
+import org.jivesoftware.smackx.muc.Affiliate
+import org.jivesoftware.smackx.muc.MUCAffiliation
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.VCardManager
@@ -42,6 +44,9 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
     }
 
     fun getRoomInfo(jid: String) {
+        val muc =
+            MainApplication.getXmppConnection().multiUserChatManager
+                .getMultiUserChat(JidCreate.entityBareFrom(jid))
 
         viewState?.showProgressBar()
 
@@ -53,13 +58,14 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
 
                 if (eventId == null) {
                     if (chatEntity.event != null) {
-                        ChangeEventRepository.event = Gson().fromJson(chatEntity.event,RoomPin::class.java)
+                        ChangeEventRepository.event =
+                            Gson().fromJson(chatEntity.event, RoomPin::class.java)
                         getMembers(jid)
                         showOrganizerInfo(ChangeEventRepository.event!!)
                         getStartDateEvent(ChangeEventRepository.event?.eventStartDate!!)
                     }
                 } else {
-                    getEvent(jid, eventId,chatEntity)
+                    getEvent(jid, eventId, chatEntity)
                 }
             }, {
                 viewState?.hideProgressBar()
@@ -80,13 +86,14 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { event, throwable ->
                 if (throwable == null) {
-                    addEventDataInBd(event,chatEntity)
+                    addEventDataInBd(event, chatEntity)
                     ChangeEventRepository.event = event
                     getMembers(jid)
                     showOrganizerInfo(event)
                     getStartDateEvent(ChangeEventRepository.event?.eventStartDate!!)
                 } else {
-                    ChangeEventRepository.event = Gson().fromJson(chatEntity.event,RoomPin::class.java)
+                    ChangeEventRepository.event =
+                        Gson().fromJson(chatEntity.event, RoomPin::class.java)
                     getMembers(jid)
                     getStartDateEvent(ChangeEventRepository.event?.eventStartDate!!)
                     showOrganizerInfo(ChangeEventRepository.event!!)
@@ -118,7 +125,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 }, { throwable ->
                     throwable.message?.let { viewState?.showError(it) }
                 })
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Logger.d(e)
         }
     }
@@ -171,9 +178,9 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             })
     }
 
-    private fun getMembers(jid: String) {
+    private fun getMembers(eventJid: String) {
         try {
-            val groupId = JidCreate.entityBareFrom(jid)
+            val groupId = JidCreate.entityBareFrom(eventJid)
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
@@ -188,11 +195,12 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             val members = muc.occupants
             val occupants = arrayListOf<Occupant>()
 
-            val category: String = ChangeEventRepository.event?.category?.get(0)?.categoryName.toString()
+            val category: String =
+                ChangeEventRepository.event?.category?.get(0)?.categoryName.toString()
             val onlineMembersValue = getValueOnlineUsers(muc, members)
 
 
-            getAvatarEvent(jid, roomInfo.name)
+            getAvatarEvent(eventJid, roomInfo.name)
 
             val location = LatLng(
                 ChangeEventRepository.event!!.latitude,
@@ -202,19 +210,31 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             viewState?.showData(
                 roomInfo.name,
                 roomInfo.occupantsCount,
-                onlineMembersValue,location,
+                onlineMembersValue, location,
                 category,
-                roomInfo.description,ChangeEventRepository.event!!.address)
+                roomInfo.description, ChangeEventRepository.event!!.address
+            )
 
 
-            getAvatarEvent(jid, roomInfo.name)
+            getAvatarEvent(eventJid, roomInfo.name)
 
 
             //todo fix
-            val isAdmin = isAdminInChat(jid)
-            if (isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(
-                false
-            )
+            val isAdmin = isManager(eventJid)
+
+            if (isAdmin) {
+                val type = getTypeAdmin(eventJid)
+                if (type != null) viewState?.showChangeChatButton(
+                    true,
+                    type
+                ) else viewState?.showChangeChatButton(
+                    false, null
+                )
+            } else {
+                viewState?.showChangeChatButton(
+                    false, null
+                )
+            }
 
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()
@@ -239,9 +259,9 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
         }
     }
 
-    private fun getData(){
+    private fun getData() {
 
-      val location = LatLng(
+        val location = LatLng(
             ChangeEventRepository.event!!.latitude,
             ChangeEventRepository.event!!.longitude
         )
@@ -254,10 +274,11 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             0, location,
             ChangeEventRepository.event!!.category!![0].categoryName!!,
             ChangeEventRepository.event!!.description,
-            ChangeEventRepository.event!!.address)
+            ChangeEventRepository.event!!.address
+        )
     }
 
-    private fun  getStartDateEvent(eventStartDate:String){
+    private fun getStartDateEvent(eventStartDate: String) {
         val date = DateHolder(eventStartDate)
         //if(date.alreadyComeDate()){ iconStartDate.visibility = View.VISIBLE } else{ iconStartDate.visibility = View.GONE}
         viewState.setStartDate("${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}")
@@ -344,6 +365,104 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
             })
     }
 
+    fun getTypeAdmin(eventJid: String): String? {
+        try {
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val groupId = JidCreate.entityBareFrom(eventJid)
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val moderators = muc.moderators
+
+            myJid?.let {
+                for (i in moderators.indices) {
+                    val adminJid = moderators[i].jid.asUnescapedString().split("/")[0]
+                    if (adminJid == it) {
+                        when (moderators[i].affiliation) {
+                            MUCAffiliation.owner -> {
+                                return "owner"
+                            }
+                            MUCAffiliation.admin -> {
+                                return "admin"
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+        } catch (e: Exception) {
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val groupId = JidCreate.entityBareFrom(eventJid)
+
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val faceControllers = muc.members
+
+            myJid?.let {
+                for (i in faceControllers.indices) {
+                    if (faceControllers[i].jid.asUnescapedString() == it) {
+                        return "FaceController"
+                    }
+                }
+            }
+            return null
+        }
+        return null
+    }
+
+    private fun isManager(jid: String): Boolean {
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val moderators = muc.moderators
+
+            val isAdminOrOwner = isAdminOrOwnerFromOccupants(moderators)
+            return if (isAdminOrOwner) {
+                true
+            } else {
+                val faceControllers = muc.members
+                val arrayListFaceControllers = arrayListOf<Affiliate>()
+                arrayListFaceControllers.clear()
+                arrayListFaceControllers.addAll(faceControllers)
+                isFaceController(arrayListFaceControllers)
+            }
+        } catch (e: Exception) {
+            return try {
+                val groupId = JidCreate.entityBareFrom(jid)
+                val muc =
+                    MainApplication.getXmppConnection().multiUserChatManager
+                        .getMultiUserChat(groupId)
+                val faceControllers = muc.members
+                val arrayListFaceControllers = arrayListOf<Affiliate>()
+                arrayListFaceControllers.clear()
+                arrayListFaceControllers.addAll(faceControllers)
+                isFaceController(arrayListFaceControllers)
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
+
+    private fun isFaceController(faceControllers: ArrayList<Affiliate>): Boolean {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+        myJid?.let {
+            for (i in faceControllers.indices) {
+                val adminJid = faceControllers[i].jid.asUnescapedString()
+                if (adminJid == it) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     //todo fix (how set privileges for all type user?)
     private fun isAdminInChat(jid: String): Boolean {
         return try {
@@ -352,17 +471,17 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
-            isAdminFromOccupants(moderators)
+            isAdminOrOwnerFromOccupants(moderators)
         } catch (e: Exception) {
             false
         }
     }
 
-    private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
+    private fun isAdminOrOwnerFromOccupants(admins: List<Occupant>): Boolean {
         val myJid = SecurePreferences.getStringValue("jid", null)
         myJid?.let {
             for (i in admins.indices) {
-                val adminJid = admins[0].jid.asUnescapedString().split("/")[0]
+                val adminJid = admins[i].jid.asUnescapedString().split("/")[0]
                 if (adminJid == it) {
                     return true
                 }

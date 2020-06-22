@@ -16,13 +16,16 @@ class AddAdminPresenter : MvpPresenter<AddAdminView>() {
             if(user.contains("@")){
                 return
             }
-
             val groupId = JidCreate.entityBareFrom(jidChatString)
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
-            muc.grantAdmin(JidCreate.from("$user@moonshard.tech"))
-            viewState?.showChatScreen()
+
+
+            //muc.grantMembership(JidCreate.from("$user@moonshard.tech"))
+            //muc.grantOwnership(JidCreate.from("$user@moonshard.tech"))
+       //     muc.grantAdmin(JidCreate.from("$user@moonshard.tech"))
+            viewState?.showChatScreen("$user@moonshard.tech")
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
         }

@@ -29,6 +29,10 @@ import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
+/*
+members = faсe contorller
+ */
+
 @InjectViewState
 class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
@@ -119,13 +123,13 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    it.chatName = name
+                    it.chatName = name //fix bug
                     setAvatarServer(muc, bytes, mimeType)
                     changeDescription(muc, description)
                     changeChatNameServer(muc, it)
                     changeEventServer(event)
                 }, {
-
+                    Logger.d(it)
                 })
         } catch (e: Exception) {
             e.message?.let { viewState.showToast(it) }
@@ -143,7 +147,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { event, throwable ->
                 if (throwable == null) {
-                    viewState.showChatInfo()
+                    //viewState.showChatInfo()
                     viewState?.hideProgressBar()
                 } else {
                     Logger.d(throwable)
@@ -296,6 +300,4 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                 }
             })
     }
-
-
 }

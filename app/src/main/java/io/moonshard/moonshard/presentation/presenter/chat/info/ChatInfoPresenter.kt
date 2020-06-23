@@ -13,9 +13,6 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
-import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -26,6 +23,7 @@ import java.net.URLConnection
 import java.util.*
 import android.graphics.Bitmap
 import io.moonshard.moonshard.common.utils.Utils.stringToBitMap
+import org.jivesoftware.smackx.muc.*
 
 
 @InjectViewState
@@ -60,11 +58,22 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
 
             getAvatar(jid,roomInfo.name)
 
-            //todo fi
-            val isAdmin = isAdminInChat(jid)
-            if (isAdmin) viewState?.showChangeChatButton(true) else viewState?.showChangeChatButton(
-                false
-            )
+            //todo fix
+            val isAdmin = isManager(jid)
+
+            if (isAdmin) {
+                val type = getTypeAdmin(jid)
+                if (type != null) viewState?.showChangeChatButton(
+                    true,
+                    type
+                ) else viewState?.showChangeChatButton(
+                    false, null
+                )
+            } else {
+                viewState?.showChangeChatButton(
+                    false, null
+                )
+            }
 
             viewState?.showData(
                 roomInfo.name,
@@ -162,6 +171,104 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
             })
     }
 
+    fun getTypeAdmin(eventJid: String): String? {
+        try {
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val groupId = JidCreate.entityBareFrom(eventJid)
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val moderators = muc.moderators
+
+            myJid?.let {
+                for (i in moderators.indices) {
+                    val adminJid = moderators[i].jid.asUnescapedString().split("/")[0]
+                    if (adminJid == it) {
+                        when (moderators[i].affiliation) {
+                            MUCAffiliation.owner -> {
+                                return "owner"
+                            }
+                            MUCAffiliation.admin -> {
+                                return "admin"
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+        } catch (e: Exception) {
+            val myJid = SecurePreferences.getStringValue("jid", null)
+
+            val groupId = JidCreate.entityBareFrom(eventJid)
+
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val faceControllers = muc.members
+
+            myJid?.let {
+                for (i in faceControllers.indices) {
+                    if (faceControllers[i].jid.asUnescapedString() == it) {
+                        return "FaceController"
+                    }
+                }
+            }
+            return null
+        }
+        return null
+    }
+
+    private fun isManager(jid: String): Boolean {
+        try {
+            val groupId = JidCreate.entityBareFrom(jid)
+            val muc =
+                MainApplication.getXmppConnection().multiUserChatManager
+                    .getMultiUserChat(groupId)
+            val moderators = muc.moderators
+
+            val isAdminOrOwner = isAdminOrOwnerFromOccupants(moderators)
+            return if (isAdminOrOwner) {
+                true
+            } else {
+                val faceControllers = muc.members
+                val arrayListFaceControllers = arrayListOf<Affiliate>()
+                arrayListFaceControllers.clear()
+                arrayListFaceControllers.addAll(faceControllers)
+                isFaceController(arrayListFaceControllers)
+            }
+        } catch (e: Exception) {
+            return try {
+                val groupId = JidCreate.entityBareFrom(jid)
+                val muc =
+                    MainApplication.getXmppConnection().multiUserChatManager
+                        .getMultiUserChat(groupId)
+                val faceControllers = muc.members
+                val arrayListFaceControllers = arrayListOf<Affiliate>()
+                arrayListFaceControllers.clear()
+                arrayListFaceControllers.addAll(faceControllers)
+                isFaceController(arrayListFaceControllers)
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
+
+    private fun isFaceController(faceControllers: ArrayList<Affiliate>): Boolean {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+        myJid?.let {
+            for (i in faceControllers.indices) {
+                val adminJid = faceControllers[i].jid.asUnescapedString()
+                if (adminJid == it) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     //todo fix (how set privileges for all type user?)
     private fun isAdminInChat(jid: String): Boolean {
         return try {
@@ -170,25 +277,21 @@ class ChatInfoPresenter : MvpPresenter<ChatInfoView>() {
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
             val moderators = muc.moderators
-            isAdminFromOccupants(moderators)
+            isAdminOrOwnerFromOccupants(moderators)
         } catch (e: Exception) {
             false
         }
     }
 
-    private fun isAdminFromOccupants(admins: List<Occupant>): Boolean {
-        try {
-            val myJid = SecurePreferences.getStringValue("jid", null)?.toUpperCase(Locale.getDefault())
-            myJid?.let {
-                for (i in admins.indices) {
-                    val adminJid =admins[i].jid.asBareJid().asUnescapedString().toUpperCase(Locale.getDefault())
-                    if (adminJid.equals(it,true)) {
-                        return true
-                    }
+    private fun isAdminOrOwnerFromOccupants(admins: List<Occupant>): Boolean {
+        val myJid = SecurePreferences.getStringValue("jid", null)
+        myJid?.let {
+            for (i in admins.indices) {
+                val adminJid = admins[i].jid.asUnescapedString().split("/")[0]
+                if (adminJid == it) {
+                    return true
                 }
             }
-        }catch (e:Exception){
-            return false
         }
         return false
     }

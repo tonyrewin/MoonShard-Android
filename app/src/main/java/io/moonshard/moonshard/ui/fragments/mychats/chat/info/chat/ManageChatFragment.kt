@@ -11,10 +11,22 @@ import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.presenter.chat.info.ManageChatPresenter
 import io.moonshard.moonshard.presentation.view.chat.ManageChatView
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_manage_chat.*
+import kotlinx.android.synthetic.main.fragment_manage_chat.adminsCountTv
+import kotlinx.android.synthetic.main.fragment_manage_chat.adminsLayout
+import kotlinx.android.synthetic.main.fragment_manage_chat.avatarIv
+import kotlinx.android.synthetic.main.fragment_manage_chat.backBtn
+import kotlinx.android.synthetic.main.fragment_manage_chat.descriptionEt
+import kotlinx.android.synthetic.main.fragment_manage_chat.destroyRoom
+import kotlinx.android.synthetic.main.fragment_manage_chat.membersLayout
+import kotlinx.android.synthetic.main.fragment_manage_chat.nameEt
+import kotlinx.android.synthetic.main.fragment_manage_chat.occupantsCountTv
+import kotlinx.android.synthetic.main.fragment_manage_chat.progressBar
+import kotlinx.android.synthetic.main.fragment_manage_chat.readyBtn
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import java.io.BufferedInputStream
@@ -31,6 +43,8 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
     var mimeType: String? = null
     var stringByteAvatar:String? = null
 
+    var typeRole = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +57,37 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
         arguments?.let {
             idChat = it.getString("chatId")
+            typeRole = it.getString("typeRole")
             presenter.getDataInfo(idChat)
+        }
+
+        when (typeRole) {
+            "owner" -> {
+                readyBtn?.setSafeOnClickListener {
+                    presenter.setData(nameEt.text.toString(), descriptionEt.text.toString(), idChat,bytes,mimeType)
+                }
+            }
+            "admin" -> {
+                avatarIv?.isEnabled = false
+                nameEt?.isEnabled = false
+                descriptionEt?.isEnabled = false
+                adminsLayout?.isEnabled = false
+                destroyRoom?.isEnabled = false
+                readyBtn?.setSafeOnClickListener {
+                    showChatInfo()
+                }
+            }
+            "FaceController" -> {
+                avatarIv?.isEnabled = false
+                nameEt?.isEnabled = false
+                descriptionEt?.isEnabled = false
+                membersLayout?.isEnabled = false
+                adminsLayout?.isEnabled = false
+                destroyRoom?.isEnabled = false
+                readyBtn?.setSafeOnClickListener {
+                    showChatInfo()
+                }
+            }
         }
 
         membersLayout?.setSafeOnClickListener {
@@ -52,10 +96,6 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
 
         adminsLayout?.setSafeOnClickListener {
             showAdminsScreen()
-        }
-
-        readyBtn?.setSafeOnClickListener {
-            presenter.setData(nameEt.text.toString(), descriptionEt.text.toString(), idChat,bytes,mimeType)
         }
 
         backBtn?.setSafeOnClickListener {
@@ -76,8 +116,7 @@ class ManageChatFragment : MvpAppCompatFragment(), ManageChatView {
     }
 
     private fun showMembersScreen() {
-        (parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
-
+        (parentFragment as? MainChatFragment)?.showMembersScreen(idChat,typeRole)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

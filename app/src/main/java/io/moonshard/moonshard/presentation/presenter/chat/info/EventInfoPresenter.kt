@@ -215,9 +215,7 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                 roomInfo.description, ChangeEventRepository.event!!.address
             )
 
-
             getAvatarEvent(eventJid, roomInfo.name)
-
 
             //todo fix
             val isAdmin = isManager(eventJid)

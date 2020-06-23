@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -33,15 +34,27 @@
             android:text="Online"
             android:textColor="#0075FF" />
 
+    <TextView
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/roleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="Создатель"
+            android:textColor="#9B9BB6" />
+
     <ImageView
-            android:visibility="gone"
             android:id="@+id/removeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="22dp"
-            android:src="@drawable/ic_trash_bin" />
+            android:src="@drawable/ic_trash_bin"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     <View
             android:layout_width="match_parent"

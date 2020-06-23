@@ -10,6 +10,7 @@ import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
 import io.moonshard.moonshard.models.dbEntities.ChatEntity
+import io.moonshard.moonshard.models.jabber.EventManagerUser
 import io.moonshard.moonshard.presentation.view.chat.info.ManageEventView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
@@ -22,6 +23,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import org.jivesoftware.smackx.muc.MultiUserChat
+import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.muc.RoomInfo
 import org.jxmpp.jid.impl.JidCreate
 import retrofit2.HttpException
@@ -42,7 +44,6 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
 
     private var authUseCase: AuthUseCase? = null
 
-
     init {
         eventsUseCase = EventsUseCase()
         authUseCase = AuthUseCase()
@@ -62,7 +63,7 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
             viewState?.showName(ChangeEventRepository.name)
             viewState?.showDescription(ChangeEventRepository.description)
             viewState?.showOccupantsCount(infoEventMuc?.occupantsCount.toString())
-            viewState?.showAdminsCount(muc.moderators.size.toString())
+            viewState?.showAdminsCount(removeDuplicates(muc.moderators).size.toString())
             viewState?.showTimeDays(ChangeEventRepository.event?.ttl!!)
             viewState?.showAdress(
                 LatLng(
@@ -299,5 +300,20 @@ class ManageEventPresenter : MvpPresenter<ManageEventView>() {
                     Logger.d(result)
                 }
             })
+    }
+
+    private fun removeDuplicates(list: List<Occupant>?): ArrayList<Occupant> {
+        val s: MutableSet<Occupant> = TreeSet<Occupant>(Comparator<Occupant?> { o1, o2 ->
+            if(o1!!.jid.asUnescapedString().split("/")[0]==o2!!.jid.asUnescapedString().split("/")[0]){
+                0
+            }else{
+                1
+            }
+        })
+        s.addAll(list!!)
+
+        val newArray = arrayListOf<Occupant>()
+        newArray.addAll(s)
+        return newArray
     }
 }

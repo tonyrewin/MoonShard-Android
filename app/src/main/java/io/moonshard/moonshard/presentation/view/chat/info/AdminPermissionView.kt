@@ -7,4 +7,5 @@ interface AdminPermissionView:MvpView {
     fun setAvatar(avatar:Bitmap)
     fun showNickName(nickName: String)
     fun goToChatScreen()
+    fun updateData(type: Int)
 }

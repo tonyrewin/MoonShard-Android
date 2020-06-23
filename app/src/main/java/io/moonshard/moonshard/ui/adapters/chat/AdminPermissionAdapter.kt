@@ -41,6 +41,11 @@ class AdminPermissionAdapter(
         }
     }
 
+    fun update(type:Int){
+        focusedItem = type
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int = adminPermission.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

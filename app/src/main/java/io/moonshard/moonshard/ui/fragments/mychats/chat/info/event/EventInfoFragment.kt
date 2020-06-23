@@ -46,12 +46,9 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         var idChat = ""
 
         initAdapter()
-
 
         arguments?.let {
             idChat = it.getString("chatId")
@@ -128,7 +125,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             override fun remove(member: Occupant) {
 
             }
-        }, arrayListOf(), false)
+        }, arrayListOf(), false, typeRole)
     }
 
     override fun showError(error: String) {

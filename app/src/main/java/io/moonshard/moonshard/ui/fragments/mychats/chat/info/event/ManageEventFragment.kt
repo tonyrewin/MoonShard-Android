@@ -90,7 +90,6 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
                 descriptionEt?.isEnabled = false
                 dateStartEvent?.isEnabled = false
                 timesLayout?.isEnabled = false
-                membersLayout?.isEnabled = false
                 adminsLayout?.isEnabled = false
                 destroyRoom?.isEnabled = false
                 readyBtn?.setSafeOnClickListener {
@@ -231,7 +230,7 @@ class ManageEventFragment : MvpAppCompatFragment(), ManageEventView {
     }
 
     private fun showMembersScreen() {
-        (parentFragment as? MainChatFragment)?.showMembersScreen(idChat)
+        (parentFragment as? MainChatFragment)?.showMembersScreen(idChat,typeRole!!)
     }
 
     private fun showManageTicketsScreen(typeRole: String?) {

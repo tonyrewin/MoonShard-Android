@@ -11,26 +11,29 @@ import androidx.recyclerview.widget.RecyclerView
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.models.jabber.EventManagerUser
+import io.moonshard.moonshard.ui.activities.onboardregistration.VCardCustomManager
 import io.moonshard.moonshard.ui.fragments.mychats.chat.info.AdminsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jivesoftware.smackx.muc.MUCAffiliation
 import org.jivesoftware.smackx.muc.Occupant
+import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
 
 interface AdminListener {
     fun remove(categoryName: String)
-    fun clickAdminPermission(occupant: Occupant)
+    fun clickAdminPermission(occupant: EventManagerUser)
 }
 
 class AdminsAdapter(
-    val adminsFragment: AdminsFragment,
     val listener: AdminListener,
-    private var moderators: List<Occupant>
+    private var managers: ArrayList<EventManagerUser>
 ) :
     RecyclerView.Adapter<AdminsAdapter.ViewHolder>() {
 
-    override fun getItemCount(): Int = moderators.size
+    override fun getItemCount(): Int = managers.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -42,12 +45,33 @@ class AdminsAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nameTv?.text = moderators[position].nick
-        holder.roleTv?.text = moderators[position].role.name
-        setAvatar(moderators[position].jid.asUnescapedString(), holder.userAvatar!!)
+        if(managers[position].nickName.isBlank()){
+            val muc = MainApplication.getXmppConnection().multiUserChatManager
+                .getMultiUserChat(JidCreate.entityBareFrom(managers[position].jid))
+            val vm =
+                VCardCustomManager.getInstanceFor(MainApplication.getXmppConnection().connection)
+            val card = vm.loadVCardMuc(muc.room)
+            holder.nameTv?.text =card.nickName
+        }else{
+            holder.nameTv?.text = managers[position].nickName
+        }
+
+        when (managers[position].roleType) {
+            MUCAffiliation.owner -> {
+                holder.roleTv?.text = "Создатель"
+            }
+            MUCAffiliation.admin -> {
+                holder.roleTv?.text = "Администратор"
+            }
+            MUCAffiliation.member -> {
+                holder.roleTv?.text = "Фейс контрольщик"
+            }
+        }
+
+        setAvatar(managers[position].jid, holder.userAvatar!!)
 
         holder.itemView.setSafeOnClickListener {
-            listener.clickAdminPermission(moderators[position])
+            listener.clickAdminPermission(managers[position])
         }
     }
 
@@ -66,8 +90,9 @@ class AdminsAdapter(
         }
     }
 
-    fun setAdmins(moderators: List<Occupant>) {
-        this.moderators = moderators
+    fun setAdmins(managers: ArrayList<EventManagerUser>) {
+        this.managers.clear()
+        this.managers.addAll(managers)
         notifyDataSetChanged()
     }
 

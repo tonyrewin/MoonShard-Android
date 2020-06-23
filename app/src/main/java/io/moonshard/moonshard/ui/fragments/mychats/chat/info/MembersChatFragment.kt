@@ -27,6 +27,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
     lateinit var presenter: MembersChatPresenter
 
     var idChat = ""
+    var typeRole = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,12 +38,14 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
 
         arguments?.let {
             idChat = it.getString("chatId")
+            typeRole = it.getString("typeRole")
             presenter.getMembers(idChat)
         }
+
+        initAdapter()
 
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
@@ -64,36 +67,10 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
     //todo maybe replace
     fun showProfileUser(jid: String) {
         (parentFragment as? MainChatFragment)?.showProfileUserScreen(jid)
-
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("userJid", jid)
-        val fragment = ProfileUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "ProfileUserFragment")?.hide(this)
-            ?.addToBackStack("ProfileUserFragment")
-            ?.commit()
-
-         */
     }
 
     private fun showInviteNewUserScreen(idChat: String) {
-
         (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment =
-            InviteUserFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.mainContainer, fragment, "InviteUserFragment")?.hide(this)
-            ?.addToBackStack("InviteUserFragment")
-            ?.commit()
-         */
     }
 
     private fun initAdapter() {
@@ -106,7 +83,7 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
             override fun remove(member: Occupant) {
                 presenter.kickUser(idChat,JidCreate.entityFullFrom(idChat.toString()+"/"+ member.nick),member)
             }
-        }, arrayListOf(),true)
+        }, arrayListOf(),true,typeRole)
     }
 
     override fun removeMember(member:Occupant){
@@ -119,6 +96,5 @@ class MembersChatFragment : MvpAppCompatFragment(), MembersChatView {
 
     override fun hideProgressBar() {
         progressBar?.visibility = View.GONE
-
     }
 }

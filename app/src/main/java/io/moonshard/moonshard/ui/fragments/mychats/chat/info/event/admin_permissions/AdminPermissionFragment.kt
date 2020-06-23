@@ -30,7 +30,7 @@ class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
     lateinit var presenter: AdminPermissionPresenter
 
     var idChat: String = ""
-    var occupant:Occupant? = null
+    var currentTypeRole:String? = null
     var userJid:String?=null
     var choosedRole = ""
 
@@ -47,11 +47,12 @@ class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
 
         arguments?.let {
             idChat = it.getString("chatId")
-            occupant = Gson().fromJson(it.getString("occupant"),Occupant::class.java)
+            currentTypeRole = it.getString("currentTypeRole")
             userJid = it.getString("userJid")
         }
 
-        presenter.getData(occupant,userJid)
+        presenter.getData(currentTypeRole,userJid)
+
         initAdapter()
 
         backBtn?.setSafeOnClickListener {
@@ -78,6 +79,10 @@ class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
                 choosedRole = role
             }
         }, adminPermissionsTypes)
+    }
+
+    override fun updateData(type:Int){
+        (typeAdminRv?.adapter as? AdminPermissionAdapter)?.update(type)
     }
 
     override fun setAvatar(avatar: Bitmap) {

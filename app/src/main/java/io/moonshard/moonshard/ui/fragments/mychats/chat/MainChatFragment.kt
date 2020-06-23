@@ -114,9 +114,10 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showManageChatScreen(idChat: String) {
+    fun showManageChatScreen(idChat: String, typeRole: String?) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putString("typeRole",typeRole)
         val manageChatFragment =
             ManageChatFragment()
         manageChatFragment.arguments = bundle
@@ -176,9 +177,10 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showMembersScreen(idChat: String) {
+    fun showMembersScreen(idChat: String,typeRole:String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
+        bundle.putString("typeRole",typeRole)
         val fragment = MembersChatFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
@@ -367,11 +369,12 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
 
     fun showAdminPermissionFragment(
         idChat: String,
-        userJid:String?=null
+        userJid:String?=null,
+        currentTypeRole:String?=null
     ){
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        //bundle.putString("occupant", Gson().toJson(occupant));
+        bundle.putString("currentTypeRole", currentTypeRole);
         bundle.putString("userJid",userJid)
         val fragment = AdminPermissionFragment()
         fragment.arguments = bundle

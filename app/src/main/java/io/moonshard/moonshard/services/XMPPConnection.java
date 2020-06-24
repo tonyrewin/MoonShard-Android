@@ -15,6 +15,7 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SASLAuthentication;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
@@ -87,6 +88,7 @@ public class XMPPConnection implements ConnectionListener {
     private AuthUseCase useCase;
 
 
+
     public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
@@ -136,6 +138,8 @@ public class XMPPConnection implements ConnectionListener {
                 .setCompressionEnabled(true)
                 .setConnectTimeout(10000)
                 .build();
+
+
 
         connection = new XMPPTCPConnection(conf);
         connection.addConnectionListener(this);
@@ -235,9 +239,10 @@ public class XMPPConnection implements ConnectionListener {
 
         serviceDiscoveryManager = ServiceDiscoveryManager.getInstanceFor(connection);
 
-        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+        ReconnectionManager.getInstanceFor(getConnection()).enableAutomaticReconnection();
         ReconnectionManager.setEnabledPerDefault(true);
-        reconnectionManager.enableAutomaticReconnection();
+        ReconnectionManager.getInstanceFor(getConnection()).setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
+        SmackConfiguration.setDefaultReplyTimeout(10000);
 
         mamManager = MamManager.getInstanceFor(this.connection);
         try {
@@ -885,6 +890,8 @@ public class XMPPConnection implements ConnectionListener {
 
         MainApplication.setCurrentLoginCredentials(credentials);
     }
+
+
 
     private static String removeLastChar(String str) {
         return str.substring(0, str.length() - 1);

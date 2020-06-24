@@ -112,9 +112,15 @@ class ProfilePresenter : MvpPresenter<ProfileView>() {
                     viewState?.setVerification(result.email, result.isActivated)
                     Logger.d(result)
                 } else {
-                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
-                    viewState?.showError(myError.error.message)
+                    Logger.d(throwable)
+
+                    val jsonError = (throwable as? HttpException)?.response()?.errorBody()?.string()
+                    if(jsonError!=null){
+                        val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                        viewState?.showError(myError.error.message)
+                    }else{
+                        viewState?.showError("Произошла ошибка")
+                    }
                 }
             })
     }

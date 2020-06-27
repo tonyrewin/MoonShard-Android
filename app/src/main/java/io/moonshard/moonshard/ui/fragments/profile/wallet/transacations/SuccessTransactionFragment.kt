@@ -1,6 +1,7 @@
 package io.moonshard.moonshard.ui.fragments.profile.wallet.transacations
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,9 @@ class SuccessTransactionFragment : MvpAppCompatFragment(),
     @InjectPresenter
     lateinit var presenter: SuccessTransactionPresenter
 
+    private var fromEventScreen=false
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +37,24 @@ class SuccessTransactionFragment : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
 
         closeBtn?.setSafeOnClickListener {
-            activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            if(fromEventScreen){
+               parentFragmentManager.popBackStack("TransferWalletFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }else{
+                activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
         }
 
         closeCrossBtn?.setSafeOnClickListener {
-            activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            if(fromEventScreen){
+                parentFragmentManager.popBackStack("TransferWalletFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }else{
+                activity!!.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
         }
     }
 }

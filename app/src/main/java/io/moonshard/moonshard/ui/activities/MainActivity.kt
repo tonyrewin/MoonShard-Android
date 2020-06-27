@@ -298,7 +298,6 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             .commit()
     }
 
-
     fun showMyTicketsFragment() {
         val fragment = MyTicketsFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -429,7 +428,7 @@ class MainActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.container, fragment, "SuccessTransactionFragment")
             .hide(hideFragment)
-            .addToBackStack("ConfirmTransactionFragment")
+            .addToBackStack("SuccessTransactionFragment")
             .commit()
     }
 

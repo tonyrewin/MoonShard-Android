@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,8 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transfer.TransferWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transfer.TransferWalletView
 import io.moonshard.moonshard.ui.activities.MainActivity
-import kotlinx.android.synthetic.main.fragment_my_tickets.*
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_transfer_wallet.*
-import kotlinx.android.synthetic.main.fragment_transfer_wallet.backBtn
-import kotlinx.android.synthetic.main.fragment_transfer_wallet.progressBar
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -27,6 +26,9 @@ class TransferWalletFragment : MvpAppCompatFragment(),
 
     @InjectPresenter
     lateinit var presenter: TransferWalletPresenter
+
+    private var fromEventScreen=false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +47,21 @@ class TransferWalletFragment : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
+
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
         }
 
         nextBtn?.setOnClickListener {
-            (activity as MainActivity).showConfirmTransactionFragment(this)
+            if (fromEventScreen) {
+                (parentFragment as? MainChatFragment)?.showConfirmTransactionFragment(this)
+            } else {
+                (activity as MainActivity).showConfirmTransactionFragment(this)
+            }
         }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
@@ -77,11 +88,15 @@ class TransferWalletFragment : MvpAppCompatFragment(),
         })
 
         chooseMember?.setOnClickListener {
-            val addPhotoBottomDialogFragment = TransferRecipientDialogFragment()
-            addPhotoBottomDialogFragment.show(
-                activity!!.supportFragmentManager,
-                "TransferRecipientDialogFragment"
-            )
+            if (fromEventScreen) {
+                (parentFragment as? MainChatFragment)?.showTransferRecipientDialogFragment()
+            } else {
+                val addPhotoBottomDialogFragment = TransferRecipientDialogFragment()
+                addPhotoBottomDialogFragment.show(
+                    activity!!.supportFragmentManager,
+                    "TransferRecipientDialogFragment"
+                )
+            }
         }
         presenter.getBalance()
     }
@@ -113,11 +128,19 @@ class TransferWalletFragment : MvpAppCompatFragment(),
     }
 
     override fun back() {
-        activity!!.supportFragmentManager.popBackStack()
+        if (fromEventScreen) {
+            parentFragmentManager.popBackStack()
+        } else {
+            activity!!.supportFragmentManager.popBackStack()
+        }
     }
 
     override fun showSuccessScreen() {
-        (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+        if (fromEventScreen) {
+            (parentFragment as? MainChatFragment)?.showSuccessTransactionFragment(this)
+        } else {
+            (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+        }
     }
 
     override fun showProgressBar() {
@@ -127,6 +150,4 @@ class TransferWalletFragment : MvpAppCompatFragment(),
     override fun hideProgressBar() {
         progressBar?.visibility = View.GONE
     }
-
-
 }

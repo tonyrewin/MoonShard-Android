@@ -32,6 +32,8 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
 
     private var disposible: Disposable? = null
 
+    private var fromEventScreen = false
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -57,6 +59,10 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
 
         initRecipientAdapter()
         presenter.getContactsRx()
@@ -90,7 +96,9 @@ class TransferRecipientDialogFragment : MvpAppCompatDialogFragment(), TransferRe
                 override fun click(jid: String) {
                     //todo test
                     chooseBtn?.setOnClickListener {
-                        (fragmentManager!!.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(jid)
+                        (parentFragmentManager.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)?.showRecipient(
+                            jid
+                        )
                         (activity as MainActivity).hideKeyboard()
                         dismiss()
                     }

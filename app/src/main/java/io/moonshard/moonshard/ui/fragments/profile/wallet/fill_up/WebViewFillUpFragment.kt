@@ -16,7 +16,9 @@ import moxy.MvpAppCompatFragment
 
 class WebViewFillUpFragment : MvpAppCompatFragment(), WebViewFillUpView {
 
-    private var url:String?=null
+    private var url: String? = null
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,17 +44,14 @@ class WebViewFillUpFragment : MvpAppCompatFragment(), WebViewFillUpView {
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                view?.loadUrl(request?.url.toString());
+                view?.loadUrl(request?.url.toString())
 
                 return true
             }
         }
 
-
-    backBtn?.setSafeOnClickListener {
-        parentFragmentManager.popBackStack()
-          //  activity!!.onBackPressed()
-     //       (activity!!.supportFragmentManager).popBackStack()
+        backBtn?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
         }
     }
 }

@@ -3,6 +3,7 @@ package io.moonshard.moonshard.presentation.presenter.profile
 import android.util.Log
 import com.example.moonshardwallet.MainService
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.getLongStringValue
 import io.moonshard.moonshard.models.api.auth.response.ErrorResponse
@@ -50,11 +51,21 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                             viewState?.showVerificationLayout(false)
                         }
                     }
-                    com.orhanobut.logger.Logger.d(result)
+                    Logger.d(result)
                 } else {
-                    val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                    val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
-                    viewState?.showToast(myError.error.message)
+                    when (throwable) {
+                        is UnknownHostException -> {
+                            viewState?.showToast("Ошибка интернет-соединения")
+                        }
+                        is HttpException -> {
+                            val jsonError = throwable.response()?.errorBody()?.string()
+                            val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                            viewState?.showToast(myError.error.message)
+                        }
+                        else -> {
+                            viewState?.showToast("Произошла ошибка")
+                        }
+                    }
                 }
             })
     }
@@ -73,13 +84,19 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                         MainApplication.initWalletLibrary(result.privateKey)
                     }
                 } else {
-                    val jsonError = (throwable as HttpException).response()!!.errorBody()!!.string()
-                    val (error) = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                    if(throwable is UnknownHostException){
+                        viewState?.showToast("Ошибка интернет-соединения")
+                    }else if(throwable is HttpException){
+                        val jsonError = throwable.response()!!.errorBody()!!.string()
+                        val (error) = Gson().fromJson(jsonError, ErrorResponse::class.java)
 
-                    if (error.message == "cipher text too short") {
-                        MainApplication.initWalletLibrary(null)
+                        if (error.message == "cipher text too short") {
+                            MainApplication.initWalletLibrary(null)
+                        }
+                    }else{
+                        viewState?.showToast("Произошла ошибка")
                     }
-                    com.orhanobut.logger.Logger.d(result)
+                    Logger.d(result)
                 }
             })
     }
@@ -96,23 +113,30 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                     if (throwable == null) {
                         viewState?.showToast("Письмо отправлено")
                     } else {
-                        if(throwable is UnknownHostException){
-                            viewState?.showToast("Ошибка интернет-соендинения")
-                        }else{
-                            val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                            val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
-                            when (myError.error.message) {
-                                "user with such email already exists" -> {
-                                    viewState?.showToast("Пользователь с таким email уже существует")
-                                }
-                                "incorrect format of email" -> {
-                                    viewState?.showToast("Некорректный формат почты")
-                                }
-                                else -> {
-                                    viewState?.showToast("Произошла ошибка")
+                        when (throwable) {
+                            is UnknownHostException -> {
+                                viewState?.showToast("Ошибка интернет-соединения")
+                            }
+                            is HttpException -> {
+                                val jsonError = throwable.response()?.errorBody()?.string()
+                                val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                                when (myError.error.message) {
+                                    "user with such email already exists" -> {
+                                        viewState?.showToast("Пользователь с таким email уже существует")
+                                    }
+                                    "incorrect format of email" -> {
+                                        viewState?.showToast("Некорректный формат почты")
+                                    }
+                                    else -> {
+                                        viewState?.showToast("Произошла ошибка")
+                                    }
                                 }
                             }
+                            else -> {
+                                viewState?.showToast("Произошла ошибка")
+                            }
                         }
+                        Logger.d(throwable)
                             //viewState?.showToast(myError.error.message)
                     }
                 })

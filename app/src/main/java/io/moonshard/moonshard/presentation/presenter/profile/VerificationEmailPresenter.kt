@@ -14,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import retrofit2.HttpException
+import java.net.UnknownHostException
 
 
 @InjectViewState
@@ -95,9 +96,24 @@ class VerificationEmailPresenter: MvpPresenter<VerificationEmailView>() {
                     if (throwable == null) {
                         viewState?.showToast("Письмо отправлено")
                     } else {
-                        val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
-                        val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
-                        viewState?.showToast(myError.error.message)
+                        if(throwable is UnknownHostException){
+                            viewState?.showToast("Ошибка интернет-соендинения")
+                        }else{
+                            val jsonError = (throwable as HttpException).response()?.errorBody()?.string()
+                            val myError = Gson().fromJson(jsonError, ErrorResponse::class.java)
+                            when (myError.error.message) {
+                                "user with such email already exists" -> {
+                                    viewState?.showToast("Пользователь с таким email уже существует")
+                                }
+                                "incorrect format of email" -> {
+                                    viewState?.showToast("Некорректный формат почты")
+                                }
+                                else -> {
+                                    viewState?.showToast("Произошла ошибка")
+                                }
+                            }
+                        }
+                            //viewState?.showToast(myError.error.message)
                     }
                 })
         }else{

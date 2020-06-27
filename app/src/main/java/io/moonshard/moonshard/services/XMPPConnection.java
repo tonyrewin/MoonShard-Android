@@ -88,7 +88,6 @@ public class XMPPConnection implements ConnectionListener {
     private AuthUseCase useCase;
 
 
-
     public XMPPConnection() {
         String jid = SecurePreferences.getStringValue("jid", null);
         String password = SecurePreferences.getStringValue("pass", null);
@@ -138,7 +137,6 @@ public class XMPPConnection implements ConnectionListener {
                 .setCompressionEnabled(true)
                 .setConnectTimeout(10000)
                 .build();
-
 
 
         connection = new XMPPTCPConnection(conf);
@@ -831,8 +829,11 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
+                    Log.d("refreshTokenSuccess",result.getAccessToken());
                     saveLoginCredentials(result.getAccessToken(), result.getRefreshToken());
-                }, error -> Logger.d(error));
+                }, error -> {
+                    Log.d("refreshTokenError",error.getMessage());
+                });
     }
 
     void getPrivateKey() {
@@ -844,9 +845,9 @@ public class XMPPConnection implements ConnectionListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     initLibrary(result.getPrivateKey());
-                }, error ->{
+                }, error -> {
                     Gson gson = new Gson();
-                    String jsonError =((HttpException) error).response().errorBody().string();
+                    String jsonError = ((HttpException) error).response().errorBody().string();
                     ErrorResponse myError = gson.fromJson(jsonError, ErrorResponse.class);
                     Logger.d(myError.getError().getMessage());
                 });
@@ -877,7 +878,7 @@ public class XMPPConnection implements ConnectionListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                   Logger.d("privateKeyIs: ",result);
+                    Logger.d("privateKeyIs: ", result);
                 }, error -> Logger.d(error));
     }
 
@@ -890,7 +891,6 @@ public class XMPPConnection implements ConnectionListener {
 
         MainApplication.setCurrentLoginCredentials(credentials);
     }
-
 
 
     private static String removeLastChar(String str) {

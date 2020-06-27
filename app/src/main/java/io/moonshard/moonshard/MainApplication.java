@@ -166,6 +166,7 @@ public class MainApplication extends Application {
 
     public static void initWalletLibrary(String privateKey) {
         String accountPassword = getCurrentLoginCredentials().password;
+        Log.d("initWalletLibrary","key: " + privateKey);
         MainService.initLibrary(getContext(), accountPassword, privateKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -56,12 +56,6 @@ class ProfileFragment : MvpAppCompatFragment(),
             showChangeProfileScreen()
         }
 
-        myTicketBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showMyTicketsFragment()
-        }
-        presentTicketLayout?.setSafeOnClickListener {
-            (activity as MainActivity).showPresentTicketFragment()
-        }
     }
 
     private fun showChangeProfileScreen() {
@@ -100,13 +94,31 @@ class ProfileFragment : MvpAppCompatFragment(),
             walletBtn?.setSafeOnClickListener {
                 (activity as MainActivity).showVerificationEmailScreen()
             }
+            myTicketBtn?.setSafeOnClickListener {
+                (activity as MainActivity).showVerificationEmailScreen()
+            }
+            presentTicketLayout?.setSafeOnClickListener {
+                (activity as MainActivity).showVerificationEmailScreen()
+            }
         } else {
             if (isActivated!!) {
                 walletBtn?.setSafeOnClickListener {
                     (activity as MainActivity).showWalletFragment()
                 }
+                myTicketBtn?.setSafeOnClickListener {
+                    (activity as MainActivity).showMyTicketsFragment()
+                }
+                presentTicketLayout?.setSafeOnClickListener {
+                    (activity as MainActivity).showPresentTicketFragment()
+                }
             } else {
                 walletBtn?.setSafeOnClickListener {
+                    (activity as MainActivity).showVerificationEmailScreen()
+                }
+                myTicketBtn?.setSafeOnClickListener {
+                    (activity as MainActivity).showVerificationEmailScreen()
+                }
+                presentTicketLayout?.setSafeOnClickListener {
                     (activity as MainActivity).showVerificationEmailScreen()
                 }
             }

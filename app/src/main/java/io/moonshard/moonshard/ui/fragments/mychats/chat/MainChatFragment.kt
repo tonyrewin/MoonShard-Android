@@ -171,7 +171,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     }
 
     fun moveAndClearPopBackStack() {
-        fragmentManager?.popBackStack(
+        parentFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )

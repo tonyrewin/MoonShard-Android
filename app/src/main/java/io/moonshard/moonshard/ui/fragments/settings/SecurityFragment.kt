@@ -40,7 +40,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
 
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager?.popBackStack()
         }
     }
 

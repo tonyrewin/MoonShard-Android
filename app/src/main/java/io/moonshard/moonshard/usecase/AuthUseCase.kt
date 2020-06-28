@@ -24,6 +24,10 @@ class AuthUseCase {
         return authRepository.register(username,password)
     }
 
+   // fun changePassword(): Single<GeneralResponseAuth> {
+  //      return authRepository.changePassword(username,password)
+   // }
+
     fun login(email:String,newPassword:String): Single<TokenModelResponse> {
         return authRepository.login(email,newPassword)
     }

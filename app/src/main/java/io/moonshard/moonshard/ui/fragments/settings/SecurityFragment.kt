@@ -50,7 +50,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
     }
 
     override fun showSettingsScreen() {
-        fragmentManager?.popBackStack()
+        parentFragmentManager.popBackStack()
     }
 
     override fun onDestroyView() {

@@ -334,11 +334,6 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
 
     fun leaveGroup(jid: String) {
         try {
-            val groupId = JidCreate.entityBareFrom(jid)
-            val muc =
-                MainApplication.getXmppConnection().multiUserChatManager
-                    .getMultiUserChat(groupId)
-            muc.leave()
             removeChatFromBd(jid)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }
@@ -354,6 +349,11 @@ class EventInfoPresenter : MvpPresenter<EventInfoView>() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
+                        val groupId = JidCreate.entityBareFrom(jid)
+                        val muc =
+                            MainApplication.getXmppConnection().multiUserChatManager
+                                .getMultiUserChat(groupId)
+                        muc.leave()
                         viewState?.showChatsScreen()
                     }, { throwable ->
                         throwable.message?.let { it1 -> viewState?.showError(it1) }

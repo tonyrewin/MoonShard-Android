@@ -156,7 +156,6 @@
 
     <!-- /bottom_sheet_info_content.xml -->
     <string name="group_name">Nombre del grupo</string>
-    <string name="info_content_text110">130 m de distancia</string>
     <string name="to_read">Leer</string>
     <string name="join">Unirse</string>
     <string name="about_event">Sobre el evento</string>
@@ -179,11 +178,8 @@
     <string name="messagetext">Mensaje de texto</string>
 
     <!-- /chat_map_item.xml -->
-    <string name="chat_map_item_text126">130 m de distancia</string>
 
     <!-- /event_item.xml -->
-    <string name="cuddle_party_17dec">MUCHACHA FIESTA 17dec</string>
-    <string name="hugging_party_december_17_at">Fiesta de abrazos 17 de diciembre en el Gazkolder Club</string>
     <string name="view_group">VER GRUPO</string>
 
     <!-- /fragment_acquaintance.xml -->
@@ -205,8 +201,7 @@
     <string name="create_event">Crear evento</string>
     <string name="organize_a_concert_conference_or">Organizar un concierto, conferencia o noche de poesía. Invita a tus amigos a un cumpleaños, fiesta o reunión</string>
     <string name="your_location">Tu ubicación:</string>
-    <string name="parkovaya_street_odintsovo_russia">Calle Parkovaya, Odintsovo, Rusia</string>
-
+   
     <!-- /fragment_admins.xml -->
     <string name="administrators">Administradores</string>
 
@@ -223,7 +218,6 @@
     <!-- /fragment_chat_info.xml -->
     <string name="information">Información</string>
     <string name="description">Descripción</string>
-    <string name="description_lorem_ipsum">Descripción de vfv fvfvfv f</string>
     <string name="notification">Notificación</string>
     <string name="add_member">Añadir miembro</string>
     <string name="leave_group">Dejar grupo</string>
@@ -231,7 +225,6 @@
     <!-- /fragment_choose_map.xml -->
     <string name="chat_location">Ubicación de chat</string>
     <string name="where_will_the_event_take">¿Dónde tendrá lugar el evento?</string>
-    <string name="sosnichnaya_street_11k1">Calle Sosnichnaya, 11k1</string>
 
     <!-- /fragment_connection_on_board.xml -->
     <string name="always_stay_in_touch">Mantente siempre en contacto</string>
@@ -254,9 +247,7 @@
 
     <!-- /fragment_event_info.xml -->
     <string name="notifications">Notificaciones</string>
-    <string name="we_are_walking">ESTAMOS CAMINANDO</string>
     <string name="organizer">Organizador</string>
-    <string name="tickets_from_300_">BOLETOS DESDE 300 ₽</string>
 
     <!-- /fragment_events.xml -->
     <string name="oops_its_empty">¡Uy! Esta vacio</string>
@@ -282,12 +273,9 @@
     <!-- /fragment_my_ticket_info.xml -->
     <string name="your_tickets">Sus entradas</string>
     <string name="actions">Comportamiento</string>
-    <string name="valeriy_meladze">Valeriy Meladze</string>
-    <string name="moscow_mutabor_club">Moscú. Club Mutabor.</string>
     <string name="admission_ticket">Boleto de admisión</string>
     <string name="all_day_event_ticket">Boleto para todo el día</string>
     <string name="order_no">N º de pedido.</string>
-    <string name="my_ticket_info_text210">021457859710</string>
     <string name="event_ended">Evento terminado</string>
     <string name="return_ticket">Boleto de regreso</string>
     <string name="save_as_pdf">Guardar como pdf</string>
@@ -326,7 +314,6 @@
     <!-- /fragment_settings.xml -->
     <string name="settings">Configuraciones</string>
     <string name="example_username">Nombre de usuario de ejemplo</string>
-    <string name="settings_text234">+1 234 567 89 01</string>
     <string name="general">General</string>
     <string name="night_theme">Tema de la noche</string>
     <string name="language">Idioma</string>
@@ -377,29 +364,23 @@
     <!-- /my_message.xml -->
     <string name="p">PAGS</string>
     <string name="apprelease">Lanzamiento de la aplicación</string>
-    <string name="my_message_text265">105 MB APK</string>
 
     <!-- /my_ticket_item.xml -->
     <string name="parterre">Patio de butacas</string>
-    <string name="my_ticket_item_text267">021457859710</string>
 
     <!-- /recommendation_item.xml -->
-    <string name="recommendation_item_text268">234 miembros, 30 en línea</string>
 
     <!-- /system_message.xml -->
     <string name="balto_joined_the_chat">Balto se unió al chat</string>
-    <string name="system_message_text270">14:43</string>
 
     <!-- /their_message.xml -->
     <string name="rose">Rosa</string>
     <string name="h">H</string>
-    <string name="their_message_text273">105 MB APK</string>
 
     <!-- /time_item.xml -->
     <string name="time_item_text274">12 horas</string>
 
     <!-- /fragment_add_new_type_ticket.xml -->
-    <string name="entrance_ticket_save_2019">Boleto de entrada Save 2019</string>
     <string name="ticket_type">Tipo de boleto</string>
     <string name="enter_type">Ingrese el tipo</string>
     <string name="explanation">Explicación</string>
@@ -421,7 +402,6 @@
     <string name="go_to_wallet">Ir a la billetera</string>
 
     <!-- /my_message.xml -->
-    <string name="my_message_text18">105 MB APK</string>
 
     <!-- /type_ticket_manage_item.xml -->
     <string name="season_ticket">Boleto de temporada</string>
@@ -429,12 +409,8 @@
     <!-- /fragment_buy_tickets.xml -->
     <string name="buy_tickets">Comprar boletos</string>
     <string name="close">Cerrar</string>
-    <string name="tickets_text3">3 boletos</string>
 
     <!-- /ticket_buy_item.xml -->
-    <string name="ticket_buy_item_text9">300 ₽</string>
-    <string name="ticket_buy_item_text10">0 0</string>
-
     <!-- config_ticket_buy_item.xml -->
     <string name="one_day_ticket">Boleto de un día</string>
 

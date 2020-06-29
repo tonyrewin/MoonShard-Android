@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/valueMembersTv"
             android:layout_alignStart="@+id/usersIv"
-            tools:text="@string/chat_map_item_text126" />
+            tools:text="text126" />
 
     <View
             android:layout_width="match_parent"

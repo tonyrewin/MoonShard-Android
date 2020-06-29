@@ -220,7 +220,7 @@
                         android:layout_gravity="right"
                         android:layout_marginEnd="14dp"
                         android:layout_marginBottom="15dp"
-                        android:text="@string/create_new_event_text173"
+                        android:text="text173"
                         android:textColor="#8A000000"
                         android:textSize="14sp" />
 

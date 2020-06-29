@@ -178,7 +178,7 @@
                 android:id="@+id/numberTicket"
                 android:layout_alignTop="@+id/typeTicket"
                 android:layout_alignLeft="@+id/numberTicketTv"
-                android:text="@string/my_ticket_info_text210"
+                android:text="text210"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/numberTicketTv"
                 android:fontFamily="@font/roboto_regular"

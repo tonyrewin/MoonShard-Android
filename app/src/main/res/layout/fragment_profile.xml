@@ -59,7 +59,7 @@
                 android:layout_toRightOf="@+id/avatarIv"
                 android:textColor="#333333"
                 android:textSize="17sp"
-                tools:text="@string/kanaevsky" />
+                tools:text="Kanaevsky" />
 
         <TextView
                 android:fontFamily="@font/roboto_regular"

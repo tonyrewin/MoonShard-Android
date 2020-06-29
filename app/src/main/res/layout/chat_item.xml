@@ -92,7 +92,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="18dp"
-            tools:text="@string/chat_item_text124"
+            tools:text="text124"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
             android:visibility="invisible" />
@@ -108,7 +108,7 @@
             android:layout_marginEnd="17dp"
             android:background="@drawable/unread_message_count_background"
             android:gravity="center"
-            tools:text="@string/chat_item_text125"
+            tools:text="text125"
             android:textColor="@android:color/white"
             android:visibility="invisible" />
 

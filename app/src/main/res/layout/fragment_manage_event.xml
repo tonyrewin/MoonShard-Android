@@ -273,7 +273,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="15dp"
                             android:layout_marginEnd="22dp"
-                            tools:text="@string/manage_event_text196"
+                            tools:text="text196"
                             android:textColor="#8A000000"
                             android:textSize="14sp" />
                 </RelativeLayout>
@@ -369,7 +369,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="22dp"
-                            tools:text="@string/manage_event_text198"
+                            tools:text="text198"
                             android:textColor="#333333" />
 
                 </RelativeLayout>
@@ -416,7 +416,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="22dp"
-                            tools:text="@string/manage_event_text198"
+                            tools:text="text198"
                             android:textColor="#333333" />
                 </RelativeLayout>
 

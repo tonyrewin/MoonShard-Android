@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/usersIv"
-            tools:text="@string/we_are_walking"
+            tools:text="we_are_walking"
             android:textColor="#333333"
             android:textSize="17sp" />
 
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/categoryTv"
             android:layout_alignStart="@+id/categoryTv"
-            tools:text="@string/recommendation_item_text268"
+            tools:text="text268"
             />
 
     <View

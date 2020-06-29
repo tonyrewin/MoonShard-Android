@@ -120,7 +120,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#535353"
                         android:textSize="14sp"
-                        tools:text="@string/event_info_text176" />
+                        tools:text="text176" />
 
                 <TextView
                         android:id="@+id/locationValueInfoTv"
@@ -131,7 +131,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#9B9BB6"
                         android:textSize="12sp"
-                        tools:text="@string/event_info_text177" />
+                        tools:text="text177" />
 
 
             </RelativeLayout>
@@ -302,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/avatarOrganization"
                         android:fontFamily="@font/roboto_regular"
-                        tools:text="@string/we_are_walking"
+                        tools:text="we_are_walking"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 

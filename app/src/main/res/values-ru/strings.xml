@@ -156,16 +156,12 @@
 
     <!-- /bottom_sheet_info_content.xml -->
     <string name="group_name">Имя группы</string>
-    <string name="info_content_text110">130 м</string>
     <string name="to_read">Читать</string>
     <string name="join">Присоединиться</string>
     <string name="about_event">О событии</string>
     <string name="start">Начало</string>
-    <string name="december_13_2019_at_1800">13 декабря 2019 года в 18:00</string>
     <string name="location">Местоположение</string>
-    <string name="parkovaya_street_odintsovo_moscow_region">Ул. Парковая, Одинцово, Московская обл.</string>
     <string name="about_chat">О чате</string>
-    <string name="we_are_drinking_pivas_at">Мы пьем пиву у памятника Грибоедову. Мы снимаем сотню частей для трехлитровых сисек!</string>
 
     <!-- /bottom_sheet_time.xml -->
 
@@ -178,17 +174,10 @@
     <!-- /chat_item.xml -->
     <string name="chatname">Имя в чате</string>
     <string name="messagetext">Текст сообщения</string>
-    <string name="chat_item_text124">14:14</string>
-    <string name="chat_item_text125">0</string>
-
-
 
     <!-- /chat_map_item.xml -->
-    <string name="chat_map_item_text126">130 м</string>
 
     <!-- /event_item.xml -->
-    <string name="cuddle_party_17dec">CUDDLE PARTY 17dec</string>
-    <string name="hugging_party_december_17_at">Вечеринка обниматься 17 декабря в клубе Газголдер</string>
     <string name="view_group">ПОСМОТРЕТЬ ГРУППУ</string>
 
     <!-- /fragment_acquaintance.xml -->
@@ -227,10 +216,7 @@
 
     <!-- /fragment_chat_info.xml -->
     <string name="information">Информация</string>
-    <string name="chat_info_text153">234 пользователей, 30 онлайн</string>
-    <string name="chat_info_text154">130 м</string>
     <string name="description">Описание</string>
-    <string name="description_lorem_ipsum">Описание vfv fvfvfv f</string>
     <string name="notification">Уведомление</string>
     <string name="add_member">Добавить участника</string>
     <string name="leave_group">Покинуть группу</string>
@@ -239,7 +225,6 @@
     <!-- /fragment_choose_map.xml -->
     <string name="chat_location">Местоположение чата</string>
     <string name="where_will_the_event_take">Где будет проходить мероприятие?</string>
-    <string name="sosnichnaya_street_11k1">Сосничная улица, 11к1</string>
 
     <!-- /fragment_connection_on_board.xml -->
     <string name="always_stay_in_touch">Всегда оставайтесь на связи</string>
@@ -256,19 +241,13 @@
 
     <!-- /fragment_create_new_event.xml -->
     <string name="the_date_of_the_beginning">Дата начала</string>
-    <string name="december_13th">13 декабря</string>
     <string name="event_duration">Продолжительность</string>
-    <string name="create_new_event_text173">3 дня</string>
     <string name="choose_a_category">Выберите категорию</string>
     <string name="link_to">Привязать к</string>
 
     <!-- /fragment_event_info.xml -->
-    <string name="event_info_text176">234 пользователей, 30 онлайн</string>
-    <string name="event_info_text177">130 м</string>
     <string name="notifications">Уведомления</string>
-    <string name="we_are_walking">МЫ ИДЁМ</string>
     <string name="organizer">Организатор</string>
-    <string name="tickets_from_300_">БИЛЕТЫ ОТ 300 ₽</string>
 
     <!-- /fragment_events.xml -->
     <string name="oops_its_empty">К сожалению, здесь ничего нет</string>
@@ -281,18 +260,12 @@
     <string name="chat_management">Управление чатом</string>
     <string name="save_the_festival_anticipated_outline">Save The Festival предвосхитил Outline и запустил цепную реакцию массовой электроники</string>
     <string name="member_management">Управление членами</string>
-    <string name="manage_chat_text190">123</string>
-    <string name="manage_chat_text191">123</string>
     <string name="delete_group">Удалить группу</string>
 
     <!-- /fragment_manage_event.xml -->
     <string name="event_management">Управление событиями</string>
-    <string name="save_2019">Save 2019</string>
     <string name="enter_event_description">Введите описание события</string>
-    <string name="manage_event_text196">4 дня</string>
     <string name="ticket_management">Управление билетами</string>
-    <string name="manage_event_text198">123</string>
-    <string name="manage_event_text199">123</string>
 
     <!-- /fragment_my_chats.xml -->
     <string name="my_chats">Мои чаты</string>
@@ -300,13 +273,9 @@
     <!-- /fragment_my_ticket_info.xml -->
     <string name="your_tickets">Ваши билеты</string>
     <string name="actions">Действия</string>
-    <string name="valeriy_meladze">Валерий Меладзе</string>
-    <string name="july_1_2020_at_2300">1 июля 2020 года в 23:00</string>
-    <string name="moscow_mutabor_club">Москва. Мутабор.</string>
     <string name="admission_ticket">Входной билет</string>
     <string name="all_day_event_ticket">Билет на все дни мероприятия</string>
     <string name="order_no">№ заказа.</string>
-    <string name="my_ticket_info_text210">021457859710</string>
     <string name="event_ended">Мероприятие завершилось</string>
     <string name="return_ticket">Вернуть билет</string>
     <string name="save_as_pdf">Сохранить как PDF</string>
@@ -346,7 +315,6 @@
     <!-- /fragment_settings.xml -->
     <string name="settings">Настройки</string>
     <string name="example_username">Пример имени пользователя</string>
-    <string name="settings_text234"> 1 234 567 89 01</string>
     <string name="general">Общие</string>
     <string name="night_theme">Ночная тема</string>
     <string name="language">Язык</string>

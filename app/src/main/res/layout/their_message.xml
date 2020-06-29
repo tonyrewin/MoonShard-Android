@@ -156,7 +156,7 @@
                     android:layout_below="@+id/nameFile"
                     android:layout_toRightOf="@+id/iconLayout"
                     android:gravity="top"
-                    tools:text="@string/their_message_text273"
+                    tools:text="text273"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

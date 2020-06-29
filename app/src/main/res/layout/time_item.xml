@@ -10,7 +10,7 @@
             android:fontFamily="@font/roboto_regular"
             android:layout_marginLeft="14dp"
             android:textColor="#333333"
-            android:text="@string/time_item_text274"
+            android:text="text274"
             android:layout_marginTop="14dp"
             android:layout_marginBottom="14dp"
             android:id="@+id/dateTv"

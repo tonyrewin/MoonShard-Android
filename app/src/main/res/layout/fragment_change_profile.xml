@@ -104,7 +104,7 @@
                 android:paddingBottom="10dp"
                 android:paddingEnd="5dp"
                 android:textSize="16sp"
-                tools:text="@string/kanaevsky" />
+                tools:text="Kanaevsky" />
 
     </RelativeLayout>
 

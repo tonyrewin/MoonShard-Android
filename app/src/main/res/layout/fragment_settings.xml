@@ -79,7 +79,7 @@
                 android:layout_below="@+id/nameTv"
                 android:layout_alignLeft="@+id/nameTv"
                 android:layout_marginTop="1dp"
-                android:text="@string/settings_text234"
+                android:text="@string/settings_example_phone"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 

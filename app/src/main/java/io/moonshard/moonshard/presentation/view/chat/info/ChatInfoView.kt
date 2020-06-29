@@ -21,7 +21,7 @@ interface ChatInfoView: MvpView {
     fun showChatsScreen()
     fun setAvatar(avatar: Bitmap?)
 
-    fun showChangeChatButton(isShow: Boolean)
+    fun showChangeChatButton(isShow: Boolean, type: String?)
     fun hideLine()
     fun hideDescription()
     fun showProgressBar()

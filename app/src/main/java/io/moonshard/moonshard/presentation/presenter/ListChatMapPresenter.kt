@@ -1,46 +1,39 @@
 package io.moonshard.moonshard.presentation.presenter
 
-import android.annotation.SuppressLint
 import android.util.Log
-import com.orhanobut.logger.Logger
-import io.moonshard.moonshard.MainApplication
-import io.moonshard.moonshard.common.NotFoundException
-import io.moonshard.moonshard.common.NotFoundException2
-import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.api.Category
 import io.moonshard.moonshard.models.api.RoomPin
-import io.moonshard.moonshard.models.dbEntities.ChatEntity
 import io.moonshard.moonshard.presentation.view.ListChatMapView
-import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.iqregister.AccountManager
-import org.jivesoftware.smackx.muc.MultiUserChatManager
-import org.jivesoftware.smackx.vcardtemp.VCardManager
-import org.jxmpp.jid.impl.JidCreate
-import org.jxmpp.jid.parts.Resourcepart
+import java.util.*
+import kotlin.collections.ArrayList
 
 @InjectViewState
 class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
 
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     private var events = ArrayList<RoomPin>()
     private var fullEvents = ArrayList<RoomPin>()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun getChats() {
         if(RoomsMap.isFilter){
-            getRoomsByCategory("","","",RoomsMap.category!!)
+            if(RoomsMap.isFilterDate){
+
+            }else{
+                getRoomsByCategory("","","",RoomsMap.category!!)
+            }
         }else{
             //this hard data - center Moscow
             compositeDisposable.add(useCase!!.getRooms("55.751244", "37.618423", 10000.toString())
@@ -50,6 +43,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                     if (throwable == null) {
                         RoomsMap.clean()
                         RoomsMap.rooms = rooms
+                        events.clear()
+                        fullEvents.clear()
                         events.addAll(rooms)
                         fullEvents.addAll(rooms)
                         Log.d("rooms", rooms.size.toString())
@@ -69,6 +64,8 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 if (throwable == null) {
                     RoomsMap.clean()
                     RoomsMap.rooms = rooms
+                    events.clear()
+                    fullEvents.clear()
                     events.addAll(rooms)
                     fullEvents.addAll(rooms)
                     Log.d("rooms", rooms.size.toString())
@@ -100,5 +97,67 @@ class ListChatMapPresenter : MvpPresenter<ListChatMapView>() {
                 viewState?.updatePinsOnMap(events)
             }
         }
+    }
+
+    fun setDateFilter(date:String,calendar: Calendar?=null){
+        /*
+        val today = Calendar.getInstance()
+        val filteredRooms = arrayListOf<RoomPin>()
+
+        when (date) {
+            "Сегодня" -> {
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==today.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState.setChats(filteredRooms)
+            }
+            "Завтра" -> {
+                val tomorrow = Calendar.getInstance()
+                tomorrow.add(Calendar.DATE, 1)
+
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==tomorrow.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState.setChats(filteredRooms)
+            }
+            "В выходные" -> {
+                val saturday = Utils.getNextSaturdayDate()
+                val sunday = Utils.getNextSundayDate()
+
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==saturday.get(Calendar.DAY_OF_MONTH) || time.dayOfMonth==sunday.get(
+                            Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState.setChats(filteredRooms)
+            }
+            "Выбрать дату" -> {
+                for (i in RoomsMap.rooms.indices){
+                    val time  = DateHolder(RoomsMap.rooms[i].eventStartDate!!)
+                    if(time.dayOfMonth==calendar!!.get(Calendar.DAY_OF_MONTH)){
+                        filteredRooms.add(RoomsMap.rooms[i])
+                    }
+                }
+                RoomsMap.rooms = filteredRooms
+                viewState.setChats(filteredRooms)
+            }
+        }
+        RoomsMap.isFilter = true
+        RoomsMap.isFilter = true
+         */
+        viewState.setChats(RoomsMap.rooms)
+
+
     }
 }

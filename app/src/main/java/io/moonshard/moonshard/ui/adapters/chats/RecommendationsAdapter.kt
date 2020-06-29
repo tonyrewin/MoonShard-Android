@@ -55,6 +55,10 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
         holder.itemView.setOnClickListener {
             listener.recommendationsClick(recommendations[position].jid)
         }
+
+        if(position == recommendations.size-1){
+            holder.viewLine?.visibility = View.GONE
+        }
     }
 
     private fun setAvatar(jid: String, nameChat: String, imageView: ImageView?) {
@@ -150,5 +154,6 @@ class RecommendationsAdapter(val listener: RecommendationsListener,
         internal var categoryTv: TextView? = view.findViewById(R.id.categoryTv)
         internal var valueMembersTv: TextView? = view.findViewById(R.id.valueMembersTv)
         internal var avatarEvent: ImageView? = view.findViewById(R.id.avatarEvent)
+        internal var viewLine:View? = view.findViewById(R.id.viewLine)
     }
 }

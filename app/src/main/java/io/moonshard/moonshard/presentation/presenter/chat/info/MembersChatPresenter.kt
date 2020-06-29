@@ -5,7 +5,7 @@ import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.presentation.view.chat.MembersChatView
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.muc.MUCAffiliation
 import org.jivesoftware.smackx.muc.Occupant
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -33,10 +33,10 @@ class MembersChatPresenter : MvpPresenter<MembersChatView>() {
             val iterator = occupants.iterator()
             while (iterator.hasNext()) {
                 val occupant = iterator.next()
-                if (occupant.jid==null) {
+                if (occupant.jid == null) {
                     iterator.remove()
-                }else if(occupant.jid.asBareJid().asUnescapedString()==myJid){
-                    iterator.remove()
+                } else if (occupant.jid.asBareJid().asUnescapedString() == myJid) {
+                    //iterator.remove()
                 }
             }
             viewState?.showMembers(occupants)
@@ -53,8 +53,15 @@ class MembersChatPresenter : MvpPresenter<MembersChatView>() {
             val muc =
                 MainApplication.getXmppConnection().multiUserChatManager
                     .getMultiUserChat(groupId)
+
+            if (fullUser.affiliation == MUCAffiliation.admin) {
+                muc.revokeAdmin(jidUserInChat)
+            } else if (fullUser.affiliation == MUCAffiliation.member) {
+                muc.revokeMembership(jidUserInChat)
+            }
+
             muc.kickParticipant(jidUserInChat.resourceOrEmpty, "Without reason")
-            muc.revokeMembership(jidUserInChat)
+
             viewState?.removeMember(fullUser)
         } catch (e: Exception) {
             e.message?.let { viewState?.showError(it) }

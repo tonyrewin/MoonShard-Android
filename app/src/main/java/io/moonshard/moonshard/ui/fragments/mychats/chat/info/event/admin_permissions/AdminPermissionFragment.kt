@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
@@ -15,15 +16,23 @@ import io.moonshard.moonshard.presentation.presenter.chat.info.AdminPermissionPr
 import io.moonshard.moonshard.presentation.view.chat.info.AdminPermissionView
 import io.moonshard.moonshard.ui.adapters.chat.AdminPermissionAdapter
 import io.moonshard.moonshard.ui.adapters.chat.AdminPermissionListener
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_admin_permission.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import org.jivesoftware.smackx.muc.Affiliate
+import org.jivesoftware.smackx.muc.Occupant
 
 
 class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
 
     @InjectPresenter
     lateinit var presenter: AdminPermissionPresenter
+
+    var idChat: String = ""
+    var currentTypeRole:String? = null
+    var userJid:String?=null
+    var choosedRole = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,40 +44,56 @@ class AdminPermissionFragment : MvpAppCompatFragment(),AdminPermissionView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //presenter.getAvatar("kek")
+
+        arguments?.let {
+            idChat = it.getString("chatId")
+            currentTypeRole = it.getString("currentTypeRole")
+            userJid = it.getString("userJid")
+        }
+
+        presenter.getData(currentTypeRole,userJid)
+
         initAdapter()
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
-        readBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+        readyBtn?.setSafeOnClickListener {
+            presenter.changeRole(choosedRole,userJid!!,idChat)
         }
     }
 
     fun initAdapter(){
         val faceControl = AdminPermission("Фейс контроль","Может сканировать входные билеты.")
-        val moderator = AdminPermission("Модератор","Может удалять сообщения пользователей, добавлять пользователей в черный список.")
-        val editor = AdminPermission("Редактор","Имеет полномочия модератора а так же может изменять описание, аватар группы, управлять информацией о мероприятиях.")
-        val administrator = AdminPermission("Администратор","Имеет полномочия редактора а так же может назначать и снимать администраторов")
+        val administrator = AdminPermission("Администратор","Имеет полномочия фейс-контрольщика,  а так же может добавлять пользователей в черный список")
 
         val adminPermissionsTypes = arrayListOf<AdminPermission>()
 
         adminPermissionsTypes.add(faceControl)
-        adminPermissionsTypes.add(moderator)
-        adminPermissionsTypes.add(editor)
         adminPermissionsTypes.add(administrator)
 
         typeAdminRv?.layoutManager = LinearLayoutManager(context)
         typeAdminRv?.adapter = AdminPermissionAdapter(object : AdminPermissionListener {
-            override fun click() {
-
+            override fun click(role: String) {
+                choosedRole = role
             }
         }, adminPermissionsTypes)
     }
 
+    override fun updateData(type:Int){
+        (typeAdminRv?.adapter as? AdminPermissionAdapter)?.update(type)
+    }
+
     override fun setAvatar(avatar: Bitmap) {
         contactAvatar?.setImageBitmap(avatar)
+    }
+
+    override fun showNickName(nickName:String){
+        nameTv?.text = nickName
+    }
+
+  override  fun goToChatScreen(){
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
     }
 }

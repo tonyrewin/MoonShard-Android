@@ -5,6 +5,7 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        android:background="#F9F9F9"
         android:id="@+id/mainLayout"
         tools:context=".ui.fragments.profile.mytickets.TypeTicketsFragment">
 
@@ -136,6 +137,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="never"
                 android:id="@+id/typeTicketPresentRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

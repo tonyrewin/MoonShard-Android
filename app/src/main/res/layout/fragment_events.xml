@@ -9,6 +9,7 @@
         tools:context=".ui.fragments.mychats.chat.EventsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
             android:visibility="gone"
             android:id="@+id/eventsRv"
             android:layout_width="match_parent"

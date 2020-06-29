@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.ManageTypesTicketFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.ManageTypesTicketFragment">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -56,6 +56,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <include
+                android:visibility="gone"
                 android:id="@+id/ticket"
                 layout="@layout/type_ticket_manage_item"
                 android:layout_width="wrap_content"
@@ -65,12 +66,18 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@+id/toolBar"
+                android:id="@+id/typesTicketsRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
 
         <RelativeLayout
                 android:id="@+id/addNewTicketBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ticket"
+                android:layout_below="@+id/typesTicketsRv"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"

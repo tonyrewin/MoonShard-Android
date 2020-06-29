@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,13 +16,11 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
-import android.os.Handler;
 import android.webkit.URLUtil;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.Logger;
 
@@ -34,14 +31,12 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.PresenceEventListener;
-import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.DefaultParticipantStatusListener;
 import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.muc.Occupant;
 import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.UserStatusListener;
@@ -55,6 +50,7 @@ import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.FullJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.impl.LocalDomainAndResourcepartJid;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -128,7 +124,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                         messageEntity.sender.setTarget(user);
                         saveMessageKick(messageEntity, chatJid.asBareJid().asUnescapedString(), chatEntity, actor.asBareJid().asUnescapedString());
                     }, e -> {
-
+                        Logger.d(e);
                     });
         } catch (Exception e) {
             Logger.d(e);
@@ -197,6 +193,10 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         }
     }
 
+
+    /*
+        This method for 1x1 chat
+     */
     @SuppressLint("CheckResult")
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
@@ -208,13 +208,12 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                     onIncomingMessageInternal(chatEntity, message, chatJid, from.asEntityBareJidString());
                 }, e -> {
                     if (e.getClass() == NotFoundException.class) {
-                        ChatEntity chatEntity = new ChatEntity(
-                                0,
-                                from.asEntityBareJidString(),
-                                from.asEntityBareJidString().split("@")[0],
-                                false,
-                                0
-                        );
+                        VCardManager vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().getConnection());
+                        VCard card = vm.loadVCard(from);
+                        String nickname = card.getNickName();
+                        ChatEntity chatEntity = new ChatEntity(0, from.asEntityBareJidString(), nickname, false, 0, null);
+
+
                         ChatListRepository.INSTANCE.addChat(chatEntity)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -229,44 +228,44 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     @SuppressLint("CheckResult")
     private void onIncomingMessageInternal(ChatEntity chatEntity, Message message, String chatJid, String fromJid) {
         try {
-        MessageEntity messageEntity;
-        if (URLUtil.isValidUrl(message.getBody())) {
-            messageEntity = new MessageEntity(
-                    0,
-                    UUID.randomUUID().toString(),
-                    message.getStanzaId(),
-                    TrueTimeRx.now().getTime(),
-                    message.getBody(),
-                    true,
-                    false,
-                    false,
-                    false,
-                    true
-            );
-        } else {
-            messageEntity = new MessageEntity(
-                    0,
-                    UUID.randomUUID().toString(),
-                    message.getStanzaId(),
-                    TrueTimeRx.now().getTime(),
-                    message.getBody(),
-                    true,
-                    false,
-                    false,
-                    false,
-                    false
-            );
-        }
+            MessageEntity messageEntity;
+            if (URLUtil.isValidUrl(message.getBody())) {
+                messageEntity = new MessageEntity(
+                        0,
+                        UUID.randomUUID().toString(),
+                        message.getStanzaId(),
+                        TrueTimeRx.now().getTime(),
+                        message.getBody(),
+                        true,
+                        false,
+                        false,
+                        false,
+                        true
+                );
+            } else {
+                messageEntity = new MessageEntity(
+                        0,
+                        UUID.randomUUID().toString(),
+                        message.getStanzaId(),
+                        TrueTimeRx.now().getTime(),
+                        message.getBody(),
+                        true,
+                        false,
+                        false,
+                        false,
+                        false
+                );
+            }
 
 
-        messageEntity.chat.setTarget(chatEntity);
-        String messageAuthorNickname;
+            messageEntity.chat.setTarget(chatEntity);
+            String messageAuthorNickname;
 
-        if (fromJid.contains("conference")) {
-            messageAuthorNickname = fromJid.split("/")[1];
-        } else {
-            messageAuthorNickname = fromJid.split("@")[0];
-        }
+            if (fromJid.contains("conference")) {
+                messageAuthorNickname = fromJid.split("/")[1];
+            } else {
+                messageAuthorNickname = fromJid.split("@")[0];
+            }
 
 
             Jid jidFrom = JidCreate.from(fromJid);
@@ -290,6 +289,8 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
     }
 
     void saveMessage(MessageEntity messageEntity, String chatJid, Message message, ChatEntity chatEntity) {
+        //String myJid = SecurePreferences.getStringValue("jid", null);
+
         MessageRepository.INSTANCE.saveMessage(messageEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -460,6 +461,9 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
         }
     }
 
+    /*
+      This method for groups (muc) chat
+   */
     @SuppressLint("CheckResult")
     @Override
     public void processMessage(Message message) {
@@ -487,7 +491,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                         roomJid,
                                         roomName,
                                         false,
-                                        0
+                                        0, null
                                 );
                                 ChatListRepository.INSTANCE.addChat(chatEntity)
                                         .subscribeOn(Schedulers.io())
@@ -531,7 +535,7 @@ public class NetworkHandler extends DefaultParticipantStatusListener implements 
                                     room.getRoom().asEntityBareJidString(),
                                     info.getName(),
                                     true,
-                                    0
+                                    0, null
                             );
                             addChat(chatEntity);
 

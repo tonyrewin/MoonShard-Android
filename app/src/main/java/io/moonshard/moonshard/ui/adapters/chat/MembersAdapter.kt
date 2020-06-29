@@ -8,16 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import de.adorsys.android.securestoragelibrary.SecurePreferences
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jivesoftware.smackx.muc.MUCAffiliation
 import org.jivesoftware.smackx.muc.Occupant
-import org.jxmpp.jid.EntityFullJid
 import trikita.log.Log
-import java.lang.Exception
 
 
 interface MemberListener {
@@ -27,7 +26,9 @@ interface MemberListener {
 
 class MembersAdapter(
     val listener: MemberListener,
-    private var members: ArrayList<Occupant>, var isRemove: Boolean
+    private var members: ArrayList<Occupant>,
+    var isRemove: Boolean,
+    var myTypeRole: String?
 ) :
     RecyclerView.Adapter<MembersAdapter.ViewHolder>() {
 
@@ -43,10 +44,51 @@ class MembersAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         if (isRemove) {
-            holder.removeBtn?.visibility = View.VISIBLE
+            when (members[position].affiliation) {
+                MUCAffiliation.owner -> {
+                    holder.statusTv?.text = "Создатель"
+                    holder.removeBtn?.visibility = View.GONE
+                }
+                MUCAffiliation.admin -> {
+                    if (myTypeRole == "owner") {
+                        holder.removeBtn?.visibility = View.VISIBLE
+                    } else if (myTypeRole == "admin") {
+                        holder.removeBtn?.visibility = View.GONE
+                    }
+                    holder.statusTv?.text = "Администратор"
+                }
+                MUCAffiliation.member -> {
+                    if (myTypeRole == "owner") {
+                        holder.removeBtn?.visibility = View.VISIBLE
+                    } else if (myTypeRole == "admin") {
+                        holder.removeBtn?.visibility = View.GONE
+                    }
+                    holder.statusTv?.text = "Фейс-контрольщик"
+                }
+                else -> {
+                    holder.removeBtn?.visibility = View.VISIBLE
+                    holder.statusTv?.text = "Участник"
+                }
+            }
         } else {
             holder.removeBtn?.visibility = View.GONE
+
+            when (members[position].affiliation) {
+                MUCAffiliation.owner -> {
+                    holder.roleTv?.text = "Создатель"
+                }
+                MUCAffiliation.admin -> {
+                    holder.roleTv?.text = "Администратор"
+                }
+                MUCAffiliation.member -> {
+                    holder.roleTv?.text = "Фейс-контрольщик"
+                }
+                else -> {
+                    holder.roleTv?.text = "Участник"
+                }
+            }
         }
 
         holder.itemView.setSafeOnClickListener {
@@ -58,12 +100,11 @@ class MembersAdapter(
         }
 
         holder.nameTv?.text = members[position].nick
-        //holder.statusTv?.text = members[position].affiliation.
-        try {
-            setAvatar(members[position].jid.asBareJid().asUnescapedString(), holder.userAvatar!!
-            )
-        }catch (e:Exception){
 
+        try {
+            setAvatar(members[position].jid.asBareJid().asUnescapedString(), holder.userAvatar!!)
+        } catch (e: Exception) {
+            Logger.d(e)
         }
     }
 
@@ -90,7 +131,7 @@ class MembersAdapter(
         notifyDataSetChanged()
     }
 
-    fun removeMember(member: Occupant){
+    fun removeMember(member: Occupant) {
         this.members.remove(member)
         notifyDataSetChanged()
     }
@@ -98,6 +139,7 @@ class MembersAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var nameTv: TextView? = view.findViewById(R.id.nameMemberTv)
         var statusTv: TextView? = view.findViewById(R.id.statusMemberTv)
+        var roleTv: TextView? = view.findViewById(R.id.roleTv)
         var userAvatar: ImageView? = view.findViewById(R.id.userMemberAvatar)
         var removeBtn: ImageView? = view.findViewById(R.id.removeBtn)
     }

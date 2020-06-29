@@ -7,6 +7,7 @@ import java.util.*
 object RoomsMap {
     var rooms = arrayListOf<RoomPin>()
     var isFilter:Boolean = false
+    var isFilterDate:Boolean = false
     var category:Category?=null
 
 
@@ -15,6 +16,7 @@ object RoomsMap {
     }
 
     fun clearFilters(){
+        isFilterDate = false
         isFilter=false
         category=null
     }

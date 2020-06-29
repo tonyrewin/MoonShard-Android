@@ -104,6 +104,7 @@
                     android:background="#F5F5F5" />
 
             <androidx.recyclerview.widget.RecyclerView
+                    android:overScrollMode="never"
                     android:id="@+id/adminsRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

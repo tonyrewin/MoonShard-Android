@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.statics.NotUsedTicketsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -89,12 +89,13 @@
 
 
                 <TextView
+                        android:id="@+id/scannedTv"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="17dp"
                         android:layout_marginTop="16dp"
                         android:textSize="14sp"
                         android:textColor="#6F6F6F"
-                        android:text="11 000 / 12000"
+                        android:text="11000 / 12000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -111,6 +112,7 @@
                     android:layout_height="1dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                    android:overScrollMode="never"
                     android:id="@+id/scannedTicketsRv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

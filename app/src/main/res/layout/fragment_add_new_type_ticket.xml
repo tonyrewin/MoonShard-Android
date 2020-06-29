@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.AddNewTypeTicketFragment">
+        android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -38,6 +37,7 @@
                     android:textSize="14sp" />
 
             <TextView
+                    android:id="@+id/readyBtn"
                     android:layout_marginEnd="17dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,6 +53,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+            android:layout_below="@+id/toolBar"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="9dp"
@@ -102,6 +103,7 @@
                 android:paddingEnd="5dp" />
 
         <TextView
+                android:visibility="gone"
                 android:textSize="14sp"
                 android:textColor="#9B9BB6"
                 android:fontFamily="@font/roboto_regular"
@@ -111,6 +113,7 @@
                 android:layout_height="wrap_content"/>
 
         <EditText
+                android:visibility="gone"
                 android:textColorHint="#DDDDDD"
                 android:hint="@string/enter_an_explanation"
                 android:fontFamily="@font/roboto_regular"
@@ -142,14 +145,14 @@
                 android:hint="@string/enter_cost"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
-                android:id="@+id/costEt"
+                android:id="@+id/priceEt"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="9dp"
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="7dp"
                 android:background="@drawable/rounded_edittext"
-                android:inputType="text"
+                android:inputType="number"
                 android:maxLength="255"
                 android:maxLines="1"
                 android:paddingStart="5dp"
@@ -169,20 +172,21 @@
                 android:hint="@string/enter_quantity"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
-                android:id="@+id/quantityEt"
+                android:id="@+id/limitEt"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="9dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="7dp"
                 android:background="@drawable/rounded_edittext"
-                android:inputType="text"
+                android:inputType="number"
                 android:maxLength="255"
                 android:maxLines="1"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp" />
 
         <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveBtn"
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,4 +200,11 @@
                 android:textSize="14sp" />
 
     </LinearLayout>
-</LinearLayout>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</RelativeLayout>

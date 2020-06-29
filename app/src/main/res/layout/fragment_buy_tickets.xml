@@ -4,8 +4,7 @@
         android:layout_width="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:layout_height="match_parent"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.BuyTicketsFragment">
+        android:layout_height="match_parent">
 
 
 
@@ -88,7 +87,7 @@
                     android:layout_height="104dp"
                     android:background="@drawable/bck_rounded"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/party_test" />
+                    tools:src="@drawable/party_test" />
 
             <TextView
                     android:id="@+id/labelTicket"
@@ -98,7 +97,7 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="13dp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="@string/valeriy_meladze"
+                    tools:text="Valery Meladze"
                     android:textColor="#333333"
                     android:textSize="17sp" />
 
@@ -111,7 +110,7 @@
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="4.5dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/july_1_2020_at_2300"
+                    tools:text="1 July 2020 23:00"
                     android:textColor="#6F6F6F"
                     android:textSize="14sp" />
 
@@ -129,6 +128,7 @@
                     android:layout_height="match_parent">
 
                 <androidx.recyclerview.widget.RecyclerView
+                        android:overScrollMode="never"
                         android:id="@+id/ticketsRv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
@@ -158,18 +158,19 @@
                 android:layout_marginStart="16.5dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#000000"
-                android:text="@string/tickets_text3"
+                android:text="0 tickets"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
+                android:id="@+id/costTv"
                 android:layout_marginRight="21dp"
                 android:layout_marginTop="14dp"
                 android:layout_alignParentEnd="true"
                 android:textSize="16sp"
                 android:textColor="#000000"
-                android:text="1500 RUB"
+                android:text="0 ₽"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -189,5 +190,12 @@
                 android:textSize="14sp" />
 
     </RelativeLayout>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

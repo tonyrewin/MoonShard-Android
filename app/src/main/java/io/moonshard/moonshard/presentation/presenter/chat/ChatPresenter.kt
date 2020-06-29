@@ -4,20 +4,15 @@ import android.graphics.BitmapFactory
 import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.common.BasePresenter
-import io.moonshard.moonshard.common.utils.Utils
 import io.moonshard.moonshard.common.utils.autoDispose
-import io.moonshard.moonshard.models.api.RoomPin
 import io.moonshard.moonshard.presentation.view.chat.ChatView
 import io.moonshard.moonshard.repository.ChatListRepository
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import moxy.InjectViewState
-import moxy.MvpPresenter
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.muc.MultiUserChat
-import org.jivesoftware.smackx.muc.MultiUserChatManager
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.EntityFullJid
 import org.jxmpp.jid.impl.JidCreate
@@ -27,12 +22,12 @@ import trikita.log.Log
 
 @InjectViewState
 class ChatPresenter : BasePresenter<ChatView>() {
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private lateinit var chatID: String
     private lateinit var chatName: String
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
     }
 
     fun setChatId(chatId: String) {

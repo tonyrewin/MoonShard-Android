@@ -1,14 +1,20 @@
 package io.moonshard.moonshard.ui.fragments.profile.present_ticket
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moonshardwallet.models.Ticket
+import com.google.gson.Gson
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.presentation.presenter.profile.present_ticket.PresentTicketPresenter
 import io.moonshard.moonshard.presentation.view.profile.present_ticket.PresentTicketView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentAdapter
+import io.moonshard.moonshard.ui.adapters.profile.present.TicketPresentListener
 import kotlinx.android.synthetic.main.fragment_present_ticket.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -18,6 +24,12 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
 
     @InjectPresenter
     lateinit var presenter: PresentTicketPresenter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +43,55 @@ class PresentTicketFragment : MvpAppCompatFragment(), PresentTicketView {
         super.onViewCreated(view, savedInstanceState)
         (activity as? MainActivity)?.hideBottomNavigationBar()
 
-        ticket?.setOnClickListener {
-            (activity as MainActivity).showTypeTicketsPresentFragment()
-        }
-
         backBtn?.setOnClickListener {
             fragmentManager?.popBackStack()
         }
+
+        initTypeTicketPresentAdapter()
+
+        presenter.getMyTickets()
+
+        closePromptBtn?.setOnClickListener {
+            actionLayout?.visibility = View.GONE
+        }
+    }
+
+    private fun initTypeTicketPresentAdapter() {
+        ticketPresentRv?.layoutManager = LinearLayoutManager(context)
+        ticketPresentRv?.adapter =
+            TicketPresentAdapter(this.mvpDelegate,object :
+                TicketPresentListener {
+                override fun click(ticket: Ticket) {
+
+                }
+
+                override fun click(ticket: Ticket, ticketName: String) {
+                    val ticketJson = Gson().toJson(ticket)
+                    val bundle = Bundle()
+                    bundle.putString("ticket", ticketJson)
+                    val addPhotoBottomDialogFragment = RecipientPresentDialogFragment()
+                    addPhotoBottomDialogFragment.arguments = bundle
+                    addPhotoBottomDialogFragment.show(
+                        activity!!.supportFragmentManager,
+                        "RecipientDialogFragment"
+                    )
+                }
+            }, arrayListOf())
+    }
+
+    override fun setTickets(ticketSales: ArrayList<Ticket>) {
+        (ticketPresentRv?.adapter as? TicketPresentAdapter)?.setData(ticketSales)
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.orhanobut.logger.Logger
-import com.squareup.picasso.Picasso
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.StreamUtil
@@ -37,6 +36,13 @@ import java.util.*
 interface PhotoListener {
     fun clickPhoto(url: String)
     fun clickUserAvater(jid:String)
+    fun clickDownloadFile(
+        text: String,
+        sizeFile: TextView,
+        statusFileIv: ImageView?,
+        progressBarFile: ProgressBar?,
+        layoutFile: RelativeLayout
+    )
 }
 
 open class MessagesAdapter(
@@ -125,12 +131,16 @@ open class MessagesAdapter(
         }
     }
 
+
+    /*
+     must use holder.adapterPosition because param position wrong
+     */
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             0 -> {
                 (holder as ViewHolderMyMessage).mainImage?.setOnClickListener {
-                    listener.clickPhoto(myMsgs[position].text)
+                    listener.clickPhoto(myMsgs[holder.adapterPosition].text)
                 }
 
                 holder.mainImage?.setShapeAppearanceModel(
@@ -155,22 +165,22 @@ open class MessagesAdapter(
                     !!.build()
                 )
 
-                if (myMsgs[position].isFile) {
-                    if (myMsgs[position].isImage) {
+                if (myMsgs[holder.adapterPosition].isFile) {
+                    if (myMsgs[holder.adapterPosition].isImage) {
                         holder.layoutFile?.visibility = View.GONE
                         holder.layoutMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.VISIBLE
 
-                        Glide.with(holder.itemView.context).load(myMsgs[position].text)
+                        Glide.with(holder.itemView.context).load(myMsgs[holder.adapterPosition].text)
                             .into(holder.mainImage!!)
                     } else {
                         holder.layoutFile?.visibility = View.VISIBLE
                         holder.layoutMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.GONE
-                        holder.nameFile?.text = myMsgs[position].fileNameFromURL
-                        getSizeFile(myMsgs[position].text,holder.sizeFile)
+                        holder.nameFile?.text = myMsgs[holder.adapterPosition].fileNameFromURL
+                        getSizeFile(myMsgs[holder.adapterPosition].text,holder.sizeFile)
 
-                        val fileInStorage = myMsgs[position].text.file()
+                        val fileInStorage = myMsgs[holder.adapterPosition].text.file()
 
                         if (fileInStorage.isFile) {
                             holder.statusFileIv?.setImageResource(R.drawable.ic_file)
@@ -182,12 +192,20 @@ open class MessagesAdapter(
                             holder.statusFileIv?.setImageResource(R.drawable.ic_download_file)
 
                             holder.layoutFile?.setOnClickListener {
-                                downloadFile(
-                                    myMsgs[position].text,
+                                /*
+                                downloadFile(myMsgs[holder.adapterPosition].text,
                                     holder.sizeFile!!,
                                     holder.statusFileIv,
                                     holder.progressBarFile,
-                                    holder.layoutFile
+                                    holder.layoutFile!!)
+
+                                 */
+
+                                listener.clickDownloadFile(myMsgs[holder.adapterPosition].text,
+                                    holder.sizeFile!!,
+                                    holder.statusFileIv,
+                                    holder.progressBarFile,
+                                    holder.layoutFile!!
                                 )
                             }
                         }
@@ -195,13 +213,13 @@ open class MessagesAdapter(
                 } else {
                     holder.layoutMessage?.visibility = View.VISIBLE
                     holder.mainImage?.visibility = View.GONE
-                    holder.bodyText?.text = myMsgs[position].text
+                    holder.bodyText?.text = myMsgs[holder.adapterPosition].text
                     holder.layoutFile?.visibility = View.GONE
                 }
             }
             1 -> {
                 (holder as ViewHolderDifferentMessage).mainImage?.setOnClickListener {
-                    listener.clickPhoto(myMsgs[position].text)
+                    listener.clickPhoto(myMsgs[holder.adapterPosition].text)
                 }
 
                 holder.mainImage?.setShapeAppearanceModel(
@@ -226,15 +244,15 @@ open class MessagesAdapter(
                     !!.build()
                 )
 
-                if (myMsgs[position].isFile) {
+                if (myMsgs[holder.adapterPosition].isFile) {
 
-                    if (myMsgs[position].isImage) {
+                    if (myMsgs[holder.adapterPosition].isImage) {
                         holder.layoutFile?.visibility = View.GONE
                         holder.bodyText?.visibility = View.GONE
                         holder.layoutBodyMessage?.visibility = View.VISIBLE
                         holder.mainImage?.visibility = View.VISIBLE
 
-                        Glide.with(holder.itemView.context).load(myMsgs[position].text)
+                        Glide.with(holder.itemView.context).load(myMsgs[holder.adapterPosition].text)
                             .into(holder.mainImage!!)
                     } else {
                         holder.layoutFile?.visibility = View.VISIBLE
@@ -242,11 +260,11 @@ open class MessagesAdapter(
                         holder.bodyText?.visibility = View.GONE
                         holder.layoutBodyMessage?.visibility = View.GONE
                         holder.mainImage?.visibility = View.GONE
-                        holder.nameFile?.text = myMsgs[position].fileNameFromURL
-                        getSizeFile(myMsgs[position].text,holder.sizeFile)
+                        holder.nameFile?.text = myMsgs[holder.adapterPosition].fileNameFromURL
+                        getSizeFile(myMsgs[holder.adapterPosition].text,holder.sizeFile)
 
 
-                        val fileInStorage = myMsgs[position].text.file()
+                        val fileInStorage = myMsgs[holder.adapterPosition].text.file()
 
                         if (fileInStorage.isFile) {
                             holder.statusFileIv?.setImageResource(R.drawable.ic_file)
@@ -259,7 +277,7 @@ open class MessagesAdapter(
 
                             holder.layoutFile?.setOnClickListener {
                                 downloadFile(
-                                    myMsgs[position].text,
+                                    myMsgs[holder.adapterPosition].text,
                                     holder.sizeFile!!,
                                     holder.statusFileIv,
                                     holder.progressBarFile,
@@ -270,42 +288,42 @@ open class MessagesAdapter(
 
                     }
                 } else {
-                    holder.bodyText?.text = myMsgs[position].text
+                    holder.bodyText?.text = myMsgs[holder.adapterPosition].text
                     holder.bodyText?.visibility = View.VISIBLE
                     holder.mainImage?.visibility = View.GONE
                 }
 
-                val nameInGroups = myMsgs[position].user.name.split("/")
+                val nameInGroups = myMsgs[holder.adapterPosition].user.name.split("/")
                 val name: String
 
                 name = if (nameInGroups.size > 1) {
                     nameInGroups[1]
                 } else {
-                    myMsgs[position].user.name.split("@")[0]
+                    myMsgs[holder.adapterPosition].user.name.split("@")[0]
                 }
 
                 holder.name?.text = name
-                setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
+                setAvatar(myMsgs[holder.adapterPosition].user.name + "@moonshard.tech", holder.avatar!!)
                 holder.avatar?.setOnClickListener {
                     //listener.clickUserAvater(myMsgs[position].user.jid)
                 }
             }
             2 -> {
-                val nameInGroups = myMsgs[position].user.name.split("/")
+                val nameInGroups = myMsgs[holder.adapterPosition].user.name.split("/")
                 var name = ""
 
                 name = if (nameInGroups.size > 1) {
                     nameInGroups[1]
                 } else {
-                    myMsgs[position].user.name.split("@")[0]
+                    myMsgs[holder.adapterPosition].user.name.split("@")[0]
                 }
 
-                (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[position].text
+                (holder as ViewHolderDifferentMessage).bodyText?.text = myMsgs[holder.adapterPosition].text
                 //holder.name?.text = name + "присоединился к чату"
-                holder.name?.text = myMsgs[position].text
+                holder.name?.text = myMsgs[holder.adapterPosition].text
 
 
-                setAvatar(myMsgs[position].user.name + "@moonshard.tech", holder.avatar!!)
+                setAvatar(myMsgs[holder.adapterPosition].user.name + "@moonshard.tech", holder.avatar!!)
 
                 holder.avatar?.setOnClickListener {
                     //listener.clickUserAvater(myMsgs[position].user.jid)
@@ -472,6 +490,17 @@ open class MessagesAdapter(
                     statusFileIv?.setImageResource(R.drawable.ic_download_file)
                     progressBarFile?.visibility = View.GONE
                     textSize.text = "ERROR"
+
+                    layoutFile?.setOnClickListener {
+                        downloadFile(
+                            url,
+                            textSize,
+                            statusFileIv,
+                            progressBarFile,
+                            layoutFile
+                        )
+                    }
+
                 }
             )
     }

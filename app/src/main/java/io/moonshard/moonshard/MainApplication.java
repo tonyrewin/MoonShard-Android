@@ -2,19 +2,17 @@ package io.moonshard.moonshard;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.moonshardwallet.MainService;
+import com.google.gson.Gson;
 import com.instacart.library.truetime.TrueTime;
 import com.instacart.library.truetime.TrueTimeRx;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -23,6 +21,7 @@ import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,7 +35,10 @@ import io.moonshard.moonshard.services.P2ChatService;
 import io.moonshard.moonshard.services.XMPPConnection;
 import io.moonshard.moonshard.ui.activities.BaseActivity;
 import io.moonshard.moonshard.ui.activities.MainActivity;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static io.moonshard.moonshard.common.SecurePreferencesLongStringKt.removeLongStringValue;
 
 public class MainApplication extends Application {
 
@@ -47,7 +49,7 @@ public class MainApplication extends Application {
     private static P2ChatService service = null;
     private static Application instance;
     public final static String APP_NAME = "MoonShard";
-    public final static String DEFAULT_NTP_SERVER = "0.ru.pool.ntp.org";
+    public final static String DEFAULT_NTP_SERVER = "ntp5.stratum2.ru";
     private static BaseActivity currentActivity;
     private static MainActivity mainActivity;
     private static String jid;
@@ -118,6 +120,7 @@ public class MainApplication extends Application {
                 .webModule(new WebModule(getApplicationContext()))
                 .build();
 
+        /*
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -132,6 +135,8 @@ public class MainApplication extends Application {
             }
         };
 
+
+
         new Handler().postDelayed(() -> {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -142,8 +147,7 @@ public class MainApplication extends Application {
 
             getApplicationContext().bindService(new Intent(getApplicationContext(), P2ChatService.class), serviceConnection, Context.BIND_AUTO_CREATE);
         }, 2000);
-
-
+   */
         instance = this;
         ObjectBox.INSTANCE.init(getApplicationContext()); // initialize ObjectBox DB
         mainUIThreadHandler = new Handler(Looper.getMainLooper());
@@ -155,6 +159,52 @@ public class MainApplication extends Application {
                 .logErrorOnRestart(false) //default: true
                 .trackActivities(true) //default: false
                 .apply();
+
+
+        //MainService.initLibrary(getApplicationContext());
+    }
+
+    public static void initWalletLibrary(String privateKey) {
+        String accountPassword = getCurrentLoginCredentials().password;
+        Log.d("initWalletLibrary","key: " + privateKey);
+        MainService.initLibrary(getContext(), accountPassword, privateKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                        xmppConnection.savePrivateKey();
+                    approvalTicketsAsPresent();
+                }, e -> {
+                    Logger.d(e.getMessage());
+                });
+    }
+
+    static void approvalTicketsAsPresent() {
+        MainService.getBuyTicketService().approvalEventFlowable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    if (event.approved.equals(MainService.getWalletService().getMyAddress())) {
+                        Log.d("approvalTicketsAsPresent", " event listen");
+                        acceptTicketAsPresent(event.owner, event.tokenId);
+                    }
+                }, throwable -> {
+                    Log.d("approvalTicketsAsPresent", throwable.getMessage());
+                    Logger.e(throwable.getMessage());
+                });
+    }
+
+    static void acceptTicketAsPresent(String owner, BigInteger tokenId) {
+        MainService.getBuyTicketService().acceptTicketAsPresentRx2(
+                owner,
+                tokenId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    Log.d("acceptTicketAsPresent", "get success ticket");
+                }, throwable -> {
+                    Log.d("acceptTicketAsPresent", throwable.getMessage());
+                    Logger.e(throwable.getMessage());
+                });
     }
 
     private static void setupLogger() {
@@ -217,6 +267,9 @@ public class MainApplication extends Application {
         SecurePreferences.removeValue("pass");
         SecurePreferences.removeValue("logged_in");
         SecurePreferences.removeValue("inviteInChats");
+        removeLongStringValue("accessToken");
+        removeLongStringValue("refreshToken");
+
     }
 
     private static void initTrueTime() {
@@ -275,11 +328,25 @@ public class MainApplication extends Application {
         TrueTimeRx.build().initializeRx(DEFAULT_NTP_SERVER)
                 .subscribeOn(Schedulers.io())
                 .subscribe(date -> {
-                    Log.d("time", "TrueTime was initialized at: %s" + date);
+                    Log.d("myTimeLog", "TrueTime was initialized at: %s" + date);
                 }, throwable -> {
-                    Log.e("time", "TrueTime init failed: ");
+                    Log.e("myTimeLog", "TrueTime init failed: ");
                 });
     }
+
+
+        /*
+        MainService.getBuyTicketService().acceptTicketAsPresentRx(
+                owner,
+                tokenId
+        ).thenAccept((avatarBytes) -> Log.d("success", "get success ticket")).exceptionally((exc -> {
+            Logger.e(exc.getMessage());
+            return null;
+        }
+        ));
+
+         */
+
 }
 
 

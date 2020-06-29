@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F9F9F9"
         tools:context=".ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -40,29 +41,41 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <LinearLayout
             android:id="@+id/balanceLayout"
             android:layout_below="@+id/toolBar"
-            android:background="@drawable/layout_settings_bg"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/layout_settings_bg"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
         <TextView
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Текущий баланс: 96 000 ₽"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:fontFamily="@font/montserrat_bold"
+                android:id="@+id/balanceTv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="0 ₽"
+                android:textColor="#333333"
+                android:textSize="34sp" />
 
-    </RelativeLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Текущий баланс"
+                android:textColor="#6F6F6F"
+                android:textSize="14sp" />
+
+    </LinearLayout>
 
     <LinearLayout
             android:layout_below="@+id/balanceLayout"
@@ -89,7 +102,7 @@
                 android:hint="Введите название"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginEnd="13dp"
-                android:id="@+id/nameTv"
+                android:id="@+id/cardNumberEt"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="11dp"
@@ -147,5 +160,10 @@
                 android:background="@drawable/ic_fill_up_disable" />
 
     </RelativeLayout>
-
+<ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

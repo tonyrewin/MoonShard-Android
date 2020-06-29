@@ -38,7 +38,7 @@
                     android:textSize="14sp" />
 
             <TextView
-                    android:id="@+id/readBtn"
+                    android:id="@+id/readyBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -127,6 +127,7 @@
                 android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="never"
                 android:layout_below="@+id/levelPermissionTv"
                 android:id="@+id/typeAdminRv"
                 android:layout_width="match_parent"

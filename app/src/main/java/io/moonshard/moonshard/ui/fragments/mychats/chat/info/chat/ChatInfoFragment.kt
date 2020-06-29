@@ -32,6 +32,9 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     @InjectPresenter
     lateinit var presenter: ChatInfoPresenter
 
+    var typeRole:String?=null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +57,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         }
 
         changeChatInfoBtn?.setSafeOnClickListener {
-            showManageChatScreen(idChat)
+            showManageChatScreen(idChat,typeRole)
         }
 
         leaveLayout?.setSafeOnClickListener {
@@ -70,8 +73,10 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         descriptionLayout?.visibility = View.GONE
     }
 
-   override fun showChangeChatButton(isShow:Boolean){
-        if(isShow){
+   override fun showChangeChatButton(isShow: Boolean, type: String?){
+       typeRole = type
+
+       if(isShow){
             changeChatInfoBtn?.visibility = View.VISIBLE
         }else{
             changeChatInfoBtn?.visibility = View.GONE
@@ -82,8 +87,8 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
         (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
     }
 
-    private fun showManageChatScreen(idChat: String) {
-        (parentFragment as? MainChatFragment)?.showManageChatScreen(idChat)
+    private fun showManageChatScreen(idChat: String, typeRole: String?) {
+        (parentFragment as? MainChatFragment)?.showManageChatScreen(idChat,typeRole)
     }
 
     fun showProfileUser(jid: String) {
@@ -107,7 +112,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
             override fun remove(member: Occupant) {
 
             }
-        }, arrayListOf(),false)
+        }, arrayListOf(), false, null)
     }
 
     override fun showError(error: String) {

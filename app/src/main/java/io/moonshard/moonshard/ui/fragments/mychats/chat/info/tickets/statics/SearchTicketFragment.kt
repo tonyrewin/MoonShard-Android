@@ -32,7 +32,11 @@ class SearchTicketFragment : Fragment() {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
+        }
+
+        searchBtn?.setSafeOnClickListener {
+
         }
     }
 }

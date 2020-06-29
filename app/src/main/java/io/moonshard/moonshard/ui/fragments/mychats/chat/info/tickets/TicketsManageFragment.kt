@@ -1,24 +1,20 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.zxing.integration.android.IntentIntegrator
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_tickets_manage.*
-import java.util.*
 
 
 class TicketsManageFragment : Fragment() {
 
     var idChat = ""
-
+    var typeRole: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,20 +29,42 @@ class TicketsManageFragment : Fragment() {
 
         arguments?.let {
             idChat = it.getString("chatId")
+            typeRole = it.getString("typeRole")
+        }
+
+        when (typeRole) {
+            "owner" -> {
+                addTicketsBtn?.visibility = View.VISIBLE
+                scanTicketsBtn?.visibility = View.VISIBLE
+                statisticBtn?.visibility = View.VISIBLE
+                walletBtn?.visibility = View.VISIBLE
+            }
+            "admin" -> {
+                addTicketsBtn?.visibility = View.GONE
+                scanTicketsBtn?.visibility = View.VISIBLE
+                statisticBtn?.visibility = View.VISIBLE
+                walletBtn?.visibility = View.GONE
+            }
+            "FaceController" -> {
+                addTicketsBtn?.visibility = View.GONE
+                scanTicketsBtn?.visibility = View.VISIBLE
+                statisticBtn?.visibility = View.GONE
+                walletBtn?.visibility = View.GONE
+            }
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
-        }
-
-        scanTicketsBtn?.setOnClickListener {
-            (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
-
+            parentFragmentManager.popBackStack()
         }
 
         addTicketsBtn?.setOnClickListener {
             (parentFragment as? MainChatFragment)?.showManageTypesTicketScreen(idChat)
         }
+
+        scanTicketsBtn?.setOnClickListener {
+            (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
+        }
+
 
         statisticBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showStatisticTicketsFragment(idChat)

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="#F9F9F9"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="match_parent"
         tools:context=".ui.fragments.profile.mytickets.MyTicketInfoFragment">
@@ -76,7 +77,7 @@
                 android:layout_height="104dp"
                 android:background="@drawable/bck_rounded"
                 android:scaleType="centerCrop"
-                android:src="@drawable/party_test" />
+                tools:src="@drawable/party_test" />
 
         <TextView
                 android:id="@+id/labelTicket"
@@ -86,7 +87,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="@string/valeriy_meladze"
+                tools:text="valeriy_meladze"
                 android:textColor="#333333"
                 android:textSize="17sp" />
 
@@ -98,7 +99,7 @@
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="4.5dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/july_1_2020_at_2300"
+                tools:text="1 July 2020 23:00"
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -109,11 +110,13 @@
                 android:layout_below="@+id/startDateTicket"
                 android:layout_marginStart="9dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/moscow_mutabor_club"
+                tools:text="Moscow. Mutabor club."
                 android:textColor="#0075FF"
                 android:textSize="14sp" />
 
         <ImageView
+                android:id="@+id/scannedIv"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatarTicket"
@@ -123,6 +126,7 @@
                 android:src="@drawable/ic_check_circle" />
 
         <View
+                android:visibility="gone"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:id="@+id/view"
@@ -133,7 +137,7 @@
                 android:background="#F5F5F5" />
 
         <TextView
-                android:id="@+id/typeTicket"
+                android:id="@+id/typeTicketTv"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="11dp"
                 android:layout_below="@+id/view"
@@ -145,7 +149,7 @@
                 android:textSize="17sp"/>
 
         <TextView
-                android:id="@+id/placeTicket"
+                android:id="@+id/typeTicket"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
@@ -162,7 +166,7 @@
                 android:id="@+id/numberTicketTv"
                 android:layout_marginEnd="25dp"
                 android:layout_below="@+id/view"
-                android:layout_alignTop="@+id/typeTicket"
+                android:layout_alignTop="@+id/typeTicketTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_bold"
@@ -171,7 +175,8 @@
                 android:textSize="17sp"/>
 
         <TextView
-                android:layout_alignTop="@+id/placeTicket"
+                android:id="@+id/numberTicket"
+                android:layout_alignTop="@+id/typeTicket"
                 android:layout_alignLeft="@+id/numberTicketTv"
                 android:text="@string/my_ticket_info_text210"
                 android:layout_alignParentEnd="true"
@@ -188,7 +193,7 @@
                 android:src="@drawable/ic_qr"
                 android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/placeTicket"
+                android:layout_below="@+id/typeTicket"
                 android:id="@+id/qrCode"
                 android:layout_width="170dp"
                 android:layout_height="170dp"/>
@@ -265,7 +270,7 @@
                 android:background="#F5F5F5" />
 
         <RelativeLayout
-                android:id="@+id/myTicketBtn"
+                android:id="@+id/saveTicketAsPdfBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">
@@ -308,6 +313,7 @@
                 android:background="#F5F5F5" />
 
         <RelativeLayout
+                android:id="@+id/presentTicketBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp">
@@ -380,5 +386,12 @@
                 android:text="@string/delete_ticket" />
 
     </RelativeLayout>
+
+    <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>

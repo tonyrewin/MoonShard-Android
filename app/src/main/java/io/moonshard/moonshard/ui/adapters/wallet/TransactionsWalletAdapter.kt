@@ -16,7 +16,7 @@ interface TransactionsWalletListener {
 }
 
 
-class TransactionsWalletAdapter(val listener: TransactionsWalletListener,var consolidatedList: List<ListItem>?) :
+class TransactionsWalletAdapter(val listener: TransactionsWalletListener,var consolidatedList: ArrayList<ListItem>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
 
 
@@ -49,9 +49,7 @@ class TransactionsWalletAdapter(val listener: TransactionsWalletListener,var con
                 generalViewHolder?.itemView?.setSafeOnClickListener {
                     listener.click()
                 }
-
-
-             //   generalViewHolder!!.txtTitle.text = generalItem.pojoOfJsonArray
+               generalViewHolder!!.nameTransaction.text = generalItem.transaction.name
             }
             ListItem.TYPE_DATE -> {
                 val dateItem: DateItem = consolidatedList!![position] as DateItem
@@ -69,7 +67,7 @@ class TransactionsWalletAdapter(val listener: TransactionsWalletListener,var con
 
     // View holder for general row item
     internal inner class GeneralViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-       // var txtTitle: TextView = v.findViewById(R.id.txt)
+        var nameTransaction: TextView = v.findViewById(R.id.nameTransaction)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -78,6 +76,12 @@ class TransactionsWalletAdapter(val listener: TransactionsWalletListener,var con
 
     override fun getItemCount(): Int {
         return if (consolidatedList != null) consolidatedList!!.size else 0
+    }
+
+    fun setTransaction(transitions: List<ListItem>) {
+        this.consolidatedList?.clear()
+        this.consolidatedList?.addAll(transitions)
+        notifyDataSetChanged()
     }
 
     init {

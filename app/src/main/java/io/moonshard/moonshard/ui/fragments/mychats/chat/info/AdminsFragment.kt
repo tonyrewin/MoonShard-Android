@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.models.jabber.EventManagerUser
 import io.moonshard.moonshard.presentation.presenter.chat.info.AdminsPresenter
 import io.moonshard.moonshard.presentation.view.chat.info.AdminsView
 import io.moonshard.moonshard.ui.adapters.chat.AdminListener
@@ -43,7 +44,7 @@ class AdminsFragment : MvpAppCompatFragment(),
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         addAdminLayout?.setSafeOnClickListener {
@@ -51,39 +52,33 @@ class AdminsFragment : MvpAppCompatFragment(),
         }
     }
 
+    private fun initAdapter() {
+        adminsRv?.layoutManager = LinearLayoutManager(context)
+        adminsRv?.adapter = AdminsAdapter(object : AdminListener {
+            override fun remove(categoryName: String) {
+
+            }
+
+            override fun clickAdminPermission(manager: EventManagerUser) {
+                showAdminPermission(manager)
+            }
+        }, arrayListOf())
+    }
+
+    override fun showAdmins(managers: ArrayList<EventManagerUser>) {
+        (adminsRv?.adapter as? AdminsAdapter)?.setAdmins(managers)
+    }
+
     private fun showAddAdminScreen(idChat: String) {
         (parentFragment as? MainChatFragment)?.showAddAdminScreen(idChat)
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val fragment =
-            AddAdminFragment()
-        fragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-
-        ft?.replace(R.id.mainContainer, fragment, "AddAdminFragment")?.hide(this)
-            ?.addToBackStack("AddAdminFragment")
-            ?.commit()
-
-         */
     }
 
     override fun showToast(text: String) {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showAdmins(admins: List<Occupant>) {
-        (adminsRv?.adapter as? AdminsAdapter)?.setAdmins(admins)
-    }
-
-    private fun initAdapter() {
-        adminsRv?.layoutManager = LinearLayoutManager(context)
-        adminsRv?.adapter = AdminsAdapter(this, object : AdminListener {
-            override fun remove(categoryName: String) {
-
-            }
-        }, arrayListOf())
+    override fun showAdminPermission(manager: EventManagerUser) {
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,manager.jid,manager.roleType.name)
     }
 
     override fun showProgressBar() {

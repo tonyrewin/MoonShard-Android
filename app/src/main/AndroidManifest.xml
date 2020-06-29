@@ -22,7 +22,9 @@
             android:roundIcon="@mipmap/ic_logo_round"
             android:supportsRtl="true"
             android:hardwareAccelerated="true"
+            android:networkSecurityConfig="@xml/network_security_config"
             android:theme="@style/AppTheme">
+
         <activity android:name=".ui.activities.auth.PasswordRecoveryActivity"></activity>
         <activity android:name=".ui.activities.onboardregistration.StartProfileActivity" />
         <activity android:name=".ui.activities.onboard.MainIntroActivity" />

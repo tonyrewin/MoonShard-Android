@@ -56,6 +56,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             dateAndTime.set(Calendar.MONTH, monthOfYear)
             dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             setDate(dayOfMonth, monthOfYear)
+            ChooseChatRepository.startDate = dateAndTime
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,7 +66,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             fromEventsFragment = it.getBoolean("fromEventsFragment", false)
         }
 
-        ChooseChatRepository.date = dateAndTime
+        ChooseChatRepository.startDate = dateAndTime
         setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
 
         initAdapter()
@@ -83,7 +84,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
             timeTv?.text = "1 " + getString(R.string.day)
             ChooseChatRepository.time = "1 " + getString(R.string.day)
         } else {
-            timeTv?.text = ChooseChatRepository.time
+            timeTv?.text = ChooseChatRepository.durationTime
         }
 
         timesLayout?.setSafeOnClickListener {
@@ -112,7 +113,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
                 nameTv?.text.toString(),
                 ChooseChatRepository.lat,
                 ChooseChatRepository.lng,
-                60*60*24, // TODO: start with default value?
+                ChooseChatRepository.getDurationTimeSec(),
                 ChooseChatRepository.category,
                 ChooseChatRepository.group,
                 ChooseChatRepository.getEventStartDate(),
@@ -190,7 +191,7 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
     private fun initAdapter() {
         categoriesRv?.layoutManager = LinearLayoutManager(context)
         categoriesRv?.adapter = CategoriesAdapter(object : CategoryListener {
-            override fun clickChat(categoryName: io.moonshard.moonshard.models.api.Category) {
+            override fun click(categoryName: io.moonshard.moonshard.models.api.Category) {
                 ChooseChatRepository.category = categoryName
             }
         }, arrayListOf())

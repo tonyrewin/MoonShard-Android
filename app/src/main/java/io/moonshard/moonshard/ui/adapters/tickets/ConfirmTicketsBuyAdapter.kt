@@ -5,14 +5,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moonshardwallet.models.MyTicketSale
 import io.moonshard.moonshard.R
+import io.moonshard.moonshard.presentation.presenter.adapters.ConfirmTicketsBuyAdapterPresenter
+import io.moonshard.moonshard.presentation.view.adapters.ConfirmTicketsBuyAdapterView
+import io.moonshard.moonshard.ui.adapters.MvpBaseAdapter
+import moxy.MvpDelegate
+import moxy.presenter.InjectPresenter
 
 interface ConfirmTicketsBuyListener {
     fun click()
 }
 
-class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private var tickets: ArrayList<String>) :
-    RecyclerView.Adapter<ConfirmTicketsBuyAdapter.ViewHolder>()  {
+class ConfirmTicketsBuyAdapter(
+    parentDelegate: MvpDelegate<*>,
+    val listener: ConfirmTicketsBuyListener,
+    private var ticketsSale: ArrayList<MyTicketSale>,val idChat:String
+) :
+    MvpBaseAdapter<ConfirmTicketsBuyAdapter.ViewHolder>(parentDelegate, 0.toString()),
+    ConfirmTicketsBuyAdapterView {
+
+    @InjectPresenter
+    lateinit var presenter: ConfirmTicketsBuyAdapterPresenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -24,15 +38,18 @@ class ConfirmTicketsBuyAdapter(val listener: ConfirmTicketsBuyListener, private 
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        //todo hardcore
-        if(position==9){
-            holder.viewLine?.visibility = View.GONE
-        }
-
+        presenter.onBindViewHolder(holder, holder.adapterPosition, listener,idChat)
     }
 
-    override fun getItemCount(): Int = 10
+    fun update(ticketSales: ArrayList<MyTicketSale>) {
+        presenter.setData(ticketSales)
+    }
+
+    override fun onDataChange() {
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int = presenter.getChatListSize()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var typeTicketTv: TextView? = view.findViewById(R.id.typeTicketTv)

@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.moonshardwallet.MainService
+import com.example.moonshardwallet.WalletService
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.WalletPresenter
@@ -52,5 +55,15 @@ class WalletFragment : MvpAppCompatFragment(),
         transferLayout?.setOnClickListener {
             (activity as MainActivity).showTransferWalletFragment()
         }
+
+        presenter.getBalance()
+    }
+
+    override fun showBalance(balance:String){
+        balanceTv?.text = "$balance ₽"
+    }
+
+    override fun showToast(text:String){
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 }

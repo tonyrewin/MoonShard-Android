@@ -15,11 +15,11 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.AddNewEventFragment
 class ViewPagerFragmentStateAdapter(
     private val tabItems: Array<TabItem>, val fragmentManager: FragmentManager, private val lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager,lifecycle) {
 
-    var kek = arrayListOf<Fragment>()
+    var fragments = arrayListOf<Fragment>()
 
     init {
-        kek.add(MessagesFragment())
-        kek.add(EventsFragment())
+        fragments.add(MessagesFragment())
+        fragments.add(EventsFragment())
     }
 
 
@@ -33,7 +33,7 @@ class ViewPagerFragmentStateAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return kek[position]
+        return fragments[position]
     }
 
     private fun newInstance(fragmentClass: Class<out Fragment>): Fragment {
@@ -47,5 +47,5 @@ class ViewPagerFragmentStateAdapter(
         }
     }
 
-    override fun getItemCount(): Int = kek.size
+    override fun getItemCount(): Int = fragments.size
 }

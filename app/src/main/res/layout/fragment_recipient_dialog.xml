@@ -77,16 +77,23 @@
                 android:ems="10"
                 android:gravity="center"
                 android:hint="@string/search"
-                android:inputType="textPassword"
                 android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="never"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_below="@+id/editSearch"
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+        <ProgressBar
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

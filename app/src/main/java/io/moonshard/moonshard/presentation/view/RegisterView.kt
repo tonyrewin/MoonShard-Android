@@ -9,4 +9,7 @@ interface RegisterView : MvpView {
     fun showContactsScreen()
     fun showError(error: String)
     fun showStartProfileScreen()
+    fun startService()
+    fun setRegisterLayout()
+    fun successRegistration()
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:background="#F9F9F9"
         android:layout_height="match_parent"
         tools:context=".ui.fragments.profile.present_ticket.PresentTicketFragment">
-
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -44,6 +43,16 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <androidx.core.widget.NestedScrollView
+            android:layout_below="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
     <RelativeLayout
             android:id="@+id/actionLayout"
             android:layout_below="@+id/cardInfo"
@@ -52,7 +61,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/layout_settings_bg"
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
@@ -80,6 +88,7 @@
                 android:layout_height="wrap_content"/>
 
         <ImageView
+                android:id="@+id/closePromptBtn"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_alignParentEnd="true"
@@ -89,9 +98,22 @@
 
     </RelativeLayout>
 
-    <include
-            android:id="@+id/ticket"
-            layout="@layout/my_ticket_item"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
+            android:id="@+id/ticketPresentRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
-</LinearLayout>
+    <ProgressBar
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

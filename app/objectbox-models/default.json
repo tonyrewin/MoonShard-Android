@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8481161831935261792",
-      "lastPropertyId": "5:3306364403533145931",
+      "lastPropertyId": "8:5375643006932097196",
       "name": "ChatEntity",
       "properties": [
         {
@@ -37,6 +37,11 @@
           "name": "unreadMessagesCount",
           "type": 5,
           "flags": 4
+        },
+        {
+          "id": "8:5375643006932097196",
+          "name": "event",
+          "type": 9
         }
       ],
       "relations": [
@@ -183,7 +188,9 @@
   ],
   "retiredPropertyUids": [
     8314083653095750993,
-    6932953257759382166
+    6932953257759382166,
+    3145970803543620233,
+    7256800239528307459
   ],
   "retiredRelationUids": [
     5994661834050608599

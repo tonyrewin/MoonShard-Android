@@ -212,14 +212,6 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             }
         }
 
-        removeCategoryFilterBtn?.setSafeOnClickListener {
-            RoomsMap.clearFilters()
-            presenter.getRooms("", "", "", null)
-            hideCategoryBottomSheet()
-            updateListRooms()
-            clearCategoryAdapter()
-        }
-
         sheetInfoBehavior?.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -262,6 +254,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         })
 
         calendarBtn?.setOnClickListener {
+            //showDateBottomSheet()
             if (sheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 showDateBottomSheet()
             } else {
@@ -317,7 +310,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         infoBottomSheet?.visibility = View.VISIBLE
         for (i in RoomsMap.rooms.indices) {
             if (RoomsMap.rooms[i].latitude == marker?.position?.latitude) {
-                RoomsMap.rooms[i].roomId?.let {
+                RoomsMap.rooms[i].roomID?.let {
 
                     if (presenter.isJoin(it)) {
                         joinBtn?.visibility = View.GONE
@@ -340,17 +333,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
                         "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} " + getString(R.string.at) + " ${date.hour}:${date.minute}"
 
                     joinBtn?.setSafeOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.joinChat(RoomsMap.rooms[i].roomID!!)
                     }
                     readBtn?.setSafeOnClickListener {
-                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.readChat(RoomsMap.rooms[i].roomID!!)
                     }
 
                     joinBtn2?.setSafeOnClickListener {
-                        presenter.joinChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.joinChat(RoomsMap.rooms[i].roomID!!)
                     }
                     readBtn2?.setSafeOnClickListener {
-                        presenter.readChat(RoomsMap.rooms[i].roomId!!)
+                        presenter.readChat(RoomsMap.rooms[i].roomID!!)
                     }
                 }
             }
@@ -511,7 +504,27 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         BottomSheetUtils.setupViewPager(bottomSheetViewPager)
     }
 
+    private fun setupBottomSheetWithoutCategories() {
+        val sectionsPagerAdapter = io.moonshard.moonshard.ui.adapters.PagerAdapter(
+            childFragmentManager,
+            context,
+            io.moonshard.moonshard.ui.adapters.PagerAdapter.TabItem.LIST
+        )
+        bottomSheetViewPager?.offscreenPageLimit = 1
+        bottomSheetViewPager?.adapter = sectionsPagerAdapter
+        bottomSheetTabs?.setupWithViewPager(bottomSheetViewPager)
+        BottomSheetUtils.setupViewPager(bottomSheetViewPager)
+    }
+
     fun showCategoryBottomSheet() {
+        removeCategoryFilterBtn?.setSafeOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("", "", "", null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+            clearCategoryAdapter()
+        }
+
         bottomSheetCategory?.visibility = View.VISIBLE
         bottomSheetFind?.visibility = View.GONE
         categoryFilterName?.text = "" + getString(R.string.category) + "" + RoomsMap.category?.categoryName
@@ -525,6 +538,9 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun showDateBottomSheet() {
+        setupBottomSheetWithoutCategories()
+
+
         searchEventEt.isEnabled = false
         sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         bottomSheetTime?.visibility = View.VISIBLE
@@ -532,6 +548,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
     }
 
     fun hideDateBottomSheet() {
+        setupBottomSheet()
         searchEventEt.isEnabled = true
         sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetTime?.visibility = View.GONE
@@ -540,23 +557,47 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     fun initDateBottomSheet() {
         todayTv?.setOnClickListener {
-            searchEventEt.setText(todayTv.text.toString())
             presenter.setDateFilter(todayTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = todayTv.text.toString()
+
+            updateDateListRooms(todayTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         tomorrowTv?.setOnClickListener {
-            searchEventEt.setText(tomorrowTv.text.toString())
             presenter.setDateFilter(tomorrowTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = tomorrowTv.text.toString()
+
+            updateDateListRooms(tomorrowTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         weekendTv?.setOnClickListener {
-            searchEventEt.setText(weekendTv.text.toString())
             presenter.setDateFilter(weekendTv.text.toString())
-            clearSearch.visibility = View.VISIBLE
+
+            sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+            categoryFilterName?.text = weekendTv.text.toString()
+
+            updateDateListRooms(weekendTv.text.toString(),dateAndTime)
+
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -569,6 +610,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             )
                 .show()
         }
+
+        removeCategoryFilterBtn?.setOnClickListener {
+            RoomsMap.clearFilters()
+            presenter.getRooms("", "", "", null)
+            hideCategoryBottomSheet()
+            updateListRooms()
+            clearSearch()
+            setupBottomSheet()
+        }
     }
 
     // установка обработчика выбора даты
@@ -577,10 +627,26 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             dateAndTime.set(Calendar.YEAR, year)
             dateAndTime.set(Calendar.MONTH, monthOfYear)
             dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH),dateAndTime.get(Calendar.MONTH))
-            presenter.setDateFilter("" + getString(R.string.select_date) + "",dateAndTime)
-            clearSearch.visibility = View.VISIBLE
+            setDate(dateAndTime.get(Calendar.DAY_OF_MONTH), dateAndTime.get(Calendar.MONTH))
+
+            presenter.setDateFilter(getString(R.string.select_date), dateAndTime)
+
+            bottomSheetCategory?.visibility = View.VISIBLE
+            activityBottomSheetContent?.visibility = View.VISIBLE
+            bottomSheetTime?.visibility = View.GONE
+            bottomSheetFind?.visibility = View.GONE
+
+            removeCategoryFilterBtn?.setOnClickListener {
+                RoomsMap.clearFilters()
+                presenter.getRooms("", "", "", null)
+                hideCategoryBottomSheet()
+                updateListRooms()
+                clearSearch()
+                setupBottomSheet()
+            }
+            updateDateListRooms(getString(R.string.select_date), dateAndTime)
             sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+
         }
 
     private fun setDate(dayOfMonth: Int, month: Int) {
@@ -619,7 +685,7 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
         defaultBottomSheet?.visibility = View.GONE
         infoBottomSheet?.visibility = View.VISIBLE
 
-        if (presenter.isJoin(roomPin.roomId!!)) {
+        if (presenter.isJoin(roomPin.roomID!!)) {
             joinBtn?.visibility = View.GONE
             joinBtn2?.visibility = View.GONE
         } else {
@@ -640,17 +706,17 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
             "${date.dayOfMonth} ${date.getMonthString(date.month)} ${date.year} г. в ${date.hour}:${date.minute}"
 
         joinBtn?.setSafeOnClickListener {
-            presenter.joinChat(roomPin.roomId!!)
+            presenter.joinChat(roomPin.roomID!!)
         }
         readBtn?.setSafeOnClickListener {
-            presenter.readChat(roomPin.roomId!!)
+            presenter.readChat(roomPin.roomID!!)
         }
 
         joinBtn2?.setSafeOnClickListener {
-            presenter.joinChat(roomPin.roomId!!)
+            presenter.joinChat(roomPin.roomID!!)
         }
         readBtn2?.setSafeOnClickListener {
-            presenter.readChat(roomPin.roomId!!)
+            presenter.readChat(roomPin.roomID!!)
         }
     }
 
@@ -690,10 +756,15 @@ class MapFragment : MvpAppCompatFragment(), MapMainView, OnMapReadyCallback,
 
     fun updateListRooms() {
         val fragment =
-            fragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+            childFragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
         (fragment as? ListChatsMapFragment)?.updateChats()
     }
 
+    fun updateDateListRooms(date:String,calendar: Calendar?=null) {
+        val fragment =
+            childFragmentManager?.findFragmentByTag("android:switcher:" + bottomSheetViewPager.id + ":" + 0)
+        (fragment as? ListChatsMapFragment)?.updateDateListRooms(date,calendar)
+    }
 
     override fun onDestroyView() {
         try {

@@ -3,8 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.TicketsManageFragment">
+        android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolBar"
@@ -53,6 +52,7 @@
 
 
     <LinearLayout
+            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
@@ -144,6 +144,7 @@
     </LinearLayout>
 
     <LinearLayout
+            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
@@ -196,6 +197,7 @@
                 android:layout_height="1dp"/>
 
         <RelativeLayout
+                android:id="@+id/walletBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp">

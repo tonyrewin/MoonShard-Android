@@ -22,7 +22,7 @@
 
     <RelativeLayout
             android:id="@+id/mainLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="83dp"
             android:orientation="vertical"
             android:paddingStart="16dp">
@@ -79,11 +79,6 @@
                 android:layout_alignStart="@+id/usersIv"
                 tools:text="@string/info_content_text110" />
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="#F9F9F9" />
 
     </RelativeLayout>
 
@@ -102,20 +97,19 @@
                     android:background="@drawable/button_background_transparent"
                     android:textColor="#0075FF"
                     android:id="@+id/readBtn2"
-                    style="@style/Theme.MaterialComponents.Light"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="159dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/to_read" />
 
             <Button
+                    style="?android:attr/borderlessButtonStyle"
                     android:fontFamily="@font/roboto_medium"
                     android:layout_marginStart="8dp"
                     android:layout_toRightOf="@+id/readBtn"
                     android:layout_below="@+id/mainLayout"
                     android:id="@+id/joinBtn2"
-                    style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="159dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -252,11 +246,11 @@
             android:orientation="horizontal">
 
         <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:fontFamily="@font/roboto_medium"
                 android:background="@drawable/button_background_transparent"
                 android:textColor="#0075FF"
                 android:id="@+id/readBtn"
-                style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="159dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -264,12 +258,12 @@
                 android:text="@string/to_read" />
 
         <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:fontFamily="@font/roboto_medium"
                 android:layout_marginStart="8dp"
                 android:layout_toRightOf="@+id/readBtn"
                 android:layout_below="@+id/mainLayout"
                 android:id="@+id/joinBtn"
-                style="@style/Theme.MaterialComponents.Light"
                 android:layout_width="159dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"

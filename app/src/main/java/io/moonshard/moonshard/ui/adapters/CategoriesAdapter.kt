@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,7 @@ import io.moonshard.moonshard.db.ChooseChatRepository
 import io.moonshard.moonshard.models.api.Category
 
 interface CategoryListener {
-    fun clickChat(categoryName: Category)
+    fun click(categoryName: Category)
 }
 
 class CategoriesAdapter(val listener: CategoryListener, private var categories: ArrayList<Category>) :
@@ -66,7 +65,7 @@ class CategoriesAdapter(val listener: CategoryListener, private var categories: 
         holder.itemView.setSafeOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
-            listener.clickChat(categories[position])
+            listener.click(categories[position])
         }
     }
 

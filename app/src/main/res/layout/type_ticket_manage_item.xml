@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:id="@+id/mainLayout"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -52,19 +53,20 @@
                 android:textSize="12sp"/>
 
         <TextView
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/quantityTv"
                 android:id="@+id/descriptionTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleType"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="9dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toLeftOf="@+id/quantityTv"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/ticket_for_all_days_of"
                 android:textColor="#9B9BB6"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="invisible" />
 
         <ImageView
                 android:id="@+id/arrowImageView"

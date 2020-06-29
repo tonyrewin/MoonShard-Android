@@ -18,7 +18,7 @@ import io.moonshard.moonshard.presentation.view.MapMainView
 import io.moonshard.moonshard.repository.ChatListRepository
 import io.moonshard.moonshard.ui.fragments.map.RoomsMap
 import io.moonshard.moonshard.usecase.MucUseCase
-import io.moonshard.moonshard.usecase.RoomsUseCase
+import io.moonshard.moonshard.usecase.EventsUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -34,12 +34,12 @@ import java.util.*
 @InjectViewState
 class MapPresenter : MvpPresenter<MapMainView>() {
 
-    private var useCase: RoomsUseCase? = null
+    private var useCase: EventsUseCase? = null
     private var mucUseCase: MucUseCase? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        useCase = RoomsUseCase()
+        useCase = EventsUseCase()
         mucUseCase = MucUseCase()
     }
 
@@ -105,7 +105,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
     }
 
     fun getCardInfo(event: RoomPin) {
-        mucUseCase?.getRoomInfo(event.roomId!!)?.subscribeOn(Schedulers.io())
+        mucUseCase?.getRoomInfo(event.roomID!!)?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
                 try {
@@ -122,7 +122,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                 }
             }, {
                 viewState?.showEventName(event.name!!)
-                setAvatar(event.roomId!!, event.name!!)
+                setAvatar(event.roomID!!, event.name!!)
                 Logger.d(it)
             })
         val distance = (calculationByDistance(
@@ -210,8 +210,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
                     MainApplication.getXmppConnection().addUserStatusListener(jid)
                 }, 2000)
             }
-
-
 
             val chatEntity = ChatEntity(
                 jid = jid,
@@ -323,6 +321,7 @@ class MapPresenter : MvpPresenter<MapMainView>() {
             }
         }
         RoomsMap.isFilter = true
+        RoomsMap.isFilterDate = true
     }
 
     override fun onDestroy() {
@@ -330,5 +329,6 @@ class MapPresenter : MvpPresenter<MapMainView>() {
         // todo
         //  made clear filter when close map fragment
         RoomsMap.clearFilters()
+        compositeDisposable.clear()
     }
 }

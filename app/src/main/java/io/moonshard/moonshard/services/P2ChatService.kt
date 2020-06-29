@@ -23,8 +23,6 @@ import io.moonshard.moonshard.models.LocalChat
 import io.moonshard.moonshard.models.MatchModel
 import io.moonshard.moonshard.models.MessageModel
 import io.moonshard.moonshard.ui.activities.auth.RegisterActivity
-import p2mobile.P2mobile
-import p2mobile.P2mobile.start
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -35,6 +33,10 @@ import kotlin.collections.ArrayList
 
 
 class P2ChatService : Service() {
+    override fun onBind(intent: Intent?): IBinder? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    /*
     private val newMatchEventName = "NewMatchEvent"
     private val newMatchMemberEventName = "newMatchMemberEventName"
     private val newMessageEventName = "NewMessageEvent"
@@ -280,4 +282,6 @@ class P2ChatService : Service() {
     companion object {
         var isServiceRunning = false
     }
+
+ */
 }

@@ -44,25 +44,18 @@ class AddAdminFragment : MvpAppCompatFragment(),
         addAdminBtn?.setSafeOnClickListener {
             presenter.addAdmin(nameTv.text.toString(),idChat)
         }
+
+        back?.setSafeOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     override fun showError(error: String) {
         Toast.makeText(context!!, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showChatScreen() {
-        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
-
-        /*
-        val bundle = Bundle()
-        bundle.putString("chatId", idChat)
-        val mainChatFragment = MainChatFragment()
-        mainChatFragment.arguments = bundle
-        val ft = activity?.supportFragmentManager?.beginTransaction()
-        ft?.replace(R.id.container, mainChatFragment)?.hide(this)?.addToBackStack(null)
-            ?.commit()
-         */
+    override fun showChatScreen(jid:String) {
+        (parentFragment as? MainChatFragment)?.showAdminPermissionFragment(idChat,jid)
+        //(parentFragment as? MainChatFragment)?.moveAndClearPopBackStackChild()
     }
-
-
 }

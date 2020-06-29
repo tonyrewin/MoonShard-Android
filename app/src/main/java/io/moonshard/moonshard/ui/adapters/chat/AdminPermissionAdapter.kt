@@ -13,7 +13,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.models.AdminPermission
 
 interface AdminPermissionListener {
-    fun click()
+    fun click(role:String)
 }
 
 class AdminPermissionAdapter(
@@ -37,8 +37,13 @@ class AdminPermissionAdapter(
         holder.itemView.setSafeOnClickListener {
             focusedItem = position
             notifyDataSetChanged()
-            listener.click()
+            listener.click(adminPermission[position].type)
         }
+    }
+
+    fun update(type:Int){
+        focusedItem = type
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = adminPermission.size
@@ -53,7 +58,7 @@ class AdminPermissionAdapter(
         )
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var type: TextView? = view.findViewById(R.id.nameEvent)
+        internal var type: TextView? = view.findViewById(R.id.typeRoleAdmin)
         internal var descriptionTv: TextView? = view.findViewById(R.id.descriptionTv)
         internal var mainLayout: RelativeLayout? = view.findViewById(R.id.mainLayout)
         internal var choosedIv: ImageView? = view.findViewById(R.id.choosedIv)

@@ -6,4 +6,5 @@ interface PasswordRecoveryView:MvpView {
     fun showProgressBar()
     fun hideProgressBar()
     fun showError(error: String)
+    fun back()
 }

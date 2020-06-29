@@ -1,9 +1,7 @@
 package io.moonshard.moonshard.ui.adapters.wallet
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,24 +9,31 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.orhanobut.logger.Logger
 import io.moonshard.moonshard.MainApplication
 import io.moonshard.moonshard.R
-import io.moonshard.moonshard.models.RosterEntryCustom
+import io.moonshard.moonshard.models.jabber.Recipient
+import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.roster.RosterEntry
+import org.jivesoftware.smackx.vcardtemp.VCardManager
+import org.jxmpp.jid.impl.JidCreate
 import trikita.log.Log
 
 
 interface RecipientWalletListener {
-    fun click()
+    fun click(asUnescapedString: String)
 }
 
-class RecipientWalletAdapter(val listener: RecipientWalletListener, private var contacts: ArrayList<RosterEntry>) :
-    RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>()  {
+class RecipientWalletAdapter(
+    val listener: RecipientWalletListener,
+    private var contacts: ArrayList<Recipient>
+) :
+    RecyclerView.Adapter<RecipientWalletAdapter.ViewHolder>() {
 
     var selectedPosition = -1
-    var lastItem = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -42,26 +47,25 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.checkBox.setOnCheckedChangeListener(null)
 
-        holder.checkBox.isChecked = selectedPosition == position
+        holder.checkBox.isChecked = holder.adapterPosition==selectedPosition
 
         holder.checkBox.setOnCheckedChangeListener { view, isChecked ->
-            selectedPosition = position
+            listener.click(contacts[holder.adapterPosition].jid)
+            selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
         }
 
-        holder.nameTv?.text = contacts[position].name
+        holder.nameTv?.text = contacts[holder.adapterPosition].nickName
+        setAvatar(contacts[position].jid, contacts[holder.adapterPosition].nickName, holder.avatar)
 
-        setAvatar(contacts[position].jid!!.asUnescapedString(),contacts[position].name,holder.avatar)
-
-        //todo hardcore
-        if(position==contacts.size-1){
+        if (position == contacts.size - 1) {
             holder.viewLine?.visibility = View.GONE
         }
     }
 
     override fun getItemCount(): Int = contacts.size
 
-    fun setContacts(contacts: ArrayList<RosterEntry>) {
+    fun setContacts(contacts: ArrayList<Recipient>) {
         this.contacts = contacts
         notifyDataSetChanged()
     }
@@ -86,7 +90,7 @@ class RecipientWalletAdapter(val listener: RecipientWalletListener, private var 
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var checkBox:CheckBox = view.findViewById(R.id.checkBox)
+        internal var checkBox: CheckBox = view.findViewById(R.id.checkBox)
         internal var avatar: ImageView? = view.findViewById(R.id.contactAvatar)
         internal var statusTv: TextView? = view.findViewById(R.id.statusTv)
         internal var nameTv: TextView? = view.findViewById(R.id.nameTv)

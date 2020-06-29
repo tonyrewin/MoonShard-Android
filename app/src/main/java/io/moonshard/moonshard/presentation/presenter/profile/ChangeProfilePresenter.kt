@@ -34,6 +34,7 @@ class ChangeProfilePresenter : MvpPresenter<ChangeProfileView>() {
             val card = vm.loadVCard()
             card.nickName = nickName
             if (bytes != null && mimeType != null) {
+                //todo баг с размером
                 card.setAvatar(bytes, mimeType)
             }
             //card.setField("DESCRIPTION",description)

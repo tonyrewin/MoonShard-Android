@@ -29,7 +29,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
     @InjectPresenter
     lateinit var presenter: RegisterPresenter
 
-    var isRegistration = false
+    var isRegistrationSuccess = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +38,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
             setTheme(R.style.AppTheme)
             startIntro()
         } else {
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-
-            startService() // if we want open this screen when logout we must use handle 5 sec
             isAuth()
+/*
             alreadyHaveText?.setSafeOnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
@@ -67,6 +65,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
                     isSecurity = true
                 }
             }
+ */
         }
     }
 
@@ -79,21 +78,12 @@ class RegisterActivity : BaseActivity(), RegisterView {
         startActivity(intent)
     }
 
-    override fun onSuccess() {
-        isRegistration = true
-        saveLoginCredentials(
-            editEmail.text.toString() + "@moonshard.tech",
-            editPassword.text.toString()
-        )
-        startService()
-    }
-
     private fun saveLoginCredentials(email: String, password: String) {
         SecurePreferences.setValue("jid", email)
         SecurePreferences.setValue("pass", password)
     }
 
-    private fun startService() {
+    override fun startService() {
         startService(Intent(applicationContext, XMPPConnectionService::class.java))
     }
 
@@ -101,11 +91,19 @@ class RegisterActivity : BaseActivity(), RegisterView {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onSuccess() {
+
+    }
+
+    override fun successRegistration() {
+        isRegistrationSuccess = true
+    }
+
     override fun onError(e: Exception) {
         runOnUiThread {
             hideLoader()
-            auth()
-            /*
+            setTheme(R.style.AppTheme)
+
             when (e) {
                 is XMPPException -> {
                     showError("Произошла ошибка на сервере")
@@ -120,8 +118,18 @@ class RegisterActivity : BaseActivity(), RegisterView {
                     e.message?.let { showError(it) } ?: showError("Произошла ошибка")
                 }
             }
+        }
+    }
 
-             */
+    override fun onAuthenticated() {
+        setTheme(R.style.AppTheme)
+        runOnUiThread {
+            hideLoader()
+            if (isRegistrationSuccess) {
+                showStartProfileScreen()
+            } else {
+                showContactsScreen()
+            }
         }
     }
 
@@ -138,29 +146,6 @@ class RegisterActivity : BaseActivity(), RegisterView {
         startActivity(intentStartProfileActivity)
     }
 
-    private fun auth() {
-        val logged = SecurePreferences.getBooleanValue("logged_in", false)
-        if (logged) {
-            setTheme(R.style.AppTheme)
-            showContactsScreen()
-        } else {
-            //setTheme(R.style.AppTheme)
-            //setContentView(R.layout.activity_register)
-        }
-    }
-
-    override fun onAuthenticated() {
-        setTheme(R.style.AppTheme)
-        runOnUiThread {
-            hideLoader()
-            if (isRegistration) {
-                showStartProfileScreen()
-            } else {
-                showContactsScreen()
-            }
-        }
-    }
-
     override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
@@ -173,12 +158,52 @@ class RegisterActivity : BaseActivity(), RegisterView {
         progressBarReg?.visibility = View.GONE
     }
 
-    //need made refactor
     fun isAuth(){
         val logged = SecurePreferences.getBooleanValue("logged_in", false)
         if (!logged) {
-            setTheme(R.style.AppTheme)
-            setContentView(R.layout.activity_register)
+           setRegisterLayout()
+        }else{
+            presenter.login()
         }
     }
+
+    override fun setRegisterLayout(){
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
+        setTheme(R.style.AppTheme)
+        setContentView(R.layout.activity_register)
+
+        alreadyHaveText?.setSafeOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
+        registerBtn?.setSafeOnClickListener {
+            if (nickNameEt?.text.toString().contains("@")) {
+                showError("Вы ввели недопустимый символ")
+            } else {
+                val actualUserName = nickNameEt.text.toString() + "@moonshard.tech"
+                showLoader()
+                presenter.registerOnServer(actualUserName, editPassword.text.toString())
+            }
+        }
+
+        val content = SpannableString("Уже есть аккаунт? Войти")
+        content.setSpan(UnderlineSpan(), 18, content.length, 0)
+        alreadyHaveText?.text = content
+
+        var isSecurity = true
+        visiblePassBtn?.setSafeOnClickListener {
+            if (isSecurity) {
+                editPassword?.transformationMethod = null
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_on)
+                isSecurity = false
+            } else {
+                editPassword?.transformationMethod = PasswordTransformationMethod()
+                visiblePassBtn?.setImageResource(R.drawable.ic_pass_off)
+                isSecurity = true
+            }
+        }
+    }
+
 }

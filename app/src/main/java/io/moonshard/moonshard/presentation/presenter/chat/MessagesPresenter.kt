@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java9.util.concurrent.CompletableFuture
 import java9.util.stream.StreamSupport
 import moxy.InjectViewState
@@ -64,7 +65,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
                 loadLocalMessages()
                 // loadMoreMessages() // FIXME
             }, {
-                com.orhanobut.logger.Logger.d(it.message)
+                Logger.d(it.message)
             })
         MessageRepository.updateRealUnreadMessagesCount(chatId).subscribe() // FIXME
     }
@@ -89,7 +90,6 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
 
     fun join() {
         try {
-
             val vm = VCardManager.getInstanceFor(MainApplication.getXmppConnection().connection)
             val card = vm.loadVCard()
             val nickName = Resourcepart.from(card.nickName)
@@ -356,7 +356,7 @@ class MessagesPresenter : MvpPresenter<MessagesView>() {
             viewState.setMessages(genericMessages, true)
             viewState.hideProgressBar()
         }, {
-            com.orhanobut.logger.Logger.d(it.message)
+            Logger.d(it.message)
         })
     }
 

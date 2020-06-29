@@ -33,6 +33,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     @InjectPresenter
     lateinit var presenter: EventInfoPresenter
 
+    var typeRole:String?=null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,12 +46,13 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
         var idChat = ""
+
+        initAdapter()
+
         arguments?.let {
             idChat = it.getString("chatId")
             presenter.getRoomInfo(idChat)
-            presenter.getOrganizerInfo(idChat)
         }
 
         backBtn?.setSafeOnClickListener {
@@ -57,7 +60,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
 
         changeChatInfoBtn?.setSafeOnClickListener {
-            showManageEventScreen(idChat)
+            showManageEventScreen(idChat,typeRole)
         }
 
         leaveLayout?.setSafeOnClickListener {
@@ -73,16 +76,14 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
     }
 
-    override fun showChangeChatButton(isShow: Boolean) {
-      //  changeChatInfoBtn?.visibility = View.GONE
-
-
-        if(isShow){
+    override fun showChangeChatButton(isShow: Boolean, type: String?) {
+        //  changeChatInfoBtn?.visibility = View.GONE
+        typeRole = type
+        if (isShow) {
             changeChatInfoBtn?.visibility = View.VISIBLE
-        }else{
+        } else {
             changeChatInfoBtn?.visibility = View.GONE
         }
-
     }
 
     override fun hideLine() {
@@ -99,8 +100,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         (parentFragment as? MainChatFragment)?.showInviteNewUserScreen(idChat)
     }
 
-    private fun showManageEventScreen(idChat: String) {
-        (parentFragment as? MainChatFragment)?.showManageEventScreen(idChat)
+    private fun showManageEventScreen(idChat: String, typeRole: String?) {
+        (parentFragment as? MainChatFragment)?.showManageEventScreen(idChat,typeRole)
     }
 
     fun showProfileUser(jid: String) {
@@ -124,7 +125,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
             override fun remove(member: Occupant) {
 
             }
-        }, arrayListOf(), false)
+        }, arrayListOf(), false, typeRole)
     }
 
     override fun showError(error: String) {
@@ -139,7 +140,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     override fun showData(
         name: String, occupantsCount: Int,
         onlineMembersValue: Int, latLngLocation: LatLng?,
-        category: String, description: String
+        category: String, description: String, address: String?
     ) {
         //val location = getAddress(latLngLocation)
         val distance = calculationByDistance(latLngLocation)
@@ -147,7 +148,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         groupNameInfoContentTv?.text = name
         valueMembersInfoTv?.text = "$occupantsCount " + getString(R.string.members) + ", $onlineMembersValue " + getString(R.string.online)
         locationValueInfoTv?.text = distance
-        address?.text = getAddress(latLngLocation)
+        addressTv?.text = address
         //categoryInfoTv?.text = category
         descriptionInfoTv?.text = description
 
@@ -156,8 +157,8 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
     }
 
-    override fun setStartDate(date:String) {
-                startDateEvent.text = date
+    override fun setStartDate(date: String) {
+        startDateEvent.text = date
     }
 
     override fun setAvatar(avatar: Bitmap?) {

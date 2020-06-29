@@ -14,8 +14,11 @@ import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smack.XMPPException
 import org.jivesoftware.smackx.muc.MultiUserChat
 import org.jivesoftware.smackx.muc.MultiUserChatManager
+import org.jivesoftware.smackx.muc.Occupant
 import org.jivesoftware.smackx.vcardtemp.VCardManager
 import org.jxmpp.jid.impl.JidCreate
+import java.util.*
+import kotlin.Comparator
 
 
 @InjectViewState
@@ -35,7 +38,7 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             viewState?.showName(info.name)
             viewState?.showDescription(info.description)
             viewState?.showOccupantsCount(info.occupantsCount.toString())
-            viewState?.showAdminsCount(muc.moderators.size.toString())
+            viewState?.showAdminsCount(removeDuplicates(muc.moderators).size.toString())
             viewState?.hideProgressBar()
         } catch (e: Exception) {
             viewState?.hideProgressBar()
@@ -136,5 +139,19 @@ class ManageChatPresenter : MvpPresenter<ManageChatView>() {
             // TODO: move this code to view
             viewState?.showToast("An error has occured on server")
         }
+    }
+    private fun removeDuplicates(list: List<Occupant>?): ArrayList<Occupant> {
+        val s: MutableSet<Occupant> = TreeSet<Occupant>(Comparator<Occupant?> { o1, o2 ->
+            if(o1!!.jid.asUnescapedString().split("/")[0]==o2!!.jid.asUnescapedString().split("/")[0]){
+                0
+            }else{
+                1
+            }
+        })
+        s.addAll(list!!)
+
+        val newArray = arrayListOf<Occupant>()
+        newArray.addAll(s)
+        return newArray
     }
 }

@@ -2,15 +2,16 @@ package io.moonshard.moonshard.ui.fragments.profile.wallet.transacations
 
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import de.adorsys.android.securestoragelibrary.SecurePreferences
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.transactions.ConfirmTransactionPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.transactions.ConfirmTransactionView
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
 import kotlinx.android.synthetic.main.fragment_confirm_transaction.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -46,7 +47,32 @@ class ConfirmTransactionFragment : MvpAppCompatFragment(),
             }
         }
 
-       // notCorrectPassword
+        closeCrossBtn?.setSafeOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
 
+
+        buyTicketBtn?.setSafeOnClickListener {
+            val password = SecurePreferences.getStringValue("pass", null)
+            if (password == editPassword.text.toString()) {
+                when {
+                    parentFragmentManager.findFragmentByTag("WithdrawWalletFragment") != null -> {
+                        val fragment = (parentFragmentManager.findFragmentByTag("WithdrawWalletFragment") as? WithdrawWalletFragment)
+                        fragment?.confirmTransaction()
+                        parentFragmentManager.popBackStack()
+                    }
+                    parentFragmentManager.findFragmentByTag("TransferWalletFragment") != null -> {
+                        val fragment = (parentFragmentManager.findFragmentByTag("TransferWalletFragment") as? TransferWalletFragment)
+                        fragment?.confirmTransaction()
+                        parentFragmentManager.popBackStack()
+                    }
+                    else -> {
+
+                    }
+                }
+            }else{
+                notCorrectPassword?.visibility = View.VISIBLE
+            }
+        }
     }
 }

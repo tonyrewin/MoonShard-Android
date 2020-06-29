@@ -1,140 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_marginTop="9dp"
-        android:paddingBottom="5dp"
-        android:layout_marginRight="12dp"
-        android:clipToPadding="false">
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:paddingRight="12dp"
+        android:paddingBottom="5dp">
 
     <LinearLayout
-            android:layout_marginStart="58dp"
-            tools:visibility="visible"
             android:id="@+id/layoutMessage"
-            android:orientation="vertical"
-            android:layout_alignParentRight="true"
-            android:elevation="2dp"
-            android:background="@drawable/my_message"
-            android:paddingVertical="10dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="58dp"
+            android:background="@drawable/my_message"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            tools:visibility="visible">
 
         <ImageView
-                android:visibility="gone"
-                android:scaleType="fitXY"
                 android:id="@+id/fileIv"
                 android:layout_width="270dp"
                 android:layout_height="152dp"
+                android:scaleType="fitXY"
+                android:visibility="gone"
                 tools:src="@drawable/palmy" />
 
-    <TextView
-            android:layout_gravity="right"
-            android:layout_below="@+id/fileIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/message_body"
-            android:textColor="#333333"
-            android:padding="10dp"
-            android:textSize="16sp"
-            tools:text="@string/p"
-            />
+        <TextView
+                android:id="@+id/message_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fileIv"
+                android:layout_gravity="right"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                tools:text="P" />
 
     </LinearLayout>
 
 
     <com.google.android.material.imageview.ShapeableImageView
-            android:adjustViewBounds="true"
-            android:layout_marginStart="58dp"
-            android:elevation="2dp"
-            android:visibility="gone"
+            android:id="@+id/mainImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:id="@+id/mainImage"
-            tools:src="@drawable/palmy"
-            android:scaleType="fitXY"
+            android:layout_marginStart="58dp"
+            android:adjustViewBounds="true"
+            android:elevation="2dp"
             android:maxHeight="250dp"
             android:minWidth="300dp"
-            android:minHeight="200dp"/>
+            android:minHeight="200dp"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            tools:src="@drawable/palmy" />
 
     <RelativeLayout
-            android:layout_marginStart="58dp"
-            android:visibility="gone"
             android:id="@+id/layoutFile"
-            android:layout_alignParentRight="true"
-            android:elevation="2dp"
-            android:background="@drawable/my_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="58dp"
+            android:background="@drawable/my_message"
+            android:elevation="2dp"
+            android:visibility="gone">
 
 
         <RelativeLayout
-                android:layout_centerVertical="true"
-                android:layout_marginStart="17dp"
                 android:id="@+id/iconLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="17dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                    android:src="#2ECBDA"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp"
+                    android:src="#2ECBDA" />
 
             <ImageView
                     android:id="@+id/statusFileIv"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_download_file"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_download_file" />
 
             <ProgressBar
                     android:id="@+id/progressBarFile"
-                    android:visibility="gone"
-                    android:layout_marginStart="-4dp"
-                    android:layout_marginBottom="-4dp"
-                    android:layout_marginTop="-4dp"
-                    android:indeterminateDrawable="@drawable/progress_bar_file"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="-4dp"
+                    android:indeterminateDrawable="@drawable/progress_bar_file"
+                    android:visibility="gone" />
 
         </RelativeLayout>
 
         <TextView
-                android:maxLines="1"
-                android:textSize="16sp"
-                android:layout_marginStart="13dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="5dp"
                 android:id="@+id/nameFile"
-                android:layout_toEndOf="@+id/iconLayout"
-                android:textStyle="bold"
-                android:textColor="#333333"
-                android:lineSpacingExtra="0sp"
-                android:gravity="top"
-                tools:text="@string/apprelease"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_toEndOf="@+id/iconLayout"
+                android:gravity="top"
+                android:lineSpacingExtra="0sp"
+                android:maxLines="1"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="@string/apprelease" />
 
 
         <TextView
-                android:maxLines="1"
-                android:layout_marginStart="13dp"
-                android:textSize="16sp"
-                android:layout_marginBottom="15dp"
-                android:textColor="#9B9BB6"
-                android:lineSpacingExtra="2sp"
-                android:translationY="-0.97sp"
                 android:id="@+id/sizeFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/nameFile"
+                android:layout_marginStart="13dp"
+                android:layout_marginBottom="15dp"
                 android:layout_toRightOf="@+id/iconLayout"
                 android:gravity="top"
-                tools:text="@string/my_message_text18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:lineSpacingExtra="2sp"
+                android:maxLines="1"
+                android:textColor="#9B9BB6"
+                android:textSize="16sp"
+                android:translationY="-0.97sp"
+                tools:text="105 MB APK" />
 
 
     </RelativeLayout>

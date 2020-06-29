@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
-        tools:context=".ui.fragments.mychats.chat.info.tickets.statics.NotUsedTicketsFragment">
+        tools:context=".ui.fragments.mychats.chat.info.ticketSales.statics.NotUsedTicketsFragment">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -41,6 +41,18 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:text="@string/search_by_ticket_number"
                         android:textColor="#333333"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/searchBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="17dp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Искать"
+                        android:textColor="#0075FF"
                         android:textSize="14sp" />
 
             </RelativeLayout>

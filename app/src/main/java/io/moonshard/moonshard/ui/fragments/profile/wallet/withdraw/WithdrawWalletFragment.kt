@@ -3,17 +3,21 @@ package io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-
+import android.widget.Toast
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.withdraw.WithdrawWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.withdraw.WithdrawWalletView
+import io.moonshard.moonshard.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_withdraw_wallet.*
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.backBtn
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.balanceTv
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.moneyValue
+import kotlinx.android.synthetic.main.fragment_withdraw_wallet.nextBtn
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
@@ -35,7 +39,7 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //important for edit text
-        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,20 +52,54 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
         moneyValue.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
-                if(s.isEmpty()){
+                if (s.isEmpty()) {
                     nextBtn.setBackgroundResource(R.drawable.ic_fill_up_disable)
-                }else{
+                } else {
                     nextBtn.setBackgroundResource(R.drawable.ic_fill_up_enable)
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
             }
         })
+
+        nextBtn?.setSafeOnClickListener {
+            (activity as MainActivity).showConfirmTransactionFragment(this)
+        }
+
+        presenter.getBalance()
+    }
+
+    override fun showBalance(balance: String) {
+        balanceTv?.text = "$balance ₽"
+    }
+
+    fun confirmTransaction() {
+        presenter.cashOut(cardNumberEt.text.toString(), moneyValue.text.toString())
+    }
+
+    override fun showSuccessScreen() {
+        (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+    }
+
+    override fun showToast(text: String) {
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgressBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        progressBar?.visibility = View.GONE
     }
 }

@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp"
-            android:text="@string/balto_joined_the_chat"/>
+            android:text="balto_joined_the_chat"/>
 
     <TextView
             android:visibility="gone"

@@ -186,7 +186,7 @@
                             android:layout_marginTop="19dp"
                             android:layout_marginEnd="14dp"
                             android:layout_marginBottom="15dp"
-                            android:text="@string/december_13th"
+                            android:text="december_13th"
                             android:textColor="#8A000000"
                             android:textSize="14sp" />
 
@@ -220,7 +220,7 @@
                         android:layout_gravity="right"
                         android:layout_marginEnd="14dp"
                         android:layout_marginBottom="15dp"
-                        android:text="text173"
+                        android:text="3 days"
                         android:textColor="#8A000000"
                         android:textSize="14sp" />
 

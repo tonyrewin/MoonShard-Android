@@ -67,7 +67,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="7 april, thursday"
+                android:text="7 April, Thursday"
                 android:textColor="#9B9BB6"
                 android:textSize="12sp" />
 

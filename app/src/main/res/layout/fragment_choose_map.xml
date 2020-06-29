@@ -138,7 +138,7 @@
 
         <TextView
                 android:layout_marginTop="4dp"
-                tools:text="@string/sosnichnaya_street_11k1"
+                tools:text="sosnichnaya_street_11k1"
                 android:fontFamily="@font/roboto_regular"
                 android:id="@+id/addressTv"
                 android:layout_width="wrap_content"

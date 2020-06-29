@@ -54,7 +54,7 @@
                 android:layout_below="@+id/startDateTicket"
                 android:layout_marginStart="9dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/moscow_mutabor_club"
+                android:text="moscow_mutabor_club"
                 android:textColor="#0075FF"
                 android:textSize="14sp" />
 

@@ -162,7 +162,6 @@
     <string name="location">Location</string>
     <string name="parkovaya_street_odintsovo_moscow_region">Parkovaya Street, Odintsovo, Moscow Region</string>
     <string name="about_chat">About chat</string>
-    <string name="we_are_drinking_pivas_at">We are drinking pivas at the monument to Griboedov. We drop off a hundred parts for a three-liter boobs!</string>
 
     <!-- /bottom_sheet_time.xml -->
 
@@ -483,7 +482,7 @@
     <string name="parterre_ticket">Parterre ticket</string>
     <string name="tickets_left">Tickets left</string>
     <string name="link_was_sent">A link was sent to the given email address. Confirm your email address to get started with your wallet and purchase tickets.</string>
-    <string name="recipent_card_number">Recipient's card number</string>
+    <string name="recipent_card_number">Recipient\'s card number</string>
     <string name="transfer_funds">Transfer funds</string>
     <string name="verification">Verification</string>
 
@@ -496,4 +495,9 @@
     <string name="withdrawal_of_funds">Withdrawal of funds</string>
 
     <string name="enter_a_name">Enter a name</string>
+
+    <string name="change_password">Change password</string>
+    <string name="recipient">Recipient</string>
+    <string name="email">Email</string>
+    <string name="ticket">Ticket</string>
 </resources>

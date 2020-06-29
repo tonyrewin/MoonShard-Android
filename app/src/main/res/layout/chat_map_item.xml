@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/valueMembersTv"
             android:layout_alignStart="@+id/usersIv"
-            tools:text="text126" />
+            tools:text="130m away" />
 
     <View
             android:layout_width="match_parent"

@@ -260,7 +260,6 @@
                             android:fontFamily="@font/roboto_regular"
                             android:text="@string/history"
                             android:gravity="center_vertical"
-                            android:text="@string/cash_flow"
                             android:textColor="#333333"
                             android:textSize="16sp" />
 

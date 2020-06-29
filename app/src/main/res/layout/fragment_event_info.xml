@@ -131,7 +131,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#9B9BB6"
                         android:textSize="12sp"
-                        tools:text="text177" />
+                        tools:text="130m away" />
 
 
             </RelativeLayout>
@@ -179,7 +179,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textColor="#333333"
                         android:textSize="16sp"
-                        tools:text="@string/december_13th" />
+                        tools:text="december_13th" />
 
                 <View
                         android:layout_width="match_parent"
@@ -457,7 +457,7 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#0075FF"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/tickets_from_300_"
+                android:text="tickets_from_300"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 

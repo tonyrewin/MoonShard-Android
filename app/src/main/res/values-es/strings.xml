@@ -160,11 +160,9 @@
     <string name="join">Unirse</string>
     <string name="about_event">Sobre el evento</string>
     <string name="start">comienzo</string>
-    <string name="december_13_2019_at_1800">13 de diciembre de 2019 a las 18:00</string>
     <string name="location">Ubicación</string>
     <string name="parkovaya_street_odintsovo_moscow_region">Parkovaya Street, Odintsovo, Región de Moscú</string>
     <string name="about_chat">Sobre el chat</string>
-    <string name="we_are_drinking_pivas_at">Estamos bebiendo pivas en el monumento a Griboedov. ¡Dejamos cien partes por unas tetas de tres litros!</string>
     <!-- /bottom_sheet_time.xml -->
 
     <!-- /category_item.xml -->
@@ -208,7 +206,6 @@
     <!-- /fragment_change_profile.xml -->
     <string name="change_profile">Cambiar el perfil</string>
     <string name="done">Hecho</string>
-    <string name="kanaevsky">Kanaevsky</string>
     <string name="about_myself">Sobre mí</string>
     <string name="any_details_for_example_age">Cualquier detalle, por ejemplo: edad, ocupación o ciudad.</string>
 
@@ -371,7 +368,6 @@
     <!-- /recommendation_item.xml -->
 
     <!-- /system_message.xml -->
-    <string name="balto_joined_the_chat">Balto se unió al chat</string>
 
     <!-- /their_message.xml -->
     <string name="rose">Rosa</string>
@@ -427,7 +423,6 @@
 
     <!-- fragment_fill_up_wallet.xml -->
     <string name="after_refill_your_wallet">Después de rellenar su billetera, ya no necesitará ingresar las credenciales de la tarjeta</string>
-    <string name="current_balance_0_rubles">Saldo actual: 0 RUB</string>
 
     <!-- fragment_sales_ticket.xml -->
     <string name="sold">Vendido</string>
@@ -495,4 +490,8 @@
     <string name="withdrawal_of_funds">Retiro de fondos</string>
 
     <string name="enter_a_name">Ingresa un nombre</string>
+    <string name="change_password">Cambia la contraseña</string>
+    <string name="recipient">Destinatario</string>
+    <string name="email">Email</string>
+    <string name="ticket">Boleto</string>
 </resources>

@@ -231,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            tools:text="@string/we_are_drinking_pivas_at"
+            tools:text="we_are_drinking_pivas_at_Griboedov"
             android:textColor="#333333"
             android:textSize="16sp" />
 

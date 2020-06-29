@@ -92,7 +92,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="18dp"
-            tools:text="text124"
+            tools:text="14:14"
             android:textColor="#9B9BB6"
             android:textSize="14sp"
             android:visibility="invisible" />
@@ -108,7 +108,7 @@
             android:layout_marginEnd="17dp"
             android:background="@drawable/unread_message_count_background"
             android:gravity="center"
-            tools:text="text125"
+            tools:text="0"
             android:textColor="@android:color/white"
             android:visibility="invisible" />
 

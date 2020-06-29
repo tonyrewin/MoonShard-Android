@@ -207,7 +207,6 @@
     <!-- /fragment_change_profile.xml -->
     <string name="change_profile">Изменить профиль</string>
     <string name="done">Готово</string>
-    <string name="kanaevsky">Kanaevsky</string>
     <string name="about_myself">Обо мне</string>
     <string name="any_details_for_example_age">Любые детали, например: возраст, род занятий или город.</string>
 
@@ -424,7 +423,6 @@
 
     <!-- fragment_fill_up_wallet.xml -->
     <string name="after_refill_your_wallet">Пополните кошелёк \nи вам не придётся вводить данные при каждой покупке</string>
-    <string name="current_balance_0_rubles">Текущий баланс: 0 RUB</string>
 
     <!-- fragment_sales_ticket.xml -->
     <string name="sold">Продано</string>
@@ -461,7 +459,7 @@
     <!-- admin_permission_item.xml -->
     <string name="moderator">Модератор</string>
     <string name="can_remove_messages_and">Может удалять сообщения и редактировать чёрный список</string>
-    <string name="permission_level">Уровень прав</string>
+    <string name="permission_level">Уровень полномочий</string>
     
     <!-- fragment_recipient_dialog.xml -->
     <string name="select_recipient">Выбрать получателя</string>
@@ -494,4 +492,8 @@
     <string name="withdrawal_of_funds">Вывод средств</string>
 
     <string name="enter_a_name">Введите название</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="recipient">Получатель</string>
+    <string name="email">Email</string>
+    <string name="ticket">Билет</string>
 </resources>

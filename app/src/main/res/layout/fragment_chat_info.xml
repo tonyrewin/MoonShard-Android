@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/groupNameInfoContentTv"
                 android:layout_alignStart="@+id/usersIv"
-                tools:text="text153"
+                tools:text="66 members, 30 online"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/valueMembersInfoTv"
                 android:layout_alignStart="@+id/usersIv"
-                tools:text="text154" />
+                tools:text="130m away" />
 
     </RelativeLayout>
 

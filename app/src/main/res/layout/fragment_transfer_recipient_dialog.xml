@@ -48,7 +48,7 @@
                 android:id="@+id/chooseBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Выбрать" />
+                android:text="@string/select" />
 
         <TextView
                 android:textColor="#333333"
@@ -58,7 +58,7 @@
                 android:id="@+id/typeTicket"
                 android:layout_below="@+id/cancelBtn"
                 android:fontFamily="@font/roboto_regular"
-                android:text="Перевести средства»"
+                android:text="@string/transfer_funds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -76,7 +76,7 @@
                 android:background="@drawable/edittext_confirm_transaction_bg"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="Поиск"
+                android:hint="@string/search"
                 android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView

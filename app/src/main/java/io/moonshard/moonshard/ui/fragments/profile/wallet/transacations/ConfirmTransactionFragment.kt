@@ -23,6 +23,9 @@ class ConfirmTransactionFragment : MvpAppCompatFragment(),
     @InjectPresenter
     lateinit var presenter: ConfirmTransactionPresenter
 
+    private var fromEventScreen=false
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +36,10 @@ class ConfirmTransactionFragment : MvpAppCompatFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
 
         var isSecurity = true
         visiblePassBtn?.setSafeOnClickListener {
@@ -50,7 +57,6 @@ class ConfirmTransactionFragment : MvpAppCompatFragment(),
         closeCrossBtn?.setSafeOnClickListener{
             parentFragmentManager.popBackStack()
         }
-
 
         buyTicketBtn?.setSafeOnClickListener {
             val password = SecurePreferences.getStringValue("pass", null)

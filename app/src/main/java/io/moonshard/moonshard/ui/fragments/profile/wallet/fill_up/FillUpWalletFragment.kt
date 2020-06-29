@@ -13,6 +13,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.fill_up.FillUpWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.fill_up.FillUpWalletView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_fill_up_wallet.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -22,6 +23,9 @@ class FillUpWalletFragment : MvpAppCompatFragment(), FillUpWalletView {
 
     @InjectPresenter
     lateinit var presenter: FillUpWalletPresenter
+
+    private var fromEventScreen=false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +44,10 @@ class FillUpWalletFragment : MvpAppCompatFragment(), FillUpWalletView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
 
         backBtn?.setSafeOnClickListener {
             parentFragmentManager.popBackStack()
@@ -75,7 +83,12 @@ class FillUpWalletFragment : MvpAppCompatFragment(), FillUpWalletView {
     }
 
     override fun openBrowser(url: String) {
-        (activity as MainActivity).showWebViewFillUpFragment(url)
+
+        if(fromEventScreen){
+            (parentFragment as? MainChatFragment)?.showWebViewFillUpFragment(url)
+        }else{
+            (activity as MainActivity).showWebViewFillUpFragment(url)
+        }
 
         //(activity as MainActivity).showWebViewFillUpFragment(url)
         //val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

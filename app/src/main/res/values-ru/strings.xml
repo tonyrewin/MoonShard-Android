@@ -46,7 +46,6 @@
     <string name="on_the_weekend">Выходные</string>
     <string name="profile">Профиль</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Привет пустой фрагмент</string>
     <string name="snackbar_undo">Отменить</string>
     <string name="chatlist_chat_deleted">Чат был удален</string>
@@ -324,7 +323,6 @@
     <string name="just_pick_a_ticket_as">Просто выберите билет как подарок \n, а затем выберите получателя.</string>
 
     <!-- /fragment_profile.xml -->
-    <string name="kanaevsky1989">@kanaevsky1989</string>
     <string name="userexamplecom">user@example.com</string>
 
     <string name="wallet">Кошелек</string>
@@ -396,29 +394,22 @@
     <string name="write_a_message">Введите сообщение</string>
 
     <!-- /my_message.xml -->
-    <string name="my_message_text265">105 Мб APK</string>
 
     <!-- /my_ticket_item.xml -->
     <string name="parterre">Партер</string>
-    <string name="my_ticket_item_text267">021457859710</string>
 
     <!-- /recommendation_item.xml -->
-    <string name="recommendation_item_text268">234 пользователей, 30 онлайн</string>
 
     <!-- /system_message.xml -->
-    <string name="balto_joined_the_chat">Балто присоединился к чату</string>
-    <string name="system_message_text270">14:43</string>
 
     <!-- /their_message.xml -->
     <string name="rose">Роза</string>
     <string name="h">ч</string>
-    <string name="their_message_text273">105Мб APK</string>
 
     <!-- /time_item.xml -->
     <string name="time_item_text274">12 часов</string>
 
     <!-- /fragment_add_new_type_ticket.xml -->
-    <string name="entrance_ticket_save_2019">Входной билет Save 2019</string>
     <string name="ticket_type">Тип билета</string>
     <string name="enter_type">Введите тип</string>
     <string name="explanation">Пояснение</string>
@@ -440,20 +431,14 @@
     <string name="go_to_wallet">Перейти в кошелек</string>
 
     <!-- /my_message.xml -->
-    <string name="my_message_text18">105Мб APK</string>
 
     <!-- /type_ticket_manage_item.xml -->
-    <string name="type_ticket_manage_item_text20">300 ₽</string>
-    <string name="type_ticket_manage_item_text21">1000 билетов</string>
 
     <!-- /fragment_buy_tickets.xml -->
     <string name="buy_tickets">Купить билеты</string>
     <string name="close">Закрыть</string>
-    <string name="tickets_text3">3 билета</string>
 
     <!-- /ticket_buy_item.xml -->
-    <string name="ticket_buy_item_text9">300 ₽</string>
-    <string name="ticket_buy_item_text10">0</string>
 
     <!-- config_ticket_buy_item.xml -->
     <string name="one_day_ticket">Билет на один день</string>
@@ -496,7 +481,6 @@
     <string name="success">Успешно</string>
     <string name="payment_success">Оплата прошла успешно</string>
     <string name="you_can_find_your_tickets_in_your_profile">Вы можете найти ваши билеты во вкладке "Билеты" своего профиля</string>
-    <string name="withdrawn_from_the_wallet">Снято с кошелька: 1500 RUB</string>
     <string name="back_to_chat">Назад в чат</string>
     <string name="see_tickets">Смотреть билеты</string>
 
@@ -505,4 +489,41 @@
 
     <!-- fragment_wallet.xml -->
     <string name="history">История</string>
+
+    <!-- admin_permission_item.xml -->
+    <string name="moderator">Модератор</string>
+    <string name="can_remove_messages_and">Может удалять сообщения и редактировать чёрный список</string>
+    <string name="permission_level">Уровень прав</string>
+    
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select_recipient">Выбрать получателя</string>
+
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select">Выбрать</string>
+    <string name="search">Поиск</string>
+    <string name="send_season_ticket">Отправить Абонимент</string>
+
+    <!-- fragment_security.xml -->
+    <string name="set_an_additional_password">Установите дополнительный пароль для блокировки чатов. Забытый код не может быть восстановлен.</string>
+    <string name="link_was_sent">На указанный электронный адрес придет ссылка. Подтвердите свой электронный адрес чтобы начать работу с кошельком и покупкой билетов.</string>
+
+    <!-- statistic_ticket_item.xml -->
+    <string name="parterre_ticket">Билет в партер</string>
+   
+    <string name="tickets_left">Остаток билетов</string>
+
+    <string name="recipent_card_number">Номер карты получателя</string>
+
+    <string name="transfer_funds">Перевести средства</string>
+    <string name="verification">Верификация</string>
+
+    <!-- fragment_verification_email.xml -->
+    <string name="please_confirm_your_email">Подтвердите свой электронный адрес для безопасной работы.</string>
+    <string name="send_a_link">Отправить ссылку</string>
+    <string name="link_was_sent_on_given_email">На указанный электронный адрес придет ссылка. Подтвердите свой электронный адрес чтобы начать работу с кошельком и покупкой билетов.</string>
+    <string name="your_email_was_confirmed">Ваша почта подтверждена. Можете закрыть это окно.</string>
+
+    <string name="withdrawal_of_funds">Вывод средств</string>
+
+    <string name="enter_a_name">Введите название</string>
 </resources>

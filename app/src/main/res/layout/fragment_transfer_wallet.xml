@@ -37,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Перевести средства"
+                        android:text="@string/transfer_funds"
                         android:textColor="#333333"
                         android:textSize="14sp" />
 
@@ -76,7 +76,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Текущий баланс"
+                    android:text="@string/current_balance"
                     android:textColor="#6F6F6F"
                     android:textSize="14sp" />
 
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
                     android:layout_toRightOf="@+id/icon"
-                    android:text="Выбрать получателя"
+                    android:text="@string/select_recipient"
                     android:textColor="#333333"
                     android:textSize="16sp" />
 
@@ -139,7 +139,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Получатель"
+                    android:text="@string/recipient"
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
@@ -190,7 +190,7 @@
                         android:layout_alignStart="@+id/nameAdminTv"
                         android:layout_marginTop="4dp"
                         android:textColor="#0075FF"
-                        tools:text="online" />
+                        tools:text="@string/online" />
 
                 <ImageView
                         android:id="@+id/removeBtn"

@@ -51,7 +51,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="17dp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Искать"
+                        android:text="@string/search"
                         android:textColor="#0075FF"
                         android:textSize="14sp" />
 

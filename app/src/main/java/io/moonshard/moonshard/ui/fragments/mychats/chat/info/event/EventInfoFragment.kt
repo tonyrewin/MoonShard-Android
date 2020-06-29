@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -56,7 +57,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
         }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         changeChatInfoBtn?.setSafeOnClickListener {
@@ -133,8 +134,7 @@ class EventInfoFragment : MvpAppCompatFragment(), EventInfoView {
     }
 
     override fun showChatsScreen() {
-        fragmentManager?.popBackStack()
-        fragmentManager?.popBackStack()
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 
     override fun showData(

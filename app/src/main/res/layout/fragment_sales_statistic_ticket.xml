@@ -157,7 +157,7 @@
                         android:layout_toRightOf="@+id/ticketIcon"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="center_vertical"
-                        android:text="Остаток билетов"
+                        android:text="@string/tickets_left"
                         android:textColor="#333333"
                         android:textSize="16sp" />
 
@@ -169,7 +169,7 @@
                         android:layout_marginTop="16dp"
                         android:textSize="14sp"
                         android:textColor="#6F6F6F"
-                        tools:text="11 000 из 12000"
+                        tools:text="11000 / 12000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

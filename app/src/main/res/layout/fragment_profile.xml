@@ -71,7 +71,7 @@
                 android:layout_marginTop="1dp"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
-                tools:text="@string/kanaevsky1989" />
+                tools:text="@kanaevsky1989" />
 
         <TextView
                 android:id="@+id/emailTv"

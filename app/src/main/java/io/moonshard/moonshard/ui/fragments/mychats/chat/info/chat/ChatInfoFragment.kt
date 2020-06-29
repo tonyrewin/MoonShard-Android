@@ -120,8 +120,7 @@ class ChatInfoFragment : MvpAppCompatFragment(), ChatInfoView {
     }
 
     override fun showChatsScreen() {
-        fragmentManager?.popBackStack()
-        fragmentManager?.popBackStack()
+        (parentFragment as? MainChatFragment)?.moveAndClearPopBackStack()
     }
 
     override fun showData(

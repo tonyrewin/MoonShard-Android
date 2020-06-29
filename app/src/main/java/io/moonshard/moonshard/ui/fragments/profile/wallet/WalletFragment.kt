@@ -12,6 +12,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.WalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.WalletView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -22,6 +23,8 @@ class WalletFragment : MvpAppCompatFragment(),
 
     @InjectPresenter
     lateinit var presenter: WalletPresenter
+
+    private var fromEventScreen=false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,25 +38,44 @@ class WalletFragment : MvpAppCompatFragment(),
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigationBar()
 
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
         }
 
         fillUpWalletBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showFillUpWalletFragment()
+            if(fromEventScreen){
+                (parentFragment as? MainChatFragment)?.showFillUpWalletFragment()
+            }else{
+                (activity as MainActivity).showFillUpWalletFragment()
+            }
         }
 
         withDrawBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showWithdrawWalletFragment()
+            if(fromEventScreen){
+                (parentFragment as? MainChatFragment)?.showWithdrawWalletFragment()
+            }else{
+                (activity as MainActivity).showWithdrawWalletFragment()
+            }
         }
 
         historyBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showHistoryTransactionScreen()
+            if(fromEventScreen){
+                (parentFragment as? MainChatFragment)?.showHistoryTransactionScreen()
+            }else{
+                (activity as MainActivity).showHistoryTransactionScreen()
+            }
         }
 
         transferLayout?.setOnClickListener {
-            (activity as MainActivity).showTransferWalletFragment()
+            if(fromEventScreen){
+                (parentFragment as? MainChatFragment)?.showTransferWalletFragment()
+            }else{
+                (activity as MainActivity).showTransferWalletFragment()
+            }
         }
 
         presenter.getBalance()

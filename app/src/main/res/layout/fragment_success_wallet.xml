@@ -96,7 +96,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="#9B9BB6"
                 android:textSize="14sp"
-                tools:text="Списано 1500 ₽ с кошелька" />
+                tools:text="1500₽ been withdrawn from the allet" />
 
         <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chatBtn"

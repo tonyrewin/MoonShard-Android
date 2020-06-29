@@ -13,6 +13,7 @@ import io.moonshard.moonshard.common.utils.setSafeOnClickListener
 import io.moonshard.moonshard.presentation.presenter.profile.wallet.withdraw.WithdrawWalletPresenter
 import io.moonshard.moonshard.presentation.view.profile.wallet.withdraw.WithdrawWalletView
 import io.moonshard.moonshard.ui.activities.MainActivity
+import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_withdraw_wallet.*
 import kotlinx.android.synthetic.main.fragment_withdraw_wallet.backBtn
 import kotlinx.android.synthetic.main.fragment_withdraw_wallet.balanceTv
@@ -27,6 +28,9 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
 
     @InjectPresenter
     lateinit var presenter: WithdrawWalletPresenter
+
+    private var fromEventScreen=false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +49,12 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            fromEventScreen = it.getBoolean("fromEventScreen")
+        }
+
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         moneyValue.addTextChangedListener(object : TextWatcher {
@@ -73,7 +81,11 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
         })
 
         nextBtn?.setSafeOnClickListener {
-            (activity as MainActivity).showConfirmTransactionFragment(this)
+            if(fromEventScreen){
+                (parentFragment as? MainChatFragment)?.showConfirmTransactionFragment(this)
+            }else{
+                (activity as MainActivity).showConfirmTransactionFragment(this)
+            }
         }
 
         presenter.getBalance()
@@ -88,7 +100,11 @@ class WithdrawWalletFragment : MvpAppCompatFragment(),
     }
 
     override fun showSuccessScreen() {
-        (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+        if(fromEventScreen){
+            (parentFragment as? MainChatFragment)?.showSuccessTransactionFragment(this)
+        }else{
+            (activity as? MainActivity)?.showSuccessTransactionFragment(this)
+        }
     }
 
     override fun showToast(text: String) {

@@ -33,7 +33,7 @@
                  android:layout_height="wrap_content"
                  android:layout_centerInParent="true"
                  android:fontFamily="@font/montserrat_bold"
-                 android:text="Пополнить кошелек"
+                 android:text="@string/refill_wallet"
                  android:textColor="#333333"
                  android:textSize="14sp" />
 

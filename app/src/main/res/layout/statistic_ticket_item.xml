@@ -15,7 +15,7 @@
             android:layout_marginTop="15dp"
             android:fontFamily="@font/roboto_regular"
             android:gravity="center_vertical"
-            android:text="Билет в партер"
+            android:text="@string/parterre_ticket"
             android:textColor="#333333"
             android:textSize="16sp" />
 
@@ -26,7 +26,7 @@
             android:layout_marginTop="16dp"
             android:textSize="14sp"
             android:textColor="#6F6F6F"
-            android:text="11 000 из 12000"
+            android:text="11000 / 12000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

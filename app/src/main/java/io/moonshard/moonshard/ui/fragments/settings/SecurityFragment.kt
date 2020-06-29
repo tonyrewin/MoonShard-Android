@@ -40,7 +40,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
 
 
         backBtn?.setSafeOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager?.popBackStack()
         }
     }
 
@@ -50,7 +50,7 @@ class SecurityFragment : MvpAppCompatFragment(), SecurityView {
     }
 
     override fun showSettingsScreen() {
-        fragmentManager?.popBackStack()
+        parentFragmentManager.popBackStack()
     }
 
     override fun onDestroyView() {

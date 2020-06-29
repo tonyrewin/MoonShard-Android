@@ -1,12 +1,14 @@
 package io.moonshard.moonshard.ui.fragments.mychats.chat.info.tickets
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.common.utils.setSafeOnClickListener
+import io.moonshard.moonshard.ui.activities.MainActivity
 import io.moonshard.moonshard.ui.fragments.mychats.chat.MainChatFragment
 import kotlinx.android.synthetic.main.fragment_tickets_manage.*
 
@@ -57,14 +59,17 @@ class TicketsManageFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        addTicketsBtn?.setOnClickListener {
+        addTicketsBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showManageTypesTicketScreen(idChat)
         }
 
-        scanTicketsBtn?.setOnClickListener {
+        scanTicketsBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showScanQrTicketFragment(idChat)
         }
 
+        walletBtn?.setSafeOnClickListener {
+            (parentFragment as? MainChatFragment)?.showWalletFragment()
+        }
 
         statisticBtn?.setSafeOnClickListener {
             (parentFragment as? MainChatFragment)?.showStatisticTicketsFragment(idChat)

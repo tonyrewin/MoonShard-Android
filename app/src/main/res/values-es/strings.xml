@@ -47,7 +47,6 @@
     <string name="on_the_weekend">Fin de semana</string>
     <string name="profile">Perfil</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
     <string name="snackbar_undo">Deshacer</string>
     <string name="chatlist_chat_deleted">El chat fue eliminado</string>
@@ -178,8 +177,6 @@
     <!-- /chat_item.xml -->
     <string name="chatname">Nombre de chat</string>
     <string name="messagetext">Mensaje de texto</string>
-    <string name="chat_item_text124">14:14</string>
-    <string name="chat_item_text125">0 0</string>
 
     <!-- /chat_map_item.xml -->
     <string name="chat_map_item_text126">130 m de distancia</string>
@@ -225,8 +222,6 @@
 
     <!-- /fragment_chat_info.xml -->
     <string name="information">Información</string>
-    <string name="chat_info_text153">234 miembros, 30 en línea</string>
-    <string name="chat_info_text154">130 m de distancia</string>
     <string name="description">Descripción</string>
     <string name="description_lorem_ipsum">Descripción de vfv fvfvfv f</string>
     <string name="notification">Notificación</string>
@@ -253,15 +248,11 @@
 
     <!-- /fragment_create_new_event.xml -->
     <string name="the_date_of_the_beginning">la fecha del comienzo</string>
-    <string name="december_13th">13 de diciembre</string>
     <string name="event_duration">Duración del evento</string>
-    <string name="create_new_event_text173">3 días</string>
     <string name="choose_a_category">Elige una categoría</string>
     <string name="link_to">Enlace a</string>
 
     <!-- /fragment_event_info.xml -->
-    <string name="event_info_text176">234 miembros, 30 en línea</string>
-    <string name="event_info_text177">130 m de distancia</string>
     <string name="notifications">Notificaciones</string>
     <string name="we_are_walking">ESTAMOS CAMINANDO</string>
     <string name="organizer">Organizador</string>
@@ -278,18 +269,12 @@
     <string name="chat_management">Gestión de chat</string>
     <string name="save_the_festival_anticipated_outline">Save The festival anticipó Outline y lanzó una reacción en cadena de electrónica de masas</string>
     <string name="member_management">Gerencia de miembros</string>
-    <string name="manage_chat_text190">123</string>
-    <string name="manage_chat_text191">123</string>
     <string name="delete_group">Eliminar grupo</string>
 
     <!-- /fragment_manage_event.xml -->
     <string name="event_management">Gestión de eventos</string>
-    <string name="save_2019">Ahorre 2019</string>
     <string name="enter_event_description">Ingrese la descripción del evento</string>
-    <string name="manage_event_text196">4 dias</string>
     <string name="ticket_management">Gestión de entradas</string>
-    <string name="manage_event_text198">123</string>
-    <string name="manage_event_text199">123</string>
 
     <!-- /fragment_my_chats.xml -->
     <string name="my_chats">Mis chats</string>
@@ -298,7 +283,6 @@
     <string name="your_tickets">Sus entradas</string>
     <string name="actions">Comportamiento</string>
     <string name="valeriy_meladze">Valeriy Meladze</string>
-    <string name="july_1_2020_at_2300">1 de julio de 2020 a las 23:00</string>
     <string name="moscow_mutabor_club">Moscú. Club Mutabor.</string>
     <string name="admission_ticket">Boleto de admisión</string>
     <string name="all_day_event_ticket">Boleto para todo el día</string>
@@ -320,7 +304,6 @@
     <string name="just_pick_a_ticket_as">Simplemente elija un boleto como regalo \n y luego elija un destinatario.</string>
 
     <!-- /fragment_profile.xml -->
-    <string name="kanaevsky1989">@ kanaevsky1989</string>
     <string name="userexamplecom">user@example.com</string>
     <string name="wallet">Billetera</string>
     <string name="my_tickets">Mis entradas</string>
@@ -442,8 +425,6 @@
 
     <!-- /type_ticket_manage_item.xml -->
     <string name="season_ticket">Boleto de temporada</string>
-    <string name="type_ticket_manage_item_text20">300 ₽</string>
-    <string name="type_ticket_manage_item_text21">1000 entradas</string>
 
     <!-- /fragment_buy_tickets.xml -->
     <string name="buy_tickets">Comprar boletos</string>
@@ -496,13 +477,46 @@
     <string name="success">Éxito</string>
     <string name="payment_success">Pago exitoso</string>
     <string name="you_can_find_your_tickets_in_your_profile">Puede encontrar la pestaña "Entradas" en su perfil</string>
-    <string name="withdrawn_from_the_wallet">Retirado de la billetera: 1500 RUB</string>
     <string name="back_to_chat">Volver al chat</string>
     <string name="see_tickets">Ver entradas</string>
 
     <!-- fragment_success_transaction.xml -->
-    <string name="operation_complete">Operation complete</string>
+    <string name="operation_complete">Operación completada</string>
 
     <!-- fragment_wallet.xml -->
-    <string name="history">History</string>
+    <string name="history">Historia</string>
+
+    <!-- admin_permission_item.xml -->
+    <string name="moderator">Moderador</string>
+    <string name="can_remove_messages_and">Puede eliminar mensajes y agregar usuarios a la lista negra</string>
+    <string name="permission_level">Nivel de permiso</string>
+    
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select_recipient">Seleccionar destinatario</string>
+
+    <!-- fragment_recipient_dialog.xml -->
+    <string name="select">Seleccione</string>
+    <string name="search">Buscar</string>
+    <string name="send_season_ticket">Enviar abono de temporada</string>
+
+    <!-- fragment_security.xml -->
+    <string name="set_an_additional_password">Establezca una contraseña adicional para bloquear los chats. El código olvidado no se puede recuperar.</string>
+    
+    <string name="link_was_sent">Se envió un enlace a la dirección de correo electrónico especificada. Confirme su dirección de correo electrónico para comenzar con su billetera y comprar boletos.</string>
+    
+    <string name="parterre_ticket">Boleto Parterre</string>
+    <string name="tickets_left">Boletas restantes</string>
+    <string name="recipent_card_number">Número de tarjeta del destinatario</string>
+    <string name="transfer_funds">Transferir fondos</string>
+    <string name="verification">Verificación</string>
+    
+    <!-- fragment_verification_email.xml -->
+    <string name="please_confirm_your_email">Confirme su correo electrónico para una operación segura.</string>
+    <string name="send_a_link">Enviar enlace</string>
+    <string name="link_was_sent_on_given_email">Se enviará un enlace a la dirección de correo electrónico indicada. Confirme su dirección de correo electrónico para comenzar con su billetera y comprar boletos.</string>
+    <string name="your_email_was_confirmed">Su correo ha sido confirmado Puedes cerrar esta ventana.</string>
+
+    <string name="withdrawal_of_funds">Retiro de fondos</string>
+
+    <string name="enter_a_name">Ingresa un nombre</string>
 </resources>

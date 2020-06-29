@@ -47,7 +47,7 @@
             android:layout_below="@+id/nameTv"
             android:layout_alignStart="@+id/nameTv"
             android:layout_marginTop="4dp"
-            android:text="online"
+            android:text="@string/online"
             android:textColor="#0075FF" />
 
     <View

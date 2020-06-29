@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                tools:text="@string/december_13_2019_at_1800"
+                tools:text="December_13_2019_at_1800"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -204,7 +204,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginBottom="13dp"
-            tools:text="@string/parkovaya_street_odintsovo_moscow_region"
+            tools:text="parkovaya_street_odintsovo_moscow_region"
             android:textColor="#333333"
             android:textSize="16sp" />
 

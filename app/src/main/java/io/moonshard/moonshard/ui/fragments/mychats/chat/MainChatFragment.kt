@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import io.moonshard.moonshard.R
 import io.moonshard.moonshard.db.ChangeEventRepository
 import io.moonshard.moonshard.presentation.view.chat.MainChatView
@@ -23,7 +25,16 @@ import io.moonshard.moonshard.ui.fragments.mychats.create.event.ChooseMapFragmen
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.CreateNewEventFragment
 import io.moonshard.moonshard.ui.fragments.mychats.create.event.TimeEventFragment
 import io.moonshard.moonshard.ui.fragments.profile.VerificationEmailFragment
+import io.moonshard.moonshard.ui.fragments.profile.history.HistoryTransactionFragment
 import io.moonshard.moonshard.ui.fragments.profile.mytickets.MyTicketsFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.WalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.FillUpWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.fill_up.WebViewFillUpFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.ConfirmTransactionFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transacations.SuccessTransactionFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferRecipientDialogFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.transfer.TransferWalletFragment
+import io.moonshard.moonshard.ui.fragments.profile.wallet.withdraw.WithdrawWalletFragment
 import moxy.MvpAppCompatFragment
 
 
@@ -117,7 +128,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     fun showManageChatScreen(idChat: String, typeRole: String?) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        bundle.putString("typeRole",typeRole)
+        bundle.putString("typeRole", typeRole)
         val manageChatFragment =
             ManageChatFragment()
         manageChatFragment.arguments = bundle
@@ -160,7 +171,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     }
 
     fun moveAndClearPopBackStack() {
-        fragmentManager?.popBackStack(
+        parentFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
@@ -177,10 +188,10 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showMembersScreen(idChat: String,typeRole:String) {
+    fun showMembersScreen(idChat: String, typeRole: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        bundle.putString("typeRole",typeRole)
+        bundle.putString("typeRole", typeRole)
         val fragment = MembersChatFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
@@ -192,7 +203,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
     fun showManageTicketsScreen(idChat: String, typeRole: String?) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        bundle.putSerializable("typeRole",typeRole)
+        bundle.putSerializable("typeRole", typeRole)
         val fragment = TicketsManageFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()
@@ -201,7 +212,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showVerificationEmail(idChat: String){
+    fun showVerificationEmail(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         val fragment = VerificationEmailFragment()
@@ -275,7 +286,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-    fun showSuccessWalletScreen(idChat: String,moneyValue:String){
+    fun showSuccessWalletScreen(idChat: String, moneyValue: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
         bundle.putString("moneyValue", moneyValue)
@@ -308,6 +319,7 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .addToBackStack("StatisticTicketsFragment")
             .commit()
     }
+
 
     fun showNotUsedTicketsFragment(idChat: String) {
         val bundle = Bundle()
@@ -342,7 +354,6 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
             .commit()
     }
 
-
     fun showSearchTicketFragment(idChat: String) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
@@ -352,6 +363,110 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.mainContainer, fragment, "SearchTicketFragment")
             .addToBackStack("SearchTicketFragment")
+            .commit()
+    }
+
+    fun showWalletFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = WalletFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "WalletFragment")
+            .addToBackStack("WalletFragment")
+            .commit()
+    }
+
+    fun showFillUpWalletFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = FillUpWalletFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "FillUpWalletFragment")
+            .addToBackStack("FillUpWalletFragment")
+            .commit()
+    }
+
+    fun showWithdrawWalletFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment =
+            WithdrawWalletFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+        ft.replace(R.id.mainContainer, fragment, "WithdrawWalletFragment")
+            .addToBackStack("WithdrawWalletFragment")
+            .commit()
+    }
+
+    fun showTransferWalletFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = TransferWalletFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+        ft.replace(R.id.mainContainer, fragment, "TransferWalletFragment")
+            .addToBackStack("TransferWalletFragment")
+            .commit()
+    }
+
+    fun showConfirmTransactionFragment(hideFragment: Fragment) {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = ConfirmTransactionFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.add(R.id.mainContainer, fragment, "ConfirmTransactionFragment")
+            .hide(hideFragment)
+            .addToBackStack("ConfirmTransactionFragment")
+            .commit()
+    }
+
+    fun showSuccessTransactionFragment(hideFragment: Fragment) {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = SuccessTransactionFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.add(R.id.mainContainer, fragment, "SuccessTransactionFragment")
+            .hide(hideFragment)
+            .addToBackStack("SuccessTransactionFragment")
+            .commit()
+    }
+
+    fun showWebViewFillUpFragment(url: String) {
+        val bundle = Bundle()
+        bundle.putString("url", url)
+        val fragment = WebViewFillUpFragment()
+        val ft = childFragmentManager.beginTransaction()
+        fragment.arguments = bundle
+        ft.replace(R.id.mainContainer, fragment, "WebViewFillUpFragment")
+            .addToBackStack("WebViewFillUpFragment")
+            .commit()
+    }
+
+    fun showTransferRecipientDialogFragment() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = TransferRecipientDialogFragment()
+        fragment.arguments = bundle
+        fragment.show(
+            childFragmentManager,
+            "TransferRecipientDialogFragment"
+        )
+    }
+
+    fun showHistoryTransactionScreen() {
+        val bundle = Bundle()
+        bundle.putBoolean("fromEventScreen", true)
+        val fragment = HistoryTransactionFragment()
+        fragment.arguments = bundle
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.mainContainer, fragment, "HistoryTransactionFragment")
+            .addToBackStack("HistoryTransactionFragment")
             .commit()
     }
 
@@ -369,13 +484,13 @@ class MainChatFragment : MvpAppCompatFragment(), MainChatView {
 
     fun showAdminPermissionFragment(
         idChat: String,
-        userJid:String?=null,
-        currentTypeRole:String?=null
-    ){
+        userJid: String? = null,
+        currentTypeRole: String? = null
+    ) {
         val bundle = Bundle()
         bundle.putString("chatId", idChat)
-        bundle.putString("currentTypeRole", currentTypeRole);
-        bundle.putString("userJid",userJid)
+        bundle.putString("currentTypeRole", currentTypeRole)
+        bundle.putString("userJid", userJid)
         val fragment = AdminPermissionFragment()
         fragment.arguments = bundle
         val ft = childFragmentManager.beginTransaction()

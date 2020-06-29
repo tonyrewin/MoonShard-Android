@@ -46,7 +46,6 @@
     <string name="on_the_weekend">Weekend</string>
     <string name="profile">Profile</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="snackbar_undo">Undo</string>
     <string name="chatlist_chat_deleted">Chat was deleted</string>
@@ -156,12 +155,10 @@
 
     <!-- /bottom_sheet_info_content.xml -->
     <string name="group_name">Group name</string>
-    <string name="info_content_text110">130 m away</string>
     <string name="to_read">To read</string>
     <string name="join">Join</string>
     <string name="about_event">About event</string>
     <string name="start">Start</string>
-    <string name="december_13_2019_at_1800">December 13, 2019 at 18:00</string>
     <string name="location">Location</string>
     <string name="parkovaya_street_odintsovo_moscow_region">Parkovaya Street, Odintsovo, Moscow Region</string>
     <string name="about_chat">About chat</string>
@@ -178,11 +175,8 @@
     <!-- /chat_item.xml -->
     <string name="chatname">ChatName</string>
     <string name="messagetext">MessageText</string>
-    <string name="chat_item_text124">14:14</string>
-    <string name="chat_item_text125">0</string>
 
     <!-- /chat_map_item.xml -->
-    <string name="chat_map_item_text126">130 m away</string>
 
     <!-- /event_item.xml -->
     <string name="cuddle_party_17dec">CUDDLE PARTY 17dec</string>
@@ -225,8 +219,6 @@
 
     <!-- /fragment_chat_info.xml -->
     <string name="information">Information</string>
-    <string name="chat_info_text153">234 members, 30 online</string>
-    <string name="chat_info_text154">130 m away</string>
     <string name="description">Description</string>
     <string name="description_lorem_ipsum">Description lorem impsum</string>
     <string name="notification">Notification</string>
@@ -236,7 +228,6 @@
     <!-- /fragment_choose_map.xml -->
     <string name="chat_location">Chat location</string>
     <string name="where_will_the_event_take">Where will the event take place?</string>
-    <string name="sosnichnaya_street_11k1">Sosnichnaya street, 11k1</string>
 
     <!-- /fragment_connection_on_board.xml -->
     <string name="always_stay_in_touch">Always stay in touch</string>
@@ -253,19 +244,14 @@
 
     <!-- /fragment_create_new_event.xml -->
     <string name="the_date_of_the_beginning">the date of the beginning</string>
-    <string name="december_13th">December 13th</string>
     <string name="event_duration">Event duration</string>
-    <string name="create_new_event_text173">3 days</string>
     <string name="choose_a_category">Choose a category</string>
     <string name="link_to">Link to</string>
 
     <!-- /fragment_event_info.xml -->
-    <string name="event_info_text176">234 members, 30 online</string>
-    <string name="event_info_text177">130 m away</string>
     <string name="notifications">Notifications</string>
     <string name="we_are_walking">WE ARE WALKING</string>
     <string name="organizer">Organizer</string>
-    <string name="tickets_from_300_">TICKETS FROM 300 ₽</string>
 
     <!-- /fragment_events.xml -->
     <string name="oops_its_empty">Oops! It\'s empty</string>
@@ -278,18 +264,12 @@
     <string name="chat_management">Chat management</string>
     <string name="save_the_festival_anticipated_outline">Save The festival anticipated Outline and launched a chain reaction of mass electronic</string>
     <string name="member_management">Member Management</string>
-    <string name="manage_chat_text190">123</string>
-    <string name="manage_chat_text191">123</string>
     <string name="delete_group">Delete group</string>
 
     <!-- /fragment_manage_event.xml -->
     <string name="event_management">Event management</string>
-    <string name="save_2019">Save 2019</string>
     <string name="enter_event_description">Enter event description</string>
-    <string name="manage_event_text196">4 days</string>
     <string name="ticket_management">Ticket management</string>
-    <string name="manage_event_text198">123</string>
-    <string name="manage_event_text199">123</string>
 
     <!-- /fragment_my_chats.xml -->
     <string name="my_chats">My chats</string>
@@ -297,13 +277,9 @@
     <!-- /fragment_my_ticket_info.xml -->
     <string name="your_tickets">Your tickets</string>
     <string name="actions">Actions</string>
-    <string name="valeriy_meladze">Valeriy Meladze</string>
-    <string name="july_1_2020_at_2300">July 1, 2020 at 23:00</string>
-    <string name="moscow_mutabor_club">Moscow. Mutabor club.</string>
     <string name="admission_ticket">Admission ticket</string>
     <string name="all_day_event_ticket">All Day Event Ticket</string>
     <string name="order_no">Order No.</string>
-    <string name="my_ticket_info_text210">021457859710</string>
     <string name="event_ended">Event ended</string>
     <string name="return_ticket">Return ticket</string>
     <string name="save_as_pdf">Save as PDF</string>
@@ -320,7 +296,6 @@
     <string name="just_pick_a_ticket_as">Just pick a ticket as a gift \n and then pick a recipient.</string>
 
     <!-- /fragment_profile.xml -->
-    <string name="kanaevsky1989">@kanaevsky1989</string>
     <string name="userexamplecom">user@example.com</string>
     <string name="wallet">Wallet</string>
     <string name="my_tickets">My tickets</string>
@@ -395,29 +370,22 @@
     <!-- /my_message.xml -->
     <string name="p">P</string>
     <string name="apprelease">App-release</string>
-    <string name="my_message_text265">105 MB APK</string>
 
     <!-- /my_ticket_item.xml -->
     <string name="parterre">Parterre</string>
-    <string name="my_ticket_item_text267">021457859710</string>
 
     <!-- /recommendation_item.xml -->
-    <string name="recommendation_item_text268">234 members, 30 online</string>
 
     <!-- /system_message.xml -->
-    <string name="balto_joined_the_chat">Balto joined the chat</string>
-    <string name="system_message_text270">14:43</string>
 
     <!-- /their_message.xml -->
     <string name="rose">Rose</string>
     <string name="h">H</string>
-    <string name="their_message_text273">105 MB APK</string>
 
     <!-- /time_item.xml -->
     <string name="time_item_text274">12 hours</string>
 
     <!-- /fragment_add_new_type_ticket.xml -->
-    <string name="entrance_ticket_save_2019">Entrance Ticket Save 2019</string>
     <string name="ticket_type">Ticket type</string>
     <string name="enter_type">Enter type</string>
     <string name="explanation">Explanation</string>
@@ -439,21 +407,15 @@
     <string name="go_to_wallet">Go to wallet</string>
 
     <!-- /my_message.xml -->
-    <string name="my_message_text18">105 MB APK</string>
 
     <!-- /type_ticket_manage_item.xml -->
     <string name="season_ticket">Season ticket</string>
-    <string name="type_ticket_manage_item_text20">300 ₽</string>
-    <string name="type_ticket_manage_item_text21">1000 tickets</string>
 
     <!-- /fragment_buy_tickets.xml -->
     <string name="buy_tickets">Buy tickets</string>
     <string name="close">Close</string>
-    <string name="tickets_text3">3 tickets</string>
 
     <!-- /ticket_buy_item.xml -->
-    <string name="ticket_buy_item_text9">300 ₽</string>
-    <string name="ticket_buy_item_text10">0</string>
 
     <!-- config_ticket_buy_item.xml -->
     <string name="one_day_ticket">One day ticket</string>
@@ -471,7 +433,6 @@
 
     <!-- fragment_fill_up_wallet.xml -->
     <string name="after_refill_your_wallet">After refill your wallet \nyou\'re not gonna need to enter card credentials anymore</string>
-    <string name="current_balance_0_rubles">Current balance: 0 RUB</string>
 
     <!-- fragment_sales_ticket.xml -->
     <string name="sold">Sold</string>
@@ -498,7 +459,6 @@
     <string name="success">Success</string>
     <string name="payment_success">Payment success</string>
     <string name="you_can_find_your_tickets_in_your_profile">You can find "Tickets" tab in your profile</string>
-    <string name="withdrawn_from_the_wallet">Withdrawn from wallet: 1500 RUB</string>
     <string name="back_to_chat">Back to chat</string>
     <string name="see_tickets">See tickets</string>
 
@@ -521,5 +481,23 @@
     <string name="search">Search</string>
     <string name="send_season_ticket">Send Season Ticket</string>
 
-    <!-- fragment_transfer_recipient_dialog.xml -->
+    <!-- fragment_security.xml -->
+    <string name="set_an_additional_password">Set an additional password to block chats. Forgotten code cannot be recovered.</string>
+    
+    <string name="parterre_ticket">Parterre ticket</string>
+    <string name="tickets_left">Tickets left</string>
+    <string name="link_was_sent">A link was sent to the given email address. Confirm your email address to get started with your wallet and purchase tickets.</string>
+    <string name="recipent_card_number">Recipient's card number</string>
+    <string name="transfer_funds">Transfer funds</string>
+    <string name="verification">Verification</string>
+
+    <!-- fragment_verification_email.xml -->
+    <string name="please_confirm_your_email">Please, confirm your email address for safe work.</string>
+    <string name="send_a_link">Send a link</string>
+    <string name="link_was_sent_on_given_email">A link will be sent to the specified email address. Confirm your email address to get started with your wallet and purchase tickets.</string>
+    <string name="your_email_was_confirmed">Your email has been confirmed. You can close this window.</string>
+
+    <string name="withdrawal_of_funds">Withdrawal of funds</string>
+
+    <string name="enter_a_name">Enter a name</string>
 </resources>

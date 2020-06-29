@@ -136,16 +136,16 @@ class CreateNewEventFragment : MvpAppCompatFragment(), CreateNewEventView {
         dateTv.text = "$dayOfMonth " + date.getMonthString(month)
     }
 
-    fun getTtlToDays(ttl:Long):String{
-        var time =""
+    fun getTtlToDays(ttl:Long): String{
+        var time: String = ""
         when(ttl){
-            (60*60*24).toLong() -> time = "1 " + getString(R.string.day) + ""
-            (60*60*48).toLong() -> time = "2 " + getString(R.string.days234) + ""
-            (60*60*(24*3)).toLong() -> time = "3 " + getString(R.string.days234) + ""
-            (60*60*(24*4)).toLong() -> time = "4 " + getString(R.string.days234) + ""
-            (60*60*(24*5)).toLong() -> time = "5 " + getString(R.string.days) + ""
-            (60*60*(24*6)).toLong() -> time = "6 " + getString(R.string.days) + ""
-            (60*60*(24*7)).toLong() -> time = "" + getString(R.string.a_week) + ""
+            ChooseChatRepository.daySeconds.toLong() -> time = "1 " + getString(R.string.day) + ""
+            (ChooseChatRepository.daySeconds*2).toLong() -> time = "2 " + getString(R.string.days234) + ""
+            (ChooseChatRepository.daySeconds*3).toLong() -> time = "3 " + getString(R.string.days234) + ""
+            (ChooseChatRepository.daySeconds*4).toLong() -> time = "4 " + getString(R.string.days234) + ""
+            (ChooseChatRepository.daySeconds*5).toLong() -> time = "5 " + getString(R.string.days) + ""
+            (ChooseChatRepository.daySeconds*6).toLong() -> time = "6 " + getString(R.string.days) + ""
+            (ChooseChatRepository.daySeconds*7).toLong() -> time = "" + getString(R.string.a_week) + ""
         }
         return time
     }

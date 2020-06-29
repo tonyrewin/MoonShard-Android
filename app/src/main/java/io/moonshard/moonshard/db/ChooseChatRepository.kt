@@ -8,8 +8,10 @@ import java.util.*
 object ChooseChatRepository {
     var lat:Double?=null
     var lng:Double?=null
+    var daySeconds = 60*60*24
     var address:String = ""
     var durationTime:String = ""
+    var days: Int = 0
     var category:Category? = null
     var name:String = ""
     var startDate: Calendar?=null
@@ -35,9 +37,7 @@ object ChooseChatRepository {
     }
 
     fun getDurationTimeSec(): Int {
-        var daySeconds = 60*60*24
-        val daysAmount = Integer.parseInt(durationTime.charAt(0))
-        return daySeconds*daysAmount	
+        return daySeconds*days	
     }
 
 }

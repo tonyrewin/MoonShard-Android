@@ -48,14 +48,13 @@ class TimeEventFragment : Fragment() {
         times.add("6 " + getString(R.string.days) + "")
         times.add("" + getString(R.string.a_week) + "")
 
-        var daySeconds:Long = 60*60*24
-
         RvTimeListener timeListener = {
             override fun clickChat(durationTime: String) {
-                if(fromManageEventScreen){
-                    val daysAmount = Integer.parseInt(durationTime.charAt(0))
-                    ChangeEventRepository.event?.ttl = daysSeconds*daysAmount
+                val days: Int = times.indexOf(durationTime) + 1
+                if(fromManageEventScreen) {
+                    ChangeEventRepository.event?.ttl = 60*60*24*days
                 } else {
+                    ChooseChatRepository.days = days
                     ChooseChatRepository.durationTime = durationTime
                 }
             }

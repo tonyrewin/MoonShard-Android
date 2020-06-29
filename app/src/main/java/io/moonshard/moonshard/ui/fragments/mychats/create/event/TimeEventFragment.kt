@@ -48,29 +48,20 @@ class TimeEventFragment : Fragment() {
         times.add("6 " + getString(R.string.days) + "")
         times.add("" + getString(R.string.a_week) + "")
 
-        timesRv?.layoutManager = LinearLayoutManager(view.context)
-        timesRv?.adapter = TimeGroupChatAdapter(object : RvTimeListener {
-            override fun clickChat(time: String) {
+        var daySeconds:Long = 60*60*24
+
+        RvTimeListener timeListener = {
+            override fun clickChat(durationTime: String) {
                 if(fromManageEventScreen){
-                    ChangeEventRepository.event?.ttl = convertDaysToTtl(time)
-                }else{
-                    ChooseChatRepository.durationTime = time
+                    val daysAmount = Integer.parseInt(durationTime.charAt(0))
+                    ChangeEventRepository.event?.ttl = daysSeconds*daysAmount
+                } else {
+                    ChooseChatRepository.durationTime = durationTime
                 }
             }
-        }, times)
-    }
-
-    fun convertDaysToTtl(days:String):Long{
-        var ttl:Long = 60*60*24
-        when (days) {
-            "1 " + getString(R.string.day) + "" -> ttl = 60*60*24
-            "2 " + getString(R.string.days234) + "" -> ttl = 60*60*48
-            "3 " + getString(R.string.days234) + "" -> ttl = 60*60*(24*3)
-            "4 " + getString(R.string.days234) + "" -> ttl = 60*60*(24*4)
-            "5 " + getString(R.string.days) + "" -> ttl = 60*60*(24*5)
-            "6 " + getString(R.string.days) + "" -> ttl = 60*60*(24*6)
-            "" + getString(R.string.a_week) + "" -> ttl = 60*60*(24*7)
         }
-        return ttl
+
+        timesRv?.layoutManager = LinearLayoutManager(view.context)
+        timesRv?.adapter = TimeGroupChatAdapter(timeListener, times)
     }
 }

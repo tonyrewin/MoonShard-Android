@@ -34,4 +34,9 @@ object ChooseChatRepository {
        //return date!!.timeInMillis / 1000
     }
 
+    fun getDurationTimeSec(): Number {
+        // FIXME: start with default value?
+        return 60*20*60
+    }
+
 }
